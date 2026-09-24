@@ -105,6 +105,11 @@ export function DialogTitle({ className, ...props }: React.ComponentProps<typeof
   return <DialogPrimitive.Title className={cn("text-heading-sm font-semibold", className)} {...props} />;
 }
 
-export function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description className={cn("text-base text-muted-foreground", className)} {...props} />;
+export function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description className={cn("text-base text-muted-foreground", className)} {...props} />
+  );
 }

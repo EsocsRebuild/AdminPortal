@@ -39,24 +39,66 @@ export const navigation: NavGroup[] = [
     title: "Overview",
     items: [
       { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, permission: "dashboard:view" },
-      { title: "Reports", href: "/reports", icon: BarChart3, permission: "reports:view", keywords: ["analytics"] },
+      {
+        title: "Reports",
+        href: "/reports",
+        icon: BarChart3,
+        permission: "reports:view",
+        keywords: ["analytics"],
+      },
     ],
   },
   {
     title: "Church",
     items: [
-      { title: "Members", href: "/members", icon: Users, permission: "members:view", badge: "12", keywords: ["people"] },
-      { title: "Parishes", href: "/parishes", icon: Church, permission: "parishes:view", keywords: ["branches"] },
+      {
+        title: "Members",
+        href: "/members",
+        icon: Users,
+        permission: "members:view",
+        badge: "12",
+        keywords: ["people"],
+      },
+      {
+        title: "Parishes",
+        href: "/parishes",
+        icon: Church,
+        permission: "parishes:view",
+        keywords: ["branches"],
+      },
       { title: "Clergy", href: "/clergy", icon: Building2, permission: "clergy:view" },
-      { title: "Events", href: "/events", icon: CalendarDays, permission: "events:view", keywords: ["calendar"] },
+      {
+        title: "Events",
+        href: "/events",
+        icon: CalendarDays,
+        permission: "events:view",
+        keywords: ["calendar"],
+      },
     ],
   },
   {
     title: "Operations",
     items: [
-      { title: "Finance", href: "/finance", icon: HandCoins, permission: "finance:view", keywords: ["tithes", "giving"] },
-      { title: "Content", href: "/content", icon: FileText, permission: "content:view", keywords: ["sermons", "news"] },
-      { title: "Communications", href: "/communications", icon: Megaphone, permission: "communications:send" },
+      {
+        title: "Finance",
+        href: "/finance",
+        icon: HandCoins,
+        permission: "finance:view",
+        keywords: ["tithes", "giving"],
+      },
+      {
+        title: "Content",
+        href: "/content",
+        icon: FileText,
+        permission: "content:view",
+        keywords: ["sermons", "news"],
+      },
+      {
+        title: "Communications",
+        href: "/communications",
+        icon: Megaphone,
+        permission: "communications:send",
+      },
     ],
   },
   {

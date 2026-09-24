@@ -12,7 +12,14 @@ export interface EmptyStateProps {
   size?: "compact" | "default";
 }
 
-export function EmptyState({ icon, title, description, action, className, size = "default" }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  className,
+  size = "default",
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
@@ -23,7 +30,10 @@ export function EmptyState({ icon, title, description, action, className, size =
     >
       {icon && (
         <div className="relative">
-          <div aria-hidden className="absolute -inset-8 bg-grid mask-radial-from-10% mask-radial-to-70% opacity-70" />
+          <div
+            aria-hidden
+            className="absolute -inset-8 bg-grid mask-radial-from-10% mask-radial-to-70% opacity-70"
+          />
           <span className="relative grid size-12 place-items-center rounded-card border border-border bg-surface text-muted-foreground shadow-sm [&_svg]:size-5">
             {icon}
           </span>

@@ -21,7 +21,7 @@ export function Switch({ className, label, description, size = "md", id, ...prop
         "group relative inline-flex shrink-0 cursor-pointer items-center rounded-full bg-border-strong p-0.5 transition-colors duration-150",
         "after:absolute after:-inset-2 after:content-['']",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "data-[state=checked]:bg-primary disabled:cursor-not-allowed disabled:opacity-50",
+        "disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary",
         size === "sm" ? "h-4.5 w-8" : "h-5.5 w-10",
         !label && className,
       )}

@@ -1,11 +1,12 @@
 "use client";
 
+import type { RowData } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import type { DataTableColumn } from "./features";
 
 /** Checkbox column with select-all for the current page and Shift-click ranges. */
-export function selectColumn<T>(): DataTableColumn<T> {
+export function selectColumn<T extends RowData>(): DataTableColumn<T> {
   return {
     id: "select",
     enableSorting: false,
@@ -16,7 +17,11 @@ export function selectColumn<T>(): DataTableColumn<T> {
       <Checkbox
         aria-label="Select all rows on this page"
         checked={
-          table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? "indeterminate" : false
+          table.getIsAllPageRowsSelected()
+            ? true
+            : table.getIsSomePageRowsSelected()
+              ? "indeterminate"
+              : false
         }
         onCheckedChange={(v) => table.toggleAllPageRowsSelected(v === true)}
       />

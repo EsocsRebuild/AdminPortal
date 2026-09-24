@@ -20,8 +20,10 @@ export function TabsList({
     <VariantContext value={variant}>
       <TabsPrimitive.List
         className={cn(
-          "flex max-w-full items-center overflow-x-auto scrollbar-none",
-          variant === "line" ? "gap-4 border-b border-border sm:gap-6" : "w-fit gap-0.5 rounded-control bg-surface-muted p-0.5",
+          "scrollbar-none flex max-w-full items-center overflow-x-auto",
+          variant === "line"
+            ? "gap-4 border-b border-border sm:gap-6"
+            : "w-fit gap-0.5 rounded-control bg-surface-muted p-0.5",
           className,
         )}
         {...props}
@@ -60,7 +62,7 @@ export function TabsContent({ className, ...props }: React.ComponentProps<typeof
 /** Small count shown inside a tab trigger. */
 export function TabsCount({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full bg-surface-muted px-1.5 text-2xs font-semibold text-muted-foreground tabular">
+    <span className="rounded-full bg-surface-muted px-1.5 tabular text-2xs font-semibold text-muted-foreground">
       {children}
     </span>
   );

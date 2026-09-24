@@ -18,8 +18,10 @@ export function SegmentedControl<T extends string>({
   options,
   size = "md",
   className,
+  id,
   "aria-label": ariaLabel,
 }: {
+  id?: string;
   value: T;
   onValueChange: (value: T) => void;
   options: SegmentedOption<T>[];
@@ -29,12 +31,13 @@ export function SegmentedControl<T extends string>({
 }) {
   return (
     <RadioPrimitive.Root
+      id={id}
       value={value}
       onValueChange={(v) => onValueChange(v as T)}
       orientation="horizontal"
       aria-label={ariaLabel}
       className={cn(
-        "inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-control bg-surface-muted p-0.5 scrollbar-none",
+        "scrollbar-none inline-flex w-fit max-w-full items-center gap-0.5 justify-self-start overflow-x-auto rounded-control bg-surface-muted p-0.5",
         className,
       )}
     >
@@ -47,7 +50,9 @@ export function SegmentedControl<T extends string>({
             "hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring",
             "data-[state=checked]:bg-surface data-[state=checked]:text-foreground data-[state=checked]:shadow-sm",
             "[&_svg]:size-3.5",
-            size === "sm" ? "h-[calc(var(--control-sm)-4px)] text-xs" : "h-[calc(var(--control-md)-4px)] text-sm",
+            size === "sm"
+              ? "h-[calc(var(--control-sm)-4px)] text-xs"
+              : "h-[calc(var(--control-md)-4px)] text-sm",
           )}
         >
           {o.icon}

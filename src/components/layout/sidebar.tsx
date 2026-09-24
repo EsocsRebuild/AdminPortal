@@ -36,7 +36,7 @@ export function Sidebar({ className }: { className?: string }) {
         <Logo collapsible />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3 py-3 scrollbar-none">
+      <div className="scrollbar-none min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-3 py-3">
         <SidebarNav rail />
       </div>
 

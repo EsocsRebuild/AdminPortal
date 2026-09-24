@@ -3,17 +3,20 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const pageVariants = cva("mx-auto grid w-full content-start gap-page px-gutter pt-6 pb-16 sm:pt-8", {
-  variants: {
-    width: {
-      default: "max-w-page",
-      narrow: "max-w-4xl",
-      form: "max-w-form",
-      full: "max-w-none",
+const pageVariants = cva(
+  "mx-auto grid w-full grid-cols-[minmax(0,1fr)] content-start gap-page px-gutter pt-6 pb-16 sm:pt-8",
+  {
+    variants: {
+      width: {
+        default: "max-w-app",
+        narrow: "max-w-4xl",
+        form: "max-w-form",
+        full: "max-w-none",
+      },
     },
+    defaultVariants: { width: "default" },
   },
-  defaultVariants: { width: "default" },
-});
+);
 
 /** Page body with consistent width, gutters and vertical rhythm. */
 export function Page({
@@ -38,7 +41,7 @@ export interface PageHeaderProps {
 
 export function PageHeader({ title, description, actions, eyebrow, children, className }: PageHeaderProps) {
   return (
-    <header className={cn("grid gap-4", className)}>
+    <header className={cn("grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4", className)}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="grid min-w-0 gap-1.5">
           {eyebrow}
@@ -46,7 +49,9 @@ export function PageHeader({ title, description, actions, eyebrow, children, cla
           {description && <p className="max-w-2xl text-md text-muted-foreground">{description}</p>}
         </div>
         {actions && (
-          <div className="flex shrink-0 flex-wrap items-center gap-2 max-sm:[&>*]:flex-1">{actions}</div>
+          <div className="grid auto-cols-fr grid-flow-col gap-2 sm:flex sm:shrink-0 sm:flex-wrap sm:items-center">
+            {actions}
+          </div>
         )}
       </div>
       {children}

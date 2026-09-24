@@ -37,7 +37,8 @@ const dotColor = {
   solid: "bg-inverse-foreground",
 } as const;
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
   /** Leading status dot. `pulse` animates it for live states. */
   dot?: boolean | "pulse";
 }

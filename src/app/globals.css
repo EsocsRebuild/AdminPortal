@@ -110,7 +110,7 @@
   --text-overline--letter-spacing: 0.08em;
 
   --container-prose: 68ch;
-  --container-page: 96rem;
+  --container-app: 96rem;
   --container-form: 42rem;
 
   --spacing-topbar: 3.5rem;
@@ -245,8 +245,8 @@
   --surface-active: color-mix(in oklch, var(--color-ink-900) 8%, transparent);
 
   --muted-foreground: var(--color-ink-600);
-  --subtle-foreground: var(--color-ink-500);
-  --faint-foreground: var(--color-ink-400);
+  --subtle-foreground: oklch(0.53 0.02 265);
+  --faint-foreground: var(--color-ink-400); /* placeholders + icons only, not text */
 
   --border: var(--color-ink-200);
   --border-subtle: var(--color-ink-150);
@@ -285,13 +285,17 @@
   /* Sidebar — its own tokens so it can flip to the brand tone. */
   --sidebar: var(--color-ink-25);
   --sidebar-foreground: var(--color-ink-700);
-  --sidebar-muted: var(--color-ink-500);
+  --sidebar-muted: var(--subtle-foreground);
   --sidebar-hover: color-mix(in oklch, var(--color-ink-900) 5%, transparent);
   --sidebar-active: var(--color-ink-0);
   --sidebar-active-foreground: var(--color-ink-950);
   --sidebar-border: var(--color-ink-200);
 
-  --shadow-color: 265 30% 12%;
+  /* Chart series — fixed per entity, independent of the accent theme. Validated for CVD + contrast. */
+  --chart-1: oklch(0.54 0.16 265);
+  --chart-2: oklch(0.6 0.11 70);
+  --chart-grid: var(--color-ink-150);
+
   --shadow-xs: 0 1px 2px oklch(0.2 0.03 265 / 0.05);
   --shadow-sm: 0 1px 2px oklch(0.2 0.03 265 / 0.06), 0 1px 3px oklch(0.2 0.03 265 / 0.05);
   --shadow-md: 0 2px 4px oklch(0.2 0.03 265 / 0.04), 0 6px 16px oklch(0.2 0.03 265 / 0.07);
@@ -316,7 +320,7 @@
 
   --muted-foreground: var(--color-ink-400);
   --subtle-foreground: var(--color-ink-500);
-  --faint-foreground: var(--color-ink-600);
+  --faint-foreground: oklch(0.52 0.018 265);
 
   --border: var(--color-ink-850);
   --border-subtle: var(--color-ink-900);
@@ -341,7 +345,7 @@
 
   --danger: oklch(0.66 0.2 25);
   --danger-hover: oklch(0.72 0.18 25);
-  --danger-foreground: oklch(1 0 0);
+  --danger-foreground: oklch(0.17 0.04 25);
   --danger-soft: oklch(0.66 0.2 25 / 0.14);
   --danger-soft-foreground: oklch(0.78 0.14 25);
 
@@ -351,6 +355,10 @@
   --info-soft-foreground: oklch(0.8 0.1 240);
 
   --overlay: oklch(0.05 0.01 265 / 0.65);
+
+  --chart-1: oklch(0.64 0.13 265);
+  --chart-2: oklch(0.67 0.11 72);
+  --chart-grid: var(--color-ink-900);
 
   --sidebar: oklch(0.14 0.015 265);
   --sidebar-foreground: var(--color-ink-300);
@@ -537,6 +545,9 @@
   --color-info-soft: var(--info-soft);
   --color-info-soft-foreground: var(--info-soft-foreground);
   --color-overlay: var(--overlay);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-grid: var(--chart-grid);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-muted: var(--sidebar-muted);
@@ -632,7 +643,12 @@
 /* 7. Utilities ---------------------------------------------------------- */
 
 @utility skeleton {
-  background: linear-gradient(90deg, var(--surface-muted) 40%, var(--surface-sunken) 50%, var(--surface-muted) 60%);
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted) 40%,
+    var(--surface-sunken) 50%,
+    var(--surface-muted) 60%
+  );
   background-size: 300% 100%;
   animation: var(--animate-shimmer);
 }
@@ -660,7 +676,10 @@
 
 /* Faint dotted grid used behind empty states and auth panels. */
 @utility bg-grid {
-  background-image: radial-gradient(color-mix(in oklch, var(--foreground) 12%, transparent) 1px, transparent 1px);
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
   background-size: 20px 20px;
 }
 
@@ -668,7 +687,11 @@
 @utility bg-aurora {
   background-image:
     radial-gradient(60% 50% at 15% 0%, color-mix(in oklch, var(--primary) 18%, transparent), transparent 70%),
-    radial-gradient(50% 40% at 100% 10%, color-mix(in oklch, var(--brand-accent) 14%, transparent), transparent 70%);
+    radial-gradient(
+      50% 40% at 100% 10%,
+      color-mix(in oklch, var(--brand-accent) 14%, transparent),
+      transparent 70%
+    );
 }
 
 /* Fade the edges of a horizontally scrolling row. */
@@ -677,7 +700,12 @@
 }
 
 @utility text-gold-gradient {
-  background: linear-gradient(120deg, var(--color-gold-300), var(--color-gold-500) 45%, var(--color-gold-700));
+  background: linear-gradient(
+    120deg,
+    var(--color-gold-300),
+    var(--color-gold-500) 45%,
+    var(--color-gold-700)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

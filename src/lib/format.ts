@@ -23,9 +23,12 @@ export function formatDateTime(date: DateInput) {
 
 /** e.g. "9:30 am" */
 export function formatTime(date: DateInput) {
-  return new Intl.DateTimeFormat(locale, { hour: "numeric", minute: "2-digit", hour12: true, timeZone }).format(
-    toDate(date),
-  );
+  return new Intl.DateTimeFormat(locale, {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone,
+  }).format(toDate(date));
 }
 
 /** e.g. "in 3 days", "2 hours ago", "just now" */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTable, type SortingState, type ColumnVisibilityState } from "@tanstack/react-table";
+import { useTable, type ColumnVisibilityState, type RowData, type SortingState } from "@tanstack/react-table";
 import { Search, SearchX, X } from "lucide-react";
 import * as React from "react";
 
@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { pluralize } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { cn, pluralize } from "@/lib/utils";
 
 import {
   dataTableFeatures,
@@ -20,7 +19,7 @@ import {
 import { DataTablePagination } from "./pagination";
 import { DataTableViewOptions } from "./view-options";
 
-export interface DataTableProps<T> {
+export interface DataTableProps<T extends RowData> {
   data: T[];
   columns: DataTableColumn<T>[];
   /** Stable id per record; used for selection. */
@@ -41,7 +40,7 @@ export interface DataTableProps<T> {
   className?: string;
 }
 
-export function DataTable<T>({
+export function DataTable<T extends RowData>({
   data,
   columns,
   getRowId,
@@ -95,10 +94,12 @@ export function DataTable<T>({
       }
     />
   );
-  const empty = isFiltered ? noResults : (emptyState ?? <EmptyState size="compact" title="Nothing here yet" />);
+  const empty = isFiltered
+    ? noResults
+    : (emptyState ?? <EmptyState size="compact" title="Nothing here yet" />);
 
   return (
-    <div className={cn("grid gap-3", className)}>
+    <div className={cn("grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3", className)}>
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="w-full sm:w-64 lg:w-72">
@@ -163,7 +164,9 @@ export function DataTable<T>({
                       <th
                         key={header.id}
                         scope="col"
-                        aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
+                        aria-sort={
+                          sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
+                        }
                         className={cn(
                           "h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap text-muted-foreground first:pl-4 last:pr-4",
                           meta?.align === "end" && "text-right",
@@ -245,7 +248,7 @@ export function DataTable<T>({
           aria-label="Bulk actions"
           className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-fit animate-pop-in flex-wrap items-center gap-2 rounded-panel border border-border bg-surface-raised p-1.5 pl-4 shadow-lg sm:flex-nowrap"
         >
-          <span className="text-sm font-medium whitespace-nowrap tabular">
+          <span className="tabular text-sm font-medium whitespace-nowrap">
             {pluralize(selectedIds.length, "row")} selected
           </span>
           <span aria-hidden className="mx-1 h-5 w-px bg-border" />

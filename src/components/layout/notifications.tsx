@@ -14,9 +14,17 @@ export function Notifications() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" aria-label={`Notifications, ${unread} unread`}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+          aria-label={`Notifications, ${unread} unread`}
+        >
           <Bell />
-          <span aria-hidden className="absolute top-2 right-2 size-2 rounded-full bg-danger ring-2 ring-background" />
+          <span
+            aria-hidden
+            className="absolute top-2 right-2 size-2 rounded-full bg-danger ring-2 ring-background"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[22rem] p-0">
@@ -32,12 +40,19 @@ export function Notifications() {
               <Avatar name={a.actor} size="sm" />
               <p className="flex-1 text-sm">
                 <span className="font-medium">{a.actor}</span>{" "}
-                <span className="text-muted-foreground">{a.action}</span> <span className="font-medium">{a.target}</span>
+                <span className="text-muted-foreground">{a.action}</span>{" "}
+                <span className="font-medium">{a.target}</span>
                 <span className="mt-0.5 block text-xs text-subtle-foreground" suppressHydrationWarning>
                   {formatRelative(a.at)}
                 </span>
               </p>
-              {i < unread && <span aria-label="Unread" className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />}
+              {i < unread && (
+                <span
+                  role="img"
+                  aria-label="Unread"
+                  className="mt-1.5 size-2 shrink-0 rounded-full bg-primary"
+                />
+              )}
             </li>
           ))}
         </ul>

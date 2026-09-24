@@ -26,7 +26,8 @@ const buttonVariants = cva(
         ghost: "bg-transparent text-muted-foreground hover:bg-surface-hover hover:text-foreground",
         inverse: "bg-inverse text-inverse-foreground shadow-button hover:bg-inverse/90",
         danger: "bg-danger text-danger-foreground shadow-button hover:bg-danger-hover",
-        "danger-soft": "bg-danger-soft text-danger-soft-foreground hover:bg-danger hover:text-danger-foreground",
+        "danger-soft":
+          "bg-danger-soft text-danger-soft-foreground hover:bg-danger hover:text-danger-foreground",
         link: "h-auto! rounded-xs px-0! text-primary underline-offset-4 hover:underline active:translate-y-0",
       },
       size: {

@@ -53,7 +53,7 @@ export function CommandMenu() {
           aria-label="Search"
         >
           <Search className="size-4 shrink-0" />
-          <span className="hidden flex-1 text-left text-base text-faint-foreground md:block">Search…</span>
+          <span className="hidden flex-1 text-left text-base text-subtle-foreground md:block">Search…</span>
           <Kbd keys={["⌘", "K"]} className="hidden md:inline-flex" />
         </button>
       </DialogPrimitive.Trigger>
@@ -105,7 +105,10 @@ export function CommandMenu() {
                 <CommandItem onSelect={() => run(() => setTheme("system"))}>
                   <Laptop /> Use system colour mode
                 </CommandItem>
-                <CommandItem value="compact density" onSelect={() => run(() => setPreference("density", "compact"))}>
+                <CommandItem
+                  value="compact density"
+                  onSelect={() => run(() => setPreference("density", "compact"))}
+                >
                   <Rows3 /> Compact density
                 </CommandItem>
                 <CommandItem

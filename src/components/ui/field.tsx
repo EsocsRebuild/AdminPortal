@@ -22,7 +22,17 @@ export interface FieldProps {
  * Label, control and hint or error. The message id is `${htmlFor}-msg`;
  * point the control's `aria-describedby` at it.
  */
-export function Field({ label, htmlFor, hint, error, required, optional, inline, className, children }: FieldProps) {
+export function Field({
+  label,
+  htmlFor,
+  hint,
+  error,
+  required,
+  optional,
+  inline,
+  className,
+  children,
+}: FieldProps) {
   const message = error ?? hint;
   const msg = message && (
     <p

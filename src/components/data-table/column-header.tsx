@@ -1,6 +1,6 @@
 "use client";
 
-import type { Header } from "@tanstack/react-table";
+import type { CellData, Header, RowData } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 
@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 import type { DataTableFeatures } from "./features";
 
 /** Clickable, accessible sort header. Use as a column's `header`. */
-export function ColumnHeader<T>({
+export function ColumnHeader<T extends RowData, TValue extends CellData = CellData>({
   header,
   title,
 }: {
-  header: Header<DataTableFeatures, T, unknown>;
+  header: Header<DataTableFeatures, T, TValue>;
   title: React.ReactNode;
 }) {
   const column = header.column;

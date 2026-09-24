@@ -90,14 +90,20 @@ export function DropdownMenuSubTrigger({
   ...props
 }: React.ComponentProps<typeof DropdownPrimitive.SubTrigger>) {
   return (
-    <DropdownPrimitive.SubTrigger className={cn(itemClass, "data-[state=open]:bg-surface-hover", className)} {...props}>
+    <DropdownPrimitive.SubTrigger
+      className={cn(itemClass, "data-[state=open]:bg-surface-hover", className)}
+      {...props}
+    >
       {children}
       <ChevronRight className="ml-auto" />
     </DropdownPrimitive.SubTrigger>
   );
 }
 
-export function DropdownMenuSubContent({ className, ...props }: React.ComponentProps<typeof DropdownPrimitive.SubContent>) {
+export function DropdownMenuSubContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof DropdownPrimitive.SubContent>) {
   return (
     <DropdownPrimitive.Portal>
       <DropdownPrimitive.SubContent className={cn(contentClass, className)} {...props} />
@@ -105,16 +111,30 @@ export function DropdownMenuSubContent({ className, ...props }: React.ComponentP
   );
 }
 
-export function DropdownMenuLabel({ className, ...props }: React.ComponentProps<typeof DropdownPrimitive.Label>) {
+export function DropdownMenuLabel({
+  className,
+  ...props
+}: React.ComponentProps<typeof DropdownPrimitive.Label>) {
   return (
-    <DropdownPrimitive.Label className={cn("px-2 py-1.5 text-xs font-medium text-subtle-foreground", className)} {...props} />
+    <DropdownPrimitive.Label
+      className={cn("px-2 py-1.5 text-xs font-medium text-subtle-foreground", className)}
+      {...props}
+    />
   );
 }
 
-export function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typeof DropdownPrimitive.Separator>) {
+export function DropdownMenuSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof DropdownPrimitive.Separator>) {
   return <DropdownPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-border", className)} {...props} />;
 }
 
 export function DropdownMenuShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
-  return <span className={cn("ml-auto pl-4 text-xs tracking-widest text-faint-foreground", className)} {...props} />;
+  return (
+    <span
+      className={cn("ml-auto pl-4 text-xs tracking-widest text-faint-foreground", className)}
+      {...props}
+    />
+  );
 }

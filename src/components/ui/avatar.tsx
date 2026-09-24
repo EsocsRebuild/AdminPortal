@@ -55,6 +55,7 @@ export function Avatar({ name, src, size, status, className }: AvatarProps) {
       </AvatarPrimitive.Root>
       {status && (
         <span
+          role="img"
           aria-label={status}
           className={cn(
             "absolute right-0 bottom-0 size-2.5 rounded-full ring-2 ring-surface",
@@ -88,7 +89,12 @@ export function AvatarGroup({
         <Avatar key={p.name} name={p.name} src={p.src} size={size} className="ring-2 ring-surface" />
       ))}
       {rest > 0 && (
-        <span className={cn(avatarVariants({ size }), "bg-surface-muted text-muted-foreground ring-2 ring-surface")}>
+        <span
+          className={cn(
+            avatarVariants({ size }),
+            "bg-surface-muted text-muted-foreground ring-2 ring-surface",
+          )}
+        >
           +{rest}
         </span>
       )}

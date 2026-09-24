@@ -1,5 +1,6 @@
 "use client";
 
+import type { RowData } from "@tanstack/react-table";
 import { Settings2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import {
 import type { DataTableInstance } from "./features";
 
 /** Column visibility menu. */
-export function DataTableViewOptions<T>({ table }: { table: DataTableInstance<T> }) {
+export function DataTableViewOptions<T extends RowData>({ table }: { table: DataTableInstance<T> }) {
   const columns = table.getAllLeafColumns().filter((c) => c.getCanHide());
   if (columns.length === 0) return null;
   return (

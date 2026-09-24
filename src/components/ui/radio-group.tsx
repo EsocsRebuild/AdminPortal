@@ -15,7 +15,10 @@ export function RadioGroupItem({
   description,
   id,
   ...props
-}: React.ComponentProps<typeof RadioPrimitive.Item> & { label?: React.ReactNode; description?: React.ReactNode }) {
+}: React.ComponentProps<typeof RadioPrimitive.Item> & {
+  label?: React.ReactNode;
+  description?: React.ReactNode;
+}) {
   const autoId = React.useId();
   const inputId = id ?? autoId;
   return (

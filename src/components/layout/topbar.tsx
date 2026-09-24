@@ -22,13 +22,12 @@ function useCrumbs(): Crumb[] {
   const item = activeNavItem(pathname);
   if (!item) return [];
   const rest = pathname.slice(item.href.length).split("/").filter(Boolean);
-  let href = item.href;
   return [
     { label: item.title, href: item.href },
-    ...rest.map((seg) => {
-      href += `/${seg}`;
-      return { label: titleCase(seg), href };
-    }),
+    ...rest.map((seg, i) => ({
+      label: titleCase(seg),
+      href: `${item.href}/${rest.slice(0, i + 1).join("/")}`,
+    })),
   ];
 }
 

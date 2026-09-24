@@ -1,5 +1,6 @@
 "use client";
 
+import type { RowData } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import type { DataTableInstance } from "./features";
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
-export function DataTablePagination<T>({ table }: { table: DataTableInstance<T> }) {
+export function DataTablePagination<T extends RowData>({ table }: { table: DataTableInstance<T> }) {
   const { pageIndex, pageSize } = table.atoms.pagination.get();
   const total = table.getRowCount();
   const pageCount = Math.max(1, table.getPageCount());

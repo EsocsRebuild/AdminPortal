@@ -32,7 +32,11 @@ export function Progress({
       value={value}
       max={max}
       aria-label={ariaLabel}
-      className={cn("relative w-full overflow-hidden rounded-full bg-surface-muted", size === "sm" ? "h-1" : "h-1.5", className)}
+      className={cn(
+        "relative w-full overflow-hidden rounded-full bg-surface-muted",
+        size === "sm" ? "h-1" : "h-1.5",
+        className,
+      )}
     >
       <ProgressPrimitive.Indicator
         className={cn("h-full rounded-full transition-[width] duration-500 ease-emphasized", tones[tone])}

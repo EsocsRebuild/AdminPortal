@@ -52,4 +52,4 @@ export function pluralize(count: number, singular: string, plural = `${singular}
   return `${count.toLocaleString()} ${count === 1 ? singular : plural}`;
 }
 
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));

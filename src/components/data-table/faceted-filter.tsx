@@ -1,6 +1,6 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
 import { PlusCircle, X } from "lucide-react";
 import * as React from "react";
 
@@ -21,7 +21,7 @@ export interface FacetOption {
 /**
  * Multi-select filter for one column. The column needs `filterFn: "arrIncludesSome"`.
  */
-export function FacetedFilter<T>({
+export function FacetedFilter<T extends RowData>({
   column,
   title,
   options,
@@ -71,9 +71,14 @@ export function FacetedFilter<T>({
               key={o.value}
               className="flex min-h-8 cursor-pointer items-center gap-2.5 rounded-xs px-2 hover:bg-surface-hover pointer-coarse:min-h-10"
             >
-              <Checkbox checked={selected.has(o.value)} onCheckedChange={(v) => toggle(o.value, v === true)} />
+              <Checkbox
+                checked={selected.has(o.value)}
+                onCheckedChange={(v) => toggle(o.value, v === true)}
+              />
               <span className="flex-1 text-base">{o.label}</span>
-              {o.count !== undefined && <span className="text-xs text-subtle-foreground tabular">{o.count}</span>}
+              {o.count !== undefined && (
+                <span className="tabular text-xs text-subtle-foreground">{o.count}</span>
+              )}
             </label>
           ))}
         </div>

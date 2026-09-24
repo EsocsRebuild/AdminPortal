@@ -72,8 +72,9 @@ export function SidebarNav({ rail = false, onNavigate }: { rail?: boolean; onNav
                     {item.badge && (
                       <span
                         className={cn(
-                          "rounded-full bg-primary-soft px-1.5 text-2xs font-semibold text-primary-soft-foreground tabular",
-                          rail && "lg:rail:absolute lg:rail:top-1 lg:rail:right-1 lg:rail:size-2 lg:rail:bg-primary lg:rail:p-0 lg:rail:text-[0px]",
+                          "rounded-full bg-primary-soft px-1.5 tabular text-2xs font-semibold text-primary-soft-foreground",
+                          rail &&
+                            "lg:rail:absolute lg:rail:top-1 lg:rail:right-1 lg:rail:size-2 lg:rail:bg-primary lg:rail:p-0 lg:rail:text-[0px]",
                         )}
                       >
                         {item.badge}

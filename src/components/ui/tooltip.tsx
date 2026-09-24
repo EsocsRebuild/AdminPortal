@@ -18,7 +18,15 @@ export interface TooltipProps {
   className?: string;
 }
 
-export function Tooltip({ content, children, side = "top", align, shortcut, disabled, className }: TooltipProps) {
+export function Tooltip({
+  content,
+  children,
+  side = "top",
+  align,
+  shortcut,
+  disabled,
+  className,
+}: TooltipProps) {
   if (disabled) return children;
   return (
     <TooltipPrimitive.Root>
