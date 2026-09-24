@@ -9,8 +9,8 @@ import { Spinner } from "./spinner";
 const buttonVariants = cva(
   [
     "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-control font-medium whitespace-nowrap select-none",
-    "transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-standard",
-    "active:translate-y-px",
+    "transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out-expo",
+    "active:scale-[0.97]",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -18,17 +18,19 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground shadow-button hover:bg-primary-hover",
+        primary:
+          "bg-primary bg-[linear-gradient(180deg,oklch(1_0_0/0.14),transparent_60%)] text-primary-foreground shadow-button hover:bg-primary-hover",
         secondary:
-          "border border-border bg-surface text-foreground shadow-xs hover:border-border-strong hover:bg-surface-muted",
+          "border border-border bg-surface text-foreground shadow-xs hover:border-border-strong hover:bg-surface-hover",
         soft: "bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft/70",
         outline: "border border-border-strong bg-transparent text-foreground hover:bg-surface-hover",
         ghost: "bg-transparent text-muted-foreground hover:bg-surface-hover hover:text-foreground",
         inverse: "bg-inverse text-inverse-foreground shadow-button hover:bg-inverse/90",
-        danger: "bg-danger text-danger-foreground shadow-button hover:bg-danger-hover",
+        danger:
+          "bg-danger bg-[linear-gradient(180deg,oklch(1_0_0/0.14),transparent_60%)] text-danger-foreground shadow-button hover:bg-danger-hover",
         "danger-soft":
           "bg-danger-soft text-danger-soft-foreground hover:bg-danger hover:text-danger-foreground",
-        link: "h-auto! rounded-xs px-0! text-primary underline-offset-4 hover:underline active:translate-y-0",
+        link: "h-auto! rounded-xs px-0! text-primary underline-offset-4 hover:underline active:scale-100",
       },
       size: {
         xs: "h-control-xs gap-1.5 px-2 text-xs [&_svg]:size-3.5",

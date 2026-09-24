@@ -21,7 +21,8 @@ src/
 ├─ app/
 │  ├─ globals.css              design tokens, themes, density, utilities
 │  ├─ layout.tsx               fonts, providers, no-flash preferences script
-│  ├─ (auth)/login             split-screen sign-in
+│  ├─ (auth)/                   login, signup (3 steps), verify (6-digit code),
+│  │                            forgot-password, reset-password
 │  └─ (app)/                   everything behind the app shell
 │     ├─ dashboard             reference: KPIs, chart, tasks, activity
 │     ├─ members               reference: full DataTable module
@@ -34,7 +35,8 @@ src/
 │  ├─ layout/                  AppShell, Sidebar, Topbar, CommandMenu, Page, PageHeader
 │  ├─ blocks/                  StatCard, StatusBadge
 │  ├─ charts/                  Sparkline, StackedBarChart
-│  ├─ auth/                    SessionProvider, useSession, <Can>
+│  ├─ auth/                    SessionProvider, <Can>, PasswordInput, PasswordStrength, AuthHeader
+│  ├─ motion/                  PageTransition, Reveal, Stagger, CountUp, SuccessCheck
 │  └─ theme/                   Providers, ThemeToggle, AppearanceSettings
 ├─ config/                     site, navigation, role → permission map
 ├─ hooks/                      usePreference, useHotkey, useMediaQuery, useDebouncedValue, useCopy
@@ -59,6 +61,17 @@ Preferences are stored in localStorage and applied by an inline script before fi
 **Type:** Geist (UI, 14px base), Geist Mono (IDs, figures), Cormorant Garamond (brand only). Use `tabular` on numbers that line up.
 
 **Sizes follow density:** use `h-control-sm|md|lg` rather than fixed heights so compact mode works. Touch devices always keep 44px targets.
+
+## Motion
+
+Motion should explain what changed, never slow anyone down. Built on `motion/react`, with `MotionConfig reducedMotion="user"` so the system "reduce motion" setting turns it off.
+
+- **Pages** fade and rise in via `template.tsx` in each route group.
+- **Sections** enter in sequence with `<Stagger>` / `<StaggerItem>`; single blocks with `<Reveal>`.
+- **Indicators glide**: the active nav item (`layoutId`), tabs and segmented controls (`useSlidingIndicator`).
+- **Numbers** count up once on screen (`<CountUp>`); chart bars and progress bars grow in.
+- **Feedback**: buttons press in, errors shake, checks draw themselves (`<SuccessCheck>`), slow links show a spinner (`useLinkStatus`).
+- Durations: 150–300ms for UI, up to 1.2s for celebratory moments. Use `ease-out-expo` for entrances.
 
 ## Responsive behaviour
 

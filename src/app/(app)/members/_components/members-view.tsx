@@ -64,7 +64,15 @@ function RowMenu({ member, onView }: { member: Member; onView: () => void }) {
         </DropdownMenuItem>
         <Can permission="members:manage">
           <DropdownMenuSeparator />
-          <DropdownMenuItem tone="danger" onSelect={() => toast.error(`${member.name} removed`)}>
+          <DropdownMenuItem
+            tone="danger"
+            onSelect={() =>
+              toast(`${member.name} removed`, {
+                description: "They can no longer sign in to the member portal.",
+                action: { label: "Undo", onClick: () => toast.success(`${member.name} restored`) },
+              })
+            }
+          >
             <Trash2 /> Remove
           </DropdownMenuItem>
         </Can>

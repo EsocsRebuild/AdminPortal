@@ -73,6 +73,8 @@ import { toast } from "@/components/ui/toaster";
 import { Tooltip } from "@/components/ui/tooltip";
 import { sleep } from "@/lib/utils";
 
+import { AccountDemos } from "./account-demos";
+
 const sections = [
   ["colors", "Colour"],
   ["type", "Typography"],
@@ -82,6 +84,7 @@ const sections = [
   ["overlays", "Overlays"],
   ["feedback", "Feedback"],
   ["data", "Data display"],
+  ["account", "Account & motion"],
   ["tokens", "Radius & depth"],
 ] as const;
 
@@ -151,7 +154,7 @@ export function Showcase() {
   return (
     <div className="grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-12">
       <nav aria-label="Sections" className="lg:sticky lg:top-20 lg:self-start">
-        <ul className="-mx-gutter scrollbar-none flex gap-1 overflow-x-auto px-gutter lg:mx-0 lg:grid lg:px-0">
+        <ul className="scrollbar-none flex gap-1 overflow-x-auto mask-fade-x px-1 lg:grid lg:[mask-image:none] lg:px-0">
           {sections.map(([id, label]) => (
             <li key={id} className="shrink-0">
               <a
@@ -592,6 +595,14 @@ export function Showcase() {
             </CardContent>
             <CardFooter>Updated 2 minutes ago</CardFooter>
           </Card>
+        </Section>
+
+        <Section
+          id="account"
+          title="Account & motion"
+          description="Building blocks for sign-up, verification and celebratory moments."
+        >
+          <AccountDemos />
         </Section>
 
         <Section id="tokens" title="Radius & depth">

@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 const cardVariants = cva("flex flex-col rounded-card text-foreground", {
   variants: {
     variant: {
-      default: "border border-border bg-surface shadow-xs",
+      default: "border border-border bg-surface",
       raised: "border border-border bg-surface-raised shadow-md",
       muted: "bg-surface-muted",
       outline: "border border-dashed border-border-strong",
       ghost: "",
     },
     interactive: {
-      true: "transition-[border-color,box-shadow] duration-150 hover:border-border-strong hover:shadow-sm",
+      true: "transition-[border-color,box-shadow,transform] duration-300 ease-out-expo hover:-translate-y-0.5 hover:border-border-strong hover:shadow-md",
     },
   },
   defaultVariants: { variant: "default" },

@@ -53,7 +53,9 @@ export function CommandMenu() {
           aria-label="Search"
         >
           <Search className="size-4 shrink-0" />
-          <span className="hidden flex-1 text-left text-base text-subtle-foreground md:block">Search…</span>
+          <span className="hidden flex-1 text-left text-base text-subtle-foreground md:block">
+            Search or jump to…
+          </span>
           <Kbd keys={["⌘", "K"]} className="hidden md:inline-flex" />
         </button>
       </DialogPrimitive.Trigger>

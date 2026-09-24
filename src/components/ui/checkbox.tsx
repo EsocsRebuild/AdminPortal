@@ -31,7 +31,7 @@ export function Checkbox({ className, label, description, id, ...props }: Checkb
       )}
       {...props}
     >
-      <CheckboxPrimitive.Indicator className="group grid place-items-center">
+      <CheckboxPrimitive.Indicator className="group grid animate-scale-in place-items-center">
         <Check className="size-3 group-data-[state=indeterminate]:hidden" strokeWidth={3} />
         <Minus className="hidden size-3 group-data-[state=indeterminate]:block" strokeWidth={3} />
       </CheckboxPrimitive.Indicator>

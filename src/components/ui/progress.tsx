@@ -39,7 +39,10 @@ export function Progress({
       )}
     >
       <ProgressPrimitive.Indicator
-        className={cn("h-full rounded-full transition-[width] duration-500 ease-emphasized", tones[tone])}
+        className={cn(
+          "h-full origin-left animate-grow-x rounded-full transition-[width] duration-500 ease-out-expo",
+          tones[tone],
+        )}
         style={{ width: `${pct}%` }}
       />
     </ProgressPrimitive.Root>

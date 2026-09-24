@@ -1,7 +1,7 @@
 /*
  * ESOCS Admin — design tokens and base styles.
  *
- * 1. Palette and static tokens      (@theme static)
+ * 1. Palette and static tokens      (@theme)
  * 2. Semantic tokens, light + dark  (:root, .dark)
  * 3. Accent themes                  ([data-accent])
  * 4. Density                        ([data-density])
@@ -27,7 +27,7 @@
 
 /* 1. Palette and static tokens ------------------------------------------ */
 
-@theme static {
+@theme {
   /* Brand — shared with the public site. */
   --color-royal-50: oklch(0.97 0.012 265);
   --color-royal-100: oklch(0.93 0.025 265);
@@ -126,6 +126,7 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   --animate-fade-in: fade-in 0.15s var(--ease-standard) both;
   --animate-fade-out: fade-out 0.12s var(--ease-standard) both;
@@ -141,6 +142,12 @@
   --animate-collapsible-up: collapsible-up 0.15s var(--ease-standard);
   --animate-shimmer: shimmer 1.8s linear infinite;
   --animate-pulse-ring: pulse-ring 2s var(--ease-standard) infinite;
+  --animate-rise-in: rise-in 0.5s var(--ease-out-expo) both;
+  --animate-scale-in: scale-in 0.2s var(--ease-spring) both;
+  --animate-float: float 14s ease-in-out infinite alternate;
+  --animate-shake: shake 0.4s var(--ease-standard);
+  --animate-grow-up: grow-up 0.9s var(--ease-out-expo) both;
+  --animate-grow-x: grow-x 1s var(--ease-out-expo) both;
 
   @keyframes fade-in {
     from {
@@ -218,6 +225,46 @@
       background-position: -200% 0;
     }
   }
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+  @keyframes grow-up {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes shake {
+    20%,
+    60% {
+      transform: translateX(-6px);
+    }
+    40%,
+    80% {
+      transform: translateX(6px);
+    }
+  }
+  @keyframes float {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(4%, -6%, 0) scale(1.12);
+    }
+  }
   @keyframes pulse-ring {
     0% {
       box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 45%, transparent);
@@ -248,10 +295,10 @@
   --subtle-foreground: oklch(0.53 0.02 265);
   --faint-foreground: var(--color-ink-400); /* placeholders + icons only, not text */
 
-  --border: var(--color-ink-200);
-  --border-subtle: var(--color-ink-150);
+  --border: oklch(0.925 0.007 265);
+  --border-subtle: oklch(0.948 0.005 265);
   --border-strong: var(--color-ink-300);
-  --input: var(--color-ink-200);
+  --input: oklch(0.89 0.009 265);
 
   --inverse: var(--color-ink-950);
   --inverse-foreground: var(--color-ink-25);
@@ -296,12 +343,14 @@
   --chart-2: oklch(0.6 0.11 70);
   --chart-grid: var(--color-ink-150);
 
-  --shadow-xs: 0 1px 2px oklch(0.2 0.03 265 / 0.05);
-  --shadow-sm: 0 1px 2px oklch(0.2 0.03 265 / 0.06), 0 1px 3px oklch(0.2 0.03 265 / 0.05);
+  --shadow-xs: 0 1px 2px oklch(0.2 0.03 265 / 0.04);
+  --shadow-sm: 0 1px 2px oklch(0.2 0.03 265 / 0.04), 0 2px 6px oklch(0.2 0.03 265 / 0.04);
   --shadow-md: 0 2px 4px oklch(0.2 0.03 265 / 0.04), 0 6px 16px oklch(0.2 0.03 265 / 0.07);
   --shadow-lg: 0 4px 12px oklch(0.2 0.03 265 / 0.06), 0 20px 48px oklch(0.2 0.03 265 / 0.12);
   --shadow-inset: inset 0 1px 0 oklch(1 0 0 / 0.5);
-  --shadow-button: 0 1px 2px oklch(0.2 0.03 265 / 0.12), inset 0 1px 0 oklch(1 0 0 / 0.14);
+  --shadow-button:
+    0 1px 2px oklch(0.2 0.03 265 / 0.14), inset 0 1px 0 oklch(1 0 0 / 0.16),
+    inset 0 -1px 0 oklch(0 0 0 / 0.06);
 }
 
 .dark,
@@ -322,8 +371,8 @@
   --subtle-foreground: var(--color-ink-500);
   --faint-foreground: oklch(0.52 0.018 265);
 
-  --border: var(--color-ink-850);
-  --border-subtle: var(--color-ink-900);
+  --border: oklch(0.235 0.02 265);
+  --border-subtle: oklch(0.19 0.018 265);
   --border-strong: var(--color-ink-800);
   --input: var(--color-ink-800);
 
@@ -613,6 +662,17 @@
 
   ::selection {
     background-color: color-mix(in oklch, var(--primary) 22%, transparent);
+  }
+
+  /* Lighter, more refined icon strokes everywhere. */
+  svg.lucide {
+    stroke-width: 1.75;
+  }
+
+  button,
+  [role="button"],
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 
   :focus-visible {

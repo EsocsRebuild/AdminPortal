@@ -97,10 +97,10 @@ export function StackedBarChart<K extends string>({
               >
                 <div
                   className={cn(
-                    "flex flex-col-reverse gap-0.5 transition-opacity duration-150",
+                    "flex origin-bottom animate-grow-up flex-col-reverse gap-0.5 transition-opacity duration-200",
                     active !== null && active !== i && "opacity-45",
                   )}
-                  style={{ height: `${(totals[i] / max) * 100}%` }}
+                  style={{ height: `${(totals[i] / max) * 100}%`, animationDelay: `${i * 45}ms` }}
                 >
                   {series.map((s, si) => (
                     <div
