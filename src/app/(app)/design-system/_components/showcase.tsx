@@ -271,7 +271,7 @@ export function Showcase() {
         <Section id="forms" title="Forms">
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Name" htmlFor="ds-name" hint="As it appears on the register." required>
-              <Input id="ds-name" placeholder="Adaeze Okafor" aria-describedby="ds-name-msg" />
+              <Input id="ds-name" placeholder="Alex Example" aria-describedby="ds-name-msg" />
             </Field>
             <Field label="Email" htmlFor="ds-email" error="Enter a valid email address.">
               <Input
@@ -424,7 +424,7 @@ export function Showcase() {
             <Button
               variant="secondary"
               onClick={() =>
-                toast.success("Member approved", { description: "Adaeze Okafor can now sign in." })
+                toast.success("Member approved", { description: "Alex Example can now sign in." })
               }
             >
               Success
@@ -524,19 +524,19 @@ export function Showcase() {
             />
           </div>
           <Demo title="Avatars">
-            <Avatar name="Adaeze Okafor" size="xs" />
-            <Avatar name="Babatunde Eze" size="sm" />
-            <Avatar name="Chiamaka Nwosu" status="online" />
-            <Avatar name="Rev. Damilola Adeyemi" size="lg" status="away" />
-            <Avatar name="Emeka Balogun" size="xl" />
+            <Avatar name="Alex Example" size="xs" />
+            <Avatar name="Sam Sample" size="sm" />
+            <Avatar name="Kim Demo" status="online" />
+            <Avatar name="Jo Placeholder" size="lg" status="away" />
+            <Avatar name="Lee Test" size="xl" />
             <AvatarGroup
               people={[
-                "Adaeze Okafor",
-                "Babatunde Eze",
-                "Chiamaka Nwosu",
-                "Damilola Adeyemi",
-                "Emeka Balogun",
-                "Funmi Ibrahim",
+                "Alex Example",
+                "Sam Sample",
+                "Kim Demo",
+                "Jo Placeholder",
+                "Lee Test",
+                "Max Preview",
               ].map((name) => ({ name }))}
             />
           </Demo>

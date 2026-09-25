@@ -50,7 +50,7 @@ export function AccountDemos() {
         <div key={replay} className="flex items-center gap-6">
           <SuccessCheck />
           <p className="tabular text-metric font-semibold">
-            <CountUp value={48294} />
+            <CountUp value={1250} />
           </p>
         </div>
         <Button variant="secondary" size="sm" onClick={() => setReplay((n) => n + 1)}>

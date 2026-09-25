@@ -1,19 +1,13 @@
 # Agent notes
 
-- Next.js 16: read `node_modules/next/dist/docs/` before using unfamiliar APIs. Middleware is now `proxy.ts`.
-- TanStack Table is **v9** (`useTable`, `tableFeatures`, `columnHelper`), not v8. Its guides ship in `node_modules/@tanstack/*/skills/`.
-- Use semantic colour tokens and density-aware sizes (`h-control-md`, `p-card`, `gap-page`). No raw colours.
-- Tailwind resolves `max-w-*` against `--spacing-*` before `--container-*`. Don't give a container token the same name as a spacing token.
-- Grid wrappers around wide children (tables, tab lists, charts) need `grid-cols-[minmax(0,1fr)]`, or they overflow on phones.
-- Run `npm run validate` before committing.
-- Use plain `@theme` / `@theme inline` in globals.css, never `@theme static`: the Tailwind IntelliSense extension (v0.16) can't parse the `static` modifier and flags every token as a CSS error.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- Next.js 16: read `node_modules/next/dist/docs/` before using unfamiliar APIs. Middleware is `src/proxy.ts`.
+- TanStack Table is **v9** (`useTable`, `tableFeatures`, `columnHelper`). Its guides are in `node_modules/@tanstack/*/skills/`.
+- **No mock data in the app.** All data comes from the API via `src/server/backend.ts`. Keep `docs/api-contract.md` in sync with every endpoint you call.
+- Reads: `features/*/queries.ts` (`import "server-only"`, call `requirePermission` first). Writes: `features/*/actions.ts` with `secureAction`. Never call the API from client code.
+- Never pass functions from Server Components to Client Components (e.g. `formatValue`); wrap the chart or control in a small client component instead.
+- Use semantic colour tokens and density-aware sizes (`h-control-md`, `p-card`, `gap-page`). No raw colours in feature UI.
+- Tailwind resolves `max-w-*` against `--spacing-*` before `--container-*`: don't reuse names across them.
+- Grid wrappers around wide children need `grid-cols-[minmax(0,1fr)]`, or they overflow on phones.
+- Use plain `@theme` / `@theme inline`, never `@theme static` (the IntelliSense extension can't parse it).
+- Dialog state belongs in the dialog body (mounted only while open), not in reset-on-open effects; the React lint rules reject setState in effects.
+- Run `npm run validate` before committing; `npm run test:e2e` for security headers and the public pages.

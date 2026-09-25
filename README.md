@@ -1,114 +1,95 @@
 # ESOCS — Admin Portal
 
-Administration portal for the Eternal Sacred Order of Cherubim & Seraphim.
+Administration software for the Eternal Sacred Order of Cherubim & Seraphim: members, email marketing, forms, administrators and audit.
 
-**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Radix UI · TanStack Table v9 · cmdk · next-themes · Sonner
+**Stack:** Next.js 16 (App Router, Server Actions, Proxy) · React 19 · TypeScript · Tailwind CSS v4 · Radix UI · Motion · TanStack Table v9 · Zod 4
+
+The portal is a **backend-for-frontend**. It holds no data: every screen reads from the REST API described in [`docs/api-contract.md`](docs/api-contract.md), from the server. Browsers never talk to the API and never see a token.
 
 ```bash
-cp .env.example .env.local
+cp .env.example .env.local        # set BACKEND_API_URL
 npm install
-npm run dev          # http://localhost:3001
-npm run validate     # lint + format + typecheck + unit tests
-npm run test:e2e     # responsive + accessibility checks at phone / tablet / desktop
+npm run dev                       # http://localhost:3001
+npm run validate                  # lint + format + typecheck + unit tests
+npm run test:e2e                  # security + public pages at phone/tablet/desktop
 ```
 
-Open **`/design-system`** to see every token and component live.
+To run the signed-in end-to-end suite against a staging API:
+`E2E_BACKEND_URL=https://staging-api.example/v1 E2E_EMAIL=… E2E_PASSWORD=… npm run test:e2e`
 
-## Structure
+---
+
+## Architecture
 
 ```
 src/
+├─ proxy.ts                  per-request CSP nonce · optimistic auth redirect · silent token refresh
+├─ server/                   server-only
+│  ├─ env.ts                 validated environment
+│  ├─ backend.ts             API client (bearer from httpOnly cookie, forwarded IP/UA/request-id, error mapping)
+│  ├─ session.ts             Data Access Layer: getSession · requireSession · requirePermission
+│  ├─ action.ts              secureAction / publicAction: session → permission → sudo → Zod → handler
+│  ├─ cookies.ts             cookie names and policy (__Host-, httpOnly, Secure, SameSite)
+│  ├─ query.ts               findOrNotFound, assertId
+│  └─ download.ts            permission-checked CSV streaming
+├─ features/<area>/          one folder per domain
+│  ├─ types.ts               API shapes (the contract)
+│  ├─ schemas.ts             Zod input rules, shared by browser and server
+│  ├─ queries.ts             server-only reads, each checks its permission
+│  ├─ actions.ts             "use server" mutations via secureAction
+│  └─ components/            the feature's UI
+│     areas: auth · account · dashboard · members · audiences · email-builder · templates
+│            campaigns · sending · forms · users · audit · notifications · lookups
 ├─ app/
-│  ├─ globals.css              design tokens, themes, density, utilities
-│  ├─ layout.tsx               fonts, providers, no-flash preferences script
-│  ├─ (auth)/                   login, signup (3 steps), verify (6-digit code),
-│  │                            forgot-password, reset-password
-│  └─ (app)/                   everything behind the app shell
-│     ├─ dashboard             reference: KPIs, chart, tasks, activity
-│     ├─ members               reference: full DataTable module
-│     ├─ settings              appearance, profile, notifications
-│     ├─ design-system         living style guide
-│     └─ [...slug]             placeholder for nav modules not built yet
-├─ components/
-│  ├─ ui/                      primitives (Button, Input, Select, Dialog, Sheet, Tabs, …)
-│  ├─ data-table/              DataTable, ColumnHeader, FacetedFilter, selectColumn, …
-│  ├─ layout/                  AppShell, Sidebar, Topbar, CommandMenu, Page, PageHeader
-│  ├─ blocks/                  StatCard, StatusBadge
-│  ├─ charts/                  Sparkline, StackedBarChart
-│  ├─ auth/                    SessionProvider, <Can>, PasswordInput, PasswordStrength, AuthHeader
-│  ├─ motion/                  PageTransition, Reveal, Stagger, CountUp, SuccessCheck
-│  └─ theme/                   Providers, ThemeToggle, AppearanceSettings
-├─ config/                     site, navigation, role → permission map
-├─ hooks/                      usePreference, useHotkey, useMediaQuery, useDebouncedValue, useCopy
-├─ lib/                        cn, formatters, typed API client, permissions, preferences, fixtures
-└─ types/                      shared domain types
+│  ├─ (auth)/                login · mfa · signup · verify · forgot/reset password · invite/[token]
+│  ├─ (app)/                 signed-in area (layout verifies the session on every request)
+│  ├─ f/[slug]/              public form pages (embeddable only by FORM_EMBED_ORIGINS)
+│  ├─ api/…/export/          CSV downloads
+│  └─ forbidden.tsx          403 page for missing permissions
+├─ components/               shared UI: ui/ · layout/ · data-table/ · modals/ · motion/ · charts/ · auth/
+├─ hooks/                    useAction · useAutosave · useUrlQuery · usePreference · useHotkey · …
+└─ lib/                      permissions · result types · list params · validation · password policy · CSV · formatters
 ```
 
-## Theming
+### Data flow
 
-Every colour is a **semantic token** (`bg-surface`, `text-muted-foreground`, `bg-primary`, `border-border`, …) that resolves differently per theme. Never use raw hex or palette steps in components.
+- **Reads:** a Server Component calls `features/x/queries.ts` → `requirePermission()` → `backend()` → rendered on the server. List pages keep page, search, sort and filters in the URL (`parseListParams` + `<DataTable server>`), so views can be shared and survive a refresh.
+- **Writes:** a client component calls a Server Action through `useAction()`. The action is wrapped in `secureAction({ schema, permission, sudo })`, which always re-checks everything. It returns an `ActionResult` (never throws to the browser), and `useAction` shows toasts, prompts for the password again when needed, and handles expired sessions.
 
-| Preference   | Values                        | Where it lives                                    |
-| ------------ | ----------------------------- | ------------------------------------------------- |
-| Colour mode  | light · dark · system         | `class="dark"` on `<html>` (next-themes)          |
-| Accent       | royal · gold · emerald · rose | `data-accent`                                     |
-| Density      | comfortable · compact         | `data-density` → `h-control-*`, `h-row`, `p-card` |
-| Sidebar      | expanded · collapsed (⌘B)     | `data-sidebar` → `rail:` variant                  |
-| Sidebar tone | default · brand               | `data-sidebar-tone`                               |
+---
 
-Preferences are stored in localStorage and applied by an inline script before first paint (no flash). Read or change them with `usePreference("accent")`.
+## Security model
 
-**Type:** Geist (UI, 14px base), Geist Mono (IDs, figures), Cormorant Garamond (brand only). Use `tabular` on numbers that line up.
+| Layer                     | What it does                                                                                                                                                                                                                 |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tokens**                | Access and refresh tokens live in `__Host-` cookies that are `httpOnly`, `Secure` and `SameSite=Lax`. Page JavaScript cannot read them (`document.cookie` is empty).                                                         |
+| **Proxy**                 | Redirects signed-out visitors (with a safe `next`), renews expired access tokens from the refresh token, and keeps signed-in users off the auth pages.                                                                       |
+| **Data Access Layer**     | Every page asks the API who the token belongs to (`/auth/me`), so revoked sessions stop working immediately. Missing permissions render a 403.                                                                               |
+| **Server Actions**        | Each one re-checks the session and permission (it doesn't trust the page), validates input with Zod, and hides unexpected errors behind a generic message. Next.js adds origin checks and encrypted action IDs.              |
+| **Sudo mode**             | Deleting, sending, role changes, invitations and domain changes require re-entering your password within the last few minutes. Enforced here and by the API (`X-Sudo-Token`).                                                |
+| **Idle timeout**          | One-minute warning, then sign-out after `NEXT_PUBLIC_IDLE_TIMEOUT_MINUTES`. Synced across tabs.                                                                                                                              |
+| **Two-step verification** | Authenticator app (TOTP), recovery codes, "remember this device"; administrators can reset it for others.                                                                                                                    |
+| **Headers**               | Per-request nonce CSP (`strict-dynamic`, `object-src 'none'`, `frame-ancestors 'none'`), HSTS, `nosniff`, `X-Frame-Options: DENY`, `COOP`, `CORP`, a strict `Permissions-Policy`, and `no-store` on signed-in pages.         |
+| **Input**                 | Route IDs are validated before they reach an API path; list params fall back to defaults; post-login redirects accept same-site paths only; email links allow only `https:`/`mailto:`; emails are block documents, not HTML. |
+| **Public forms**          | Honeypot, minimum fill time, server-side validation against the live form, and unknown fields dropped. The API adds rate limits and an optional CAPTCHA.                                                                     |
+| **Consent**               | Nobody is added to an audience without an explicit consent attestation; members need `emailConsent`.                                                                                                                         |
+| **Self-protection**       | You can't change your own role, suspend yourself or reset your own two-step verification. The Owner role is locked.                                                                                                          |
 
-**Sizes follow density:** use `h-control-sm|md|lg` rather than fixed heights so compact mode works. Touch devices always keep 44px targets.
+The API must enforce the same rules on its side: see §2 of the API contract.
 
-## Motion
+---
 
-Motion should explain what changed, never slow anyone down. Built on `motion/react`, with `MotionConfig reducedMotion="user"` so the system "reduce motion" setting turns it off.
+## Design system
 
-- **Pages** fade and rise in via `template.tsx` in each route group.
-- **Sections** enter in sequence with `<Stagger>` / `<StaggerItem>`; single blocks with `<Reveal>`.
-- **Indicators glide**: the active nav item (`layoutId`), tabs and segmented controls (`useSlidingIndicator`).
-- **Numbers** count up once on screen (`<CountUp>`); chart bars and progress bars grow in.
-- **Feedback**: buttons press in, errors shake, checks draw themselves (`<SuccessCheck>`), slow links show a spinner (`useLinkStatus`).
-- Durations: 150–300ms for UI, up to 1.2s for celebratory moments. Use `ease-out-expo` for entrances.
+- Semantic colour tokens only (`bg-surface`, `text-muted-foreground`, …). Light/dark mode, 4 accents, comfortable/compact density and a neutral/royal sidebar are all set in `src/app/globals.css` and chosen by each user in **Settings → Appearance**.
+- Motion: `<Reveal>`, `<Stagger>`, `<CountUp>`, `<SuccessCheck>`, route transitions, and gliding indicators. All of it respects "reduce motion".
+- In-app dialogs: `const modals = useModals()` gives `await modals.confirm({…})`, `await modals.reauth()` and `await modals.open(render)`.
+- `/design-system` shows every component. It is available in development, and in production only when `ENABLE_DESIGN_SYSTEM=true`.
 
-## Responsive behaviour
+## Adding a feature
 
-- **≥ 1024px** persistent sidebar, collapsible to an icon rail.
-- **< 1024px** sidebar becomes a drawer from the top bar.
-- **< 768px** DataTables switch to cards (`renderMobileRow`), dialogs become bottom sheets, page actions go full-width, search collapses to an icon.
-- Inputs use 16px text on phones so iOS never zooms on focus; safe-area insets are respected.
-
-## Building a module
-
-```tsx
-// app/(app)/parishes/page.tsx
-export default async function ParishesPage() {
-  const parishes = await api.get<Paginated<Parish>>("/parishes");
-  return (
-    <Page>
-      <PageHeader
-        title="Parishes"
-        actions={
-          <Can permission="parishes:manage">
-            <Button>Add parish</Button>
-          </Can>
-        }
-      />
-      <ParishesTable data={parishes.items} />
-    </Page>
-  );
-}
-```
-
-1. Add the route under `app/(app)/`. It gets the shell automatically.
-2. The nav entry already exists in `config/navigation.ts` (with its permission), and the `[...slug]` placeholder stops matching once your page exists.
-3. Build tables with `columnHelper<T>()` + `<DataTable>`; see `members/_components/members-view.tsx`.
-4. Gate UI with `<Can permission>` / `usePermission()`. **The API must enforce the same rules.** This only hides UI.
-
-## Before production
-
-- Replace `demoUser` in `app/layout.tsx` with the real session, and add a `proxy.ts` redirect for signed-out users.
-- Replace `lib/fixtures.ts` with API calls via `lib/api.ts`.
-- Swap `LogoMark` for the official crest.
+1. Add the types (from the API contract), schemas, queries and actions under `src/features/<area>/`.
+2. Pages go in `src/app/(app)/<area>/`. Call a query, which checks the permission, and render.
+3. Mutations: `export const doThing = secureAction({ schema, permission, sudo? }, handler)`, then call it from the UI with `useAction(doThing, { success: "…" })`.
+4. Add the nav entry (with its permission) in `src/config/navigation.ts`, and the permission in `src/lib/permissions.ts` and `permission-catalog.ts`.
+5. Document the endpoints in `docs/api-contract.md`.

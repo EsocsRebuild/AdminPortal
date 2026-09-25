@@ -10,7 +10,7 @@ export interface AuditEvent {
   id: string;
   /** Machine name, e.g. "member.deleted", "auth.mfa_failed". */
   action: string;
-  /** Human sentence written by the API, e.g. "Deleted member Ada Okafor". */
+  /** Human sentence written by the API, e.g. "Deleted member <name>". */
   summary: string;
   severity: Severity;
   actor: { id: string; name: string; email: string } | null;
