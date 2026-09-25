@@ -18,6 +18,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Minimal self-contained server for the Docker image (see Dockerfile).
+  output: "standalone",
+  // Version-skew protection across rolling deploys; set by the image build.
+  deploymentId: process.env.DEPLOYMENT_VERSION || undefined,
+  // Don't let `next dev` generate AGENTS.md / CLAUDE.md.
+  agentRules: false,
   poweredByHeader: false,
   reactStrictMode: true,
   experimental: {

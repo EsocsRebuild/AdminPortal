@@ -1,0 +1,15 @@
+# Run the production stack on this machine at https://localhost with a
+# self-signed certificate:
+#
+#   make certs-dev
+#   docker compose -f compose.yml -f compose.local.yml up --build
+#
+# The API is expected on the host (e.g. http://host.docker.internal:4000/v1).
+
+services:
+  portal:
+    extra_hosts: ["host.docker.internal:host-gateway"]
+  proxy:
+    ports: !override
+      - "8080:80"
+      - "8443:443"

@@ -1,0 +1,105 @@
+# Rendered at container start with envsubst. Variables: ${SERVER_NAME}, ${TLS_CERT_DIR}.
+
+# ─── Port 80 ─────────────────────────────────────────────────────────────────
+# Unknown hosts: drop the connection. Health probe for the container itself.
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  server_name _;
+  location = /nginx-health { access_log off; default_type text/plain; return 200 "ok\n"; }
+  location / { return 444; }
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name ${SERVER_NAME};
+
+  # Let's Encrypt HTTP-01 challenges.
+  location ^~ /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+    default_type text/plain;
+  }
+  location / { return 301 https://$host$request_uri; }
+}
+
+# ─── Port 443 ────────────────────────────────────────────────────────────────
+# Reject TLS for any other hostname before a certificate is even sent.
+server {
+  listen 443 ssl default_server;
+  listen [::]:443 ssl default_server;
+  http2 on;
+  server_name _;
+  ssl_reject_handshake on;
+}
+
+server {
+  listen 443 ssl;
+  listen [::]:443 ssl;
+  http2 on;
+  server_name ${SERVER_NAME};
+
+  ssl_certificate     ${TLS_CERT_DIR}/fullchain.pem;
+  ssl_certificate_key ${TLS_CERT_DIR}/privkey.pem;
+  include /etc/nginx/snippets/tls.conf;
+  include /etc/nginx/snippets/real-ip.conf;
+
+  limit_conn conn_per_ip 60;
+
+  # The app sets CSP, HSTS, frame and cache headers itself; nginx doesn't
+  # duplicate them (duplicate CSP headers would combine into a stricter policy).
+
+  # Never serve dotfiles.
+  location ~ /\.(?!well-known/) { return 404; }
+
+  # Sign-in and account pages: POSTs (Server Actions) are tightly limited.
+  location ~ ^/(login|signup|verify|mfa|forgot-password|reset-password|invite)(/|$) {
+    limit_req zone=auth burst=5 nodelay;
+    limit_req zone=per_ip burst=40 nodelay;
+    include /etc/nginx/snippets/proxy.conf;
+  }
+
+  # Public forms: small bodies, limited submissions per visitor.
+  location ^~ /f/ {
+    client_max_body_size 256k;
+    limit_req zone=public_forms burst=3 nodelay;
+    limit_req zone=per_ip burst=40 nodelay;
+    include /etc/nginx/snippets/proxy.conf;
+  }
+
+  # CSV exports: streamed, slow allowed, few per minute.
+  location ~ ^/api/.+/export$ {
+    limit_req zone=exports burst=2 nodelay;
+    proxy_buffering off;
+    include /etc/nginx/snippets/proxy.conf;
+    proxy_read_timeout 180s;
+  }
+
+  # Fingerprinted build assets: cache hard, at the edge and in browsers.
+  location ^~ /_next/static/ {
+    include /etc/nginx/snippets/proxy.conf;
+    proxy_cache static;
+    proxy_cache_valid 200 30d;
+    proxy_cache_use_stale error timeout updating;
+    proxy_cache_lock on;
+    add_header Cache-Control "public, max-age=31536000, immutable" always;
+    add_header X-Cache $upstream_cache_status always;
+  }
+
+  location = /api/health {
+    access_log off;
+    include /etc/nginx/snippets/proxy.conf;
+  }
+
+  location / {
+    limit_req zone=per_ip burst=60 nodelay;
+    include /etc/nginx/snippets/proxy.conf;
+  }
+
+  # Friendly message when the app is down or restarting.
+  error_page 502 503 504 /maintenance.html;
+  location = /maintenance.html {
+    root /usr/share/nginx/html;
+    internal;
+  }
+}
