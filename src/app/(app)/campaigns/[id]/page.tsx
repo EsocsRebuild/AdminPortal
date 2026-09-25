@@ -5,17 +5,17 @@ import { redirect } from "next/navigation";
 
 import { StatCard } from "@/components/blocks/stat-card";
 import { StatusBadge } from "@/components/blocks/status-badge";
-import { StackedBarChart } from "@/components/charts/stacked-bar-chart";
 import { Page, PageHeader } from "@/components/layout/page";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { OpensChart } from "@/features/campaigns/components/opens-chart";
 import { UnscheduleButton } from "@/features/campaigns/components/schedule-actions";
 import { getCampaign, getCampaignReport, getSenderProfile } from "@/features/campaigns/queries";
 import { campaignStatusLabels, clickRate, openRate } from "@/features/campaigns/types";
 import { EmailPreview } from "@/features/email-builder/email-preview";
-import { formatDateTime, formatNumber, formatPercent, formatTime } from "@/lib/format";
+import { formatDateTime, formatNumber, formatPercent } from "@/lib/format";
 import { assertId, findOrNotFound } from "@/server/query";
 
 export async function generateMetadata({ params }: PageProps<"/campaigns/[id]">): Promise<Metadata> {
@@ -77,12 +77,7 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
               <CardHeader title="Opens over time" description="Unique opens per hour after sending." />
               <CardContent>
                 {report.timeline.length ? (
-                  <StackedBarChart
-                    title="Opens per hour"
-                    data={report.timeline.slice(0, 24).map((t) => ({ label: formatTime(t.at), opens: t.opens }))}
-                    series={[{ key: "opens", label: "Opens", color: "var(--chart-1)" }]}
-                    formatValue={(n) => formatNumber(Math.round(n))}
-                  />
+                  <OpensChart timeline={report.timeline} />
                 ) : (
                   <EmptyState size="compact" title="No opens yet" description="Most opens happen in the first day." />
                 )}

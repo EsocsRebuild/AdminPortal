@@ -147,7 +147,14 @@ export function StackedBarChart<K extends string>({
         <span aria-hidden />
         <div aria-hidden className="mt-2 flex gap-[clamp(3px,1.2vw,12px)] text-2xs text-subtle-foreground">
           {data.map((d, i) => (
-            <span key={d.label} className={cn("flex-1 text-center", i % 2 === 1 && "max-sm:invisible")}>
+            <span
+              key={d.label}
+              className={cn(
+                "min-w-0 flex-1 truncate text-center",
+                i % Math.ceil(data.length / 8) !== 0 && "invisible",
+                i % 2 === 1 && "max-sm:invisible",
+              )}
+            >
               {d.label}
             </span>
           ))}

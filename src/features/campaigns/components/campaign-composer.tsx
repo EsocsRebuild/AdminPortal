@@ -103,8 +103,8 @@ export function CampaignComposer({
   const [estimate, setEstimate] = React.useState<{ count: number; loading: boolean }>({ count: campaign.recipientCount ?? 0, loading: false });
   React.useEffect(() => {
     let cancelled = false;
-    setEstimate((e) => ({ ...e, loading: true }));
     const t = setTimeout(async () => {
+      setEstimate((e) => ({ ...e, loading: true }));
       const res = await estimateRecipients({ listIds });
       if (!cancelled) setEstimate({ count: res.ok ? res.data.count : 0, loading: false });
     }, 400);
@@ -391,7 +391,7 @@ function TemplateStrip({ templates, onPick }: { templates: Template[]; onPick: (
             onClick={() => onPick(t)}
             className="w-44 shrink-0 cursor-pointer overflow-hidden rounded-card border border-border bg-surface text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring"
           >
-            <EmailThumbnail document={t.content} className="h-24" />
+            <EmailThumbnail document={t.content} className="h-24" size="sm" />
             <span className="block truncate border-t border-border-subtle px-3 py-2 text-sm font-medium">{t.name}</span>
           </button>
         ))}
@@ -465,7 +465,10 @@ function ReviewStep({
     if (ok) await send.run({ id: campaign.id, expectedRecipients: recipients });
   }
 
-  const minWhen = new Date(Date.now() + 10 * 60_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+  // Earliest allowed schedule time, fixed when the step opens.
+  const [minWhen] = React.useState(() =>
+    new Date(Date.now() + 10 * 60_000 - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 16),
+  );
 
   return (
     <div className="grid gap-page lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">

@@ -68,13 +68,11 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-export function MemberFormDialog({
-  open,
+function MemberFormDialogBody({
   onOpenChange,
   parishes,
   member,
 }: {
-  open: boolean;
   onOpenChange: (open: boolean) => void;
   parishes: Parish[];
   /** Editing when set; creating otherwise. */
@@ -84,13 +82,6 @@ export function MemberFormDialog({
   const editing = !!member;
   const [values, setValues] = React.useState<Values>(() => initial(member));
   const [errors, setErrors] = React.useState<Errors>({});
-
-  React.useEffect(() => {
-    if (open) {
-      setValues(initial(member));
-      setErrors({});
-    }
-  }, [open, member]);
 
   const create = useAction(createMember, {
     success: (d) => `${d.name} was added`,
@@ -123,8 +114,7 @@ export function MemberFormDialog({
   const describe = (k: keyof Values) => (err(k) ? `m-${k}-msg` : undefined);
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !pending && onOpenChange(o)}>
-      <DialogContent size="lg">
+    <>
         <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-col">
           <DialogHeader>
             <DialogTitle>{editing ? "Edit member" : "Add a member"}</DialogTitle>
@@ -226,6 +216,25 @@ export function MemberFormDialog({
             </Button>
           </DialogFooter>
         </form>
+      </>
+  );
+}
+
+export function MemberFormDialog({
+  open,
+  onOpenChange,
+  parishes,
+  member,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  parishes: Parish[];
+  member?: Member;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        <MemberFormDialogBody onOpenChange={onOpenChange} parishes={parishes} member={member} />
       </DialogContent>
     </Dialog>
   );

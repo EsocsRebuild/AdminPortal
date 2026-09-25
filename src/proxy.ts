@@ -16,7 +16,7 @@ import { COOKIE, cookieOptions } from "@/server/cookies";
 const PUBLIC = /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f)(\/|$)/;
 const GUEST_ONLY = /^\/(login|signup|forgot-password)(\/|$)/;
 
-function contentSecurityPolicy(nonce: string, embeddable: boolean) {
+function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolean) {
   const dev = process.env.NODE_ENV !== "production";
   // Public forms may be embedded only by sites listed in FORM_EMBED_ORIGINS.
   const embedOrigins = (process.env.FORM_EMBED_ORIGINS ?? "")
@@ -36,7 +36,8 @@ function contentSecurityPolicy(nonce: string, embeddable: boolean) {
     `base-uri 'self'`,
     `form-action 'self'`,
     embeddable && embedOrigins.length ? `frame-ancestors 'self' ${embedOrigins.join(" ")}` : `frame-ancestors 'none'`,
-    dev ? "" : "upgrade-insecure-requests",
+    // Only when served over HTTPS; on plain-http localhost it would break asset loading.
+    https && !dev ? "upgrade-insecure-requests" : "",
   ]
     .filter(Boolean)
     .join("; ");
@@ -87,7 +88,8 @@ function toLogin(request: NextRequest, clear: boolean) {
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-  const csp = contentSecurityPolicy(nonce, pathname.startsWith("/f/"));
+  const https = request.nextUrl.protocol === "https:" || request.headers.get("x-forwarded-proto") === "https";
+  const csp = contentSecurityPolicy(nonce, pathname.startsWith("/f/"), https);
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);

@@ -12,23 +12,33 @@ import { MobileNav } from "./mobile-nav";
 import { Notifications } from "./notifications";
 import { UserMenu } from "./user-menu";
 
-function titleCase(segment: string) {
-  const s = decodeURIComponent(segment).replace(/[-_]/g, " ");
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
+/** Readable names for sub-pages. Record ids are skipped: the page title already names the record. */
+const segmentLabels: Record<string, string> = {
+  edit: "Edit",
+  new: "New",
+  settings: "Settings",
+  share: "Share",
+  responses: "Responses",
+  requests: "Access requests",
+  roles: "Roles",
+  profile: "Profile",
+  security: "Security",
+  appearance: "Appearance",
+  notifications: "Notifications",
+  email: "Email sending",
+};
 
 function useCrumbs(): Crumb[] {
   const pathname = usePathname();
   const item = activeNavItem(pathname);
   if (!item) return [];
   const rest = pathname.slice(item.href.length).split("/").filter(Boolean);
-  return [
-    { label: item.title, href: item.href },
-    ...rest.map((seg, i) => ({
-      label: titleCase(seg),
-      href: `${item.href}/${rest.slice(0, i + 1).join("/")}`,
-    })),
-  ];
+  const crumbs: Crumb[] = [{ label: item.title, href: item.href }];
+  rest.forEach((seg, i) => {
+    const label = segmentLabels[seg];
+    if (label) crumbs.push({ label, href: `${item.href}/${rest.slice(0, i + 1).join("/")}` });
+  });
+  return crumbs;
 }
 
 export function Topbar() {

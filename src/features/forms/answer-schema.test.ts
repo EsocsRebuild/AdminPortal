@@ -41,3 +41,22 @@ describe("buildAnswerSchema", () => {
     expect(r).not.toHaveProperty("injected");
   });
 });
+
+describe("buildAnswerSchema messages", () => {
+  const schema = buildAnswerSchema([
+    f({ id: "name", required: true }),
+    f({ id: "age", type: "number", required: true }),
+    f({ id: "size", type: "radio", required: true, options: [{ id: "s", label: "S" }] }),
+  ]);
+
+  it("uses plain language for unanswered questions", () => {
+    const r = schema.safeParse({});
+    const messages = Object.fromEntries(r.error!.issues.map((i) => [i.path[0], i.message]));
+    expect(messages).toEqual({ name: "This question is required.", age: "This question is required.", size: "Choose an option." });
+  });
+
+  it("doesn't treat an empty required number as zero", () => {
+    expect(schema.safeParse({ name: "Ada", age: "", size: "s" }).success).toBe(false);
+    expect(schema.safeParse({ name: "Ada", age: "0", size: "s" }).success).toBe(true);
+  });
+});

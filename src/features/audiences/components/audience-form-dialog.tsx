@@ -16,28 +16,16 @@ import { createAudience, updateAudience } from "../actions";
 import { listInput } from "../schemas";
 import type { AudienceList } from "../types";
 
-export function AudienceFormDialog({
-  open,
+function AudienceFormDialogBody({
   onOpenChange,
   audience,
 }: {
-  open: boolean;
   onOpenChange: (open: boolean) => void;
   audience?: AudienceList;
 }) {
   const router = useRouter();
   const [values, setValues] = React.useState({ name: "", description: "", doubleOptIn: true });
   const [errors, setErrors] = React.useState<Errors>({});
-
-  React.useEffect(() => {
-    if (!open) return;
-    setValues({
-      name: audience?.name ?? "",
-      description: audience?.description ?? "",
-      doubleOptIn: audience?.doubleOptIn ?? true,
-    });
-    setErrors({});
-  }, [open, audience]);
 
   const create = useAction(createAudience, {
     success: "Audience created",
@@ -58,8 +46,7 @@ export function AudienceFormDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !pending && onOpenChange(o)}>
-      <DialogContent>
+    <>
         <form onSubmit={submit} noValidate className="flex min-h-0 flex-col">
           <DialogHeader>
             <DialogTitle>{audience ? "Edit audience" : "New audience"}</DialogTitle>
@@ -90,6 +77,15 @@ export function AudienceFormDialog({
             </Button>
           </DialogFooter>
         </form>
+      </>
+  );
+}
+
+export function AudienceFormDialog({ open, onOpenChange, audience }: { open: boolean; onOpenChange: (open: boolean) => void; audience?: AudienceList }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="md">
+        <AudienceFormDialogBody onOpenChange={onOpenChange} audience={audience} />
       </DialogContent>
     </Dialog>
   );

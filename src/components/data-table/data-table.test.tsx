@@ -20,15 +20,15 @@ describe("DataTable", () => {
 
   it("filters with the search box and offers a reset", async () => {
     render(<DataTable data={data} columns={columns} getRowId={(r) => r.id} />);
-    await userEvent.type(screen.getByRole("searchbox", { name: "Search table" }), "Person 14");
+    await userEvent.type(screen.getByRole("searchbox", { name: "Search" }), "Person 14");
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("row")).toHaveLength(2);
-    expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
   });
 
   it("shows the empty state when nothing matches", async () => {
     render(<DataTable data={data} columns={columns} getRowId={(r) => r.id} />);
-    await userEvent.type(screen.getByRole("searchbox", { name: "Search table" }), "zzz");
+    await userEvent.type(screen.getByRole("searchbox", { name: "Search" }), "zzz");
     expect(screen.getByText("No matching results")).toBeInTheDocument();
   });
 });

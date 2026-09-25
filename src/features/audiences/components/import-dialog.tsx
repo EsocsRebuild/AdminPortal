@@ -38,22 +38,13 @@ type Stage =
   | { name: "importing"; done: number; total: number }
   | { name: "done"; result: ImportResult };
 
-export function ImportDialog({ listId, open, onOpenChange }: { listId: string; open: boolean; onOpenChange: (o: boolean) => void }) {
+function ImportDialogBody({ listId, onOpenChange }: { listId: string; onOpenChange: (o: boolean) => void }) {
   const [stage, setStage] = React.useState<Stage>({ name: "upload" });
   const [error, setError] = React.useState<string | null>(null);
   const [mapping, setMapping] = React.useState<Record<Field, number | null>>({ email: null, firstName: null, lastName: null });
   const [consent, setConsent] = React.useState(false);
   const [updateExisting, setUpdateExisting] = React.useState(false);
   const run = useAction(importContacts, { quiet: true });
-
-  React.useEffect(() => {
-    if (open) {
-      setStage({ name: "upload" });
-      setError(null);
-      setConsent(false);
-      setUpdateExisting(false);
-    }
-  }, [open]);
 
   async function onFile(file: File) {
     setError(null);
@@ -125,8 +116,7 @@ export function ImportDialog({ listId, open, onOpenChange }: { listId: string; o
   const busy = stage.name === "importing";
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !busy && onOpenChange(o)}>
-      <DialogContent size="lg">
+    <>
         <DialogHeader>
           <DialogTitle>Import contacts</DialogTitle>
           <DialogDescription>Upload a CSV file exported from a spreadsheet, like Excel or Google Sheets.</DialogDescription>
@@ -299,6 +289,15 @@ export function ImportDialog({ listId, open, onOpenChange }: { listId: string; o
             </>
           )}
         </DialogFooter>
+      </>
+  );
+}
+
+export function ImportDialog({ listId, open, onOpenChange }: { listId: string; open: boolean; onOpenChange: (o: boolean) => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        <ImportDialogBody listId={listId} onOpenChange={onOpenChange} />
       </DialogContent>
     </Dialog>
   );

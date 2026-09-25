@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ const EVENTS = ["pointerdown", "keydown", "wheel", "touchstart", "mousemove"] as
  * Activity in any tab counts for all tabs, and signing out in one signs out all.
  */
 export function SessionGuard() {
+  const router = useRouter();
   const lastActive = React.useRef(0);
   const lastTouch = React.useRef(0);
   const channel = React.useRef<BroadcastChannel | null>(null);
@@ -44,7 +46,7 @@ export function SessionGuard() {
     channel.current = bc;
     bc?.addEventListener("message", (e: MessageEvent<{ type: string; at?: number }>) => {
       if (e.data.type === "active" && e.data.at) lastActive.current = Math.max(lastActive.current, e.data.at);
-      if (e.data.type === "signed-out") window.location.assign("/login?reason=signed-out");
+      if (e.data.type === "signed-out") router.replace("/login?reason=signed-out");
     });
 
     let throttle = 0;
@@ -74,7 +76,7 @@ export function SessionGuard() {
       clearInterval(tick);
       bc?.close();
     };
-  }, [markActive]);
+  }, [markActive, router]);
 
   const stay = () => {
     lastTouch.current = 0;

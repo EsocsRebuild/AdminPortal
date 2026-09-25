@@ -5,7 +5,11 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // Server modules import "server-only"; tests run them directly.
+      "server-only": fileURLToPath(new URL("./src/test/server-only-stub.ts", import.meta.url)),
+    },
   },
   test: {
     environment: "jsdom",
@@ -14,7 +18,7 @@ export default defineConfig({
     css: false,
     coverage: {
       provider: "v8",
-      include: ["src/lib/**", "src/components/**"],
+      include: ["src/lib/**", "src/components/**", "src/server/**", "src/features/**/*.ts"],
       reporter: ["text", "lcov"],
     },
   },

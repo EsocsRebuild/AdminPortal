@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { Page, PageHeader } from "@/components/layout/page";
 import { Badge } from "@/components/ui/badge";
+
+import { env } from "@/server/env";
 
 import { Showcase } from "./_components/showcase";
 
 export const metadata: Metadata = { title: "Design system" };
 
 export default function DesignSystemPage() {
+  // Developer tool: not part of the product in production unless explicitly enabled.
+  if (env().NODE_ENV === "production" && !env().ENABLE_DESIGN_SYSTEM) notFound();
   return (
     <Page>
       <PageHeader

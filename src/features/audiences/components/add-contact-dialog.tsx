@@ -14,19 +14,11 @@ import { resultErrors, validate, type Errors } from "@/lib/validate";
 import { addContact } from "../actions";
 import { addContactInput } from "../schemas";
 
-export function AddContactDialog({ listId, open, onOpenChange }: { listId: string; open: boolean; onOpenChange: (o: boolean) => void }) {
+function AddContactDialogBody({ listId, onOpenChange }: { listId: string; onOpenChange: (o: boolean) => void }) {
   const blank = { email: "", firstName: "", lastName: "", consent: false };
   const [values, setValues] = React.useState(blank);
   const [errors, setErrors] = React.useState<Errors>({});
   const add = useAction(addContact, { success: "Contact added" });
-
-  React.useEffect(() => {
-    if (open) {
-      setValues(blank);
-      setErrors({});
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
 
   async function submit(e: React.FormEvent, another = false) {
     e.preventDefault();
@@ -42,8 +34,7 @@ export function AddContactDialog({ listId, open, onOpenChange }: { listId: strin
   }
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !add.pending && onOpenChange(o)}>
-      <DialogContent>
+    <>
         <form onSubmit={(e) => submit(e)} noValidate className="flex min-h-0 flex-col">
           <DialogHeader>
             <DialogTitle>Add a contact</DialogTitle>
@@ -80,6 +71,15 @@ export function AddContactDialog({ listId, open, onOpenChange }: { listId: strin
             </Button>
           </DialogFooter>
         </form>
+      </>
+  );
+}
+
+export function AddContactDialog({ listId, open, onOpenChange }: { listId: string; open: boolean; onOpenChange: (o: boolean) => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="md">
+        <AddContactDialogBody listId={listId} onOpenChange={onOpenChange} />
       </DialogContent>
     </Dialog>
   );

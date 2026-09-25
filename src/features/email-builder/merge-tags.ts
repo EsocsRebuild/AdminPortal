@@ -7,7 +7,7 @@ export const mergeTags = [
 
 /** Replaces tags with neutral preview values. */
 export function previewMergeTags(text: string) {
-  return mergeTags.reduce((out, t) => out.replaceAll(t.tag, t.preview), text).replace(/\s{2,}/g, " ");
+  return mergeTags.reduce((out, t) => out.replaceAll(t.tag, t.preview), text).replace(/[ \t]{2,}/g, " ");
 }
 
 /** Tags the API won't recognise, so authors can fix typos before sending. */

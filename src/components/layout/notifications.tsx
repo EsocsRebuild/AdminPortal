@@ -22,20 +22,27 @@ type State =
 
 /** Notifications load when opened and refresh every few minutes in the background. */
 export function Notifications() {
-  const [state, setState] = React.useState<State>({ status: "idle" });
+  const [state, setState] = React.useState<State>({ status: "loading" });
   const [open, setOpen] = React.useState(false);
 
   const load = React.useCallback(async () => {
-    setState((s) => (s.status === "ready" ? s : { status: "loading" }));
     const res = await listNotifications({});
     setState(res.ok ? { status: "ready", ...res.data } : { status: "error" });
   }, []);
 
   React.useEffect(() => {
-    void load();
-    const id = setInterval(() => document.visibilityState === "visible" && void load(), 3 * 60_000);
-    return () => clearInterval(id);
-  }, [load]);
+    let alive = true;
+    const refresh = () =>
+      listNotifications({}).then((res) => {
+        if (alive) setState(res.ok ? { status: "ready", ...res.data } : { status: "error" });
+      });
+    void refresh();
+    const id = setInterval(() => document.visibilityState === "visible" && void refresh(), 3 * 60_000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
 
   const unread = state.status === "ready" ? state.unread : 0;
 
