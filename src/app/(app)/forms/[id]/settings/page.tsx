@@ -14,5 +14,12 @@ export default async function FormSettingsPage({ params }: PageProps<"/forms/[id
   const user = await requireSession();
   const form = await findOrNotFound(getForm(assertId((await params).id)));
   const audiences = can(user, "audiences:view") ? await listAudiences() : [];
-  return <FormSettingsForm form={form} audiences={audiences} canManage={can(user, "forms:manage")} appUrl={env().NEXT_PUBLIC_APP_URL} />;
+  return (
+    <FormSettingsForm
+      form={form}
+      audiences={audiences}
+      canManage={can(user, "forms:manage")}
+      appUrl={env().NEXT_PUBLIC_APP_URL}
+    />
+  );
 }

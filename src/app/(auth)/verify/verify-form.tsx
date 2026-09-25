@@ -27,7 +27,9 @@ export function VerifyForm({ maskedEmail }: { maskedEmail: string }) {
     const res = await verifyEmail({ code: value });
     if (res.ok) return setState("done");
     setState("idle");
-    setError(res.code === "VALIDATION" ? "That code didn’t work. Check the email and try again." : res.message);
+    setError(
+      res.code === "VALIDATION" ? "That code didn’t work. Check the email and try again." : res.message,
+    );
     setAttempt((n) => n + 1);
     setCode("");
   }
@@ -67,8 +69,8 @@ export function VerifyForm({ maskedEmail }: { maskedEmail: string }) {
             title="Check your email"
             description={
               <>
-                We sent a 6-digit code to <span className="font-medium text-foreground">{maskedEmail}</span>. It
-                expires in 15 minutes.
+                We sent a 6-digit code to <span className="font-medium text-foreground">{maskedEmail}</span>.
+                It expires in 15 minutes.
               </>
             }
           />
@@ -91,7 +93,13 @@ export function VerifyForm({ maskedEmail }: { maskedEmail: string }) {
               {error && <span className="text-danger">{error}</span>}
             </p>
           </div>
-          <Button size="lg" fullWidth loading={state === "checking"} disabled={code.length < 6} onClick={() => check(code)}>
+          <Button
+            size="lg"
+            fullWidth
+            loading={state === "checking"}
+            disabled={code.length < 6}
+            onClick={() => check(code)}
+          >
             Confirm email
           </Button>
           <p className="text-center text-base text-muted-foreground">

@@ -53,7 +53,14 @@ export function ResetForm({ token }: { token: string }) {
         description="Pick something you haven’t used here before. You’ll be signed out everywhere else."
       />
       {banner && (
-        <Alert tone="danger" action={<Link href="/forgot-password" className="text-sm font-medium underline">New link</Link>}>
+        <Alert
+          tone="danger"
+          action={
+            <Link href="/forgot-password" className="text-sm font-medium underline">
+              New link
+            </Link>
+          }
+        >
           {banner}
         </Alert>
       )}

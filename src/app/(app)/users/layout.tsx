@@ -10,7 +10,11 @@ export default async function UsersLayout({ children }: LayoutProps<"/users">) {
   const [roles, requests] = await Promise.all([listRoles(), listAccessRequests()]);
   return (
     <Page>
-      <PageHeader title="Users & roles" description="Who can use the portal, and what they’re allowed to do." actions={<InviteButton roles={roles} />}>
+      <PageHeader
+        title="Users & roles"
+        description="Who can use the portal, and what they’re allowed to do."
+        actions={<InviteButton roles={roles} />}
+      >
         <RouteTabs
           label="Users sections"
           tabs={[

@@ -92,7 +92,8 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
   if (body !== undefined) requestHeaders["Content-Type"] = "application/json";
   if (auth) {
     const token = (await cookies()).get(COOKIE.access)?.value;
-    if (!token) throw new BackendError("UNAUTHENTICATED", "Your session has ended. Please sign in again.", 401);
+    if (!token)
+      throw new BackendError("UNAUTHENTICATED", "Your session has ended. Please sign in again.", 401);
     requestHeaders.Authorization = `Bearer ${token}`;
   }
 
@@ -115,13 +116,16 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
   }
 
   if (res.status === 204) return undefined as T;
-  const payload = (await res.json().catch(() => null)) as
-    | { error?: { code?: string; message?: string; fields?: FieldErrors } }
-    | null;
+  const payload = (await res.json().catch(() => null)) as {
+    error?: { code?: string; message?: string; fields?: FieldErrors };
+  } | null;
 
   if (!res.ok) {
     const e = payload?.error;
-    const code = (e?.code as ErrorCode | undefined) ?? statusToCode[res.status] ?? (res.status >= 500 ? "UNAVAILABLE" : "UNKNOWN");
+    const code =
+      (e?.code as ErrorCode | undefined) ??
+      statusToCode[res.status] ??
+      (res.status >= 500 ? "UNAVAILABLE" : "UNKNOWN");
     throw new BackendError(code, e?.message ?? defaultMessage(code), res.status, e?.fields);
   }
   return payload as T;

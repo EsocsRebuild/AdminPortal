@@ -16,11 +16,14 @@ import {
 } from "./schemas";
 import type { AudienceList, ImportResult } from "./types";
 
-export const createAudience = secureAction({ schema: listInput, permission: "audiences:manage" }, async (values) => {
-  const list = await backend<AudienceList>("/audiences", { method: "POST", body: values });
-  revalidatePath("/audiences");
-  return { id: list.id };
-});
+export const createAudience = secureAction(
+  { schema: listInput, permission: "audiences:manage" },
+  async (values) => {
+    const list = await backend<AudienceList>("/audiences", { method: "POST", body: values });
+    revalidatePath("/audiences");
+    return { id: list.id };
+  },
+);
 
 export const updateAudience = secureAction(
   { schema: updateListInput, permission: "audiences:manage" },
@@ -41,12 +44,15 @@ export const deleteAudience = secureAction(
   },
 );
 
-export const addContact = secureAction({ schema: addContactInput, permission: "audiences:manage" }, async (input) => {
-  const { listId, ...contact } = input;
-  await backend(`/audiences/${listId}/contacts`, { method: "POST", body: contact });
-  revalidatePath(`/audiences/${listId}`);
-  return null;
-});
+export const addContact = secureAction(
+  { schema: addContactInput, permission: "audiences:manage" },
+  async (input) => {
+    const { listId, ...contact } = input;
+    await backend(`/audiences/${listId}/contacts`, { method: "POST", body: contact });
+    revalidatePath(`/audiences/${listId}`);
+    return null;
+  },
+);
 
 /** One chunk of a CSV import. The dialog sends chunks in sequence and totals the results. */
 export const importContacts = secureAction(
@@ -62,7 +68,10 @@ export const importContacts = secureAction(
 export const addMembersToAudience = secureAction(
   { schema: addMembersInput, permission: "audiences:manage" },
   async ({ listId, parishId }) => {
-    const res = await backend<ImportResult>(`/audiences/${listId}/sync-members`, { method: "POST", body: { parishId } });
+    const res = await backend<ImportResult>(`/audiences/${listId}/sync-members`, {
+      method: "POST",
+      body: { parishId },
+    });
     revalidatePath(`/audiences/${listId}`);
     return res;
   },
@@ -71,7 +80,10 @@ export const addMembersToAudience = secureAction(
 export const removeContacts = secureAction(
   { schema: removeContactsInput, permission: "audiences:manage" },
   async ({ listId, ids }) => {
-    const res = await backend<{ removed: number }>(`/audiences/${listId}/contacts/remove`, { method: "POST", body: { ids } });
+    const res = await backend<{ removed: number }>(`/audiences/${listId}/contacts/remove`, {
+      method: "POST",
+      body: { ids },
+    });
     revalidatePath(`/audiences/${listId}`);
     return res;
   },

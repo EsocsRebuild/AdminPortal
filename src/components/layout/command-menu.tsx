@@ -1,7 +1,18 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { FormInput, Laptop, MailPlus, Moon, PanelLeft, Rows3, Search, Sun, UserPlus, UserRoundPlus } from "lucide-react";
+import {
+  FormInput,
+  Laptop,
+  MailPlus,
+  Moon,
+  PanelLeft,
+  Rows3,
+  Search,
+  Sun,
+  UserPlus,
+  UserRoundPlus,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import * as React from "react";
@@ -26,7 +37,12 @@ import { useVisibleNavigation } from "./shell-context";
 
 const quickActions = [
   { label: "Add a member", href: "/members?new=1", icon: UserRoundPlus, permission: "members:manage" },
-  { label: "Create an email campaign", href: "/campaigns/new", icon: MailPlus, permission: "campaigns:manage" },
+  {
+    label: "Create an email campaign",
+    href: "/campaigns/new",
+    icon: MailPlus,
+    permission: "campaigns:manage",
+  },
   { label: "Build a form", href: "/forms/new", icon: FormInput, permission: "forms:manage" },
   { label: "Invite an administrator", href: "/users?invite=1", icon: UserPlus, permission: "users:manage" },
 ] as const;

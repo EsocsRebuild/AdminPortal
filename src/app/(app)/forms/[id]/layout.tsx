@@ -23,7 +23,11 @@ export default async function FormLayout({ children, params }: LayoutProps<"/for
         </Button>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="grid min-w-0 gap-1.5">
-            <StatusBadge status={form.status === "published" ? "active" : form.status} label={formStatusLabels[form.status]} className="w-fit" />
+            <StatusBadge
+              status={form.status === "published" ? "active" : form.status}
+              label={formStatusLabels[form.status]}
+              className="w-fit"
+            />
             <h1 className="truncate text-heading-lg font-semibold">{form.title}</h1>
           </div>
           <FormHeaderActions form={form} publicUrl={publicFormUrl(form.slug)} />

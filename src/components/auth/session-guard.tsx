@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { keepAlive, signOut } from "@/features/auth/actions";
 
 const IDLE_MS = Math.max(2, Number(process.env.NEXT_PUBLIC_IDLE_TIMEOUT_MINUTES) || 15) * 60_000;
@@ -94,8 +101,8 @@ export function SessionGuard() {
           <DialogTitle>Are you still there?</DialogTitle>
           <DialogDescription>
             For your security, you’ll be signed out in{" "}
-            <span className="font-semibold text-foreground tabular">{remaining ?? 0} seconds</span> because you
-            haven’t been active.
+            <span className="tabular font-semibold text-foreground">{remaining ?? 0} seconds</span> because
+            you haven’t been active.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-4">

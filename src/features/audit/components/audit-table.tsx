@@ -11,7 +11,14 @@ import { UrlFilter } from "@/components/data-table/url-filter";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Sheet, SheetBody, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { formatDateTime, formatRelative } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -24,9 +31,18 @@ const severityIcon = {
   critical: <AlertOctagon className="size-4 text-danger" />,
 };
 
-const show = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v));
+const show = (v: unknown) =>
+  v === null || v === undefined || v === "" ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 
-export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; server: ServerTableState; canExport: boolean }) {
+export function AuditTable({
+  page,
+  server,
+  canExport,
+}: {
+  page: AuditEvent[];
+  server: ServerTableState;
+  canExport: boolean;
+}) {
   const [open, setOpen] = React.useState<AuditEvent | null>(null);
   const params = useSearchParams();
   const columns = React.useMemo(
@@ -36,7 +52,11 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
         enableSorting: false,
         enableHiding: false,
         meta: { headerClassName: "w-8" },
-        cell: (i) => <span aria-label={severityLabels[i.getValue()]}>{severityIcon[i.getValue()]}</span>,
+        cell: (i) => (
+          <span role="img" aria-label={severityLabels[i.getValue()]}>
+            {severityIcon[i.getValue()]}
+          </span>
+        ),
       }),
       col.accessor("summary", {
         header: "Event",
@@ -64,11 +84,24 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
             <span className="text-muted-foreground">System</span>
           ),
       }),
-      col.accessor("ip", { header: "IP address", enableSorting: false, meta: { label: "IP address" }, cell: (i) => <span className="font-mono text-xs text-muted-foreground">{i.getValue() ?? "—"}</span> }),
+      col.accessor("ip", {
+        header: "IP address",
+        enableSorting: false,
+        meta: { label: "IP address" },
+        cell: (i) => <span className="font-mono text-xs text-muted-foreground">{i.getValue() ?? "—"}</span>,
+      }),
       col.accessor("createdAt", {
         header: ({ header }) => <ColumnHeader header={header} title="When" />,
         meta: { label: "When" },
-        cell: (i) => <span className="text-muted-foreground" title={formatDateTime(i.getValue())} suppressHydrationWarning>{formatRelative(i.getValue())}</span>,
+        cell: (i) => (
+          <span
+            className="text-muted-foreground"
+            title={formatDateTime(i.getValue())}
+            suppressHydrationWarning
+          >
+            {formatRelative(i.getValue())}
+          </span>
+        ),
       }),
     ],
     [],
@@ -85,7 +118,11 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
         onRowClick={setOpen}
         filters={() => (
           <>
-            <UrlFilter param="severity" title="Severity" options={severities.map((s) => ({ value: s, label: severityLabels[s] }))} />
+            <UrlFilter
+              param="severity"
+              title="Severity"
+              options={severities.map((s) => ({ value: s, label: severityLabels[s] }))}
+            />
             <UrlFilter
               param="period"
               title="Period"
@@ -110,7 +147,11 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
         renderMobileRow={(row) => {
           const e = row.original;
           return (
-            <button type="button" onClick={() => setOpen(e)} className="flex w-full items-start gap-3 p-3.5 text-left">
+            <button
+              type="button"
+              onClick={() => setOpen(e)}
+              className="flex w-full items-start gap-3 p-3.5 text-left"
+            >
               <span className="mt-0.5">{severityIcon[e.severity]}</span>
               <span className="grid min-w-0 flex-1 gap-0.5">
                 <span className="text-sm">{e.summary}</span>
@@ -121,7 +162,14 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
             </button>
           );
         }}
-        emptyState={<EmptyState size="compact" icon={<ScrollText />} title="No activity recorded yet" description="Sign-ins, changes and exports will appear here." />}
+        emptyState={
+          <EmptyState
+            size="compact"
+            icon={<ScrollText />}
+            title="No activity recorded yet"
+            description="Sign-ins, changes and exports will appear here."
+          />
+        }
       />
       <Sheet open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
         <SheetContent size="lg">
@@ -148,7 +196,9 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
                   ))}
                   <div className="grid gap-0.5 sm:col-span-2">
                     <dt className="text-xs text-muted-foreground">Device</dt>
-                    <dd className="font-mono text-xs break-words text-muted-foreground">{open.userAgent ?? "—"}</dd>
+                    <dd className="font-mono text-xs break-words text-muted-foreground">
+                      {open.userAgent ?? "—"}
+                    </dd>
                   </div>
                 </dl>
                 {open.changes && Object.keys(open.changes).length > 0 && (
@@ -167,8 +217,16 @@ export function AuditTable({ page, server, canExport }: { page: AuditEvent[]; se
                           {Object.entries(open.changes).map(([field, c]) => (
                             <tr key={field} className="border-t border-border-subtle align-top">
                               <td className="px-3 py-2 font-medium">{field}</td>
-                              <td className={cn("px-3 py-2 break-all text-danger-soft-foreground line-through decoration-danger/40")}>{show(c.from)}</td>
-                              <td className="px-3 py-2 break-all text-success-soft-foreground">{show(c.to)}</td>
+                              <td
+                                className={cn(
+                                  "px-3 py-2 break-all text-danger-soft-foreground line-through decoration-danger/40",
+                                )}
+                              >
+                                {show(c.from)}
+                              </td>
+                              <td className="px-3 py-2 break-all text-success-soft-foreground">
+                                {show(c.to)}
+                              </td>
                             </tr>
                           ))}
                         </tbody>

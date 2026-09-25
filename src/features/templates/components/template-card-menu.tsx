@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 
 import { useModals } from "@/components/modals/modal-provider";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAction } from "@/hooks/use-action";
 
 import { deleteTemplate, duplicateTemplate } from "../actions";
@@ -13,7 +19,10 @@ import { deleteTemplate, duplicateTemplate } from "../actions";
 export function TemplateCardMenu({ id, name }: { id: string; name: string }) {
   const router = useRouter();
   const modals = useModals();
-  const duplicate = useAction(duplicateTemplate, { success: "Template duplicated", onSuccess: (r) => router.push(`/templates/${r.id}`) });
+  const duplicate = useAction(duplicateTemplate, {
+    success: "Template duplicated",
+    onSuccess: (r) => router.push(`/templates/${r.id}`),
+  });
   const remove = useAction(deleteTemplate, { success: "Template deleted" });
 
   return (

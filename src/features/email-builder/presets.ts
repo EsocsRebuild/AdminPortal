@@ -39,7 +39,12 @@ export const presets: { id: string; name: string; description: string; build: ()
     build: () =>
       doc([
         { id: newId(), type: "heading", text: "Your headline", align: "left" },
-        { id: newId(), type: "text", text: "Dear {{first_name}},\n\nWrite your message here. Keep it short and friendly.", align: "left" },
+        {
+          id: newId(),
+          type: "text",
+          text: "Dear {{first_name}},\n\nWrite your message here. Keep it short and friendly.",
+          align: "left",
+        },
         { id: newId(), type: "button", label: "Find out more", url: "", align: "left", style: "filled" },
       ]),
   },
@@ -66,7 +71,12 @@ export const presets: { id: string; name: string; description: string; build: ()
     build: () =>
       doc([
         { id: newId(), type: "heading", text: "You’re invited", align: "center" },
-        { id: newId(), type: "text", text: "Date · Time · Place\n\nA sentence about what to expect.", align: "center" },
+        {
+          id: newId(),
+          type: "text",
+          text: "Date · Time · Place\n\nA sentence about what to expect.",
+          align: "center",
+        },
         { id: newId(), type: "button", label: "Register now", url: "", align: "center", style: "filled" },
       ]),
   },

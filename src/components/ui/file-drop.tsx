@@ -29,7 +29,8 @@ export function FileDrop({ accept, maxSize, onFile, onError, hint, className }: 
       return t.startsWith(".") ? file.name.toLowerCase().endsWith(t) : file.type === t;
     });
     if (!okType) return onError?.("That file type isn’t supported.");
-    if (file.size > maxSize) return onError?.(`That file is too large. The limit is ${formatBytes(maxSize)}.`);
+    if (file.size > maxSize)
+      return onError?.(`That file is too large. The limit is ${formatBytes(maxSize)}.`);
     onFile(file);
   };
 
@@ -48,7 +49,7 @@ export function FileDrop({ accept, maxSize, onFile, onError, hint, className }: 
       }}
       className={cn(
         "group grid cursor-pointer justify-items-center gap-3 rounded-card border-2 border-dashed border-border-strong bg-surface-muted/40 px-6 py-10 text-center transition-all duration-200",
-        "hover:border-primary/50 hover:bg-primary-soft/40 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring",
+        "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring hover:border-primary/50 hover:bg-primary-soft/40",
         over && "scale-[1.01] border-primary bg-primary-soft/60",
         className,
       )}
@@ -58,7 +59,8 @@ export function FileDrop({ accept, maxSize, onFile, onError, hint, className }: 
       </span>
       <span className="grid gap-1">
         <span className="font-medium">
-          Drop your file here, or <span className="text-primary underline underline-offset-4">choose one</span>
+          Drop your file here, or{" "}
+          <span className="text-primary underline underline-offset-4">choose one</span>
         </span>
         {hint && <span className="text-sm text-muted-foreground">{hint}</span>}
       </span>

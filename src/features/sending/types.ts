@@ -5,7 +5,13 @@ export interface SendingDomain {
   domain: string;
   status: DnsStatus;
   /** Records to add at the domain's DNS provider (SPF, DKIM, DMARC, return-path). */
-  records: { purpose: string; type: "TXT" | "CNAME" | "MX"; host: string; value: string; status: DnsStatus }[];
+  records: {
+    purpose: string;
+    type: "TXT" | "CNAME" | "MX";
+    host: string;
+    value: string;
+    status: DnsStatus;
+  }[];
   lastCheckedAt: string | null;
 }
 

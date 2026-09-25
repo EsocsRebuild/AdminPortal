@@ -9,9 +9,21 @@ import { Button } from "./button";
 import { Spinner } from "./spinner";
 
 /** Small "Saved / Saving… / Couldn't save" indicator for autosaving editors. */
-export function SaveStatus({ state, onRetry, className }: { state: SaveState; onRetry?: () => void; className?: string }) {
+export function SaveStatus({
+  state,
+  onRetry,
+  className,
+}: {
+  state: SaveState;
+  onRetry?: () => void;
+  className?: string;
+}) {
   return (
-    <span role="status" aria-live="polite" className={cn("inline-flex items-center gap-1.5 text-sm text-muted-foreground", className)}>
+    <span
+      role="status"
+      aria-live="polite"
+      className={cn("inline-flex items-center gap-1.5 text-sm text-muted-foreground", className)}
+    >
       {state === "saved" && (
         <>
           <Check className="size-4 text-success" /> Saved

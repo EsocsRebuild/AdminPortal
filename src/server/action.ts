@@ -79,7 +79,11 @@ export function publicAction<S extends z.ZodType, R>(
 }
 
 function validationFailure(error: z.ZodError) {
-  return fail("VALIDATION", "Please check the highlighted fields.", z.flattenError(error).fieldErrors as Record<string, string[]>);
+  return fail(
+    "VALIDATION",
+    "Please check the highlighted fields.",
+    z.flattenError(error).fieldErrors as Record<string, string[]>,
+  );
 }
 
 function toFailure(error: unknown): ActionResult<never> {

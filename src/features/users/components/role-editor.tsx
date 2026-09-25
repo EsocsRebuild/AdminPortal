@@ -29,12 +29,20 @@ export function RoleEditor({ role }: { role?: Role }) {
   const canEdit = usePermission("roles:manage") && !role?.locked;
   const [name, setName] = React.useState(role?.name ?? "");
   const [description, setDescription] = React.useState(role?.description ?? "");
-  const [granted, setGranted] = React.useState<Set<Permission>>(new Set(role?.permissions ?? ["dashboard:view"]));
+  const [granted, setGranted] = React.useState<Set<Permission>>(
+    new Set(role?.permissions ?? ["dashboard:view"]),
+  );
   const [errors, setErrors] = React.useState<Errors>({});
 
-  const create = useAction(createRole, { success: "Role created", onSuccess: (r) => router.replace(`/users/roles/${r.id}`) });
+  const create = useAction(createRole, {
+    success: "Role created",
+    onSuccess: (r) => router.replace(`/users/roles/${r.id}`),
+  });
   const update = useAction(updateRole, { success: "Role saved" });
-  const remove = useAction(deleteRole, { success: "Role deleted", onSuccess: () => router.replace("/users/roles") });
+  const remove = useAction(deleteRole, {
+    success: "Role deleted",
+    onSuccess: () => router.replace("/users/roles"),
+  });
 
   const toggle = (p: Permission, on: boolean) => {
     const next = new Set(granted);
@@ -52,7 +60,9 @@ export function RoleEditor({ role }: { role?: Role }) {
     setErrors(res.ok ? {} : resultErrors(res, role ? "values." : ""));
   }
 
-  const sensitive = permissionCatalog.flatMap((g) => g.items).filter((i) => i.sensitive && granted.has(i.permission));
+  const sensitive = permissionCatalog
+    .flatMap((g) => g.items)
+    .filter((i) => i.sensitive && granted.has(i.permission));
 
   return (
     <div className="grid max-w-4xl gap-page">
@@ -63,16 +73,31 @@ export function RoleEditor({ role }: { role?: Role }) {
       )}
       {role && role.userCount > 0 && canEdit && (
         <Alert tone="warning">
-          {pluralize(role.userCount, "administrator")} {role.userCount === 1 ? "has" : "have"} this role. Changes apply to them straight away.
+          {pluralize(role.userCount, "administrator")} {role.userCount === 1 ? "has" : "have"} this role.
+          Changes apply to them straight away.
         </Alert>
       )}
       <Card>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field label="Role name" htmlFor="role-name" error={errors.name}>
-            <Input id="role-name" value={name} onChange={(e) => setName(e.target.value)} disabled={!canEdit} maxLength={60} aria-describedby="role-name-msg" />
+            <Input
+              id="role-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={!canEdit}
+              maxLength={60}
+              aria-describedby="role-name-msg"
+            />
           </Field>
           <Field label="Description" htmlFor="role-desc" optional>
-            <Textarea id="role-desc" rows={1} value={description} onChange={(e) => setDescription(e.target.value)} disabled={!canEdit} maxLength={280} />
+            <Textarea
+              id="role-desc"
+              rows={1}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={!canEdit}
+              maxLength={280}
+            />
           </Field>
         </CardContent>
       </Card>
@@ -82,7 +107,10 @@ export function RoleEditor({ role }: { role?: Role }) {
           <CardHeader title={group.area} />
           <CardContent className="grid gap-1 pt-2">
             {group.items.map((item) => (
-              <div key={item.permission} className="flex items-start justify-between gap-4 rounded-control px-2 py-3 hover:bg-surface-hover">
+              <div
+                key={item.permission}
+                className="flex items-start justify-between gap-4 rounded-control px-2 py-3 hover:bg-surface-hover"
+              >
                 <label htmlFor={`perm-${item.permission}`} className="grid cursor-pointer gap-0.5">
                   <span className="flex items-center gap-2 font-medium">
                     {item.label}
@@ -111,7 +139,8 @@ export function RoleEditor({ role }: { role?: Role }) {
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             {sensitive.length > 0 ? (
               <>
-                <AlertTriangle className="size-4 text-warning" /> Includes {pluralize(sensitive.length, "sensitive permission")}
+                <AlertTriangle className="size-4 text-warning" /> Includes{" "}
+                {pluralize(sensitive.length, "sensitive permission")}
               </>
             ) : (
               <>
@@ -133,7 +162,14 @@ export function RoleEditor({ role }: { role?: Role }) {
                     });
                     return;
                   }
-                  if (await modals.confirm({ tone: "danger", title: `Delete the “${role.name}” role?`, confirmLabel: "Delete role" })) await remove.run({ id: role.id });
+                  if (
+                    await modals.confirm({
+                      tone: "danger",
+                      title: `Delete the “${role.name}” role?`,
+                      confirmLabel: "Delete role",
+                    })
+                  )
+                    await remove.run({ id: role.id });
                 }}
               >
                 Delete

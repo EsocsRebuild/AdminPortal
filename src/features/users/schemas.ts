@@ -5,7 +5,11 @@ import { permissions } from "@/lib/permissions";
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,64}$/);
 
 export const inviteInput = z.object({
-  email: z.string().trim().toLowerCase().pipe(z.email({ error: "That email doesn’t look right." })),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .pipe(z.email({ error: "That email doesn’t look right." })),
   name: z.string().trim().max(120).optional().or(z.literal("")),
   roleId: id,
 });

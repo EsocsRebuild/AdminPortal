@@ -13,13 +13,15 @@ function RichText({ text }: { text: string }) {
         .split("\n")
         .map((line, i, lines) => (
           <React.Fragment key={i}>
-            {line.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
-              part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
-                <strong key={j}>{part.slice(2, -2)}</strong>
-              ) : (
-                <React.Fragment key={j}>{part}</React.Fragment>
-              ),
-            )}
+            {line
+              .split(/(\*\*[^*]+\*\*)/g)
+              .map((part, j) =>
+                part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
+                  <strong key={j}>{part.slice(2, -2)}</strong>
+                ) : (
+                  <React.Fragment key={j}>{part}</React.Fragment>
+                ),
+              )}
             {i < lines.length - 1 && <br />}
           </React.Fragment>
         ))}
@@ -120,7 +122,13 @@ export function EmailPreview({
             <span className="text-muted-foreground">From </span>
             <span className="font-medium">{fromName || "Your organisation"}</span>
           </p>
-          <p className="truncate font-semibold">{subject ? previewMergeTags(subject) : <span className="text-subtle-foreground">No subject yet</span>}</p>
+          <p className="truncate font-semibold">
+            {subject ? (
+              previewMergeTags(subject)
+            ) : (
+              <span className="text-subtle-foreground">No subject yet</span>
+            )}
+          </p>
           {previewText && <p className="truncate text-muted-foreground">{previewMergeTags(previewText)}</p>}
         </div>
       )}
@@ -139,7 +147,9 @@ export function EmailPreview({
         >
           <div className="grid gap-4 px-6 py-7 sm:px-8">
             {document.blocks.length === 0 ? (
-              <p className="py-10 text-center text-sm text-[#9aa1ad]">Add blocks on the left to start building your email.</p>
+              <p className="py-10 text-center text-sm text-[#9aa1ad]">
+                Add blocks on the left to start building your email.
+              </p>
             ) : (
               document.blocks.map((block) =>
                 onSelect ? (

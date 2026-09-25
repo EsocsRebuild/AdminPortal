@@ -14,8 +14,11 @@ export async function getSignupOptions() {
 }
 
 export async function getInvitation(token: string) {
-  return backend<{ email: string; name: string | null; roleName: string; invitedBy: string; expiresAt: string }>(
-    `/public/invitations/${encodeURIComponent(token)}`,
-    { auth: false },
-  );
+  return backend<{
+    email: string;
+    name: string | null;
+    roleName: string;
+    invitedBy: string;
+    expiresAt: string;
+  }>(`/public/invitations/${encodeURIComponent(token)}`, { auth: false });
 }

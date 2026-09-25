@@ -8,11 +8,14 @@ import { backend } from "@/server/backend";
 import { bulkDeleteInput, bulkMembersInput, memberIdInput, memberInput, updateMemberInput } from "./schemas";
 import type { Member } from "./types";
 
-export const createMember = secureAction({ schema: memberInput, permission: "members:manage" }, async (values) => {
-  const member = await backend<Member>("/members", { method: "POST", body: values });
-  revalidatePath("/members");
-  return { id: member.id, name: `${member.firstName} ${member.lastName}` };
-});
+export const createMember = secureAction(
+  { schema: memberInput, permission: "members:manage" },
+  async (values) => {
+    const member = await backend<Member>("/members", { method: "POST", body: values });
+    revalidatePath("/members");
+    return { id: member.id, name: `${member.firstName} ${member.lastName}` };
+  },
+);
 
 export const updateMember = secureAction(
   { schema: updateMemberInput, permission: "members:manage" },
@@ -27,7 +30,10 @@ export const updateMember = secureAction(
 export const bulkUpdateMembers = secureAction(
   { schema: bulkMembersInput, permission: "members:manage" },
   async ({ ids, action }) => {
-    const res = await backend<{ updated: number }>("/members/bulk", { method: "POST", body: { ids, action } });
+    const res = await backend<{ updated: number }>("/members/bulk", {
+      method: "POST",
+      body: { ids, action },
+    });
     revalidatePath("/members");
     return res;
   },

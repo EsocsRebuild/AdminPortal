@@ -40,7 +40,9 @@ export function MembersTable({
   const canManage = usePermission("members:manage");
   const canExport = usePermission("members:export");
   const bulk = useAction(bulkUpdateMembers, { success: (r) => `${pluralize(r.updated, "member")} updated` });
-  const remove = useAction(bulkDeleteMembers, { success: (r) => `${pluralize(r.deleted, "member")} deleted` });
+  const remove = useAction(bulkDeleteMembers, {
+    success: (r) => `${pluralize(r.deleted, "member")} deleted`,
+  });
 
   const columns = React.useMemo(
     () => [
@@ -57,7 +59,9 @@ export function MembersTable({
               <Avatar name={name} src={m.avatarUrl} />
               <div className="grid min-w-0">
                 <span className="truncate font-medium">{name}</span>
-                <span className="truncate text-xs text-muted-foreground">{m.email ?? m.phone ?? "No contact details"}</span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {m.email ?? m.phone ?? "No contact details"}
+                </span>
               </div>
             </div>
           );
@@ -98,7 +102,8 @@ export function MembersTable({
     const ok = await modals.confirm({
       tone: "danger",
       title: `Delete ${pluralize(ids.length, "member")}?`,
-      description: "Their records, attendance and giving history will be removed permanently. This can’t be undone.",
+      description:
+        "Their records, attendance and giving history will be removed permanently. This can’t be undone.",
       confirmLabel: "Delete permanently",
       confirmText: "DELETE",
     });
@@ -120,9 +125,17 @@ export function MembersTable({
       onRowClick={(m) => router.push(`/members/${m.id}`)}
       filters={() => (
         <>
-          <UrlFilter param="status" title="Status" options={memberStatuses.map((s) => ({ value: s, label: statusLabels[s] }))} />
+          <UrlFilter
+            param="status"
+            title="Status"
+            options={memberStatuses.map((s) => ({ value: s, label: statusLabels[s] }))}
+          />
           {parishes.length > 1 && (
-            <UrlFilter param="parishId" title="Parish" options={parishes.map((p) => ({ value: p.id, label: p.name }))} />
+            <UrlFilter
+              param="parishId"
+              title="Parish"
+              options={parishes.map((p) => ({ value: p.id, label: p.name }))}
+            />
           )}
         </>
       )}
@@ -156,7 +169,12 @@ export function MembersTable({
                 >
                   Mark inactive
                 </Button>
-                <Button variant="danger-soft" size="sm" leftIcon={<Trash2 />} onClick={() => confirmDelete(ids, clear)}>
+                <Button
+                  variant="danger-soft"
+                  size="sm"
+                  leftIcon={<Trash2 />}
+                  onClick={() => confirmDelete(ids, clear)}
+                >
                   Delete
                 </Button>
               </>
@@ -190,7 +208,11 @@ export function MembersTable({
           size="compact"
           icon={<Users />}
           title="No members yet"
-          description={canManage ? "Add your first member to get started." : "Members will appear here once they’re added."}
+          description={
+            canManage
+              ? "Add your first member to get started."
+              : "Members will appear here once they’re added."
+          }
         />
       }
     />

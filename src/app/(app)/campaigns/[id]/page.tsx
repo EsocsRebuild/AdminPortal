@@ -37,7 +37,13 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
         <Link href="/campaigns">All campaigns</Link>
       </Button>
       <PageHeader
-        eyebrow={<StatusBadge status={campaign.status} label={campaignStatusLabels[campaign.status]} className="w-fit" />}
+        eyebrow={
+          <StatusBadge
+            status={campaign.status}
+            label={campaignStatusLabels[campaign.status]}
+            className="w-fit"
+          />
+        }
         title={campaign.name}
         description={campaign.subject ?? undefined}
         actions={campaign.status === "scheduled" ? <UnscheduleButton id={id} /> : undefined}
@@ -45,13 +51,15 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
 
       {campaign.status === "scheduled" && campaign.scheduledAt && (
         <Alert tone="info" title={`Scheduled for ${formatDateTime(campaign.scheduledAt)}`}>
-          It will go to {formatNumber(campaign.recipientCount ?? 0)} people. Cancel the schedule to make changes.
+          It will go to {formatNumber(campaign.recipientCount ?? 0)} people. Cancel the schedule to make
+          changes.
         </Alert>
       )}
       {campaign.status === "sending" && (
         <Alert tone="info" title="Sending now">
           <span className="inline-flex items-center gap-2">
-            <Loader className="size-4 animate-spin" /> Large audiences can take a few minutes. Numbers below update as it goes.
+            <Loader className="size-4 animate-spin" /> Large audiences can take a few minutes. Numbers below
+            update as it goes.
           </span>
         </Alert>
       )}
@@ -79,7 +87,11 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
                 {report.timeline.length ? (
                   <OpensChart timeline={report.timeline} />
                 ) : (
-                  <EmptyState size="compact" title="No opens yet" description="Most opens happen in the first day." />
+                  <EmptyState
+                    size="compact"
+                    title="No opens yet"
+                    description="Most opens happen in the first day."
+                  />
                 )}
               </CardContent>
             </Card>
@@ -92,12 +104,15 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
                   <p className="text-sm text-muted-foreground">No clicks yet.</p>
                 ) : (
                   report.links.slice(0, 10).map((l) => (
-                    <div key={l.url} className="flex items-center gap-3 rounded-control px-2 py-2 hover:bg-surface-hover">
+                    <div
+                      key={l.url}
+                      className="flex items-center gap-3 rounded-control px-2 py-2 hover:bg-surface-hover"
+                    >
                       <ExternalLink className="size-4 shrink-0 text-subtle-foreground" />
                       <span className="min-w-0 flex-1 truncate text-sm" title={l.url}>
                         {l.url.replace(/^https?:\/\//, "")}
                       </span>
-                      <span className="text-sm font-medium tabular">{formatNumber(l.clicks)}</span>
+                      <span className="tabular text-sm font-medium">{formatNumber(l.clicks)}</span>
                     </div>
                   ))
                 )}
@@ -109,11 +124,21 @@ export default async function CampaignPage({ params }: PageProps<"/campaigns/[id
             <CardContent>
               <dl className="grid gap-4 sm:grid-cols-2">
                 {[
-                  ["From", campaign.fromName && campaign.fromEmail ? `${campaign.fromName} <${campaign.fromEmail}>` : "—"],
+                  [
+                    "From",
+                    campaign.fromName && campaign.fromEmail
+                      ? `${campaign.fromName} <${campaign.fromEmail}>`
+                      : "—",
+                  ],
                   ["Recipients", formatNumber(campaign.recipientCount ?? 0)],
                   ["Sent", campaign.sentAt ? formatDateTime(campaign.sentAt) : "—"],
                   ["Created by", campaign.createdBy?.name ?? "—"],
-                  ...(s ? [["Bounced", formatNumber(s.bounces)], ["Marked as spam", formatNumber(s.complaints)]] : []),
+                  ...(s
+                    ? [
+                        ["Bounced", formatNumber(s.bounces)],
+                        ["Marked as spam", formatNumber(s.complaints)],
+                      ]
+                    : []),
                 ].map(([k, v]) => (
                   <div key={k} className="grid gap-0.5">
                     <dt className="text-xs text-muted-foreground">{k}</dt>

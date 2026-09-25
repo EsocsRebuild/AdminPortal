@@ -18,7 +18,11 @@ export default async function TemplatesPage() {
   const templates = await listTemplates();
   return (
     <Page>
-      <PageHeader title="Templates" description="Reusable email designs, so every campaign looks consistent." actions={<NewTemplateButton />} />
+      <PageHeader
+        title="Templates"
+        description="Reusable email designs, so every campaign looks consistent."
+        actions={<NewTemplateButton />}
+      />
       {templates.length === 0 ? (
         <Card variant="outline">
           <EmptyState
@@ -33,7 +37,11 @@ export default async function TemplatesPage() {
           {templates.map((t) => (
             <StaggerItem key={t.id}>
               <Card interactive className="relative h-full overflow-hidden">
-                <Link href={`/templates/${t.id}`} className="absolute inset-0 z-0 rounded-card focus-visible:outline-2 focus-visible:outline-ring" aria-label={`Edit ${t.name}`} />
+                <Link
+                  href={`/templates/${t.id}`}
+                  className="absolute inset-0 z-0 rounded-card focus-visible:outline-2 focus-visible:outline-ring"
+                  aria-label={`Edit ${t.name}`}
+                />
                 <EmailThumbnail document={t.content} />
                 <div className="flex items-center gap-2 border-t border-border-subtle p-4">
                   <div className="grid min-w-0 flex-1">

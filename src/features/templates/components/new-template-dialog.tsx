@@ -7,7 +7,15 @@ import * as React from "react";
 
 import { Can } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { RadioCard } from "@/components/ui/radio-group";
@@ -47,13 +55,32 @@ export function NewTemplateButton() {
           <form onSubmit={submit} noValidate className="flex min-h-0 flex-col">
             <DialogHeader>
               <DialogTitle>New template</DialogTitle>
-              <DialogDescription>Templates are reusable designs. Start from a layout and change anything.</DialogDescription>
+              <DialogDescription>
+                Templates are reusable designs. Start from a layout and change anything.
+              </DialogDescription>
             </DialogHeader>
             <DialogBody className="grid gap-5">
               <Field label="Template name" htmlFor="tpl-name" error={error}>
-                <Input id="tpl-name" autoFocus placeholder="e.g. Monthly newsletter" value={name} onChange={(e) => { setName(e.target.value); setError(undefined); }} aria-invalid={!!error} aria-describedby="tpl-name-msg" maxLength={80} />
+                <Input
+                  id="tpl-name"
+                  autoFocus
+                  placeholder="e.g. Monthly newsletter"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setError(undefined);
+                  }}
+                  aria-invalid={!!error}
+                  aria-describedby="tpl-name-msg"
+                  maxLength={80}
+                />
               </Field>
-              <RadioPrimitive.Root value={preset} onValueChange={setPreset} aria-label="Starting layout" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <RadioPrimitive.Root
+                value={preset}
+                onValueChange={setPreset}
+                aria-label="Starting layout"
+                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+              >
                 {presets.map((p) => (
                   <RadioCard key={p.id} value={p.id} className="grid gap-0 overflow-hidden p-0">
                     <EmailThumbnail document={previews[p.id]} className="h-32" />

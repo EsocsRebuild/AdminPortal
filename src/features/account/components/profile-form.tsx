@@ -35,20 +35,54 @@ export function ProfileForm({ profile }: { profile: Profile }) {
           setErrors(resultErrors(res));
         }}
       >
-        <CardHeader title="Your profile" description="How you appear to other administrators and in the audit log." />
+        <CardHeader
+          title="Your profile"
+          description="How you appear to other administrators and in the audit log."
+        />
         <CardContent className="grid gap-5">
           <div className="flex items-center gap-4">
             <Avatar name={v.name || profile.name} src={profile.avatarUrl} size="xl" />
-            <p className="text-sm text-muted-foreground">Your initials are shown until photo uploads are available.</p>
+            <p className="text-sm text-muted-foreground">
+              Your initials are shown until photo uploads are available.
+            </p>
           </div>
           <Field label="Full name" htmlFor="p-name" error={errors.name} inline>
-            <Input id="p-name" autoComplete="name" value={v.name} onChange={(e) => setV({ ...v, name: e.target.value })} aria-invalid={!!errors.name} aria-describedby="p-name-msg" maxLength={120} />
+            <Input
+              id="p-name"
+              autoComplete="name"
+              value={v.name}
+              onChange={(e) => setV({ ...v, name: e.target.value })}
+              aria-invalid={!!errors.name}
+              aria-describedby="p-name-msg"
+              maxLength={120}
+            />
           </Field>
-          <Field label="Email" htmlFor="p-email" hint="Used to sign in. Ask an administrator to change it." inline>
-            <Input id="p-email" prefix={<Mail />} value={profile.email} readOnly disabled aria-describedby="p-email-msg" />
+          <Field
+            label="Email"
+            htmlFor="p-email"
+            hint="Used to sign in. Ask an administrator to change it."
+            inline
+          >
+            <Input
+              id="p-email"
+              prefix={<Mail />}
+              value={profile.email}
+              readOnly
+              disabled
+              aria-describedby="p-email-msg"
+            />
           </Field>
           <Field label="Phone" htmlFor="p-phone" error={errors.phone} optional inline>
-            <Input id="p-phone" type="tel" prefix={<Phone />} autoComplete="tel" value={v.phone} onChange={(e) => setV({ ...v, phone: e.target.value })} aria-invalid={!!errors.phone} aria-describedby="p-phone-msg" />
+            <Input
+              id="p-phone"
+              type="tel"
+              prefix={<Phone />}
+              autoComplete="tel"
+              value={v.phone}
+              onChange={(e) => setV({ ...v, phone: e.target.value })}
+              aria-invalid={!!errors.phone}
+              aria-describedby="p-phone-msg"
+            />
           </Field>
         </CardContent>
         <CardFooter className="justify-end">

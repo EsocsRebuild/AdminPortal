@@ -1,12 +1,28 @@
 import { z } from "zod";
 
 const id = z.string().regex(/^[A-Za-z0-9_-]{1,64}$/);
-const email = z.string().trim().toLowerCase().pipe(z.email({ error: "That email doesn’t look right." }));
-const name = z.string().trim().max(80).optional().or(z.literal("")).transform((v) => v || null);
+const email = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .pipe(z.email({ error: "That email doesn’t look right." }));
+const name = z
+  .string()
+  .trim()
+  .max(80)
+  .optional()
+  .or(z.literal(""))
+  .transform((v) => v || null);
 
 export const listInput = z.object({
   name: z.string().trim().min(2, { error: "Give this audience a name." }).max(80),
-  description: z.string().trim().max(280).optional().or(z.literal("")).transform((v) => v || null),
+  description: z
+    .string()
+    .trim()
+    .max(280)
+    .optional()
+    .or(z.literal(""))
+    .transform((v) => v || null),
   doubleOptIn: z.boolean().default(true),
 });
 

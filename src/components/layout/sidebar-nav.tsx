@@ -70,7 +70,12 @@ function NavLink({
           )}
         />
         <span className={cn("relative flex-1 truncate", rail && "lg:rail:sr-only")}>{item.title}</span>
-        <span className={cn("relative flex items-center", rail && "lg:rail:absolute lg:rail:top-1 lg:rail:right-1")}>
+        <span
+          className={cn(
+            "relative flex items-center",
+            rail && "lg:rail:absolute lg:rail:top-1 lg:rail:right-1",
+          )}
+        >
           <PendingHint />
         </span>
       </Link>

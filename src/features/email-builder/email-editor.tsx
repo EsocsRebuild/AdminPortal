@@ -67,7 +67,13 @@ function blockErrors(block: Block) {
   return out;
 }
 
-function AlignPicker({ value, onChange }: { value: "left" | "center"; onChange: (v: "left" | "center") => void }) {
+function AlignPicker({
+  value,
+  onChange,
+}: {
+  value: "left" | "center";
+  onChange: (v: "left" | "center") => void;
+}) {
   return (
     <SegmentedControl
       size="sm"
@@ -93,7 +99,13 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
       return (
         <div className="grid gap-3">
           <Field label="Heading" htmlFor={id("text")}>
-            <Input id={id("text")} autoFocus value={block.text} maxLength={200} onChange={(e) => onChange({ ...block, text: e.target.value })} />
+            <Input
+              id={id("text")}
+              autoFocus
+              value={block.text}
+              maxLength={200}
+              onChange={(e) => onChange({ ...block, text: e.target.value })}
+            />
           </Field>
           <AlignPicker value={block.align} onChange={(align) => onChange({ ...block, align })} />
         </div>
@@ -107,7 +119,15 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
             htmlFor={id("text")}
             hint="Wrap words in **double stars** for bold. Press Enter for a new line."
           >
-            <Textarea id={id("text")} autoFocus rows={5} value={block.text} maxLength={5000} onChange={(e) => onChange({ ...block, text: e.target.value })} aria-describedby={`${id("text")}-msg`} />
+            <Textarea
+              id={id("text")}
+              autoFocus
+              rows={5}
+              value={block.text}
+              maxLength={5000}
+              onChange={(e) => onChange({ ...block, text: e.target.value })}
+              aria-describedby={`${id("text")}-msg`}
+            />
           </Field>
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-xs text-muted-foreground">Insert:</span>
@@ -115,7 +135,12 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
               <button
                 key={t.tag}
                 type="button"
-                onClick={() => onChange({ ...block, text: `${block.text}${block.text && !block.text.endsWith(" ") ? " " : ""}${t.tag}` })}
+                onClick={() =>
+                  onChange({
+                    ...block,
+                    text: `${block.text}${block.text && !block.text.endsWith(" ") ? " " : ""}${t.tag}`,
+                  })
+                }
                 className="cursor-pointer rounded-full border border-border px-2 py-0.5 text-xs transition-colors hover:border-primary hover:text-primary"
               >
                 {t.label}
@@ -135,10 +160,29 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
       return (
         <div className="grid gap-3">
           <Field label="Button text" htmlFor={id("label")} error={show("label", block.label)}>
-            <Input id={id("label")} autoFocus value={block.label} maxLength={60} onChange={(e) => onChange({ ...block, label: e.target.value })} />
+            <Input
+              id={id("label")}
+              autoFocus
+              value={block.label}
+              maxLength={60}
+              onChange={(e) => onChange({ ...block, label: e.target.value })}
+            />
           </Field>
-          <Field label="Link" htmlFor={id("url")} error={show("url", block.url)} hint="Where people go when they tap it.">
-            <Input id={id("url")} type="url" inputMode="url" placeholder="https://" value={block.url} onChange={(e) => onChange({ ...block, url: e.target.value })} aria-describedby={`${id("url")}-msg`} />
+          <Field
+            label="Link"
+            htmlFor={id("url")}
+            error={show("url", block.url)}
+            hint="Where people go when they tap it."
+          >
+            <Input
+              id={id("url")}
+              type="url"
+              inputMode="url"
+              placeholder="https://"
+              value={block.url}
+              onChange={(e) => onChange({ ...block, url: e.target.value })}
+              aria-describedby={`${id("url")}-msg`}
+            />
           </Field>
           <div className="flex flex-wrap gap-2">
             <AlignPicker value={block.align} onChange={(align) => onChange({ ...block, align })} />
@@ -158,14 +202,43 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
     case "image":
       return (
         <div className="grid gap-3">
-          <Field label="Image address" htmlFor={id("src")} error={show("src", block.src)} hint="Paste the link to an image that’s already online.">
-            <Input id={id("src")} type="url" autoFocus placeholder="https://" value={block.src} onChange={(e) => onChange({ ...block, src: e.target.value })} aria-describedby={`${id("src")}-msg`} />
+          <Field
+            label="Image address"
+            htmlFor={id("src")}
+            error={show("src", block.src)}
+            hint="Paste the link to an image that’s already online."
+          >
+            <Input
+              id={id("src")}
+              type="url"
+              autoFocus
+              placeholder="https://"
+              value={block.src}
+              onChange={(e) => onChange({ ...block, src: e.target.value })}
+              aria-describedby={`${id("src")}-msg`}
+            />
           </Field>
-          <Field label="Description" htmlFor={id("alt")} hint="Read aloud to people using screen readers, and shown if images are off.">
-            <Input id={id("alt")} value={block.alt} maxLength={200} onChange={(e) => onChange({ ...block, alt: e.target.value })} aria-describedby={`${id("alt")}-msg`} />
+          <Field
+            label="Description"
+            htmlFor={id("alt")}
+            hint="Read aloud to people using screen readers, and shown if images are off."
+          >
+            <Input
+              id={id("alt")}
+              value={block.alt}
+              maxLength={200}
+              onChange={(e) => onChange({ ...block, alt: e.target.value })}
+              aria-describedby={`${id("alt")}-msg`}
+            />
           </Field>
           <Field label="Link when tapped" htmlFor={id("href")} optional error={show("href", block.href)}>
-            <Input id={id("href")} type="url" placeholder="https://" value={block.href} onChange={(e) => onChange({ ...block, href: e.target.value })} />
+            <Input
+              id={id("href")}
+              type="url"
+              placeholder="https://"
+              value={block.href}
+              onChange={(e) => onChange({ ...block, href: e.target.value })}
+            />
           </Field>
           <SegmentedControl
             size="sm"
@@ -194,7 +267,9 @@ function Inspector({ block, onChange }: { block: Block; onChange: (b: Block) => 
         />
       );
     case "divider":
-      return <p className="text-sm text-muted-foreground">A thin line to separate sections. Nothing to set.</p>;
+      return (
+        <p className="text-sm text-muted-foreground">A thin line to separate sections. Nothing to set.</p>
+      );
   }
 }
 
@@ -232,7 +307,9 @@ function BlockRow({
       dragControls={controls}
       className={cn(
         "relative rounded-card border bg-surface transition-[border-color,box-shadow]",
-        selected ? "border-primary/60 shadow-sm ring-3 ring-primary/10" : "border-border hover:border-border-strong",
+        selected
+          ? "border-primary/60 shadow-sm ring-3 ring-primary/10"
+          : "border-border hover:border-border-strong",
       )}
       whileDrag={{ scale: 1.02, boxShadow: "var(--shadow-lg)", zIndex: 10 }}
     >
@@ -258,26 +335,57 @@ function BlockRow({
             <span className="text-xs text-muted-foreground">{meta.label}</span>
             <span className="truncate text-sm">{summary(block)}</span>
           </span>
-          {incomplete && <span className="ml-auto size-1.5 shrink-0 rounded-full bg-warning" aria-label="Needs attention" />}
+          {incomplete && (
+            <span
+              className="ml-auto size-1.5 shrink-0 rounded-full bg-warning"
+              role="img"
+              aria-label="Needs attention"
+            />
+          )}
         </button>
         <div className="flex shrink-0 items-center">
           <Tooltip content="Move up">
-            <Button variant="ghost" size="icon-xs" aria-label="Move up" disabled={disabled || index === 0} onClick={() => onMove(-1)}>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label="Move up"
+              disabled={disabled || index === 0}
+              onClick={() => onMove(-1)}
+            >
               <ArrowUp />
             </Button>
           </Tooltip>
           <Tooltip content="Move down">
-            <Button variant="ghost" size="icon-xs" aria-label="Move down" disabled={disabled || index === count - 1} onClick={() => onMove(1)}>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label="Move down"
+              disabled={disabled || index === count - 1}
+              onClick={() => onMove(1)}
+            >
               <ArrowDown />
             </Button>
           </Tooltip>
           <Tooltip content="Duplicate">
-            <Button variant="ghost" size="icon-xs" aria-label="Duplicate" disabled={disabled} onClick={onDuplicate}>
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label="Duplicate"
+              disabled={disabled}
+              onClick={onDuplicate}
+            >
               <Copy />
             </Button>
           </Tooltip>
           <Tooltip content="Remove">
-            <Button variant="ghost" size="icon-xs" aria-label="Remove" disabled={disabled} onClick={onRemove} className="hover:text-danger">
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label="Remove"
+              disabled={disabled}
+              onClick={onRemove}
+              className="hover:text-danger"
+            >
               <Trash2 />
             </Button>
           </Tooltip>
@@ -378,7 +486,7 @@ export function EmailEditor({ value, onChange, disabled, preview }: EmailEditorP
                     key={type}
                     type="button"
                     onClick={() => add(type)}
-                    className="group grid cursor-pointer justify-items-center gap-1.5 rounded-card border border-border bg-surface px-2 py-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-ring"
+                    className="group grid cursor-pointer justify-items-center gap-1.5 rounded-card border border-border bg-surface px-2 py-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-ring active:scale-[0.97]"
                   >
                     <m.icon className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
                     <span className="text-xs font-medium">{m.label}</span>
@@ -408,12 +516,17 @@ export function EmailEditor({ value, onChange, disabled, preview }: EmailEditorP
                 style={{ background: c }}
               />
             ))}
-            <label className="relative size-7 cursor-pointer overflow-hidden rounded-full border border-dashed border-border-strong" aria-label="Custom colour">
+            <label
+              className="relative size-7 cursor-pointer overflow-hidden rounded-full border border-dashed border-border-strong"
+              aria-label="Custom colour"
+            >
               <input
                 type="color"
                 disabled={disabled}
                 value={value.settings.accentColor}
-                onChange={(e) => onChange({ ...value, settings: { ...value.settings, accentColor: e.target.value } })}
+                onChange={(e) =>
+                  onChange({ ...value, settings: { ...value.settings, accentColor: e.target.value } })
+                }
                 className="absolute inset-0 size-full cursor-pointer opacity-0"
               />
               <span className="grid size-full place-items-center text-xs text-muted-foreground">+</span>
@@ -423,7 +536,9 @@ export function EmailEditor({ value, onChange, disabled, preview }: EmailEditorP
             size="sm"
             aria-label="Background"
             value={value.settings.background}
-            onValueChange={(background) => !disabled && onChange({ ...value, settings: { ...value.settings, background } })}
+            onValueChange={(background) =>
+              !disabled && onChange({ ...value, settings: { ...value.settings, background } })
+            }
             options={[
               { value: "muted", label: "Soft grey background" },
               { value: "light", label: "White background" },
@@ -446,7 +561,13 @@ export function EmailEditor({ value, onChange, disabled, preview }: EmailEditorP
             ]}
           />
         </div>
-        <EmailPreview {...preview} document={value} device={device} selectedId={selected} onSelect={disabled ? undefined : setSelected} />
+        <EmailPreview
+          {...preview}
+          document={value}
+          device={device}
+          selectedId={selected}
+          onSelect={disabled ? undefined : setSelected}
+        />
       </div>
     </div>
   );

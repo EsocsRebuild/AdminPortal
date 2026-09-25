@@ -29,7 +29,15 @@ const sources: Record<Contact["source"], string> = {
   api: "Integration",
 };
 
-export function ContactsTable({ listId, page, server }: { listId: string; page: Contact[]; server: ServerTableState }) {
+export function ContactsTable({
+  listId,
+  page,
+  server,
+}: {
+  listId: string;
+  page: Contact[];
+  server: ServerTableState;
+}) {
   const modals = useModals();
   const canManage = usePermission("audiences:manage");
   const remove = useAction(removeContacts, { success: (r) => `${pluralize(r.removed, "contact")} removed` });
@@ -80,7 +88,11 @@ export function ContactsTable({ listId, page, server }: { listId: string; page: 
       server={server}
       searchPlaceholder="Search by email or name…"
       filters={() => (
-        <UrlFilter param="status" title="Status" options={contactStatuses.map((s) => ({ value: s, label: contactStatusLabels[s] }))} />
+        <UrlFilter
+          param="status"
+          title="Status"
+          options={contactStatuses.map((s) => ({ value: s, label: contactStatusLabels[s] }))}
+        />
       )}
       bulkActions={
         canManage
@@ -92,7 +104,8 @@ export function ContactsTable({ listId, page, server }: { listId: string; page: 
                 onClick={async () => {
                   const ok = await modals.confirm({
                     title: `Remove ${pluralize(ids.length, "contact")} from this audience?`,
-                    description: "They won’t receive emails sent to this audience. Their other lists aren’t affected.",
+                    description:
+                      "They won’t receive emails sent to this audience. Their other lists aren’t affected.",
                     confirmLabel: "Remove",
                     tone: "danger",
                   });

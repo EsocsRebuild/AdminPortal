@@ -13,7 +13,10 @@ import { pluralize } from "@/lib/utils";
 export const metadata: Metadata = { title: "Members" };
 
 export default async function MembersPage({ searchParams }: PageProps<"/members">) {
-  const params = parseListParams(await searchParams, { status: enumParam(memberStatuses), parishId: idParam });
+  const params = parseListParams(await searchParams, {
+    status: enumParam(memberStatuses),
+    parishId: idParam,
+  });
   const [result, parishes] = await Promise.all([listMembers(params), getParishes()]);
 
   return (

@@ -1,6 +1,14 @@
 import type { EmailDocument } from "@/features/email-builder/types";
 
-export const campaignStatuses = ["draft", "scheduled", "sending", "sent", "paused", "cancelled", "failed"] as const;
+export const campaignStatuses = [
+  "draft",
+  "scheduled",
+  "sending",
+  "sent",
+  "paused",
+  "cancelled",
+  "failed",
+] as const;
 export type CampaignStatus = (typeof campaignStatuses)[number];
 
 export const campaignStatusLabels: Record<CampaignStatus, string> = {

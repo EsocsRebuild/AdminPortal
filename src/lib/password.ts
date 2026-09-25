@@ -7,10 +7,25 @@ export const PASSWORD_MIN = 12;
 export const PASSWORD_MAX = 128;
 
 export const passwordRules = [
-  { id: "length", label: `At least ${PASSWORD_MIN} characters`, required: true, test: (p: string) => p.length >= PASSWORD_MIN },
+  {
+    id: "length",
+    label: `At least ${PASSWORD_MIN} characters`,
+    required: true,
+    test: (p: string) => p.length >= PASSWORD_MIN,
+  },
   { id: "number", label: "A number", required: false, test: (p: string) => /\d/.test(p) },
-  { id: "case", label: "Upper and lower case", required: false, test: (p: string) => /[a-z]/.test(p) && /[A-Z]/.test(p) },
-  { id: "symbol", label: "A symbol, like ! or #", required: false, test: (p: string) => /[^A-Za-z0-9\s]/.test(p) },
+  {
+    id: "case",
+    label: "Upper and lower case",
+    required: false,
+    test: (p: string) => /[a-z]/.test(p) && /[A-Z]/.test(p),
+  },
+  {
+    id: "symbol",
+    label: "A symbol, like ! or #",
+    required: false,
+    test: (p: string) => /[^A-Za-z0-9\s]/.test(p),
+  },
 ] as const;
 
 /** 0–4. Length is required before any other rule counts. */

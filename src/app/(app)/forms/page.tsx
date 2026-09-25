@@ -15,7 +15,11 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
   const result = await listForms({ ...params, sort: params.sort ?? "updatedAt", dir: params.dir ?? "desc" });
   return (
     <Page>
-      <PageHeader title="Forms" description="Registrations, surveys and sign-ups you can share with a link." actions={<NewFormButton />}>
+      <PageHeader
+        title="Forms"
+        description="Registrations, surveys and sign-ups you can share with a link."
+        actions={<NewFormButton />}
+      >
         <UrlTabs
           param="status"
           label="Form status"
@@ -30,7 +34,15 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
       <FormsTable
         page={result.data}
         emptyAction={<NewFormButton />}
-        server={{ total: result.meta.total, page: result.meta.page, pageSize: result.meta.pageSize, q: params.q, sort: params.sort, dir: params.dir, filtered: Boolean(params.status) }}
+        server={{
+          total: result.meta.total,
+          page: result.meta.page,
+          pageSize: result.meta.pageSize,
+          q: params.q,
+          sort: params.sort,
+          dir: params.dir,
+          filtered: Boolean(params.status),
+        }}
       />
     </Page>
   );

@@ -1,6 +1,10 @@
 export const severities = ["info", "warning", "critical"] as const;
 export type Severity = (typeof severities)[number];
-export const severityLabels: Record<Severity, string> = { info: "Info", warning: "Warning", critical: "Critical" };
+export const severityLabels: Record<Severity, string> = {
+  info: "Info",
+  warning: "Warning",
+  critical: "Critical",
+};
 
 export interface AuditEvent {
   id: string;

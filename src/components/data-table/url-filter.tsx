@@ -20,7 +20,15 @@ export interface UrlFilterOption {
 }
 
 /** Single-choice filter stored in the URL, e.g. `?status=pending`. For server tables. */
-export function UrlFilter({ param, title, options }: { param: string; title: string; options: UrlFilterOption[] }) {
+export function UrlFilter({
+  param,
+  title,
+  options,
+}: {
+  param: string;
+  title: string;
+  options: UrlFilterOption[];
+}) {
   const url = useUrlQuery();
   const current = url.get(param);
   const selected = options.find((o) => o.value === current);

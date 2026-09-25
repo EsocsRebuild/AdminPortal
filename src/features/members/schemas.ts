@@ -20,7 +20,13 @@ export const memberInput = z.object({
     .nullable()
     .optional(),
   phone: z
-    .union([z.literal(""), z.string().trim().regex(/^[+\d][\d\s()-]{6,24}$/, { error: "Enter a valid phone number." })])
+    .union([
+      z.literal(""),
+      z
+        .string()
+        .trim()
+        .regex(/^[+\d][\d\s()-]{6,24}$/, { error: "Enter a valid phone number." }),
+    ])
     .transform((v) => v || null)
     .nullable()
     .optional(),

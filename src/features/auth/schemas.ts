@@ -26,7 +26,12 @@ export const signInSchema = z.object({
 });
 
 export const mfaSchema = z.discriminatedUnion("method", [
-  z.object({ method: z.literal("totp"), code, rememberDevice: z.boolean().default(false), next: z.string().optional() }),
+  z.object({
+    method: z.literal("totp"),
+    code,
+    rememberDevice: z.boolean().default(false),
+    next: z.string().optional(),
+  }),
   z.object({
     method: z.literal("recovery"),
     code: z.string().trim().min(8, { error: "Enter one of your recovery codes." }).max(32),
@@ -63,7 +68,10 @@ export const signUpStep3 = z
     confirm: z.string(),
     terms: z.literal(true, { error: "Please agree to continue." }),
   })
-  .refine((v) => v.password === v.confirm, { path: ["confirm"], error: "The two passwords don’t match yet." });
+  .refine((v) => v.password === v.confirm, {
+    path: ["confirm"],
+    error: "The two passwords don’t match yet.",
+  });
 
 export const signUpSchema = signUpStep1.and(signUpStep2).and(signUpStep3);
 
@@ -73,9 +81,14 @@ export const forgotPasswordSchema = z.object({ email });
 
 export const resetPasswordSchema = z
   .object({ token: z.string().min(16).max(512), password: newPassword, confirm: z.string() })
-  .refine((v) => v.password === v.confirm, { path: ["confirm"], error: "The two passwords don’t match yet." });
+  .refine((v) => v.password === v.confirm, {
+    path: ["confirm"],
+    error: "The two passwords don’t match yet.",
+  });
 
-export const reauthSchema = z.object({ password: z.string().min(1, { error: "Enter your password." }).max(PASSWORD_MAX) });
+export const reauthSchema = z.object({
+  password: z.string().min(1, { error: "Enter your password." }).max(PASSWORD_MAX),
+});
 
 export type SignInInput = z.input<typeof signInSchema>;
 export type SignUpInput = z.input<typeof signUpSchema>;
@@ -87,4 +100,7 @@ export const acceptInviteSchema = z
     password: newPassword,
     confirm: z.string(),
   })
-  .refine((v) => v.password === v.confirm, { path: ["confirm"], error: "The two passwords don’t match yet." });
+  .refine((v) => v.password === v.confirm, {
+    path: ["confirm"],
+    error: "The two passwords don’t match yet.",
+  });

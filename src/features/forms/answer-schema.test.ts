@@ -19,7 +19,15 @@ describe("buildAnswerSchema", () => {
   const schema = buildAnswerSchema([
     f({ id: "name", required: true }),
     f({ id: "email", type: "email" }),
-    f({ id: "size", type: "radio", required: true, options: [{ id: "s", label: "S" }, { id: "m", label: "M" }] }),
+    f({
+      id: "size",
+      type: "radio",
+      required: true,
+      options: [
+        { id: "s", label: "S" },
+        { id: "m", label: "M" },
+      ],
+    }),
     f({ id: "age", type: "number", validation: { min: 0, max: 120 } }),
     f({ id: "ok", type: "consent", required: true }),
     f({ id: "intro", type: "section" }),
@@ -52,7 +60,11 @@ describe("buildAnswerSchema messages", () => {
   it("uses plain language for unanswered questions", () => {
     const r = schema.safeParse({});
     const messages = Object.fromEntries(r.error!.issues.map((i) => [i.path[0], i.message]));
-    expect(messages).toEqual({ name: "This question is required.", age: "This question is required.", size: "Choose an option." });
+    expect(messages).toEqual({
+      name: "This question is required.",
+      age: "This question is required.",
+      size: "Choose an option.",
+    });
   });
 
   it("doesn't treat an empty required number as zero", () => {

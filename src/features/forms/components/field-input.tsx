@@ -25,8 +25,15 @@ export interface FieldInputProps {
 export function FieldInput({ field, value, onChange, error, disabled }: FieldInputProps) {
   const id = `q-${field.id}`;
   const msgId = `${id}-msg`;
-  const describedBy = [field.description ? `${id}-desc` : null, error ? msgId : null].filter(Boolean).join(" ") || undefined;
-  const common = { id, disabled, "aria-invalid": !!error || undefined, "aria-describedby": describedBy, "aria-required": field.required || undefined };
+  const describedBy =
+    [field.description ? `${id}-desc` : null, error ? msgId : null].filter(Boolean).join(" ") || undefined;
+  const common = {
+    id,
+    disabled,
+    "aria-invalid": !!error || undefined,
+    "aria-describedby": describedBy,
+    "aria-required": field.required || undefined,
+  };
 
   if (field.type === "section") {
     return (
@@ -41,16 +48,54 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
   let control: React.ReactNode;
   switch (field.type) {
     case "short_text":
-      control = <Input {...common} size="lg" placeholder={field.placeholder ?? undefined} value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} maxLength={field.validation?.maxLength ?? 300} />;
+      control = (
+        <Input
+          {...common}
+          size="lg"
+          placeholder={field.placeholder ?? undefined}
+          value={(value as string) ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          maxLength={field.validation?.maxLength ?? 300}
+        />
+      );
       break;
     case "long_text":
-      control = <Textarea {...common} rows={4} placeholder={field.placeholder ?? undefined} value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} maxLength={field.validation?.maxLength ?? 5000} />;
+      control = (
+        <Textarea
+          {...common}
+          rows={4}
+          placeholder={field.placeholder ?? undefined}
+          value={(value as string) ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          maxLength={field.validation?.maxLength ?? 5000}
+        />
+      );
       break;
     case "email":
-      control = <Input {...common} size="lg" type="email" autoComplete="email" placeholder={field.placeholder ?? "name@example.com"} value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} />;
+      control = (
+        <Input
+          {...common}
+          size="lg"
+          type="email"
+          autoComplete="email"
+          placeholder={field.placeholder ?? "name@example.com"}
+          value={(value as string) ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      );
       break;
     case "phone":
-      control = <Input {...common} size="lg" type="tel" autoComplete="tel" placeholder={field.placeholder ?? "+234"} value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} />;
+      control = (
+        <Input
+          {...common}
+          size="lg"
+          type="tel"
+          autoComplete="tel"
+          placeholder={field.placeholder ?? "+234"}
+          value={(value as string) ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      );
       break;
     case "number":
       control = (
@@ -68,7 +113,16 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
       );
       break;
     case "date":
-      control = <Input {...common} size="lg" type="date" value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} className="max-w-56" />;
+      control = (
+        <Input
+          {...common}
+          size="lg"
+          type="date"
+          value={(value as string) ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          className="max-w-56"
+        />
+      );
       break;
     case "select":
       control = (
@@ -77,11 +131,13 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
             <SelectValue placeholder={field.placeholder ?? "Choose an option"} />
           </SelectTrigger>
           <SelectContent>
-            {(field.options ?? []).filter((o) => o.label).map((o) => (
-              <SelectItem key={o.id} value={o.id}>
-                {o.label}
-              </SelectItem>
-            ))}
+            {(field.options ?? [])
+              .filter((o) => o.label)
+              .map((o) => (
+                <SelectItem key={o.id} value={o.id}>
+                  {o.label}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
       );
@@ -105,14 +161,21 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
     case "checkboxes": {
       const selected = Array.isArray(value) ? value : [];
       control = (
-        <div role="group" aria-labelledby={`${id}-label`} aria-describedby={describedBy} className="grid gap-2.5">
+        <div
+          role="group"
+          aria-labelledby={`${id}-label`}
+          aria-describedby={describedBy}
+          className="grid gap-2.5"
+        >
           {(field.options ?? []).map((o) => (
             <Checkbox
               key={o.id}
               label={o.label || "Option"}
               disabled={disabled}
               checked={selected.includes(o.id)}
-              onCheckedChange={(v) => onChange(v === true ? [...selected, o.id] : selected.filter((x) => x !== o.id))}
+              onCheckedChange={(v) =>
+                onChange(v === true ? [...selected, o.id] : selected.filter((x) => x !== o.id))
+              }
             />
           ))}
         </div>
@@ -136,9 +199,15 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
 
   if (field.type === "consent") {
     return (
-      <div className={cn("grid gap-1.5 rounded-card border p-4", error ? "border-danger/50" : "border-border")}>
+      <div
+        className={cn("grid gap-1.5 rounded-card border p-4", error ? "border-danger/50" : "border-border")}
+      >
         {control}
-        {error && <p id={msgId} role="alert" className="text-sm text-danger">{error}</p>}
+        {error && (
+          <p id={msgId} role="alert" className="text-sm text-danger">
+            {error}
+          </p>
+        )}
       </div>
     );
   }
@@ -149,7 +218,11 @@ export function FieldInput({ field, value, onChange, error, disabled }: FieldInp
       {groupLabel ? (
         <p id={`${id}-label`} className="text-base font-medium">
           {label}
-          {field.required && <span aria-hidden className="ml-0.5 text-danger">*</span>}
+          {field.required && (
+            <span aria-hidden className="ml-0.5 text-danger">
+              *
+            </span>
+          )}
         </p>
       ) : (
         <Label htmlFor={id} required={field.required} className="text-base">

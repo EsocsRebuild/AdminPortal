@@ -6,7 +6,15 @@ import * as React from "react";
 
 import { Can } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,23 +56,45 @@ export function InviteButton({ roles }: { roles: Role[] }) {
             onSubmit={async (e) => {
               e.preventDefault();
               const check = validate(inviteInput, v);
-              if (!check.ok) return setErrors({ ...check.errors, roleId: check.errors.roleId && "Choose a role." });
+              if (!check.ok)
+                return setErrors({ ...check.errors, roleId: check.errors.roleId && "Choose a role." });
               const res = await invite.run(v);
               if (!res.ok) setErrors(resultErrors(res));
             }}
           >
             <DialogHeader>
               <DialogTitle>Invite an administrator</DialogTitle>
-              <DialogDescription>They’ll get an email with a link to set their password. The link expires in 7 days.</DialogDescription>
+              <DialogDescription>
+                They’ll get an email with a link to set their password. The link expires in 7 days.
+              </DialogDescription>
             </DialogHeader>
             <DialogBody className="grid gap-4">
               <Field label="Email" htmlFor="inv-email" error={errors.email} required>
-                <Input id="inv-email" type="email" autoFocus prefix={<Mail />} value={v.email} onChange={(e) => setV({ ...v, email: e.target.value })} aria-invalid={!!errors.email} aria-describedby="inv-email-msg" />
+                <Input
+                  id="inv-email"
+                  type="email"
+                  autoFocus
+                  prefix={<Mail />}
+                  value={v.email}
+                  onChange={(e) => setV({ ...v, email: e.target.value })}
+                  aria-invalid={!!errors.email}
+                  aria-describedby="inv-email-msg"
+                />
               </Field>
               <Field label="Name" htmlFor="inv-name" optional>
-                <Input id="inv-name" value={v.name} onChange={(e) => setV({ ...v, name: e.target.value })} maxLength={120} />
+                <Input
+                  id="inv-name"
+                  value={v.name}
+                  onChange={(e) => setV({ ...v, name: e.target.value })}
+                  maxLength={120}
+                />
               </Field>
-              <Field label="Role" htmlFor="inv-role" error={errors.roleId} hint={role?.description ?? "Decides what they can see and do."}>
+              <Field
+                label="Role"
+                htmlFor="inv-role"
+                error={errors.roleId}
+                hint={role?.description ?? "Decides what they can see and do."}
+              >
                 <Select value={v.roleId || undefined} onValueChange={(roleId) => setV({ ...v, roleId })}>
                   <SelectTrigger id="inv-role" aria-invalid={!!errors.roleId} aria-describedby="inv-role-msg">
                     <SelectValue placeholder="Choose a role" />

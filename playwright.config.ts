@@ -37,5 +37,10 @@ export default defineConfig({
     port: PORT,
     reuseExistingServer: !isCI,
     timeout: 120_000,
+    env: {
+      // Public-page tests need no API. Point this at a staging API to run the signed-in suite.
+      BACKEND_API_URL: process.env.E2E_BACKEND_URL ?? "http://127.0.0.1:9/v1",
+      NEXT_PUBLIC_APP_URL: `http://localhost:${PORT}`,
+    },
   },
 });

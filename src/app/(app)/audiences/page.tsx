@@ -37,7 +37,10 @@ export default async function AudiencesPage() {
             const total = a.subscriberCount + a.unsubscribedCount;
             return (
               <StaggerItem key={a.id}>
-                <Link href={`/audiences/${a.id}`} className="block rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                <Link
+                  href={`/audiences/${a.id}`}
+                  className="block rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
                   <Card interactive className="h-full gap-5 p-card">
                     <div className="flex items-start gap-3">
                       <span className="grid size-10 shrink-0 place-items-center rounded-card bg-primary-soft text-primary-soft-foreground">
@@ -45,12 +48,16 @@ export default async function AudiencesPage() {
                       </span>
                       <div className="grid min-w-0 gap-0.5">
                         <h2 className="truncate font-semibold">{a.name}</h2>
-                        <p className="line-clamp-2 text-sm text-muted-foreground">{a.description ?? "No description"}</p>
+                        <p className="line-clamp-2 text-sm text-muted-foreground">
+                          {a.description ?? "No description"}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-auto flex items-end justify-between gap-4">
                       <div>
-                        <p className="text-metric font-semibold tabular">{formatCompact(a.subscriberCount)}</p>
+                        <p className="tabular text-metric font-semibold">
+                          {formatCompact(a.subscriberCount)}
+                        </p>
                         <p className="text-xs text-muted-foreground">subscribed</p>
                       </div>
                       <div className="grid justify-items-end gap-1 text-xs text-muted-foreground">
@@ -60,7 +67,9 @@ export default async function AudiencesPage() {
                           </span>
                         )}
                         <span>
-                          {total > 0 ? `${formatPercent(a.unsubscribedCount / total)} unsubscribed` : `Created ${formatDate(a.createdAt)}`}
+                          {total > 0
+                            ? `${formatPercent(a.unsubscribedCount / total)} unsubscribed`
+                            : `Created ${formatDate(a.createdAt)}`}
                         </span>
                       </div>
                     </div>

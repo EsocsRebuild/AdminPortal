@@ -5,7 +5,14 @@ import { can, type Permission } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
 import type { SessionUser } from "@/types/auth";
 
-const actions: { href: string; title: string; text: string; icon: LucideIcon; tint: string; permission: Permission }[] = [
+const actions: {
+  href: string;
+  title: string;
+  text: string;
+  icon: LucideIcon;
+  tint: string;
+  permission: Permission;
+}[] = [
   {
     href: "/members?new=1",
     title: "Add a member",
@@ -45,7 +52,13 @@ export function QuickActions({ user }: { user: SessionUser }) {
   const visible = actions.filter((a) => can(user, a.permission));
   if (visible.length === 0) return null;
   return (
-    <nav aria-label="Quick actions" className={cn("grid grid-cols-2 gap-3", visible.length >= 4 ? "lg:grid-cols-4" : visible.length === 3 ? "lg:grid-cols-3" : "")}>
+    <nav
+      aria-label="Quick actions"
+      className={cn(
+        "grid grid-cols-2 gap-3",
+        visible.length >= 4 ? "lg:grid-cols-4" : visible.length === 3 ? "lg:grid-cols-3" : "",
+      )}
+    >
       {visible.map((a) => (
         <Link
           key={a.href}
@@ -58,7 +71,12 @@ export function QuickActions({ user }: { user: SessionUser }) {
             "sm:flex-row sm:items-center",
           )}
         >
-          <span className={cn("grid size-10 shrink-0 place-items-center rounded-card transition-transform duration-300 ease-spring group-hover:scale-110 group-hover:-rotate-3", a.tint)}>
+          <span
+            className={cn(
+              "grid size-10 shrink-0 place-items-center rounded-card transition-transform duration-300 ease-spring group-hover:scale-110 group-hover:-rotate-3",
+              a.tint,
+            )}
+          >
             <a.icon className="size-5" />
           </span>
           <span className="grid min-w-0 gap-0.5">

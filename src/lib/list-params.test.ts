@@ -13,7 +13,10 @@ describe("parseListParams", () => {
   });
 
   it("parses page-specific filters", () => {
-    const p = parseListParams({ status: ["active", "x"], q: "  ada  " }, { status: enumParam(["active", "pending"]) });
+    const p = parseListParams(
+      { status: ["active", "x"], q: "  ada  " },
+      { status: enumParam(["active", "pending"]) },
+    );
     expect(p.status).toBe("active");
     expect(p.q).toBe("ada");
   });

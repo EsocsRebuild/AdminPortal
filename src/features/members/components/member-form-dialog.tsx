@@ -115,108 +115,186 @@ function MemberFormDialogBody({
 
   return (
     <>
-        <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-col">
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit member" : "Add a member"}</DialogTitle>
-            <DialogDescription>
-              {editing ? "Update their details. Changes are recorded in the audit log." : "Only a name and parish are required. You can add the rest later."}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogBody className="grid gap-7">
-            <Section title="Name">
-              <Field label="First name" htmlFor="m-firstName" error={err("firstName")} required>
-                <Input id="m-firstName" autoFocus autoComplete="off" value={values.firstName} onChange={(e) => set("firstName", e.target.value)} aria-invalid={!!err("firstName")} aria-describedby={describe("firstName")} maxLength={60} />
-              </Field>
-              <Field label="Last name" htmlFor="m-lastName" error={err("lastName")} required>
-                <Input id="m-lastName" autoComplete="off" value={values.lastName} onChange={(e) => set("lastName", e.target.value)} aria-invalid={!!err("lastName")} aria-describedby={describe("lastName")} maxLength={60} />
-              </Field>
-            </Section>
+      <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-col">
+        <DialogHeader>
+          <DialogTitle>{editing ? "Edit member" : "Add a member"}</DialogTitle>
+          <DialogDescription>
+            {editing
+              ? "Update their details. Changes are recorded in the audit log."
+              : "Only a name and parish are required. You can add the rest later."}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogBody className="grid gap-7">
+          <Section title="Name">
+            <Field label="First name" htmlFor="m-firstName" error={err("firstName")} required>
+              <Input
+                id="m-firstName"
+                autoFocus
+                autoComplete="off"
+                value={values.firstName}
+                onChange={(e) => set("firstName", e.target.value)}
+                aria-invalid={!!err("firstName")}
+                aria-describedby={describe("firstName")}
+                maxLength={60}
+              />
+            </Field>
+            <Field label="Last name" htmlFor="m-lastName" error={err("lastName")} required>
+              <Input
+                id="m-lastName"
+                autoComplete="off"
+                value={values.lastName}
+                onChange={(e) => set("lastName", e.target.value)}
+                aria-invalid={!!err("lastName")}
+                aria-describedby={describe("lastName")}
+                maxLength={60}
+              />
+            </Field>
+          </Section>
 
-            <Section title="Contact">
-              <Field label="Email" htmlFor="m-email" error={err("email")} optional>
-                <Input id="m-email" type="email" prefix={<Mail />} autoComplete="off" value={values.email} onChange={(e) => set("email", e.target.value)} aria-invalid={!!err("email")} aria-describedby={describe("email")} />
-              </Field>
-              <Field label="Phone" htmlFor="m-phone" error={err("phone")} optional>
-                <Input id="m-phone" type="tel" prefix={<Phone />} autoComplete="off" placeholder="+234" value={values.phone} onChange={(e) => set("phone", e.target.value)} aria-invalid={!!err("phone")} aria-describedby={describe("phone")} />
-              </Field>
-              <div className="rounded-card border border-border bg-surface-muted/50 p-3.5 sm:col-span-2">
-                <Switch
-                  label="Happy to receive email updates"
-                  description="Only switch this on if they’ve agreed. Members without consent are never added to email campaigns."
-                  checked={values.emailConsent}
-                  onCheckedChange={(v) => set("emailConsent", v)}
-                  disabled={!values.email}
-                />
-              </div>
-            </Section>
+          <Section title="Contact">
+            <Field label="Email" htmlFor="m-email" error={err("email")} optional>
+              <Input
+                id="m-email"
+                type="email"
+                prefix={<Mail />}
+                autoComplete="off"
+                value={values.email}
+                onChange={(e) => set("email", e.target.value)}
+                aria-invalid={!!err("email")}
+                aria-describedby={describe("email")}
+              />
+            </Field>
+            <Field label="Phone" htmlFor="m-phone" error={err("phone")} optional>
+              <Input
+                id="m-phone"
+                type="tel"
+                prefix={<Phone />}
+                autoComplete="off"
+                placeholder="+234"
+                value={values.phone}
+                onChange={(e) => set("phone", e.target.value)}
+                aria-invalid={!!err("phone")}
+                aria-describedby={describe("phone")}
+              />
+            </Field>
+            <div className="rounded-card border border-border bg-surface-muted/50 p-3.5 sm:col-span-2">
+              <Switch
+                label="Happy to receive email updates"
+                description="Only switch this on if they’ve agreed. Members without consent are never added to email campaigns."
+                checked={values.emailConsent}
+                onCheckedChange={(v) => set("emailConsent", v)}
+                disabled={!values.email}
+              />
+            </div>
+          </Section>
 
-            <Section title="Church">
-              <Field label="Parish" htmlFor="m-parishId" error={err("parishId")} required>
-                <Select value={values.parishId} onValueChange={(v) => set("parishId", v)}>
-                  <SelectTrigger id="m-parishId" aria-invalid={!!err("parishId")} aria-describedby={describe("parishId")}>
-                    <SelectValue placeholder="Choose a parish" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {parishes.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
-                        {p.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Rank or title" htmlFor="m-rank" error={err("rank")} optional>
-                <Input id="m-rank" placeholder="e.g. Elder" value={values.rank} onChange={(e) => set("rank", e.target.value)} maxLength={60} />
-              </Field>
-              <Field label="Status" htmlFor="m-status">
-                <Select value={values.status} onValueChange={(v) => set("status", v as Values["status"])}>
-                  <SelectTrigger id="m-status">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {memberStatuses.map((s) => (
-                      <SelectItem key={s} value={s}>
-                        {statusLabels[s]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-            </Section>
+          <Section title="Church">
+            <Field label="Parish" htmlFor="m-parishId" error={err("parishId")} required>
+              <Select value={values.parishId} onValueChange={(v) => set("parishId", v)}>
+                <SelectTrigger
+                  id="m-parishId"
+                  aria-invalid={!!err("parishId")}
+                  aria-describedby={describe("parishId")}
+                >
+                  <SelectValue placeholder="Choose a parish" />
+                </SelectTrigger>
+                <SelectContent>
+                  {parishes.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Rank or title" htmlFor="m-rank" error={err("rank")} optional>
+              <Input
+                id="m-rank"
+                placeholder="e.g. Elder"
+                value={values.rank}
+                onChange={(e) => set("rank", e.target.value)}
+                maxLength={60}
+              />
+            </Field>
+            <Field label="Status" htmlFor="m-status">
+              <Select value={values.status} onValueChange={(v) => set("status", v as Values["status"])}>
+                <SelectTrigger id="m-status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {memberStatuses.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {statusLabels[s]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          </Section>
 
-            <Section title="Personal">
-              <Field label="Gender" htmlFor="m-gender" optional>
-                <Select value={values.gender || undefined} onValueChange={(v) => set("gender", v as Values["gender"])}>
-                  <SelectTrigger id="m-gender">
-                    <SelectValue placeholder="Not set" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="male">Male</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Date of birth" htmlFor="m-dateOfBirth" error={err("dateOfBirth")} optional>
-                <Input id="m-dateOfBirth" type="date" max={new Date().toISOString().slice(0, 10)} value={values.dateOfBirth} onChange={(e) => set("dateOfBirth", e.target.value)} aria-invalid={!!err("dateOfBirth")} aria-describedby={describe("dateOfBirth")} />
-              </Field>
-              <Field label="Address" htmlFor="m-address" optional className="sm:col-span-2">
-                <Input id="m-address" autoComplete="off" value={values.address} onChange={(e) => set("address", e.target.value)} maxLength={240} />
-              </Field>
-              <Field label="Notes" htmlFor="m-notes" optional hint="Visible to administrators only." className="sm:col-span-2">
-                <Textarea id="m-notes" rows={3} value={values.notes} onChange={(e) => set("notes", e.target.value)} maxLength={2000} aria-describedby="m-notes-msg" />
-              </Field>
-            </Section>
-          </DialogBody>
-          <DialogFooter>
-            <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={pending}>
-              Cancel
-            </Button>
-            <Button type="submit" loading={pending}>
-              {editing ? "Save changes" : "Add member"}
-            </Button>
-          </DialogFooter>
-        </form>
-      </>
+          <Section title="Personal">
+            <Field label="Gender" htmlFor="m-gender" optional>
+              <Select
+                value={values.gender || undefined}
+                onValueChange={(v) => set("gender", v as Values["gender"])}
+              >
+                <SelectTrigger id="m-gender">
+                  <SelectValue placeholder="Not set" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="male">Male</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Date of birth" htmlFor="m-dateOfBirth" error={err("dateOfBirth")} optional>
+              <Input
+                id="m-dateOfBirth"
+                type="date"
+                max={new Date().toISOString().slice(0, 10)}
+                value={values.dateOfBirth}
+                onChange={(e) => set("dateOfBirth", e.target.value)}
+                aria-invalid={!!err("dateOfBirth")}
+                aria-describedby={describe("dateOfBirth")}
+              />
+            </Field>
+            <Field label="Address" htmlFor="m-address" optional className="sm:col-span-2">
+              <Input
+                id="m-address"
+                autoComplete="off"
+                value={values.address}
+                onChange={(e) => set("address", e.target.value)}
+                maxLength={240}
+              />
+            </Field>
+            <Field
+              label="Notes"
+              htmlFor="m-notes"
+              optional
+              hint="Visible to administrators only."
+              className="sm:col-span-2"
+            >
+              <Textarea
+                id="m-notes"
+                rows={3}
+                value={values.notes}
+                onChange={(e) => set("notes", e.target.value)}
+                maxLength={2000}
+                aria-describedby="m-notes-msg"
+              />
+            </Field>
+          </Section>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={pending}>
+            Cancel
+          </Button>
+          <Button type="submit" loading={pending}>
+            {editing ? "Save changes" : "Add member"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </>
   );
 }
 

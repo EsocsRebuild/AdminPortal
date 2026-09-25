@@ -25,7 +25,9 @@ export interface Modals {
   /** Asks for the password again. Resolves true once sudo mode is open. */
   reauth(): Promise<boolean>;
   /** Opens any dialog. Call `close(value)` from inside to resolve. */
-  open<T = unknown>(render: (api: { open: boolean; close: (value?: T) => void }) => React.ReactNode): Promise<T | undefined>;
+  open<T = unknown>(
+    render: (api: { open: boolean; close: (value?: T) => void }) => React.ReactNode,
+  ): Promise<T | undefined>;
 }
 
 const ModalContext = React.createContext<Modals | null>(null);

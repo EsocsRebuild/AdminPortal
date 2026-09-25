@@ -19,7 +19,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useUrlQuery } from "@/hooks/use-url-query";
 import { cn, pluralize } from "@/lib/utils";
 
-import { dataTableFeatures, type DataTableColumn, type DataTableInstance, type DataTableRow } from "./features";
+import {
+  dataTableFeatures,
+  type DataTableColumn,
+  type DataTableInstance,
+  type DataTableRow,
+} from "./features";
 import { DataTablePagination } from "./pagination";
 import { DataTableViewOptions } from "./view-options";
 
@@ -250,7 +255,9 @@ function TableFrame<T extends RowData>({
 
         {/* Phone layout: cards */}
         {renderMobileRow && (
-          <div className={cn("grid gap-2 transition-opacity duration-200 md:hidden", pending && "opacity-60")}>
+          <div
+            className={cn("grid gap-2 transition-opacity duration-200 md:hidden", pending && "opacity-60")}
+          >
             {loading ? (
               Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-24 rounded-card" />)
             ) : rows.length === 0 ? (
@@ -289,7 +296,9 @@ function TableFrame<T extends RowData>({
                         <th
                           key={header.id}
                           scope="col"
-                          aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
+                          aria-sort={
+                            sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
+                          }
                           className={cn(
                             "h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap text-muted-foreground first:pl-4 last:pr-4",
                             meta?.align === "end" && "text-right",

@@ -10,9 +10,15 @@ import { LoginForm } from "./login-form";
 export const metadata: Metadata = { title: "Sign in" };
 
 const notices: Record<string, { tone: "info" | "success" | "warning"; text: string }> = {
-  idle: { tone: "warning", text: "You were signed out because you weren’t active for a while. Please sign in again." },
+  idle: {
+    tone: "warning",
+    text: "You were signed out because you weren’t active for a while. Please sign in again.",
+  },
   "signed-out": { tone: "success", text: "You’ve been signed out safely." },
-  "password-reset": { tone: "success", text: "Your password was changed. Please sign in with your new password." },
+  "password-reset": {
+    tone: "success",
+    text: "Your password was changed. Please sign in with your new password.",
+  },
   "invite-accepted": { tone: "success", text: "Your account is ready. Sign in to get started." },
   expired: { tone: "info", text: "Your session ended. Please sign in again." },
 };

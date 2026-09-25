@@ -11,7 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CopyButton } from "@/components/ui/copy-button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { OtpInput } from "@/components/ui/otp-input";
 import { useAction } from "@/hooks/use-action";
 
@@ -42,7 +50,11 @@ function RecoveryCodes({ codes, onDone }: { codes: string[]; onDone: () => void 
             </a>
           </Button>
         </div>
-        <Checkbox label="I’ve saved my recovery codes" checked={saved} onCheckedChange={(v) => setSaved(v === true)} />
+        <Checkbox
+          label="I’ve saved my recovery codes"
+          checked={saved}
+          onCheckedChange={(v) => setSaved(v === true)}
+        />
       </DialogBody>
       <DialogFooter>
         <Button onClick={onDone} disabled={!saved}>
@@ -56,7 +68,9 @@ function RecoveryCodes({ codes, onDone }: { codes: string[]; onDone: () => void 
 export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: number }) {
   const modals = useModals();
   const [open, setOpen] = React.useState(false);
-  const [stage, setStage] = React.useState<{ step: "scan"; secret: string; qr: string } | { step: "codes"; codes: string[] } | null>(null);
+  const [stage, setStage] = React.useState<
+    { step: "scan"; secret: string; qr: string } | { step: "codes"; codes: string[] } | null
+  >(null);
   const [code, setCode] = React.useState("");
   const [attempt, setAttempt] = React.useState(0);
   const begin = useAction(beginMfaSetup);
@@ -87,7 +101,15 @@ export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: n
         title={
           <span className="flex items-center gap-2">
             Two-step verification
-            {enabled ? <Badge tone="success" dot>On</Badge> : <Badge tone="warning" dot>Off</Badge>}
+            {enabled ? (
+              <Badge tone="success" dot>
+                On
+              </Badge>
+            ) : (
+              <Badge tone="warning" dot>
+                Off
+              </Badge>
+            )}
           </span>
         }
         description="A code from your phone, as well as your password, every time you sign in on a new device."
@@ -97,7 +119,8 @@ export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: n
           <div className="flex items-start gap-3 rounded-card bg-success-soft/60 p-4">
             <ShieldCheck className="mt-0.5 size-5 shrink-0 text-success" />
             <p className="text-sm">
-              Your account is protected. You have <span className="font-semibold tabular">{remaining}</span> unused recovery {remaining === 1 ? "code" : "codes"}.
+              Your account is protected. You have <span className="tabular font-semibold">{remaining}</span>{" "}
+              unused recovery {remaining === 1 ? "code" : "codes"}.
               {remaining <= 3 && " Consider making new ones."}
             </p>
           </div>
@@ -105,7 +128,8 @@ export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: n
           <div className="flex items-start gap-3 rounded-card bg-warning-soft/60 p-4">
             <Smartphone className="mt-0.5 size-5 shrink-0 text-warning" />
             <p className="text-sm">
-              Strongly recommended for everyone with access to member data. You’ll need an authenticator app such as Google Authenticator or Microsoft Authenticator.
+              Strongly recommended for everyone with access to member data. You’ll need an authenticator app
+              such as Google Authenticator or Microsoft Authenticator.
             </p>
           </div>
         )}
@@ -155,19 +179,29 @@ export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: n
       <Dialog open={open} onOpenChange={(o) => stage?.step !== "codes" && setOpen(o)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{stage?.step === "codes" ? "Your recovery codes" : "Set up two-step verification"}</DialogTitle>
-            {stage?.step === "scan" && <DialogDescription>Open your authenticator app and scan this code.</DialogDescription>}
+            <DialogTitle>
+              {stage?.step === "codes" ? "Your recovery codes" : "Set up two-step verification"}
+            </DialogTitle>
+            {stage?.step === "scan" && (
+              <DialogDescription>Open your authenticator app and scan this code.</DialogDescription>
+            )}
           </DialogHeader>
           {stage?.step === "scan" && (
             <>
               <DialogBody className="grid gap-5">
                 <div className="grid justify-items-center gap-3">
                   {/* eslint-disable-next-line @next/next/no-img-element -- server-generated data URL */}
-                  <img src={stage.qr} alt="QR code for your authenticator app" className="size-48 rounded-control border border-border bg-white p-2" />
+                  <img
+                    src={stage.qr}
+                    alt="QR code for your authenticator app"
+                    className="size-48 rounded-control border border-border bg-white p-2"
+                  />
                   <details className="text-center text-sm text-muted-foreground">
                     <summary className="cursor-pointer">Can’t scan? Enter this key instead</summary>
                     <div className="mt-2 flex items-center justify-center gap-2">
-                      <code className="rounded-xs bg-surface-sunken px-2 py-1 font-mono text-xs tracking-wider break-all">{stage.secret}</code>
+                      <code className="rounded-xs bg-surface-sunken px-2 py-1 font-mono text-xs tracking-wider break-all">
+                        {stage.secret}
+                      </code>
                       <CopyButton value={stage.secret} iconOnly label="Copy key" />
                     </div>
                   </details>
@@ -175,9 +209,20 @@ export function MfaCard({ enabled, remaining }: { enabled: boolean; remaining: n
                 <div className="grid gap-2">
                   <p className="text-sm font-medium">Then enter the 6-digit code it shows</p>
                   <div key={attempt}>
-                    <OtpInput value={code} onChange={setCode} onComplete={confirm} invalid={attempt > 0 && !code} disabled={enable.pending} autoFocus />
+                    <OtpInput
+                      value={code}
+                      onChange={setCode}
+                      onComplete={confirm}
+                      invalid={attempt > 0 && !code}
+                      disabled={enable.pending}
+                      autoFocus
+                    />
                   </div>
-                  {enable.result && !enable.result.ok && <p className="text-sm text-danger">That code didn’t match. Codes change every 30 seconds, so try the current one.</p>}
+                  {enable.result && !enable.result.ok && (
+                    <p className="text-sm text-danger">
+                      That code didn’t match. Codes change every 30 seconds, so try the current one.
+                    </p>
+                  )}
                 </div>
               </DialogBody>
               <DialogFooter>

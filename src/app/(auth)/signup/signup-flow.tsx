@@ -45,7 +45,11 @@ const roleIcons: Record<string, LucideIcon> = {
 };
 
 const steps = [
-  { label: "About you", title: "Request an account", description: "It takes about two minutes. An administrator will approve it." },
+  {
+    label: "About you",
+    title: "Request an account",
+    description: "It takes about two minutes. An administrator will approve it.",
+  },
   { label: "Your church", title: "Where do you serve?", description: "This decides what you’ll see first." },
   { label: "Security", title: "Create a password", description: "You’ll use it with your email to sign in." },
 ];
@@ -124,7 +128,9 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
     if (res.ok) return router.push(res.data.redirectTo);
     setPending(false);
     if (res.fieldErrors) {
-      const found = Object.fromEntries(Object.entries(res.fieldErrors).map(([k, v]) => [k, v?.[0]])) as Errors;
+      const found = Object.fromEntries(
+        Object.entries(res.fieldErrors).map(([k, v]) => [k, v?.[0]]),
+      ) as Errors;
       // Jump back to the step that owns the first server-side error.
       const owner = [signUpStep1, signUpStep2].findIndex((s) => Object.keys(found).some((k) => k in s.shape));
       if (owner >= 0 && owner !== step) {
@@ -134,7 +140,11 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
       setErrors(found);
       focusFirst(found);
     }
-    setBanner(res.code === "CONFLICT" ? "An account with this email already exists. Try signing in instead." : res.message);
+    setBanner(
+      res.code === "CONFLICT"
+        ? "An account with this email already exists. Try signing in instead."
+        : res.message,
+    );
   }
 
   const s = steps[step];
@@ -152,7 +162,11 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
           transition={{ duration: 0.3, ease: easeOutExpo }}
           className="grid gap-6"
         >
-          <AuthHeader icon={step === 0 ? <UserRoundPlus /> : undefined} title={s.title} description={s.description} />
+          <AuthHeader
+            icon={step === 0 ? <UserRoundPlus /> : undefined}
+            title={s.title}
+            description={s.description}
+          />
           {banner && <Alert tone="danger">{banner}</Alert>}
 
           {step === 0 && (
@@ -172,7 +186,12 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
                   maxLength={120}
                 />
               </Field>
-              <Field label="Email address" htmlFor="su-email" error={errors.email} hint="We’ll send a short code here to confirm it’s you.">
+              <Field
+                label="Email address"
+                htmlFor="su-email"
+                error={errors.email}
+                hint="We’ll send a short code here to confirm it’s you."
+              >
                 <Input
                   id="su-email"
                   type="email"
@@ -207,7 +226,12 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
             <div className="grid gap-5">
               <Field label="Parish" htmlFor="su-parishId" error={errors.parishId}>
                 <Select value={form.parishId} onValueChange={(v) => set("parishId", v)}>
-                  <SelectTrigger id="su-parishId" size="lg" aria-invalid={!!errors.parishId} aria-describedby="su-parishId-msg">
+                  <SelectTrigger
+                    id="su-parishId"
+                    size="lg"
+                    aria-invalid={!!errors.parishId}
+                    aria-describedby="su-parishId-msg"
+                  >
                     <SelectValue placeholder="Choose your parish" />
                   </SelectTrigger>
                   <SelectContent>
@@ -251,7 +275,9 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
                     {errors.requestedRoleId}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground">An administrator confirms every request before access is granted.</p>
+                <p className="text-xs text-muted-foreground">
+                  An administrator confirms every request before access is granted.
+                </p>
               </div>
             </div>
           )}
@@ -305,7 +331,13 @@ export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; role
 
       <div className="flex items-center gap-3">
         {step > 0 && (
-          <Button variant="ghost" size="lg" onClick={() => go(step - 1)} leftIcon={<ArrowLeft />} disabled={pending}>
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => go(step - 1)}
+            leftIcon={<ArrowLeft />}
+            disabled={pending}
+          >
             Back
           </Button>
         )}

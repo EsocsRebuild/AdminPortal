@@ -1,6 +1,16 @@
 "use client";
 
-import { KeyRound, MailPlus, MoreHorizontal, ShieldCheck, ShieldOff, UserCheck, UserCog, UserX, XCircle } from "lucide-react";
+import {
+  KeyRound,
+  MailPlus,
+  MoreHorizontal,
+  ShieldCheck,
+  ShieldOff,
+  UserCheck,
+  UserCog,
+  UserX,
+  XCircle,
+} from "lucide-react";
 import * as React from "react";
 
 import { usePermission, useSession } from "@/components/auth/session-provider";
@@ -13,27 +23,63 @@ import { useModals } from "@/components/modals/modal-provider";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAction } from "@/hooks/use-action";
 import { formatRelative } from "@/lib/format";
 
-import { changeAdminRole, reactivateAdmin, resendInvite, resetAdminMfa, revokeInvite, suspendAdmin } from "../actions";
+import {
+  changeAdminRole,
+  reactivateAdmin,
+  resendInvite,
+  resetAdminMfa,
+  revokeInvite,
+  suspendAdmin,
+} from "../actions";
 import { adminStatuses, adminStatusLabels, type AdminUser, type Role } from "../types";
 
 const col = columnHelper<AdminUser>();
 
-function RoleDialog({ user, roles, open, onOpenChange }: { user: AdminUser; roles: Role[]; open: boolean; onOpenChange: (o: boolean) => void }) {
+function RoleDialog({
+  user,
+  roles,
+  open,
+  onOpenChange,
+}: {
+  user: AdminUser;
+  roles: Role[];
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+}) {
   const [roleId, setRoleId] = React.useState(user.role.id);
-  const change = useAction(changeAdminRole, { success: `${user.name}’s role was updated`, onSuccess: () => onOpenChange(false) });
+  const change = useAction(changeAdminRole, {
+    success: `${user.name}’s role was updated`,
+    onSuccess: () => onOpenChange(false),
+  });
   const role = roles.find((r) => r.id === roleId);
   return (
     <Dialog open={open} onOpenChange={(o) => !change.pending && onOpenChange(o)}>
       <DialogContent size="sm">
         <DialogHeader>
           <DialogTitle>Change role</DialogTitle>
-          <DialogDescription>For {user.name}. It takes effect the next time they load a page.</DialogDescription>
+          <DialogDescription>
+            For {user.name}. It takes effect the next time they load a page.
+          </DialogDescription>
         </DialogHeader>
         <DialogBody className="grid gap-2">
           <Select value={roleId} onValueChange={setRoleId}>
@@ -41,11 +87,13 @@ function RoleDialog({ user, roles, open, onOpenChange }: { user: AdminUser; role
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {roles.filter((r) => !r.locked).map((r) => (
-                <SelectItem key={r.id} value={r.id}>
-                  {r.name}
-                </SelectItem>
-              ))}
+              {roles
+                .filter((r) => !r.locked)
+                .map((r) => (
+                  <SelectItem key={r.id} value={r.id}>
+                    {r.name}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
           {role?.description && <p className="text-sm text-muted-foreground">{role.description}</p>}
@@ -54,7 +102,11 @@ function RoleDialog({ user, roles, open, onOpenChange }: { user: AdminUser; role
           <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={change.pending}>
             Cancel
           </Button>
-          <Button loading={change.pending} disabled={roleId === user.role.id} onClick={() => change.run({ id: user.id, roleId })}>
+          <Button
+            loading={change.pending}
+            disabled={roleId === user.role.id}
+            onClick={() => change.run({ id: user.id, roleId })}
+          >
             Save role
           </Button>
         </DialogFooter>
@@ -104,7 +156,8 @@ function RowMenu({ user, roles }: { user: AdminUser; roles: Role[] }) {
                     if (
                       await modals.confirm({
                         title: `Reset two-step verification for ${user.name}?`,
-                        description: "Use this if they lost their phone. They’ll set it up again next time they sign in.",
+                        description:
+                          "Use this if they lost their phone. They’ll set it up again next time they sign in.",
                         confirmLabel: "Reset",
                       })
                     )
@@ -127,7 +180,8 @@ function RowMenu({ user, roles }: { user: AdminUser; roles: Role[] }) {
                       await modals.confirm({
                         tone: "danger",
                         title: `Suspend ${user.name}?`,
-                        description: "They’ll be signed out everywhere immediately and won’t be able to sign in until reactivated.",
+                        description:
+                          "They’ll be signed out everywhere immediately and won’t be able to sign in until reactivated.",
                         confirmLabel: "Suspend",
                       })
                     )
@@ -146,7 +200,15 @@ function RowMenu({ user, roles }: { user: AdminUser; roles: Role[] }) {
   );
 }
 
-export function AdminsTable({ page, server, roles }: { page: AdminUser[]; server: ServerTableState; roles: Role[] }) {
+export function AdminsTable({
+  page,
+  server,
+  roles,
+}: {
+  page: AdminUser[];
+  server: ServerTableState;
+  roles: Role[];
+}) {
   const me = useSession();
   const columns = React.useMemo(
     () => [
@@ -169,7 +231,12 @@ export function AdminsTable({ page, server, roles }: { page: AdminUser[]; server
           );
         },
       }),
-      col.accessor((u) => u.role.name, { id: "role", header: "Role", enableSorting: false, meta: { label: "Role" } }),
+      col.accessor((u) => u.role.name, {
+        id: "role",
+        header: "Role",
+        enableSorting: false,
+        meta: { label: "Role" },
+      }),
       col.accessor("status", {
         header: "Status",
         enableSorting: false,
@@ -194,7 +261,11 @@ export function AdminsTable({ page, server, roles }: { page: AdminUser[]; server
       col.accessor("lastActiveAt", {
         header: ({ header }) => <ColumnHeader header={header} title="Last active" />,
         meta: { label: "Last active" },
-        cell: (i) => <span className="text-muted-foreground" suppressHydrationWarning>{i.getValue() ? formatRelative(i.getValue()!) : "Never"}</span>,
+        cell: (i) => (
+          <span className="text-muted-foreground" suppressHydrationWarning>
+            {i.getValue() ? formatRelative(i.getValue()!) : "Never"}
+          </span>
+        ),
       }),
       col.display({
         id: "actions",
@@ -215,8 +286,16 @@ export function AdminsTable({ page, server, roles }: { page: AdminUser[]; server
       searchPlaceholder="Search by name or email…"
       filters={() => (
         <>
-          <UrlFilter param="status" title="Status" options={adminStatuses.map((s) => ({ value: s, label: adminStatusLabels[s] }))} />
-          <UrlFilter param="roleId" title="Role" options={roles.map((r) => ({ value: r.id, label: r.name }))} />
+          <UrlFilter
+            param="status"
+            title="Status"
+            options={adminStatuses.map((s) => ({ value: s, label: adminStatusLabels[s] }))}
+          />
+          <UrlFilter
+            param="roleId"
+            title="Role"
+            options={roles.map((r) => ({ value: r.id, label: r.name }))}
+          />
         </>
       )}
       renderMobileRow={(row) => {

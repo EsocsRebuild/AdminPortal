@@ -31,7 +31,15 @@ const statusTones: Record<string, Tone> = {
   rejected: "danger",
 };
 
-export function StatusBadge({ status, label, className }: { status: string; label?: string; className?: string }) {
+export function StatusBadge({
+  status,
+  label,
+  className,
+}: {
+  status: string;
+  label?: string;
+  className?: string;
+}) {
   const tone = statusTones[status] ?? "neutral";
   return (
     <Badge tone={tone} dot={status === "sending" ? "pulse" : true} className={className}>

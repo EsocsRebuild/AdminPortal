@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 import { Can } from "@/components/auth/session-provider";
 import { useModals } from "@/components/modals/modal-provider";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAction } from "@/hooks/use-action";
 import { formatNumber } from "@/lib/format";
 
@@ -16,10 +22,19 @@ import type { FormSummary } from "../types";
 export function FormHeaderActions({ form, publicUrl }: { form: FormSummary; publicUrl: string }) {
   const router = useRouter();
   const modals = useModals();
-  const publish = useAction(publishForm, { success: "Your form is live", onSuccess: () => router.push(`/forms/${form.id}/share`) });
+  const publish = useAction(publishForm, {
+    success: "Your form is live",
+    onSuccess: () => router.push(`/forms/${form.id}/share`),
+  });
   const close = useAction(closeForm, { success: "Form closed. It no longer accepts responses." });
-  const duplicate = useAction(duplicateForm, { success: "Copy created", onSuccess: (r) => router.push(`/forms/${r.id}/edit`) });
-  const remove = useAction(deleteForm, { success: "Form deleted", onSuccess: () => router.replace("/forms") });
+  const duplicate = useAction(duplicateForm, {
+    success: "Copy created",
+    onSuccess: (r) => router.push(`/forms/${r.id}/edit`),
+  });
+  const remove = useAction(deleteForm, {
+    success: "Form deleted",
+    onSuccess: () => router.replace("/forms"),
+  });
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -54,7 +69,8 @@ export function FormHeaderActions({ form, publicUrl }: { form: FormSummary; publ
             onClick={async () => {
               const ok = await modals.confirm({
                 title: "Stop accepting responses?",
-                description: "People who open the link will see that the form is closed. Existing responses are kept.",
+                description:
+                  "People who open the link will see that the form is closed. Existing responses are kept.",
                 confirmLabel: "Close form",
               });
               if (ok) await close.run({ id: form.id });

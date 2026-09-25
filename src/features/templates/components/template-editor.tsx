@@ -17,7 +17,9 @@ export function TemplateEditor({ template }: { template: Template }) {
   const [name, setName] = React.useState(template.name);
   const [content, setContent] = React.useState<EmailDocument>(template.content);
   const draft = React.useMemo(() => ({ name: name.trim(), content }), [name, content]);
-  const save = useAutosave(draft, (d) => updateTemplate({ id: template.id, name: d.name.length >= 2 ? d.name : undefined, content: d.content }));
+  const save = useAutosave(draft, (d) =>
+    updateTemplate({ id: template.id, name: d.name.length >= 2 ? d.name : undefined, content: d.content }),
+  );
 
   return (
     <div className="grid gap-page">

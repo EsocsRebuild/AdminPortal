@@ -69,7 +69,10 @@ export function Notifications() {
         >
           <Bell />
           {unread > 0 && (
-            <span aria-hidden className="absolute top-2 right-2 size-2 animate-scale-in rounded-full bg-danger ring-2 ring-background" />
+            <span
+              aria-hidden
+              className="absolute top-2 right-2 size-2 animate-scale-in rounded-full bg-danger ring-2 ring-background"
+            />
           )}
         </Button>
       </PopoverTrigger>
@@ -112,7 +115,12 @@ export function Notifications() {
               {state.items.map((n) => {
                 const body = (
                   <>
-                    <span className={cn("mt-1.5 size-2 shrink-0 rounded-full", n.read ? "bg-transparent" : toneDot[n.tone])} />
+                    <span
+                      className={cn(
+                        "mt-1.5 size-2 shrink-0 rounded-full",
+                        n.read ? "bg-transparent" : toneDot[n.tone],
+                      )}
+                    />
                     <span className="grid flex-1 gap-0.5">
                       <span className={cn("text-sm", !n.read && "font-medium")}>{n.title}</span>
                       {n.body && <span className="text-sm text-muted-foreground">{n.body}</span>}
@@ -123,7 +131,11 @@ export function Notifications() {
                 return (
                   <li key={n.id}>
                     {n.href ? (
-                      <Link href={n.href} onClick={() => setOpen(false)} className="flex gap-3 px-4 py-3 hover:bg-surface-hover">
+                      <Link
+                        href={n.href}
+                        onClick={() => setOpen(false)}
+                        className="flex gap-3 px-4 py-3 hover:bg-surface-hover"
+                      >
                         {body}
                       </Link>
                     ) : (

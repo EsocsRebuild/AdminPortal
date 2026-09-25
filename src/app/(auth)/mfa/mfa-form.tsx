@@ -37,10 +37,16 @@ export function MfaForm({ next }: { next?: string }) {
     setPending(false);
     setAttempt((n) => n + 1);
     setCode("");
-    if (res.code === "UNAUTHENTICATED" && /expired/i.test(res.message)) router.replace("/login?reason=expired");
+    if (res.code === "UNAUTHENTICATED" && /expired/i.test(res.message))
+      router.replace("/login?reason=expired");
   }
 
-  const error = result && !result.ok ? (result.code === "VALIDATION" ? "Check the code and try again." : result.message) : null;
+  const error =
+    result && !result.ok
+      ? result.code === "VALIDATION"
+        ? "Check the code and try again."
+        : result.message
+      : null;
 
   return (
     <div className="grid gap-8">

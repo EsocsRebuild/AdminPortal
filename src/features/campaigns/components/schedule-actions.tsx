@@ -24,7 +24,13 @@ export function UnscheduleButton({ id }: { id: string }) {
         leftIcon={<CalendarX />}
         loading={run.pending}
         onClick={async () => {
-          if (await modals.confirm({ title: "Cancel the schedule?", description: "The campaign goes back to draft so you can edit it.", confirmLabel: "Cancel schedule" }))
+          if (
+            await modals.confirm({
+              title: "Cancel the schedule?",
+              description: "The campaign goes back to draft so you can edit it.",
+              confirmLabel: "Cancel schedule",
+            })
+          )
             await run.run({ id });
         }}
       >

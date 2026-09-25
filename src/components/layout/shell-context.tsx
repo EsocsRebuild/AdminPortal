@@ -8,7 +8,13 @@ import { can } from "@/lib/permissions";
 
 const ShellContext = React.createContext({ showDesignSystem: false });
 
-export function ShellProvider({ showDesignSystem, children }: { showDesignSystem: boolean; children: React.ReactNode }) {
+export function ShellProvider({
+  showDesignSystem,
+  children,
+}: {
+  showDesignSystem: boolean;
+  children: React.ReactNode;
+}) {
   const value = React.useMemo(() => ({ showDesignSystem }), [showDesignSystem]);
   return <ShellContext value={value}>{children}</ShellContext>;
 }

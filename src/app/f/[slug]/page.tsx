@@ -34,7 +34,14 @@ export default async function PublicFormPage({ params, searchParams }: PageProps
   const embed = (await searchParams).embed === "1";
   const form = await load(slug);
 
-  const body = form ? <PublicForm form={form} /> : <ServiceUnavailable retryHref={`/f/${slug}`} message="This form can’t load right now. Please try again in a moment." />;
+  const body = form ? (
+    <PublicForm form={form} />
+  ) : (
+    <ServiceUnavailable
+      retryHref={`/f/${slug}`}
+      message="This form can’t load right now. Please try again in a moment."
+    />
+  );
 
   if (embed) return <main className="mx-auto w-full max-w-2xl p-4 sm:p-6">{body}</main>;
 
@@ -44,10 +51,14 @@ export default async function PublicFormPage({ params, searchParams }: PageProps
       <main id="main" className="relative mx-auto grid w-full max-w-2xl gap-6 px-gutter py-8 sm:py-14">
         <div className="flex items-center gap-2.5">
           <LogoMark />
-          <span className="font-brand text-xl font-semibold tracking-wide">{form?.organisationName ?? "ESOCS"}</span>
+          <span className="font-brand text-xl font-semibold tracking-wide">
+            {form?.organisationName ?? "ESOCS"}
+          </span>
         </div>
         <div className="rounded-panel border border-border bg-surface p-5 shadow-sm sm:p-10">{body}</div>
-        <p className="text-center text-xs text-subtle-foreground">Your answers are sent securely and only shared with the organisers.</p>
+        <p className="text-center text-xs text-subtle-foreground">
+          Your answers are sent securely and only shared with the organisers.
+        </p>
       </main>
     </div>
   );

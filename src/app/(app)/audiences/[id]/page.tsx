@@ -27,7 +27,11 @@ export default async function AudiencePage({ params, searchParams }: PageProps<"
       <Button variant="ghost" size="sm" asChild leftIcon={<ArrowLeft />} className="-ml-2 w-fit">
         <Link href="/audiences">All audiences</Link>
       </Button>
-      <PageHeader title={audience.name} description={audience.description ?? undefined} actions={<AudienceActions audience={audience} />} />
+      <PageHeader
+        title={audience.name}
+        description={audience.description ?? undefined}
+        actions={<AudienceActions audience={audience} />}
+      />
       <section aria-label="Audience numbers" className="grid gap-page sm:grid-cols-2">
         <StatCard label="Subscribed" value={audience.subscriberCount} />
         <StatCard label="Unsubscribed" value={audience.unsubscribedCount} />

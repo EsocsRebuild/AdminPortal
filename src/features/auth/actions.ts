@@ -78,7 +78,12 @@ export const signUp = publicAction({ schema: signUpSchema }, async (input) => {
 export const verifyEmail = publicAction({ schema: verifyEmailSchema }, async ({ code }) => {
   const jar = await cookies();
   const email = jar.get(COOKIE.pendingEmail)?.value;
-  if (!email) throw new BackendError("NOT_FOUND", "Your verification link has expired. Please sign in to get a new code.", 404);
+  if (!email)
+    throw new BackendError(
+      "NOT_FOUND",
+      "Your verification link has expired. Please sign in to get a new code.",
+      404,
+    );
   await backend("/auth/verify-email", { method: "POST", auth: false, body: { email, code } });
   jar.delete(COOKIE.pendingEmail);
   return { email };
@@ -96,7 +101,8 @@ export const requestPasswordReset = publicAction({ schema: forgotPasswordSchema 
   try {
     await backend("/auth/password/forgot", { method: "POST", auth: false, body: { email } });
   } catch (error) {
-    if (error instanceof BackendError && (error.code === "RATE_LIMITED" || error.code === "UNAVAILABLE")) throw error;
+    if (error instanceof BackendError && (error.code === "RATE_LIMITED" || error.code === "UNAVAILABLE"))
+      throw error;
   }
   return null;
 });
@@ -136,11 +142,14 @@ export async function signOut(reason?: "idle" | "manual") {
 }
 
 /** New administrator sets their name and password from an emailed invitation. */
-export const acceptInvitation = publicAction({ schema: acceptInviteSchema }, async ({ token, name, password }) => {
-  await backend(`/public/invitations/${encodeURIComponent(token)}/accept`, {
-    method: "POST",
-    auth: false,
-    body: { name, password },
-  });
-  return null;
-});
+export const acceptInvitation = publicAction(
+  { schema: acceptInviteSchema },
+  async ({ token, name, password }) => {
+    await backend(`/public/invitations/${encodeURIComponent(token)}/accept`, {
+      method: "POST",
+      auth: false,
+      body: { name, password },
+    });
+    return null;
+  },
+);

@@ -1,5 +1,4 @@
 import {
-
   FormInput,
   LayoutDashboard,
   LayoutTemplate,
@@ -35,31 +34,96 @@ export interface NavGroup {
 export const navigation: NavGroup[] = [
   {
     title: "Overview",
-    items: [{ title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, permission: "dashboard:view", keywords: ["home"] }],
+    items: [
+      {
+        title: "Dashboard",
+        href: "/dashboard",
+        icon: LayoutDashboard,
+        permission: "dashboard:view",
+        keywords: ["home"],
+      },
+    ],
   },
   {
     title: "People",
-    items: [{ title: "Members", href: "/members", icon: Users, permission: "members:view", keywords: ["people", "congregation"] }],
+    items: [
+      {
+        title: "Members",
+        href: "/members",
+        icon: Users,
+        permission: "members:view",
+        keywords: ["people", "congregation"],
+      },
+    ],
   },
   {
     title: "Email marketing",
     items: [
-      { title: "Campaigns", href: "/campaigns", icon: Mail, permission: "campaigns:view", keywords: ["newsletter", "email", "send"] },
-      { title: "Audiences", href: "/audiences", icon: UsersRound, permission: "audiences:view", keywords: ["lists", "contacts", "subscribers"] },
-      { title: "Templates", href: "/templates", icon: LayoutTemplate, permission: "templates:manage", keywords: ["design", "layout"] },
+      {
+        title: "Campaigns",
+        href: "/campaigns",
+        icon: Mail,
+        permission: "campaigns:view",
+        keywords: ["newsletter", "email", "send"],
+      },
+      {
+        title: "Audiences",
+        href: "/audiences",
+        icon: UsersRound,
+        permission: "audiences:view",
+        keywords: ["lists", "contacts", "subscribers"],
+      },
+      {
+        title: "Templates",
+        href: "/templates",
+        icon: LayoutTemplate,
+        permission: "templates:manage",
+        keywords: ["design", "layout"],
+      },
     ],
   },
   {
     title: "Forms",
-    items: [{ title: "Forms", href: "/forms", icon: FormInput, permission: "forms:view", keywords: ["survey", "registration", "responses"] }],
+    items: [
+      {
+        title: "Forms",
+        href: "/forms",
+        icon: FormInput,
+        permission: "forms:view",
+        keywords: ["survey", "registration", "responses"],
+      },
+    ],
   },
   {
     title: "Administration",
     items: [
-      { title: "Users & roles", href: "/users", icon: ShieldCheck, permission: "users:view", keywords: ["admins", "invite", "permissions"] },
-      { title: "Audit log", href: "/audit-log", icon: ScrollText, permission: "audit:view", keywords: ["history", "activity"] },
-      { title: "Settings", href: "/settings", icon: Settings, keywords: ["profile", "password", "security", "two-factor"] },
-      { title: "Design system", href: "/design-system", icon: Palette, devOnly: true, keywords: ["components"] },
+      {
+        title: "Users & roles",
+        href: "/users",
+        icon: ShieldCheck,
+        permission: "users:view",
+        keywords: ["admins", "invite", "permissions"],
+      },
+      {
+        title: "Audit log",
+        href: "/audit-log",
+        icon: ScrollText,
+        permission: "audit:view",
+        keywords: ["history", "activity"],
+      },
+      {
+        title: "Settings",
+        href: "/settings",
+        icon: Settings,
+        keywords: ["profile", "password", "security", "two-factor"],
+      },
+      {
+        title: "Design system",
+        href: "/design-system",
+        icon: Palette,
+        devOnly: true,
+        keywords: ["components"],
+      },
     ],
   },
 ];
@@ -72,4 +136,3 @@ export function activeNavItem(pathname: string) {
     .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
     .sort((a, b) => b.href.length - a.href.length)[0];
 }
-

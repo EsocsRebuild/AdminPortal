@@ -94,12 +94,16 @@ export function GettingStarted({ steps }: { steps: SetupStep[] }) {
                       <span
                         className={cn(
                           "grid size-5 shrink-0 place-items-center rounded-full border transition-all duration-300",
-                          s.done ? "border-success bg-success text-success-foreground" : "border-border-strong",
+                          s.done
+                            ? "border-success bg-success text-success-foreground"
+                            : "border-border-strong",
                         )}
                       >
                         {s.done && <Check className="size-3 animate-scale-in" strokeWidth={3} />}
                       </span>
-                      <span className={cn("flex-1 text-base", s.done && "text-muted-foreground line-through")}>
+                      <span
+                        className={cn("flex-1 text-base", s.done && "text-muted-foreground line-through")}
+                      >
                         {s.title}
                         <span className="sr-only">{s.done ? " (done)" : ""}</span>
                       </span>
@@ -109,7 +113,13 @@ export function GettingStarted({ steps }: { steps: SetupStep[] }) {
                 ))}
               </ul>
             </div>
-            <Button variant="ghost" size="icon-sm" className="absolute top-2 right-2" aria-label="Hide the setup checklist" onClick={hide}>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="absolute top-2 right-2"
+              aria-label="Hide the setup checklist"
+              onClick={hide}
+            >
               <X />
             </Button>
           </Card>

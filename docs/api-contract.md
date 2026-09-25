@@ -9,19 +9,19 @@ This is everything the admin portal expects from the backend. The portal holds n
 
 ## 1. Conventions
 
-| Topic | Rule |
-| --- | --- |
-| Base URL | `BACKEND_API_URL`, e.g. `https://api.esocs.org/v1`. Only the portal's **server** calls it; browsers never do. |
-| Auth | `Authorization: Bearer <accessToken>` on every non-public endpoint. |
-| Success | `200/201` with `{ "data": … }`. Lists add `"meta": { "page", "pageSize", "total" }`. `204` for empty responses. |
-| Errors | `{ "error": { "code": ErrorCode, "message": string, "fields"?: { [field]: string[] } } }`. The `message` is shown to users, so write it for a non-technical reader. |
-| Error codes | `VALIDATION` (400/422), `UNAUTHENTICATED` (401), `FORBIDDEN` (403), `REAUTH_REQUIRED` (403), `NOT_FOUND` (404), `CONFLICT` (409), `RATE_LIMITED` (429), `UNAVAILABLE` (5xx). |
-| Lists | Query `page` (1-based), `pageSize` (10/20/50/100), `q` (search), `sort` (field name), `dir` (`asc`/`desc`), plus the filters listed per endpoint. |
-| Dates | ISO 8601 UTC strings. |
-| IDs | Opaque strings matching `^[A-Za-z0-9_-]{1,64}$`. The portal rejects anything else before calling you. |
-| Forwarded headers | `X-Request-Id` (log it; correlate with portal logs), `X-Forwarded-For` (the real client IP — use it for rate limiting and audit), `User-Agent`. |
-| Sudo | Dangerous operations send `X-Sudo-Token` (from `POST /auth/reauthenticate`). If it's missing or expired, respond `403 REAUTH_REQUIRED`. The portal then asks for the password and retries. |
-| Timeouts | The portal gives up after 15 s (120 s for CSV exports). |
+| Topic             | Rule                                                                                                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Base URL          | `BACKEND_API_URL`, e.g. `https://api.esocs.org/v1`. Only the portal's **server** calls it; browsers never do.                                                                              |
+| Auth              | `Authorization: Bearer <accessToken>` on every non-public endpoint.                                                                                                                        |
+| Success           | `200/201` with `{ "data": … }`. Lists add `"meta": { "page", "pageSize", "total" }`. `204` for empty responses.                                                                            |
+| Errors            | `{ "error": { "code": ErrorCode, "message": string, "fields"?: { [field]: string[] } } }`. The `message` is shown to users, so write it for a non-technical reader.                        |
+| Error codes       | `VALIDATION` (400/422), `UNAUTHENTICATED` (401), `FORBIDDEN` (403), `REAUTH_REQUIRED` (403), `NOT_FOUND` (404), `CONFLICT` (409), `RATE_LIMITED` (429), `UNAVAILABLE` (5xx).               |
+| Lists             | Query `page` (1-based), `pageSize` (10/20/50/100), `q` (search), `sort` (field name), `dir` (`asc`/`desc`), plus the filters listed per endpoint.                                          |
+| Dates             | ISO 8601 UTC strings.                                                                                                                                                                      |
+| IDs               | Opaque strings matching `^[A-Za-z0-9_-]{1,64}$`. The portal rejects anything else before calling you.                                                                                      |
+| Forwarded headers | `X-Request-Id` (log it; correlate with portal logs), `X-Forwarded-For` (the real client IP — use it for rate limiting and audit), `User-Agent`.                                            |
+| Sudo              | Dangerous operations send `X-Sudo-Token` (from `POST /auth/reauthenticate`). If it's missing or expired, respond `403 REAUTH_REQUIRED`. The portal then asks for the password and retries. |
+| Timeouts          | The portal gives up after 15 s (120 s for CSV exports).                                                                                                                                    |
 
 ---
 
@@ -66,24 +66,24 @@ Plain-language descriptions shown in the role editor are in `src/lib/permission-
 
 ## 4. Authentication — `features/auth`
 
-| Method & path | Body → `data` | Notes |
-| --- | --- | --- |
-| `POST /auth/login` | `{ email, password, remember }` → `LoginResponse` | `{status:"authenticated", tokens}` \| `{status:"mfa_required", challengeToken, expiresIn}` \| `{status:"email_unverified", email}`. Failure: `401 UNAUTHENTICATED`. |
-| `POST /auth/mfa/verify` | `{ challengeToken, method:"totp"\|"recovery", code, rememberDevice }` → `AuthTokens` | |
-| `POST /auth/refresh` | `{ refreshToken }` → `AuthTokens` | Rotate the refresh token. Called by the portal proxy. |
-| `POST /auth/logout` | `{ refreshToken }` → 204 | Revoke the session. |
-| `GET /auth/me` | → `SessionUser` | Called on every page load. Keep it fast. |
-| `POST /auth/session/touch` | → 204 | Keep-alive while the user is active. |
-| `POST /auth/reauthenticate` | `{ password }` → `{ sudoToken, expiresIn }` | Rate-limit it. |
-| `POST /auth/signup` | `{ name, email, phone, parishId, requestedRoleId, password }` → 201 | Creates an **access request** (§11), not an active account. Sends a 6-digit code. |
-| `POST /auth/verify-email` | `{ email, code }` → 204 | Code valid 15 min, 5 attempts. |
-| `POST /auth/verify-email/resend` | `{ email }` → 204 | At most one every 45 s. |
-| `POST /auth/password/forgot` | `{ email }` → 204 | Link `APP_URL/reset-password?token=…`, single use, 30 min. |
-| `POST /auth/password/reset` | `{ token, password }` → 204 | Revoke all sessions. |
-| `GET /public/parishes` | → `PublicParish[]` | Sign-up form. |
-| `GET /public/requestable-roles` | → `PublicRole[]` | `icon`: `church` \| `finance` \| `editor` \| `viewer` \| `admin`. |
-| `GET /public/invitations/:token` | → `{ email, name, roleName, invitedBy, expiresAt }` | `404` if invalid or expired. |
-| `POST /public/invitations/:token/accept` | `{ name, password }` → 204 | |
+| Method & path                            | Body → `data`                                                                        | Notes                                                                                                                                                               |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /auth/login`                       | `{ email, password, remember }` → `LoginResponse`                                    | `{status:"authenticated", tokens}` \| `{status:"mfa_required", challengeToken, expiresIn}` \| `{status:"email_unverified", email}`. Failure: `401 UNAUTHENTICATED`. |
+| `POST /auth/mfa/verify`                  | `{ challengeToken, method:"totp"\|"recovery", code, rememberDevice }` → `AuthTokens` |                                                                                                                                                                     |
+| `POST /auth/refresh`                     | `{ refreshToken }` → `AuthTokens`                                                    | Rotate the refresh token. Called by the portal proxy.                                                                                                               |
+| `POST /auth/logout`                      | `{ refreshToken }` → 204                                                             | Revoke the session.                                                                                                                                                 |
+| `GET /auth/me`                           | → `SessionUser`                                                                      | Called on every page load. Keep it fast.                                                                                                                            |
+| `POST /auth/session/touch`               | → 204                                                                                | Keep-alive while the user is active.                                                                                                                                |
+| `POST /auth/reauthenticate`              | `{ password }` → `{ sudoToken, expiresIn }`                                          | Rate-limit it.                                                                                                                                                      |
+| `POST /auth/signup`                      | `{ name, email, phone, parishId, requestedRoleId, password }` → 201                  | Creates an **access request** (§11), not an active account. Sends a 6-digit code.                                                                                   |
+| `POST /auth/verify-email`                | `{ email, code }` → 204                                                              | Code valid 15 min, 5 attempts.                                                                                                                                      |
+| `POST /auth/verify-email/resend`         | `{ email }` → 204                                                                    | At most one every 45 s.                                                                                                                                             |
+| `POST /auth/password/forgot`             | `{ email }` → 204                                                                    | Link `APP_URL/reset-password?token=…`, single use, 30 min.                                                                                                          |
+| `POST /auth/password/reset`              | `{ token, password }` → 204                                                          | Revoke all sessions.                                                                                                                                                |
+| `GET /public/parishes`                   | → `PublicParish[]`                                                                   | Sign-up form.                                                                                                                                                       |
+| `GET /public/requestable-roles`          | → `PublicRole[]`                                                                     | `icon`: `church` \| `finance` \| `editor` \| `viewer` \| `admin`.                                                                                                   |
+| `GET /public/invitations/:token`         | → `{ email, name, roleName, invitedBy, expiresAt }`                                  | `404` if invalid or expired.                                                                                                                                        |
+| `POST /public/invitations/:token/accept` | `{ name, password }` → 204                                                           |                                                                                                                                                                     |
 
 `AuthTokens = { accessToken, expiresIn, refreshToken, refreshExpiresIn }` (expiry values in seconds).
 
@@ -91,42 +91,42 @@ Plain-language descriptions shown in the role editor are in `src/lib/permission-
 
 ## 5. Account — `features/account`
 
-| Method & path | Body → `data` |
-| --- | --- |
-| `GET /me/profile` · `PATCH /me/profile` | `Profile` · `{ name, phone }` |
-| `POST /me/password` | `{ currentPassword, newPassword }`. Revoke other sessions. |
-| `GET /me/security` | `SecurityOverview` (MFA state, recovery codes left, sessions) |
-| `POST /me/mfa/setup` 🔒sudo | → `{ secret, otpauthUrl }` |
-| `POST /me/mfa/enable` | `{ code }` → `{ recoveryCodes: string[] }` (10 codes) |
-| `DELETE /me/mfa` 🔒sudo | |
-| `POST /me/mfa/recovery-codes` 🔒sudo | → `{ recoveryCodes }` |
-| `DELETE /me/sessions/:id` · `POST /me/sessions/revoke-others` 🔒sudo | → `{ revoked }` |
-| `GET/PUT /me/notification-preferences` | `NotificationPrefs` |
-| `GET /notifications?limit=15` | `Notification[]` with `meta: { unread }` |
-| `POST /notifications/read-all` | |
+| Method & path                                                        | Body → `data`                                                 |
+| -------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `GET /me/profile` · `PATCH /me/profile`                              | `Profile` · `{ name, phone }`                                 |
+| `POST /me/password`                                                  | `{ currentPassword, newPassword }`. Revoke other sessions.    |
+| `GET /me/security`                                                   | `SecurityOverview` (MFA state, recovery codes left, sessions) |
+| `POST /me/mfa/setup` 🔒sudo                                          | → `{ secret, otpauthUrl }`                                    |
+| `POST /me/mfa/enable`                                                | `{ code }` → `{ recoveryCodes: string[] }` (10 codes)         |
+| `DELETE /me/mfa` 🔒sudo                                              |                                                               |
+| `POST /me/mfa/recovery-codes` 🔒sudo                                 | → `{ recoveryCodes }`                                         |
+| `DELETE /me/sessions/:id` · `POST /me/sessions/revoke-others` 🔒sudo | → `{ revoked }`                                               |
+| `GET/PUT /me/notification-preferences`                               | `NotificationPrefs`                                           |
+| `GET /notifications?limit=15`                                        | `Notification[]` with `meta: { unread }`                      |
+| `POST /notifications/read-all`                                       |                                                               |
 
 ---
 
 ## 6. Dashboard & lookups
 
-| Method & path | → `data` | Permission |
-| --- | --- | --- |
+| Method & path            | → `data`                                                                | Permission       |
+| ------------------------ | ----------------------------------------------------------------------- | ---------------- |
 | `GET /dashboard/summary` | `DashboardSummary`. Set a section to `null` when the user can't see it. | `dashboard:view` |
-| `GET /lookups/parishes` | `Parish[]`, scoped to the caller's parish when they have one | any |
+| `GET /lookups/parishes`  | `Parish[]`, scoped to the caller's parish when they have one            | any              |
 
 ---
 
 ## 7. Members — `features/members`
 
-| Method & path | Body / query → `data` | Permission |
-| --- | --- | --- |
-| `GET /members` | list params + `status`, `parishId` → `Page<MemberSummary>`. `q` matches name, email, phone and member number. | `members:view` |
-| `GET /members/:id` | → `Member` | `members:view` |
-| `POST /members` | `MemberInput` → `Member` | `members:manage` |
-| `PATCH /members/:id` | `MemberInput` | `members:manage` |
-| `POST /members/bulk` | `{ ids, action: "approve"\|"deactivate" }` → `{ updated }` | `members:manage` |
-| `DELETE /members/:id` 🔒sudo · `POST /members/bulk-delete` 🔒sudo | `{ ids }` → `{ deleted }` | `members:manage` |
-| `GET /members/export` | same filters → CSV stream | `members:export` |
+| Method & path                                                     | Body / query → `data`                                                                                         | Permission       |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `GET /members`                                                    | list params + `status`, `parishId` → `Page<MemberSummary>`. `q` matches name, email, phone and member number. | `members:view`   |
+| `GET /members/:id`                                                | → `Member`                                                                                                    | `members:view`   |
+| `POST /members`                                                   | `MemberInput` → `Member`                                                                                      | `members:manage` |
+| `PATCH /members/:id`                                              | `MemberInput`                                                                                                 | `members:manage` |
+| `POST /members/bulk`                                              | `{ ids, action: "approve"\|"deactivate" }` → `{ updated }`                                                    | `members:manage` |
+| `DELETE /members/:id` 🔒sudo · `POST /members/bulk-delete` 🔒sudo | `{ ids }` → `{ deleted }`                                                                                     | `members:manage` |
+| `GET /members/export`                                             | same filters → CSV stream                                                                                     | `members:export` |
 
 `emailConsent` must be recorded with who set it and when.
 
@@ -152,17 +152,17 @@ Merge tags: `{{first_name}}`, `{{last_name}}`, `{{email}}`.
 
 ### Audiences — `features/audiences`
 
-| Method & path | Body → `data` | Permission |
-| --- | --- | --- |
-| `GET /audiences` · `GET /audiences/:id` | → `AudienceList[]` · `AudienceList` | `audiences:view` |
-| `POST /audiences` · `PATCH /audiences/:id` | `{ name, description, doubleOptIn }` | `audiences:manage` |
-| `DELETE /audiences/:id` 🔒sudo | | `audiences:manage` |
-| `GET /audiences/:id/contacts` | list params + `status` → `Page<Contact>` | `audiences:view` |
-| `POST /audiences/:id/contacts` | `{ email, firstName, lastName, consent: true }` | `audiences:manage` |
-| `POST /audiences/:id/imports` | `{ contacts: ≤500, consent: true, updateExisting }` → `ImportResult` | `audiences:manage` |
-| `POST /audiences/:id/sync-members` | `{ parishId? }` → `ImportResult`. Only members with `emailConsent`. | `audiences:manage` |
-| `POST /audiences/:id/contacts/remove` | `{ ids }` → `{ removed }` | `audiences:manage` |
-| `POST /audiences/estimate` | `{ listIds }` → `{ count }`. Unique, subscribed addresses only. | `campaigns:manage` |
+| Method & path                              | Body → `data`                                                        | Permission         |
+| ------------------------------------------ | -------------------------------------------------------------------- | ------------------ |
+| `GET /audiences` · `GET /audiences/:id`    | → `AudienceList[]` · `AudienceList`                                  | `audiences:view`   |
+| `POST /audiences` · `PATCH /audiences/:id` | `{ name, description, doubleOptIn }`                                 | `audiences:manage` |
+| `DELETE /audiences/:id` 🔒sudo             |                                                                      | `audiences:manage` |
+| `GET /audiences/:id/contacts`              | list params + `status` → `Page<Contact>`                             | `audiences:view`   |
+| `POST /audiences/:id/contacts`             | `{ email, firstName, lastName, consent: true }`                      | `audiences:manage` |
+| `POST /audiences/:id/imports`              | `{ contacts: ≤500, consent: true, updateExisting }` → `ImportResult` | `audiences:manage` |
+| `POST /audiences/:id/sync-members`         | `{ parishId? }` → `ImportResult`. Only members with `emailConsent`.  | `audiences:manage` |
+| `POST /audiences/:id/contacts/remove`      | `{ ids }` → `{ removed }`                                            | `audiences:manage` |
+| `POST /audiences/estimate`                 | `{ listIds }` → `{ count }`. Unique, subscribed addresses only.      | `campaigns:manage` |
 
 ### Templates — `features/templates`
 
@@ -170,18 +170,18 @@ Merge tags: `{{first_name}}`, `{{last_name}}`, `{{email}}`.
 
 ### Campaigns — `features/campaigns`
 
-| Method & path | Body → `data` | Permission |
-| --- | --- | --- |
-| `GET /campaigns` | list params + `status` → `Page<CampaignSummary>` | `campaigns:view` |
-| `GET /campaigns/:id` · `GET /campaigns/:id/report` | `Campaign` · `CampaignReport` | `campaigns:view` |
-| `POST /campaigns` | `{ name, content }` → `Campaign` (draft) | `campaigns:manage` |
-| `PATCH /campaigns/:id` | `{ setup?, audience?: { listIds }, content? }`. Drafts only; `409` otherwise. | `campaigns:manage` |
-| `POST /campaigns/:id/test` | `{ emails: ≤5 }`. Rate-limit it. | `campaigns:manage` |
-| `POST /campaigns/:id/schedule` 🔒sudo | `{ sendAt }` | `campaigns:send` |
-| `POST /campaigns/:id/send` 🔒sudo | `{ expectedRecipients }`. Refuse with `409` if the real count differs by more than 5 %. | `campaigns:send` |
-| `POST /campaigns/:id/unschedule` | back to draft | `campaigns:send` |
-| `POST /campaigns/:id/duplicate` · `DELETE /campaigns/:id` (drafts only) | | `campaigns:manage` |
-| `GET /email/sender-profile` | `SenderProfile` (verified from-addresses, organisation name, postal address) | `campaigns:view` |
+| Method & path                                                           | Body → `data`                                                                           | Permission         |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------ |
+| `GET /campaigns`                                                        | list params + `status` → `Page<CampaignSummary>`                                        | `campaigns:view`   |
+| `GET /campaigns/:id` · `GET /campaigns/:id/report`                      | `Campaign` · `CampaignReport`                                                           | `campaigns:view`   |
+| `POST /campaigns`                                                       | `{ name, content }` → `Campaign` (draft)                                                | `campaigns:manage` |
+| `PATCH /campaigns/:id`                                                  | `{ setup?, audience?: { listIds }, content? }`. Drafts only; `409` otherwise.           | `campaigns:manage` |
+| `POST /campaigns/:id/test`                                              | `{ emails: ≤5 }`. Rate-limit it.                                                        | `campaigns:manage` |
+| `POST /campaigns/:id/schedule` 🔒sudo                                   | `{ sendAt }`                                                                            | `campaigns:send`   |
+| `POST /campaigns/:id/send` 🔒sudo                                       | `{ expectedRecipients }`. Refuse with `409` if the real count differs by more than 5 %. | `campaigns:send`   |
+| `POST /campaigns/:id/unschedule`                                        | back to draft                                                                           | `campaigns:send`   |
+| `POST /campaigns/:id/duplicate` · `DELETE /campaigns/:id` (drafts only) |                                                                                         | `campaigns:manage` |
+| `GET /email/sender-profile`                                             | `SenderProfile` (verified from-addresses, organisation name, postal address)            | `campaigns:view`   |
 
 Before scheduling or sending, check that the subject, sender name, a from-address on a **verified** domain, at least one audience, valid content and a postal address are all present.
 
@@ -193,36 +193,36 @@ Before scheduling or sending, check that the subject, sender name, a from-addres
 
 ## 9. Forms — `features/forms`
 
-| Method & path | Body → `data` | Permission |
-| --- | --- | --- |
-| `GET /forms` | list params + `status` → `Page<FormSummary>` | `forms:view` |
-| `GET /forms/:id` | → `Form` | `forms:view` |
-| `POST /forms` | `{ title }` → `Form` (draft, generated `slug`) | `forms:manage` |
-| `PATCH /forms/:id` | `{ title?, description?, fields? }` | `forms:manage` |
-| `PUT /forms/:id/settings` | `FormSettings` | `forms:manage` |
-| `PUT /forms/:id/slug` | `{ slug }`. `409` if taken. | `forms:manage` |
-| `POST /forms/:id/publish` · `/close` · `/duplicate` | | `forms:manage` |
-| `DELETE /forms/:id` 🔒sudo | deletes all responses | `forms:manage` |
-| `GET /forms/:id/responses` | list params → `Page<FormResponse>`. `q` searches answers. | `forms:view` |
-| `POST /forms/:id/responses/delete` 🔒sudo | `{ responseIds }` → `{ deleted }` | `forms:manage` |
-| `GET /forms/:id/responses/export` | CSV (one column per question, choice answers as labels) | `forms:view` |
-| `GET /public/forms/:slug` | → `PublicForm`. `404` for drafts. | public |
-| `POST /public/forms/:slug/responses` | `{ answers, captchaToken? }`. Validate, enforce `closesAt` and `responseLimit`, notify `notifyEmails`, add consenting respondents to `audienceId`. | public, rate-limited |
+| Method & path                                       | Body → `data`                                                                                                                                      | Permission           |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `GET /forms`                                        | list params + `status` → `Page<FormSummary>`                                                                                                       | `forms:view`         |
+| `GET /forms/:id`                                    | → `Form`                                                                                                                                           | `forms:view`         |
+| `POST /forms`                                       | `{ title }` → `Form` (draft, generated `slug`)                                                                                                     | `forms:manage`       |
+| `PATCH /forms/:id`                                  | `{ title?, description?, fields? }`                                                                                                                | `forms:manage`       |
+| `PUT /forms/:id/settings`                           | `FormSettings`                                                                                                                                     | `forms:manage`       |
+| `PUT /forms/:id/slug`                               | `{ slug }`. `409` if taken.                                                                                                                        | `forms:manage`       |
+| `POST /forms/:id/publish` · `/close` · `/duplicate` |                                                                                                                                                    | `forms:manage`       |
+| `DELETE /forms/:id` 🔒sudo                          | deletes all responses                                                                                                                              | `forms:manage`       |
+| `GET /forms/:id/responses`                          | list params → `Page<FormResponse>`. `q` searches answers.                                                                                          | `forms:view`         |
+| `POST /forms/:id/responses/delete` 🔒sudo           | `{ responseIds }` → `{ deleted }`                                                                                                                  | `forms:manage`       |
+| `GET /forms/:id/responses/export`                   | CSV (one column per question, choice answers as labels)                                                                                            | `forms:view`         |
+| `GET /public/forms/:slug`                           | → `PublicForm`. `404` for drafts.                                                                                                                  | public               |
+| `POST /public/forms/:slug/responses`                | `{ answers, captchaToken? }`. Validate, enforce `closesAt` and `responseLimit`, notify `notifyEmails`, add consenting respondents to `audienceId`. | public, rate-limited |
 
 ---
 
 ## 10. Users & roles — `features/users`
 
-| Method & path | Body → `data` | Permission |
-| --- | --- | --- |
-| `GET /admin-users` | list params + `status`, `roleId` → `Page<AdminUser>` | `users:view` |
-| `POST /admin-users/invitations` 🔒sudo | `{ email, name, roleId }`. Link `APP_URL/invite/<token>`, 7 days. | `users:manage` |
-| `POST /admin-users/:id/invitation/resend` · `DELETE /admin-users/:id/invitation` | | `users:manage` |
-| `PUT /admin-users/:id/role` 🔒sudo | `{ roleId }` | `users:manage` |
-| `POST /admin-users/:id/suspend` 🔒sudo · `/reactivate` 🔒sudo | Suspending revokes all sessions. | `users:manage` |
-| `POST /admin-users/:id/mfa/reset` 🔒sudo | | `users:manage` |
-| `GET /roles` · `GET /roles/:id` | `Role[]` · `Role` | `users:view` |
-| `POST /roles` · `PUT /roles/:id` · `DELETE /roles/:id` (all 🔒sudo) | `{ name, description, permissions }` | `roles:manage` |
+| Method & path                                                                    | Body → `data`                                                     | Permission     |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------------- |
+| `GET /admin-users`                                                               | list params + `status`, `roleId` → `Page<AdminUser>`              | `users:view`   |
+| `POST /admin-users/invitations` 🔒sudo                                           | `{ email, name, roleId }`. Link `APP_URL/invite/<token>`, 7 days. | `users:manage` |
+| `POST /admin-users/:id/invitation/resend` · `DELETE /admin-users/:id/invitation` |                                                                   | `users:manage` |
+| `PUT /admin-users/:id/role` 🔒sudo                                               | `{ roleId }`                                                      | `users:manage` |
+| `POST /admin-users/:id/suspend` 🔒sudo · `/reactivate` 🔒sudo                    | Suspending revokes all sessions.                                  | `users:manage` |
+| `POST /admin-users/:id/mfa/reset` 🔒sudo                                         |                                                                   | `users:manage` |
+| `GET /roles` · `GET /roles/:id`                                                  | `Role[]` · `Role`                                                 | `users:view`   |
+| `POST /roles` · `PUT /roles/:id` · `DELETE /roles/:id` (all 🔒sudo)              | `{ name, description, permissions }`                              | `roles:manage` |
 
 Rules the API must enforce: nobody can change their own role, suspend themselves or reset their own two-step verification. The last active Owner can't be demoted or suspended. Only an Owner can grant `roles:manage`. A role that is still assigned can't be deleted (`409`).
 

@@ -16,7 +16,11 @@ export default async function EditCampaignPage({ params }: PageProps<"/campaigns
   const id = assertId((await params).id);
   const campaign = await findOrNotFound(getCampaign(id));
   if (campaign.status !== "draft") redirect(`/campaigns/${id}`);
-  const [audiences, sender, templates] = await Promise.all([listAudiences(), getSenderProfile(), listTemplatesForPicker()]);
+  const [audiences, sender, templates] = await Promise.all([
+    listAudiences(),
+    getSenderProfile(),
+    listTemplatesForPicker(),
+  ]);
 
   return (
     <Page width="full" className="max-w-[88rem]">

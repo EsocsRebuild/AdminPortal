@@ -34,7 +34,8 @@ export function MemberActions({ member, parishes }: { member: Member; parishes: 
     const ok = await modals.confirm({
       tone: "danger",
       title: `Delete ${name}?`,
-      description: "Their record and history will be removed permanently. If they’ve simply left, mark them inactive instead.",
+      description:
+        "Their record and history will be removed permanently. If they’ve simply left, mark them inactive instead.",
       confirmLabel: "Delete permanently",
       confirmText: member.lastName.toUpperCase(),
     });

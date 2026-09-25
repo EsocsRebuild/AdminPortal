@@ -16,7 +16,8 @@ export default async function EditFormPage({ params }: PageProps<"/forms/[id]/ed
     <>
       {form.status === "published" && (
         <Alert tone="warning" title="This form is live">
-          Changes appear to visitors straight away. Removing a question hides its past answers from new exports.
+          Changes appear to visitors straight away. Removing a question hides its past answers from new
+          exports.
         </Alert>
       )}
       <FormBuilder form={form} readOnly={!can(user, "forms:manage")} />

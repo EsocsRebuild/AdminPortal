@@ -15,7 +15,9 @@ import type { ActiveSession } from "../types";
 export function SessionsCard({ sessions }: { sessions: ActiveSession[] }) {
   const modals = useModals();
   const revoke = useAction(revokeSession, { success: "Signed out of that device" });
-  const revokeAll = useAction(revokeOtherSessions, { success: (r) => `Signed out of ${r.revoked} other ${r.revoked === 1 ? "device" : "devices"}` });
+  const revokeAll = useAction(revokeOtherSessions, {
+    success: (r) => `Signed out of ${r.revoked} other ${r.revoked === 1 ? "device" : "devices"}`,
+  });
   const others = sessions.filter((s) => !s.current).length;
 
   return (
@@ -31,7 +33,13 @@ export function SessionsCard({ sessions }: { sessions: ActiveSession[] }) {
               leftIcon={<LogOut />}
               loading={revokeAll.pending}
               onClick={async () => {
-                if (await modals.confirm({ title: "Sign out everywhere else?", description: "Every other browser and device will need to sign in again.", confirmLabel: "Sign out others" }))
+                if (
+                  await modals.confirm({
+                    title: "Sign out everywhere else?",
+                    description: "Every other browser and device will need to sign in again.",
+                    confirmLabel: "Sign out others",
+                  })
+                )
                   await revokeAll.run({});
               }}
             >
@@ -45,7 +53,10 @@ export function SessionsCard({ sessions }: { sessions: ActiveSession[] }) {
           const mobile = /android|ios|iphone|ipad/i.test(s.os);
           const Icon = mobile ? Smartphone : Monitor;
           return (
-            <div key={s.id} className="flex items-center gap-3 rounded-control px-2 py-3 hover:bg-surface-hover">
+            <div
+              key={s.id}
+              className="flex items-center gap-3 rounded-control px-2 py-3 hover:bg-surface-hover"
+            >
               <span className="grid size-9 shrink-0 place-items-center rounded-control bg-surface-muted text-muted-foreground">
                 <Icon className="size-4" />
               </span>

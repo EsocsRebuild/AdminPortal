@@ -37,18 +37,47 @@ export function PasswordForm({ changedAt }: { changedAt: string | null }) {
       >
         <CardHeader
           title="Password"
-          description={changedAt ? <span suppressHydrationWarning>Last changed {formatRelative(changedAt)}.</span> : "Use a long, unique password."}
+          description={
+            changedAt ? (
+              <span suppressHydrationWarning>Last changed {formatRelative(changedAt)}.</span>
+            ) : (
+              "Use a long, unique password."
+            )
+          }
         />
         <CardContent className="grid max-w-lg gap-4">
           <Field label="Current password" htmlFor="pw-current" error={errors.current}>
-            <PasswordInput id="pw-current" autoComplete="current-password" value={v.current} onChange={(e) => setV({ ...v, current: e.target.value })} aria-invalid={!!errors.current} aria-describedby="pw-current-msg" />
+            <PasswordInput
+              id="pw-current"
+              autoComplete="current-password"
+              value={v.current}
+              onChange={(e) => setV({ ...v, current: e.target.value })}
+              aria-invalid={!!errors.current}
+              aria-describedby="pw-current-msg"
+            />
           </Field>
           <Field label="New password" htmlFor="pw-next" error={errors.next}>
-            <PasswordInput id="pw-next" autoComplete="new-password" value={v.next} onChange={(e) => setV({ ...v, next: e.target.value })} aria-invalid={!!errors.next} aria-describedby="pw-next-msg pw-strength" maxLength={128} />
+            <PasswordInput
+              id="pw-next"
+              autoComplete="new-password"
+              value={v.next}
+              onChange={(e) => setV({ ...v, next: e.target.value })}
+              aria-invalid={!!errors.next}
+              aria-describedby="pw-next-msg pw-strength"
+              maxLength={128}
+            />
           </Field>
           {v.next && <PasswordStrength id="pw-strength" password={v.next} />}
           <Field label="Type the new password again" htmlFor="pw-confirm" error={errors.confirm}>
-            <PasswordInput id="pw-confirm" autoComplete="new-password" value={v.confirm} onChange={(e) => setV({ ...v, confirm: e.target.value })} aria-invalid={!!errors.confirm} aria-describedby="pw-confirm-msg" maxLength={128} />
+            <PasswordInput
+              id="pw-confirm"
+              autoComplete="new-password"
+              value={v.confirm}
+              onChange={(e) => setV({ ...v, confirm: e.target.value })}
+              aria-invalid={!!errors.confirm}
+              aria-describedby="pw-confirm-msg"
+              maxLength={128}
+            />
           </Field>
         </CardContent>
         <CardFooter className="justify-end">

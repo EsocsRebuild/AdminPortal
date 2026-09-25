@@ -27,9 +27,13 @@ export function AudienceActions({ audience }: { audience: AudienceList }) {
   const router = useRouter();
   const modals = useModals();
   const [dialog, setDialog] = React.useState<"add" | "import" | "edit" | null>(null);
-  const remove = useAction(deleteAudience, { success: "Audience deleted", onSuccess: () => router.replace("/audiences") });
+  const remove = useAction(deleteAudience, {
+    success: "Audience deleted",
+    onSuccess: () => router.replace("/audiences"),
+  });
   const sync = useAction(addMembersToAudience, {
-    success: (r) => `${formatNumber(r.created)} members added${r.skipped ? `, ${formatNumber(r.skipped)} were already here` : ""}`,
+    success: (r) =>
+      `${formatNumber(r.created)} members added${r.skipped ? `, ${formatNumber(r.skipped)} were already here` : ""}`,
   });
 
   async function onAddMembers() {
@@ -82,9 +86,21 @@ export function AudienceActions({ audience }: { audience: AudienceList }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <AddContactDialog listId={audience.id} open={dialog === "add"} onOpenChange={(o) => setDialog(o ? "add" : null)} />
-      <ImportDialog listId={audience.id} open={dialog === "import"} onOpenChange={(o) => setDialog(o ? "import" : null)} />
-      <AudienceFormDialog audience={audience} open={dialog === "edit"} onOpenChange={(o) => setDialog(o ? "edit" : null)} />
+      <AddContactDialog
+        listId={audience.id}
+        open={dialog === "add"}
+        onOpenChange={(o) => setDialog(o ? "add" : null)}
+      />
+      <ImportDialog
+        listId={audience.id}
+        open={dialog === "import"}
+        onOpenChange={(o) => setDialog(o ? "import" : null)}
+      />
+      <AudienceFormDialog
+        audience={audience}
+        open={dialog === "edit"}
+        onOpenChange={(o) => setDialog(o ? "edit" : null)}
+      />
     </Can>
   );
 }

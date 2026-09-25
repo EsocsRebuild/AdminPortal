@@ -35,7 +35,9 @@ function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolea
     `object-src 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,
-    embeddable && embedOrigins.length ? `frame-ancestors 'self' ${embedOrigins.join(" ")}` : `frame-ancestors 'none'`,
+    embeddable && embedOrigins.length
+      ? `frame-ancestors 'self' ${embedOrigins.join(" ")}`
+      : `frame-ancestors 'none'`,
     // Only when served over HTTPS; on plain-http localhost it would break asset loading.
     https && !dev ? "upgrade-insecure-requests" : "",
   ]

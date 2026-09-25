@@ -104,7 +104,9 @@ export default async function MemberPage({ params }: PageProps<"/members/[id]">)
               <dl className="grid gap-5 sm:grid-cols-2">
                 <Detail label="Parish">{member.parish?.name}</Detail>
                 <Detail label="Rank or title">{member.rank}</Detail>
-                <Detail label="Gender">{member.gender && member.gender[0].toUpperCase() + member.gender.slice(1)}</Detail>
+                <Detail label="Gender">
+                  {member.gender && member.gender[0].toUpperCase() + member.gender.slice(1)}
+                </Detail>
                 <Detail label="Date of birth">{member.dateOfBirth && formatDate(member.dateOfBirth)}</Detail>
                 <Detail label="Member since">{formatDate(member.joinedAt)}</Detail>
               </dl>
@@ -114,7 +116,7 @@ export default async function MemberPage({ params }: PageProps<"/members/[id]">)
           {member.notes && (
             <Card>
               <CardHeader title="Notes" description="Only administrators can see these." />
-              <CardContent className="whitespace-pre-wrap text-base">{member.notes}</CardContent>
+              <CardContent className="text-base whitespace-pre-wrap">{member.notes}</CardContent>
             </Card>
           )}
         </div>
@@ -124,7 +126,9 @@ export default async function MemberPage({ params }: PageProps<"/members/[id]">)
             <dl className="grid gap-4 text-sm">
               <Detail label="Added">
                 {formatDateTime(member.createdAt)}
-                {member.createdBy && <span className="block text-muted-foreground">by {member.createdBy.name}</span>}
+                {member.createdBy && (
+                  <span className="block text-muted-foreground">by {member.createdBy.name}</span>
+                )}
               </Detail>
               <Detail label="Last updated">{formatDateTime(member.updatedAt)}</Detail>
             </dl>

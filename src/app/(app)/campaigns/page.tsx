@@ -24,7 +24,11 @@ export default async function CampaignsPage({ searchParams }: PageProps<"/campai
 
   return (
     <Page>
-      <PageHeader title="Email campaigns" description="Create, send and measure emails to your audiences." actions={newButton}>
+      <PageHeader
+        title="Email campaigns"
+        description="Create, send and measure emails to your audiences."
+        actions={newButton}
+      >
         <UrlTabs
           param="status"
           label="Campaign status"

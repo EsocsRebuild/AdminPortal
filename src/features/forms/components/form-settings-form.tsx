@@ -20,9 +20,21 @@ import type { Form } from "../types";
 
 const NONE = "__none";
 const toLocal = (iso: string | null) =>
-  iso ? new Date(new Date(iso).getTime() - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 16) : "";
+  iso
+    ? new Date(new Date(iso).getTime() - new Date().getTimezoneOffset() * 60_000).toISOString().slice(0, 16)
+    : "";
 
-export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form: Form; audiences: AudienceList[]; canManage: boolean; appUrl: string }) {
+export function FormSettingsForm({
+  form,
+  audiences,
+  canManage,
+  appUrl,
+}: {
+  form: Form;
+  audiences: AudienceList[];
+  canManage: boolean;
+  appUrl: string;
+}) {
   const s = form.settings;
   const [v, setV] = React.useState({
     submitLabel: s.submitLabel,
@@ -67,16 +79,48 @@ export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form:
           <CardHeader title="After someone submits" />
           <CardContent className="grid gap-5">
             <Field label="Button text" htmlFor="fs-submit" error={errors.submitLabel}>
-              <Input id="fs-submit" value={v.submitLabel} onChange={(e) => set("submitLabel", e.target.value)} maxLength={40} className="max-w-xs" aria-describedby="fs-submit-msg" />
+              <Input
+                id="fs-submit"
+                value={v.submitLabel}
+                onChange={(e) => set("submitLabel", e.target.value)}
+                maxLength={40}
+                className="max-w-xs"
+                aria-describedby="fs-submit-msg"
+              />
             </Field>
             <Field label="Thank-you heading" htmlFor="fs-title" error={errors.confirmationTitle}>
-              <Input id="fs-title" value={v.confirmationTitle} onChange={(e) => set("confirmationTitle", e.target.value)} maxLength={120} aria-describedby="fs-title-msg" />
+              <Input
+                id="fs-title"
+                value={v.confirmationTitle}
+                onChange={(e) => set("confirmationTitle", e.target.value)}
+                maxLength={120}
+                aria-describedby="fs-title-msg"
+              />
             </Field>
             <Field label="Thank-you message" htmlFor="fs-msg" optional>
-              <Textarea id="fs-msg" rows={3} value={v.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)} maxLength={1000} />
+              <Textarea
+                id="fs-msg"
+                rows={3}
+                value={v.confirmationMessage}
+                onChange={(e) => set("confirmationMessage", e.target.value)}
+                maxLength={1000}
+              />
             </Field>
-            <Field label="Then send them to" htmlFor="fs-redirect" optional error={errors.redirectUrl} hint="A page on your website, e.g. event details. Leave empty to just show the thank-you message.">
-              <Input id="fs-redirect" type="url" placeholder="https://" value={v.redirectUrl} onChange={(e) => set("redirectUrl", e.target.value)} aria-describedby="fs-redirect-msg" />
+            <Field
+              label="Then send them to"
+              htmlFor="fs-redirect"
+              optional
+              error={errors.redirectUrl}
+              hint="A page on your website, e.g. event details. Leave empty to just show the thank-you message."
+            >
+              <Input
+                id="fs-redirect"
+                type="url"
+                placeholder="https://"
+                value={v.redirectUrl}
+                onChange={(e) => set("redirectUrl", e.target.value)}
+                aria-describedby="fs-redirect-msg"
+              />
             </Field>
           </CardContent>
         </Card>
@@ -85,12 +129,31 @@ export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form:
           <CardHeader title="Limits" description="Close the form automatically." />
           <CardContent className="grid gap-5">
             <Field label="Stop accepting responses on" htmlFor="fs-close" optional hint="In your local time.">
-              <Input id="fs-close" type="datetime-local" value={v.closesAt} onChange={(e) => set("closesAt", e.target.value)} className="max-w-xs" aria-describedby="fs-close-msg" />
+              <Input
+                id="fs-close"
+                type="datetime-local"
+                value={v.closesAt}
+                onChange={(e) => set("closesAt", e.target.value)}
+                className="max-w-xs"
+                aria-describedby="fs-close-msg"
+              />
             </Field>
-            <Switch label="Limit the number of responses" description="Useful for events with limited places." checked={v.limitOn} onCheckedChange={(on) => set("limitOn", on)} />
+            <Switch
+              label="Limit the number of responses"
+              description="Useful for events with limited places."
+              checked={v.limitOn}
+              onCheckedChange={(on) => set("limitOn", on)}
+            />
             {v.limitOn && (
               <Field label="Maximum responses" htmlFor="fs-limit" error={errors.responseLimit}>
-                <Input id="fs-limit" type="number" min={1} value={v.responseLimit} onChange={(e) => set("responseLimit", e.target.value)} className="max-w-40" />
+                <Input
+                  id="fs-limit"
+                  type="number"
+                  min={1}
+                  value={v.responseLimit}
+                  onChange={(e) => set("responseLimit", e.target.value)}
+                  className="max-w-40"
+                />
               </Field>
             )}
           </CardContent>
@@ -99,11 +162,26 @@ export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form:
         <Card>
           <CardHeader title="Notifications & follow-up" />
           <CardContent className="grid gap-5">
-            <Field label="Email these people about new responses" htmlFor="fs-notify" optional error={errors.notifyEmails} hint="Separate addresses with commas. Up to 10.">
-              <Input id="fs-notify" value={v.notifyEmails} onChange={(e) => set("notifyEmails", e.target.value)} aria-describedby="fs-notify-msg" />
+            <Field
+              label="Email these people about new responses"
+              htmlFor="fs-notify"
+              optional
+              error={errors.notifyEmails}
+              hint="Separate addresses with commas. Up to 10."
+            >
+              <Input
+                id="fs-notify"
+                value={v.notifyEmails}
+                onChange={(e) => set("notifyEmails", e.target.value)}
+                aria-describedby="fs-notify-msg"
+              />
             </Field>
             <Field label="Add people who agree to emails to an audience" htmlFor="fs-audience" optional>
-              <Select value={v.audienceId} onValueChange={(x) => set("audienceId", x)} disabled={!canManage || audiences.length === 0}>
+              <Select
+                value={v.audienceId}
+                onValueChange={(x) => set("audienceId", x)}
+                disabled={!canManage || audiences.length === 0}
+              >
                 <SelectTrigger id="fs-audience">
                   <SelectValue />
                 </SelectTrigger>
@@ -119,7 +197,8 @@ export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form:
             </Field>
             {v.audienceId !== NONE && !hasConsent && (
               <Alert tone="warning">
-                Add an <span className="font-medium">Agreement</span> question to the form. Only people who tick it are added, so nobody is emailed without consent.
+                Add an <span className="font-medium">Agreement</span> question to the form. Only people who
+                tick it are added, so nobody is emailed without consent.
               </Alert>
             )}
           </CardContent>
@@ -149,11 +228,19 @@ export function FormSettingsForm({ form, audiences, canManage, appUrl }: { form:
                   className="h-control-md min-w-0 flex-1 rounded-r-control bg-surface px-2 text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/20"
                 />
               </div>
-              <Button type="button" variant="secondary" loading={saveSlug.pending} disabled={slug === form.slug} onClick={() => saveSlug.run({ id: form.id, slug })}>
+              <Button
+                type="button"
+                variant="secondary"
+                loading={saveSlug.pending}
+                disabled={slug === form.slug}
+                onClick={() => saveSlug.run({ id: form.id, slug })}
+              >
                 Update link
               </Button>
             </div>
-            {saveSlug.errorFor("slug") && <p className="mt-1.5 text-xs text-danger">{saveSlug.errorFor("slug")}</p>}
+            {saveSlug.errorFor("slug") && (
+              <p className="mt-1.5 text-xs text-danger">{saveSlug.errorFor("slug")}</p>
+            )}
           </CardContent>
         </Card>
       )}

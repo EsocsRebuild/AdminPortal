@@ -15,14 +15,25 @@ export interface RouteTab {
 }
 
 /** Tabs that are real links (sub-pages), with the gliding underline. */
-export function RouteTabs({ tabs, className, label }: { tabs: RouteTab[]; className?: string; label: string }) {
+export function RouteTabs({
+  tabs,
+  className,
+  label,
+}: {
+  tabs: RouteTab[];
+  className?: string;
+  label: string;
+}) {
   const pathname = usePathname();
   const { ref, rect } = useSlidingIndicator<HTMLElement>("[data-state=active]");
   return (
     <nav
       ref={ref}
       aria-label={label}
-      className={cn("scrollbar-none relative flex max-w-full gap-5 overflow-x-auto border-b border-border sm:gap-7", className)}
+      className={cn(
+        "relative scrollbar-none flex max-w-full gap-5 overflow-x-auto border-b border-border sm:gap-7",
+        className,
+      )}
     >
       <span
         aria-hidden
@@ -37,7 +48,9 @@ export function RouteTabs({ tabs, className, label }: { tabs: RouteTab[]; classN
         }}
       />
       {tabs.map((t) => {
-        const active = t.prefix ? pathname === t.href || pathname.startsWith(`${t.href}/`) : pathname === t.href;
+        const active = t.prefix
+          ? pathname === t.href || pathname.startsWith(`${t.href}/`)
+          : pathname === t.href;
         return (
           <Link
             key={t.href}

@@ -29,7 +29,9 @@ export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
   const [summary, campaigns, activity] = await Promise.all([
     getDashboardSummary(),
-    can(user, "campaigns:view") ? listCampaigns({ page: 1, pageSize: 5, sort: "updatedAt", dir: "desc" }).then((r) => r.data) : null,
+    can(user, "campaigns:view")
+      ? listCampaigns({ page: 1, pageSize: 5, sort: "updatedAt", dir: "desc" }).then((r) => r.data)
+      : null,
     can(user, "audit:view") ? recentAuditEvents(6) : null,
   ]);
 
@@ -37,39 +39,102 @@ export default async function DashboardPage() {
     { id: "mfa", title: "Turn on two-step verification", href: "/settings/security", done: user.mfaEnabled },
     ...(can(user, "settings:manage")
       ? [
-          { id: "domain", title: "Verify your email domain", href: "/settings/email", done: summary.setup.domainVerified },
-          { id: "address", title: "Add your postal address", href: "/settings/email", done: summary.setup.postalAddressSet },
+          {
+            id: "domain",
+            title: "Verify your email domain",
+            href: "/settings/email",
+            done: summary.setup.domainVerified,
+          },
+          {
+            id: "address",
+            title: "Add your postal address",
+            href: "/settings/email",
+            done: summary.setup.postalAddressSet,
+          },
         ]
       : []),
-    ...(can(user, "audiences:manage") ? [{ id: "audience", title: "Create your first audience", href: "/audiences", done: summary.setup.hasAudience }] : []),
-    ...(can(user, "forms:manage") ? [{ id: "form", title: "Build your first form", href: "/forms/new", done: summary.setup.hasForm }] : []),
+    ...(can(user, "audiences:manage")
+      ? [
+          {
+            id: "audience",
+            title: "Create your first audience",
+            href: "/audiences",
+            done: summary.setup.hasAudience,
+          },
+        ]
+      : []),
+    ...(can(user, "forms:manage")
+      ? [{ id: "form", title: "Build your first form", href: "/forms/new", done: summary.setup.hasForm }]
+      : []),
   ];
 
   const tasks = [
     can(user, "users:manage") && summary.pending.accessRequests > 0
-      ? { title: "Approve account requests", count: summary.pending.accessRequests, href: "/users/requests", tone: "warning" as const }
+      ? {
+          title: "Approve account requests",
+          count: summary.pending.accessRequests,
+          href: "/users/requests",
+          tone: "warning" as const,
+        }
       : null,
     can(user, "members:manage") && summary.pending.memberApprovals > 0
-      ? { title: "Review new members", count: summary.pending.memberApprovals, href: "/members?status=pending", tone: "info" as const }
+      ? {
+          title: "Review new members",
+          count: summary.pending.memberApprovals,
+          href: "/members?status=pending",
+          tone: "info" as const,
+        }
       : null,
     can(user, "campaigns:view") && summary.pending.scheduledCampaigns > 0
-      ? { title: "Campaigns scheduled to send", count: summary.pending.scheduledCampaigns, href: "/campaigns?status=scheduled", tone: "primary" as const }
+      ? {
+          title: "Campaigns scheduled to send",
+          count: summary.pending.scheduledCampaigns,
+          href: "/campaigns?status=scheduled",
+          tone: "primary" as const,
+        }
       : null,
   ].filter((t) => t !== null);
 
   const stats = [
-    summary.members && <StatCard key="m" label="Members" value={summary.members.total} delta={summary.members.delta ?? undefined} trend={summary.members.trend} icon={<Users />} />,
-    summary.audience && <StatCard key="a" label="Email subscribers" value={summary.audience.subscribers} delta={summary.audience.delta ?? undefined} trend={summary.audience.trend} icon={<UsersRound />} />,
+    summary.members && (
+      <StatCard
+        key="m"
+        label="Members"
+        value={summary.members.total}
+        delta={summary.members.delta ?? undefined}
+        trend={summary.members.trend}
+        icon={<Users />}
+      />
+    ),
+    summary.audience && (
+      <StatCard
+        key="a"
+        label="Email subscribers"
+        value={summary.audience.subscribers}
+        delta={summary.audience.delta ?? undefined}
+        trend={summary.audience.trend}
+        icon={<UsersRound />}
+      />
+    ),
     summary.campaigns && (
       <StatCard
         key="c"
         label="Average open rate"
-        value={summary.campaigns.averageOpenRate === null ? "—" : formatPercent(summary.campaigns.averageOpenRate)}
+        value={
+          summary.campaigns.averageOpenRate === null ? "—" : formatPercent(summary.campaigns.averageOpenRate)
+        }
         deltaLabel=""
         icon={<MailOpen />}
       />
     ),
-    summary.forms && <StatCard key="f" label="Form responses (30 days)" value={summary.forms.responsesLast30Days} icon={<FormInput />} />,
+    summary.forms && (
+      <StatCard
+        key="f"
+        label="Form responses (30 days)"
+        value={summary.forms.responsesLast30Days}
+        icon={<FormInput />}
+      />
+    ),
   ].filter(Boolean);
 
   return (
@@ -97,10 +162,7 @@ export default async function DashboardPage() {
 
         <StaggerItem className="grid gap-page xl:grid-cols-3">
           <Card className={campaigns ? "xl:col-span-2" : "xl:col-span-3"}>
-            <CardHeader
-              title="Needs your attention"
-              description="Things waiting on you right now."
-            />
+            <CardHeader title="Needs your attention" description="Things waiting on you right now." />
             <CardContent className="grid content-start gap-1">
               {tasks.length === 0 ? (
                 <div className="flex items-center gap-3 rounded-control bg-success-soft/50 p-4 text-sm">

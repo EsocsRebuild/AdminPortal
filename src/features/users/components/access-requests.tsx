@@ -9,7 +9,15 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,8 +32,14 @@ function RequestCard({ request, roles }: { request: AccessRequest; roles: Role[]
   const [mode, setMode] = React.useState<"approve" | "reject" | null>(null);
   const [roleId, setRoleId] = React.useState(request.requestedRole?.id ?? "");
   const [reason, setReason] = React.useState("");
-  const approve = useAction(approveAccessRequest, { success: `${request.name} now has access`, onSuccess: () => setMode(null) });
-  const reject = useAction(rejectAccessRequest, { success: "Request declined", onSuccess: () => setMode(null) });
+  const approve = useAction(approveAccessRequest, {
+    success: `${request.name} now has access`,
+    onSuccess: () => setMode(null),
+  });
+  const reject = useAction(rejectAccessRequest, {
+    success: "Request declined",
+    onSuccess: () => setMode(null),
+  });
 
   return (
     <Card className="gap-4 p-card">
@@ -74,7 +88,12 @@ function RequestCard({ request, roles }: { request: AccessRequest; roles: Role[]
           <Button variant="secondary" className="flex-1" leftIcon={<X />} onClick={() => setMode("reject")}>
             Decline
           </Button>
-          <Button className="flex-1" leftIcon={<Check />} onClick={() => setMode("approve")} disabled={!request.emailVerified}>
+          <Button
+            className="flex-1"
+            leftIcon={<Check />}
+            onClick={() => setMode("approve")}
+            disabled={!request.emailVerified}
+          >
             Approve
           </Button>
         </div>
@@ -83,9 +102,13 @@ function RequestCard({ request, roles }: { request: AccessRequest; roles: Role[]
       <Dialog open={mode !== null} onOpenChange={(o) => !o && setMode(null)}>
         <DialogContent size="sm">
           <DialogHeader>
-            <DialogTitle>{mode === "approve" ? `Give ${request.name} access` : `Decline ${request.name}’s request`}</DialogTitle>
+            <DialogTitle>
+              {mode === "approve" ? `Give ${request.name} access` : `Decline ${request.name}’s request`}
+            </DialogTitle>
             <DialogDescription>
-              {mode === "approve" ? "Choose the role that fits their work. You can change it later." : "They’ll get a short email letting them know."}
+              {mode === "approve"
+                ? "Choose the role that fits their work. You can change it later."
+                : "They’ll get a short email letting them know."}
             </DialogDescription>
           </DialogHeader>
           <DialogBody>
@@ -96,17 +119,31 @@ function RequestCard({ request, roles }: { request: AccessRequest; roles: Role[]
                     <SelectValue placeholder="Choose a role" />
                   </SelectTrigger>
                   <SelectContent>
-                    {roles.filter((r) => !r.locked).map((r) => (
-                      <SelectItem key={r.id} value={r.id}>
-                        {r.name}
-                      </SelectItem>
-                    ))}
+                    {roles
+                      .filter((r) => !r.locked)
+                      .map((r) => (
+                        <SelectItem key={r.id} value={r.id}>
+                          {r.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </Field>
             ) : (
-              <Field label="Reason" htmlFor={`rq-reason-${request.id}`} optional hint="Included in the email.">
-                <Textarea id={`rq-reason-${request.id}`} rows={3} value={reason} onChange={(e) => setReason(e.target.value)} maxLength={500} aria-describedby={`rq-reason-${request.id}-msg`} />
+              <Field
+                label="Reason"
+                htmlFor={`rq-reason-${request.id}`}
+                optional
+                hint="Included in the email."
+              >
+                <Textarea
+                  id={`rq-reason-${request.id}`}
+                  rows={3}
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  maxLength={500}
+                  aria-describedby={`rq-reason-${request.id}-msg`}
+                />
               </Field>
             )}
           </DialogBody>
@@ -115,11 +152,19 @@ function RequestCard({ request, roles }: { request: AccessRequest; roles: Role[]
               Cancel
             </Button>
             {mode === "approve" ? (
-              <Button loading={approve.pending} disabled={!roleId} onClick={() => approve.run({ id: request.id, roleId })}>
+              <Button
+                loading={approve.pending}
+                disabled={!roleId}
+                onClick={() => approve.run({ id: request.id, roleId })}
+              >
                 Approve
               </Button>
             ) : (
-              <Button variant="danger" loading={reject.pending} onClick={() => reject.run({ id: request.id, reason })}>
+              <Button
+                variant="danger"
+                loading={reject.pending}
+                onClick={() => reject.run({ id: request.id, reason })}
+              >
                 Decline request
               </Button>
             )}
@@ -134,7 +179,11 @@ export function AccessRequests({ requests, roles }: { requests: AccessRequest[];
   if (requests.length === 0) {
     return (
       <Card variant="outline">
-        <EmptyState icon={<MailCheck />} title="No requests waiting" description="When someone requests an account, it appears here for you to approve." />
+        <EmptyState
+          icon={<MailCheck />}
+          title="No requests waiting"
+          description="When someone requests an account, it appears here for you to approve."
+        />
       </Card>
     );
   }

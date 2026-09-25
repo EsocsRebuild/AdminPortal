@@ -3,7 +3,9 @@ import { z } from "zod";
 
 const cookieStore = new Map<string, string>();
 vi.mock("next/headers", () => ({
-  cookies: async () => ({ get: (k: string) => (cookieStore.has(k) ? { value: cookieStore.get(k) } : undefined) }),
+  cookies: async () => ({
+    get: (k: string) => (cookieStore.has(k) ? { value: cookieStore.get(k) } : undefined),
+  }),
   headers: async () => new Headers(),
 }));
 vi.mock("next/navigation", () => ({ unstable_rethrow: () => {}, redirect: vi.fn(), forbidden: vi.fn() }));
@@ -16,7 +18,10 @@ import { BackendError } from "./backend";
 import { COOKIE } from "./cookies";
 
 const handler = vi.fn(async (input: { name: string }) => `hello ${input.name}`);
-const action = secureAction({ schema: z.object({ name: z.string().min(2) }), permission: "members:manage", sudo: true }, handler);
+const action = secureAction(
+  { schema: z.object({ name: z.string().min(2) }), permission: "members:manage", sudo: true },
+  handler,
+);
 
 beforeEach(() => {
   handler.mockClear();
@@ -56,7 +61,11 @@ describe("secureAction", () => {
 
   it("maps API errors and hides unexpected ones", async () => {
     handler.mockRejectedValueOnce(new BackendError("CONFLICT", "Already exists", 409));
-    expect(await action({ name: "Ada" })).toMatchObject({ ok: false, code: "CONFLICT", message: "Already exists" });
+    expect(await action({ name: "Ada" })).toMatchObject({
+      ok: false,
+      code: "CONFLICT",
+      message: "Already exists",
+    });
     vi.spyOn(console, "error").mockImplementation(() => {});
     handler.mockRejectedValueOnce(new Error("database password is hunter2"));
     const res = await action({ name: "Ada" });

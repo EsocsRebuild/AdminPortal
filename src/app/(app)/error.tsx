@@ -19,8 +19,13 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         title="This page couldn’t load"
         description={
           <>
-            We couldn’t get the latest information. Check your internet connection and try again. If it keeps happening, contact support.
-            {error.digest && <span className="mt-3 block font-mono text-xs text-subtle-foreground">Reference: {error.digest}</span>}
+            We couldn’t get the latest information. Check your internet connection and try again. If it keeps
+            happening, contact support.
+            {error.digest && (
+              <span className="mt-3 block font-mono text-xs text-subtle-foreground">
+                Reference: {error.digest}
+              </span>
+            )}
           </>
         }
         action={

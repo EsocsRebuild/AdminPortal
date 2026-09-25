@@ -15,7 +15,15 @@ import { formStatusLabels, type FormSummary } from "../types";
 
 const col = columnHelper<FormSummary>();
 
-export function FormsTable({ page, server, emptyAction }: { page: FormSummary[]; server: ServerTableState; emptyAction?: React.ReactNode }) {
+export function FormsTable({
+  page,
+  server,
+  emptyAction,
+}: {
+  page: FormSummary[];
+  server: ServerTableState;
+  emptyAction?: React.ReactNode;
+}) {
   const router = useRouter();
   const columns = React.useMemo(
     () => [
@@ -33,7 +41,12 @@ export function FormsTable({ page, server, emptyAction }: { page: FormSummary[];
         header: "Status",
         enableSorting: false,
         meta: { label: "Status" },
-        cell: (i) => <StatusBadge status={i.getValue() === "published" ? "active" : i.getValue()} label={formStatusLabels[i.getValue()]} />,
+        cell: (i) => (
+          <StatusBadge
+            status={i.getValue() === "published" ? "active" : i.getValue()}
+            label={formStatusLabels[i.getValue()]}
+          />
+        ),
       }),
       col.accessor("responseCount", {
         header: ({ header }) => <ColumnHeader header={header} title="Responses" />,
@@ -43,7 +56,11 @@ export function FormsTable({ page, server, emptyAction }: { page: FormSummary[];
       col.accessor("updatedAt", {
         header: ({ header }) => <ColumnHeader header={header} title="Last edited" />,
         meta: { label: "Last edited" },
-        cell: (i) => <span className="text-muted-foreground" suppressHydrationWarning>{formatRelative(i.getValue())}</span>,
+        cell: (i) => (
+          <span className="text-muted-foreground" suppressHydrationWarning>
+            {formatRelative(i.getValue())}
+          </span>
+        ),
       }),
     ],
     [],
@@ -55,14 +72,23 @@ export function FormsTable({ page, server, emptyAction }: { page: FormSummary[];
       getRowId={(f) => f.id}
       server={server}
       searchPlaceholder="Search forms…"
-      onRowClick={(f) => router.push(f.responseCount > 0 ? `/forms/${f.id}/responses` : `/forms/${f.id}/edit`)}
+      onRowClick={(f) =>
+        router.push(f.responseCount > 0 ? `/forms/${f.id}/responses` : `/forms/${f.id}/edit`)
+      }
       renderMobileRow={(row) => {
         const f = row.original;
         return (
-          <button type="button" onClick={() => router.push(`/forms/${f.id}/edit`)} className="grid w-full gap-1 p-3.5 text-left">
+          <button
+            type="button"
+            onClick={() => router.push(`/forms/${f.id}/edit`)}
+            className="grid w-full gap-1 p-3.5 text-left"
+          >
             <span className="flex items-center justify-between gap-2">
               <span className="truncate font-medium">{f.title}</span>
-              <StatusBadge status={f.status === "published" ? "active" : f.status} label={formStatusLabels[f.status]} />
+              <StatusBadge
+                status={f.status === "published" ? "active" : f.status}
+                label={formStatusLabels[f.status]}
+              />
             </span>
             <span className="text-sm text-muted-foreground">{formatNumber(f.responseCount)} responses</span>
           </button>

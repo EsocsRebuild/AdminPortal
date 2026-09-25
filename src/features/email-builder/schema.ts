@@ -20,8 +20,18 @@ const blockId = z.string().regex(/^[a-z0-9-]{4,40}$/i);
 const align = z.enum(["left", "center"]);
 
 export const blockSchema = z.discriminatedUnion("type", [
-  z.object({ id: blockId, type: z.literal("heading"), text: z.string().trim().min(1, { error: "Add heading text." }).max(200), align }),
-  z.object({ id: blockId, type: z.literal("text"), text: z.string().trim().min(1, { error: "Add some text." }).max(5000), align }),
+  z.object({
+    id: blockId,
+    type: z.literal("heading"),
+    text: z.string().trim().min(1, { error: "Add heading text." }).max(200),
+    align,
+  }),
+  z.object({
+    id: blockId,
+    type: z.literal("text"),
+    text: z.string().trim().min(1, { error: "Add some text." }).max(5000),
+    align,
+  }),
   z.object({
     id: blockId,
     type: z.literal("button"),
@@ -56,6 +66,10 @@ export const draftDocumentSchema = z.object({
   version: z.literal(1),
   settings: emailDocumentSchema.shape.settings,
   blocks: z
-    .array(z.object({ id: blockId, type: z.enum(["heading", "text", "button", "image", "divider", "spacer"]) }).loose())
+    .array(
+      z
+        .object({ id: blockId, type: z.enum(["heading", "text", "button", "image", "divider", "spacer"]) })
+        .loose(),
+    )
     .max(80),
 });

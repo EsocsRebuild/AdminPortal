@@ -52,8 +52,9 @@ export function InviteForm({
         title="You’re invited"
         description={
           <>
-            {invitation.invitedBy} invited <span className="font-medium text-foreground">{invitation.email}</span> to
-            join as <span className="font-medium text-foreground">{invitation.roleName}</span>.
+            {invitation.invitedBy} invited{" "}
+            <span className="font-medium text-foreground">{invitation.email}</span> to join as{" "}
+            <span className="font-medium text-foreground">{invitation.roleName}</span>.
           </>
         }
       />

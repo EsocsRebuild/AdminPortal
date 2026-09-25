@@ -7,7 +7,15 @@ import * as React from "react";
 import { PasswordInput } from "@/components/auth/password-input";
 import { useSession } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { reauthenticate } from "@/features/auth/actions";
 import { fieldError, type ActionResult } from "@/lib/result";
@@ -28,7 +36,9 @@ export function ReauthDialog({ open, onDone }: { open: boolean; onDone: (ok: boo
     if (res.ok) onDone(true);
   }
 
-  const error = fieldError(result, "password") ?? (result && !result.ok && result.code !== "VALIDATION" ? result.message : undefined);
+  const error =
+    fieldError(result, "password") ??
+    (result && !result.ok && result.code !== "VALIDATION" ? result.message : undefined);
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && !pending && onDone(false)}>

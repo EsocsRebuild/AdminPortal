@@ -68,12 +68,23 @@ function newField(type: FieldType): FormField {
     description: null,
     placeholder: null,
     required: false,
-    options: withOptions ? [{ id: uid(), label: "Option 1" }, { id: uid(), label: "Option 2" }] : null,
+    options: withOptions
+      ? [
+          { id: uid(), label: "Option 1" },
+          { id: uid(), label: "Option 2" },
+        ]
+      : null,
     validation: null,
   };
 }
 
-function AddQuestionMenu({ onAdd, variant = "secondary" }: { onAdd: (t: FieldType) => void; variant?: "secondary" | "primary" }) {
+function AddQuestionMenu({
+  onAdd,
+  variant = "secondary",
+}: {
+  onAdd: (t: FieldType) => void;
+  variant?: "secondary" | "primary";
+}) {
   const [open, setOpen] = React.useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -134,17 +145,34 @@ function OptionsEditor({ field, onChange }: { field: FormField; onChange: (f: Fo
                   const next = [...options];
                   next.splice(i + 1, 0, { id: uid(), label: "" });
                   set(next);
-                  requestAnimationFrame(() => (document.querySelector(`[aria-label="Option ${i + 2}"]`) as HTMLInputElement | null)?.focus());
+                  requestAnimationFrame(() =>
+                    (
+                      document.querySelector(`[aria-label="Option ${i + 2}"]`) as HTMLInputElement | null
+                    )?.focus(),
+                  );
                 }
               }}
             />
-            <Button variant="ghost" size="icon-sm" aria-label={`Remove option ${i + 1}`} disabled={options.length <= 1} onClick={() => set(options.filter((x) => x.id !== o.id))}>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label={`Remove option ${i + 1}`}
+              disabled={options.length <= 1}
+              onClick={() => set(options.filter((x) => x.id !== o.id))}
+            >
               <X />
             </Button>
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      <Button variant="ghost" size="sm" leftIcon={<Plus />} className="w-fit" onClick={() => set([...options, { id: uid(), label: `Option ${options.length + 1}` }])} disabled={options.length >= 100}>
+      <Button
+        variant="ghost"
+        size="sm"
+        leftIcon={<Plus />}
+        className="w-fit"
+        onClick={() => set([...options, { id: uid(), label: `Option ${options.length + 1}` }])}
+        disabled={options.length >= 100}
+      >
         Add option
       </Button>
       <p className="text-xs text-muted-foreground">Tip: press Enter in an option to add the next one.</p>
@@ -166,25 +194,75 @@ function Inspector({ field, onChange }: { field: FormField; onChange: (f: FormFi
           <span className="text-xs text-muted-foreground">{m.hint}</span>
         </div>
       </div>
-      <Field label={field.type === "section" ? "Heading" : field.type === "consent" ? "What they agree to" : "Question"} htmlFor="fi-label">
-        <Textarea id="fi-label" autoFocus rows={2} value={field.label} maxLength={300} onChange={(e) => onChange({ ...field, label: e.target.value })} />
+      <Field
+        label={
+          field.type === "section" ? "Heading" : field.type === "consent" ? "What they agree to" : "Question"
+        }
+        htmlFor="fi-label"
+      >
+        <Textarea
+          id="fi-label"
+          autoFocus
+          rows={2}
+          value={field.label}
+          maxLength={300}
+          onChange={(e) => onChange({ ...field, label: e.target.value })}
+        />
       </Field>
       <Field label="Help text" htmlFor="fi-desc" optional hint="Shown under the question.">
-        <Input id="fi-desc" value={field.description ?? ""} maxLength={1000} onChange={(e) => onChange({ ...field, description: e.target.value || null })} aria-describedby="fi-desc-msg" />
+        <Input
+          id="fi-desc"
+          value={field.description ?? ""}
+          maxLength={1000}
+          onChange={(e) => onChange({ ...field, description: e.target.value || null })}
+          aria-describedby="fi-desc-msg"
+        />
       </Field>
       {textual && (
         <Field label="Placeholder" htmlFor="fi-ph" optional hint="Example text inside the empty box.">
-          <Input id="fi-ph" value={field.placeholder ?? ""} maxLength={150} onChange={(e) => onChange({ ...field, placeholder: e.target.value || null })} aria-describedby="fi-ph-msg" />
+          <Input
+            id="fi-ph"
+            value={field.placeholder ?? ""}
+            maxLength={150}
+            onChange={(e) => onChange({ ...field, placeholder: e.target.value || null })}
+            aria-describedby="fi-ph-msg"
+          />
         </Field>
       )}
       {choiceTypes.includes(field.type) && <OptionsEditor field={field} onChange={onChange} />}
       {field.type === "number" && (
         <div className="grid grid-cols-2 gap-3">
           <Field label="Lowest" htmlFor="fi-min" optional>
-            <Input id="fi-min" type="number" value={field.validation?.min ?? ""} onChange={(e) => onChange({ ...field, validation: { ...field.validation, min: e.target.value === "" ? null : Number(e.target.value) } })} />
+            <Input
+              id="fi-min"
+              type="number"
+              value={field.validation?.min ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...field,
+                  validation: {
+                    ...field.validation,
+                    min: e.target.value === "" ? null : Number(e.target.value),
+                  },
+                })
+              }
+            />
           </Field>
           <Field label="Highest" htmlFor="fi-max" optional>
-            <Input id="fi-max" type="number" value={field.validation?.max ?? ""} onChange={(e) => onChange({ ...field, validation: { ...field.validation, max: e.target.value === "" ? null : Number(e.target.value) } })} />
+            <Input
+              id="fi-max"
+              type="number"
+              value={field.validation?.max ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...field,
+                  validation: {
+                    ...field.validation,
+                    max: e.target.value === "" ? null : Number(e.target.value),
+                  },
+                })
+              }
+            />
           </Field>
         </div>
       )}
@@ -192,7 +270,11 @@ function Inspector({ field, onChange }: { field: FormField; onChange: (f: FormFi
         <div className="rounded-card border border-border bg-surface-muted/50 p-3.5">
           <Switch
             label="Required"
-            description={field.type === "consent" ? "People must tick this to submit." : "People must answer before submitting."}
+            description={
+              field.type === "consent"
+                ? "People must tick this to submit."
+                : "People must answer before submitting."
+            }
             checked={field.required}
             onCheckedChange={(required) => onChange({ ...field, required })}
           />
@@ -239,7 +321,11 @@ function CanvasItem({
         aria-label={`Edit ${field.label || fieldMeta[field.type].label}`}
         aria-pressed={selected}
         onClick={onSelect}
-        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && e.target === e.currentTarget && (e.preventDefault(), onSelect())}
+        onKeyDown={(e) =>
+          (e.key === "Enter" || e.key === " ") &&
+          e.target === e.currentTarget &&
+          (e.preventDefault(), onSelect())
+        }
         className="cursor-pointer rounded-card p-4 pl-10 focus-visible:outline-2 focus-visible:outline-ring"
       >
         {/* Inputs are for show only in the builder. */}
@@ -253,7 +339,9 @@ function CanvasItem({
         onPointerDown={(e) => controls.start(e)}
         className={cn(
           "absolute top-3 left-2 grid size-7 cursor-grab touch-none place-items-center rounded-xs text-faint-foreground transition-opacity hover:text-foreground active:cursor-grabbing",
-          selected ? "opacity-100" : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100",
+          selected
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100",
         )}
       >
         <GripVertical className="size-4" />
@@ -261,16 +349,30 @@ function CanvasItem({
       <div
         className={cn(
           "absolute -top-3.5 right-3 flex items-center rounded-control border border-border bg-surface-raised p-0.5 shadow-sm transition-all",
-          selected ? "opacity-100" : "pointer-events-none translate-y-1 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100",
+          selected
+            ? "opacity-100"
+            : "pointer-events-none translate-y-1 opacity-0 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100",
         )}
       >
         <Tooltip content="Move up">
-          <Button variant="ghost" size="icon-xs" aria-label="Move up" disabled={index === 0} onClick={() => onMove(-1)}>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label="Move up"
+            disabled={index === 0}
+            onClick={() => onMove(-1)}
+          >
             <ArrowUp />
           </Button>
         </Tooltip>
         <Tooltip content="Move down">
-          <Button variant="ghost" size="icon-xs" aria-label="Move down" disabled={index === count - 1} onClick={() => onMove(1)}>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label="Move down"
+            disabled={index === count - 1}
+            onClick={() => onMove(1)}
+          >
             <ArrowDown />
           </Button>
         </Tooltip>
@@ -280,7 +382,13 @@ function CanvasItem({
           </Button>
         </Tooltip>
         <Tooltip content="Delete">
-          <Button variant="ghost" size="icon-xs" aria-label="Delete question" onClick={onRemove} className="hover:text-danger">
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label="Delete question"
+            onClick={onRemove}
+            className="hover:text-danger"
+          >
             <Trash2 />
           </Button>
         </Tooltip>
@@ -289,17 +397,30 @@ function CanvasItem({
   );
 }
 
-function LivePreview({ form, fields }: { form: { title: string; description: string }; fields: FormField[] }) {
+function LivePreview({
+  form,
+  fields,
+}: {
+  form: { title: string; description: string };
+  fields: FormField[];
+}) {
   const [answers, setAnswers] = React.useState<Record<string, Answer>>({});
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardContent className="grid gap-7 p-6 sm:p-10">
         <div className="grid gap-2">
           <h2 className="text-heading-lg font-semibold">{form.title || "Untitled form"}</h2>
-          {form.description && <p className="whitespace-pre-wrap text-md text-muted-foreground">{form.description}</p>}
+          {form.description && (
+            <p className="text-md whitespace-pre-wrap text-muted-foreground">{form.description}</p>
+          )}
         </div>
         {fields.map((f) => (
-          <FieldInput key={f.id} field={f} value={answers[f.id]} onChange={(v) => setAnswers((a) => ({ ...a, [f.id]: v }))} />
+          <FieldInput
+            key={f.id}
+            field={f}
+            value={answers[f.id]}
+            onChange={(v) => setAnswers((a) => ({ ...a, [f.id]: v }))}
+          />
         ))}
         <Button size="lg" className="w-full sm:w-fit" disabled>
           Submit
@@ -317,8 +438,16 @@ export function FormBuilder({ form, readOnly }: { form: Form; readOnly?: boolean
   const [selected, setSelected] = React.useState<string | null>(null);
   const [mode, setMode] = React.useState<"build" | "preview">("build");
 
-  const draft = React.useMemo(() => ({ title: title.trim(), description: description.trim() || null, fields }), [title, description, fields]);
-  const save = useAutosave(draft, (d) => updateForm({ id: form.id, title: d.title || undefined, description: d.description, fields: d.fields }), { enabled: !readOnly });
+  const draft = React.useMemo(
+    () => ({ title: title.trim(), description: description.trim() || null, fields }),
+    [title, description, fields],
+  );
+  const save = useAutosave(
+    draft,
+    (d) =>
+      updateForm({ id: form.id, title: d.title || undefined, description: d.description, fields: d.fields }),
+    { enabled: !readOnly },
+  );
 
   const current = fields.find((f) => f.id === selected) ?? null;
   const update = (f: FormField) => setFields(fields.map((x) => (x.id === f.id ? f : x)));
@@ -348,11 +477,22 @@ export function FormBuilder({ form, readOnly }: { form: Form; readOnly?: boolean
 
       <AnimatePresence mode="wait" initial={false}>
         {mode === "preview" ? (
-          <motion.div key="preview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+          <motion.div
+            key="preview"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+          >
             <LivePreview form={{ title, description }} fields={fields} />
           </motion.div>
         ) : (
-          <motion.div key="build" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="grid gap-page lg:grid-cols-[minmax(0,1fr)_22rem]">
+          <motion.div
+            key="build"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="grid gap-page lg:grid-cols-[minmax(0,1fr)_22rem]"
+          >
             <Card>
               <CardContent className="grid gap-5 p-4 sm:p-6">
                 <div className="grid gap-2 rounded-card p-2">
@@ -380,11 +520,18 @@ export function FormBuilder({ form, readOnly }: { form: Form; readOnly?: boolean
                 {fields.length === 0 ? (
                   <div className="grid justify-items-center gap-3 rounded-card border-2 border-dashed border-border-strong px-6 py-12 text-center">
                     <p className="font-medium">Your form is empty</p>
-                    <p className="max-w-sm text-sm text-muted-foreground">Add your first question. You can reorder, change and remove questions any time.</p>
+                    <p className="max-w-sm text-sm text-muted-foreground">
+                      Add your first question. You can reorder, change and remove questions any time.
+                    </p>
                     {!readOnly && <AddQuestionMenu onAdd={add} variant="primary" />}
                   </div>
                 ) : (
-                  <Reorder.Group axis="y" values={fields} onReorder={readOnly ? () => {} : setFields} className="grid gap-3">
+                  <Reorder.Group
+                    axis="y"
+                    values={fields}
+                    onReorder={readOnly ? () => {} : setFields}
+                    className="grid gap-3"
+                  >
                     {fields.map((f, i) => (
                       <CanvasItem
                         key={f.id}
@@ -399,7 +546,11 @@ export function FormBuilder({ form, readOnly }: { form: Form; readOnly?: boolean
                           setFields(next);
                         }}
                         onDuplicate={() => {
-                          const copy = { ...f, id: uid(), options: f.options?.map((o) => ({ ...o, id: uid() })) ?? null };
+                          const copy = {
+                            ...f,
+                            id: uid(),
+                            options: f.options?.map((o) => ({ ...o, id: uid() })) ?? null,
+                          };
                           const next = [...fields];
                           next.splice(i + 1, 0, copy);
                           setFields(next);
@@ -421,18 +572,31 @@ export function FormBuilder({ form, readOnly }: { form: Form; readOnly?: boolean
               </CardContent>
             </Card>
 
-            <aside className="lg:sticky lg:top-[calc(var(--spacing-topbar)+1rem)] lg:self-start" aria-label="Question settings">
+            <aside
+              className="lg:sticky lg:top-[calc(var(--spacing-topbar)+1rem)] lg:self-start"
+              aria-label="Question settings"
+            >
               <Card>
                 <CardContent className="p-5">
                   <AnimatePresence mode="wait" initial={false}>
-                    <motion.div key={current?.id ?? "none"} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.18 }}>
+                    <motion.div
+                      key={current?.id ?? "none"}
+                      initial={{ opacity: 0, x: 8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -8 }}
+                      transition={{ duration: 0.18 }}
+                    >
                       {current && !readOnly ? (
                         <Inspector field={current} onChange={update} />
                       ) : (
                         <div className="grid gap-2 py-6 text-center">
-                          <p className="font-medium">{readOnly ? "This form is read-only" : "Select a question to edit it"}</p>
+                          <p className="font-medium">
+                            {readOnly ? "This form is read-only" : "Select a question to edit it"}
+                          </p>
                           <p className="text-sm text-muted-foreground">
-                            {readOnly ? "You can view this form but your role can’t change it." : "Click any question on the left. Its settings appear here."}
+                            {readOnly
+                              ? "You can view this form but your role can’t change it."
+                              : "Click any question on the left. Its settings appear here."}
                           </p>
                         </div>
                       )}

@@ -11,7 +11,13 @@ import { DataTable, type ServerTableState } from "@/components/data-table/data-t
 import { columnHelper } from "@/components/data-table/features";
 import { useModals } from "@/components/modals/modal-provider";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useAction } from "@/hooks/use-action";
 import { formatDateTime, formatNumber, formatPercent, formatRelative } from "@/lib/format";
@@ -21,7 +27,8 @@ import { campaignStatusLabels, clickRate, openRate, type CampaignSummary } from 
 
 const col = columnHelper<CampaignSummary>();
 
-const hrefFor = (c: CampaignSummary) => (c.status === "draft" ? `/campaigns/${c.id}/edit` : `/campaigns/${c.id}`);
+const hrefFor = (c: CampaignSummary) =>
+  c.status === "draft" ? `/campaigns/${c.id}/edit` : `/campaigns/${c.id}`;
 
 function when(c: CampaignSummary) {
   if (c.sentAt) return `Sent ${formatDateTime(c.sentAt)}`;
@@ -34,7 +41,10 @@ function RowMenu({ c }: { c: CampaignSummary }) {
   const modals = useModals();
   const canManage = usePermission("campaigns:manage");
   const canSend = usePermission("campaigns:send");
-  const duplicate = useAction(duplicateCampaign, { success: "Copy created", onSuccess: (r) => router.push(`/campaigns/${r.id}/edit`) });
+  const duplicate = useAction(duplicateCampaign, {
+    success: "Copy created",
+    onSuccess: (r) => router.push(`/campaigns/${r.id}/edit`),
+  });
   const unschedule = useAction(unscheduleCampaign, { success: "Schedule cancelled. It’s a draft again." });
   const remove = useAction(deleteCampaign, { success: "Draft deleted" });
   if (!canManage) return null;
@@ -42,7 +52,12 @@ function RowMenu({ c }: { c: CampaignSummary }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${c.name}`} onClick={(e) => e.stopPropagation()}>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={`Actions for ${c.name}`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
@@ -61,7 +76,14 @@ function RowMenu({ c }: { c: CampaignSummary }) {
             <DropdownMenuItem
               tone="danger"
               onSelect={async () => {
-                if (await modals.confirm({ tone: "danger", title: `Delete “${c.name}”?`, description: "This draft will be removed.", confirmLabel: "Delete draft" }))
+                if (
+                  await modals.confirm({
+                    tone: "danger",
+                    title: `Delete “${c.name}”?`,
+                    description: "This draft will be removed.",
+                    confirmLabel: "Delete draft",
+                  })
+                )
                   await remove.run({ id: c.id });
               }}
             >
@@ -74,7 +96,15 @@ function RowMenu({ c }: { c: CampaignSummary }) {
   );
 }
 
-export function CampaignsTable({ page, server, emptyAction }: { page: CampaignSummary[]; server: ServerTableState; emptyAction?: React.ReactNode }) {
+export function CampaignsTable({
+  page,
+  server,
+  emptyAction,
+}: {
+  page: CampaignSummary[];
+  server: ServerTableState;
+  emptyAction?: React.ReactNode;
+}) {
   const router = useRouter();
   const columns = React.useMemo(
     () => [
@@ -84,7 +114,9 @@ export function CampaignsTable({ page, server, emptyAction }: { page: CampaignSu
         cell: ({ row }) => (
           <div className="grid max-w-md min-w-0">
             <span className="truncate font-medium">{row.original.name}</span>
-            <span className="truncate text-xs text-muted-foreground">{row.original.subject ?? "No subject yet"}</span>
+            <span className="truncate text-xs text-muted-foreground">
+              {row.original.subject ?? "No subject yet"}
+            </span>
           </div>
         ),
       }),
@@ -115,7 +147,11 @@ export function CampaignsTable({ page, server, emptyAction }: { page: CampaignSu
       col.accessor("updatedAt", {
         header: ({ header }) => <ColumnHeader header={header} title="Date" />,
         meta: { label: "Date" },
-        cell: ({ row }) => <span className="text-muted-foreground" suppressHydrationWarning>{when(row.original)}</span>,
+        cell: ({ row }) => (
+          <span className="text-muted-foreground" suppressHydrationWarning>
+            {when(row.original)}
+          </span>
+        ),
       }),
       col.display({
         id: "actions",
@@ -138,7 +174,11 @@ export function CampaignsTable({ page, server, emptyAction }: { page: CampaignSu
       renderMobileRow={(row) => {
         const c = row.original;
         return (
-          <button type="button" onClick={() => router.push(hrefFor(c))} className="grid w-full gap-1.5 p-3.5 text-left">
+          <button
+            type="button"
+            onClick={() => router.push(hrefFor(c))}
+            className="grid w-full gap-1.5 p-3.5 text-left"
+          >
             <span className="flex items-center justify-between gap-2">
               <span className="truncate font-medium">{c.name}</span>
               <StatusBadge status={c.status} label={campaignStatusLabels[c.status]} />

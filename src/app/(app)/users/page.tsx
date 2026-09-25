@@ -14,7 +14,15 @@ export default async function AdminsPage({ searchParams }: PageProps<"/users">) 
     <AdminsTable
       page={result.data}
       roles={roles}
-      server={{ total: result.meta.total, page: result.meta.page, pageSize: result.meta.pageSize, q: params.q, sort: params.sort, dir: params.dir, filtered: Boolean(params.status || params.roleId) }}
+      server={{
+        total: result.meta.total,
+        page: result.meta.page,
+        pageSize: result.meta.pageSize,
+        q: params.q,
+        sort: params.sort,
+        dir: params.dir,
+        filtered: Boolean(params.status || params.roleId),
+      }}
     />
   );
 }

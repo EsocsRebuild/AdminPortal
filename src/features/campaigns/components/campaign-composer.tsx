@@ -42,7 +42,13 @@ import { useAutosave } from "@/hooks/use-autosave";
 import { formatDateTime, formatNumber } from "@/lib/format";
 import { cn, pluralize } from "@/lib/utils";
 
-import { estimateRecipients, scheduleCampaign, sendCampaignNow, sendTestEmail, updateCampaign } from "../actions";
+import {
+  estimateRecipients,
+  scheduleCampaign,
+  sendCampaignNow,
+  sendTestEmail,
+  updateCampaign,
+} from "../actions";
 import { readyToSendSchema } from "../schemas";
 import type { Campaign, SenderProfile } from "../types";
 
@@ -100,7 +106,10 @@ export function CampaignComposer({
   );
 
   // Live recipient estimate.
-  const [estimate, setEstimate] = React.useState<{ count: number; loading: boolean }>({ count: campaign.recipientCount ?? 0, loading: false });
+  const [estimate, setEstimate] = React.useState<{ count: number; loading: boolean }>({
+    count: campaign.recipientCount ?? 0,
+    loading: false,
+  });
   React.useEffect(() => {
     let cancelled = false;
     const t = setTimeout(async () => {
@@ -116,7 +125,9 @@ export function CampaignComposer({
 
   const readiness = React.useMemo(() => {
     const r = readyToSendSchema.safeParse({ ...setup, listIds, content });
-    const issues = r.success ? [] : r.error.issues.map((i) => ({ step: issueStep[String(i.path[0])] ?? "content", message: i.message }));
+    const issues = r.success
+      ? []
+      : r.error.issues.map((i) => ({ step: issueStep[String(i.path[0])] ?? "content", message: i.message }));
     // One message per field keeps the checklist short.
     return issues.filter((i, idx) => issues.findIndex((j) => j.message === i.message) === idx);
   }, [setup, listIds, content]);
@@ -134,7 +145,8 @@ export function CampaignComposer({
     if (content.blocks.length > 0) {
       const ok = await modals.confirm({
         title: `Use “${t.name}”?`,
-        description: "This replaces the current content of the email. Your set-up and audience stay the same.",
+        description:
+          "This replaces the current content of the email. Your set-up and audience stay the same.",
         confirmLabel: "Replace content",
       });
       if (!ok) return;
@@ -177,9 +189,7 @@ export function CampaignComposer({
           )}
           {current === "content" && (
             <div className="grid gap-5">
-              {templates.length > 0 && (
-                <TemplateStrip templates={templates} onPick={applyTemplate} />
-              )}
+              {templates.length > 0 && <TemplateStrip templates={templates} onPick={applyTemplate} />}
               <EmailEditor
                 value={content}
                 onChange={setContent}
@@ -213,7 +223,12 @@ export function CampaignComposer({
       {/* Step navigation */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/85 backdrop-blur-xl lg:left-[var(--spacing-sidebar)] lg:rail:left-[var(--spacing-rail)]">
         <div className="mx-auto flex max-w-app items-center justify-between gap-3 px-gutter py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-          <Button variant="ghost" leftIcon={<ArrowLeft />} disabled={stepIndex === 0} onClick={() => go(steps[stepIndex - 1].id)}>
+          <Button
+            variant="ghost"
+            leftIcon={<ArrowLeft />}
+            disabled={stepIndex === 0}
+            onClick={() => go(steps[stepIndex - 1].id)}
+          >
             Back
           </Button>
           <span className="hidden text-sm text-muted-foreground sm:block">
@@ -237,7 +252,14 @@ function SetupStep({
   onChange,
   sender,
 }: {
-  setup: { name: string; subject: string; previewText: string; fromName: string; fromEmail: string; replyTo: string };
+  setup: {
+    name: string;
+    subject: string;
+    previewText: string;
+    fromName: string;
+    fromEmail: string;
+    replyTo: string;
+  };
   onChange: (s: typeof setup) => void;
   sender: SenderProfile;
 }) {
@@ -249,10 +271,28 @@ function SetupStep({
         <CardHeader title="The basics" description="What people see in their inbox before they open it." />
         <CardContent className="grid gap-5">
           <Field label="Campaign name" htmlFor="c-name" hint="Only you and your team see this.">
-            <Input id="c-name" value={setup.name} onChange={(e) => set("name", e.target.value)} maxLength={100} aria-describedby="c-name-msg" />
+            <Input
+              id="c-name"
+              value={setup.name}
+              onChange={(e) => set("name", e.target.value)}
+              maxLength={100}
+              aria-describedby="c-name-msg"
+            />
           </Field>
-          <Field label="Subject line" htmlFor="c-subject" hint={`${setup.subject.length}/150 · Short and specific works best.`}>
-            <Input id="c-subject" autoFocus placeholder="e.g. Join us for Harvest Thanksgiving this Sunday" value={setup.subject} onChange={(e) => set("subject", e.target.value)} maxLength={150} aria-describedby="c-subject-msg" />
+          <Field
+            label="Subject line"
+            htmlFor="c-subject"
+            hint={`${setup.subject.length}/150 · Short and specific works best.`}
+          >
+            <Input
+              id="c-subject"
+              autoFocus
+              placeholder="e.g. Join us for Harvest Thanksgiving this Sunday"
+              value={setup.subject}
+              onChange={(e) => set("subject", e.target.value)}
+              maxLength={150}
+              aria-describedby="c-subject-msg"
+            />
           </Field>
           <div className="-mt-3 flex flex-wrap items-center gap-1.5">
             <span className="text-xs text-muted-foreground">Personalise:</span>
@@ -267,8 +307,19 @@ function SetupStep({
               </button>
             ))}
           </div>
-          <Field label="Preview text" htmlFor="c-preview" optional hint="Shown after the subject in most inboxes.">
-            <Input id="c-preview" value={setup.previewText} onChange={(e) => set("previewText", e.target.value)} maxLength={150} aria-describedby="c-preview-msg" />
+          <Field
+            label="Preview text"
+            htmlFor="c-preview"
+            optional
+            hint="Shown after the subject in most inboxes."
+          >
+            <Input
+              id="c-preview"
+              value={setup.previewText}
+              onChange={(e) => set("previewText", e.target.value)}
+              maxLength={150}
+              aria-describedby="c-preview-msg"
+            />
           </Field>
         </CardContent>
       </Card>
@@ -276,7 +327,12 @@ function SetupStep({
         <CardHeader title="Sender" />
         <CardContent className="grid gap-5">
           <Field label="From name" htmlFor="c-fromName">
-            <Input id="c-fromName" value={setup.fromName} onChange={(e) => set("fromName", e.target.value)} maxLength={80} />
+            <Input
+              id="c-fromName"
+              value={setup.fromName}
+              onChange={(e) => set("fromName", e.target.value)}
+              maxLength={80}
+            />
           </Field>
           <Field label="From address" htmlFor="c-fromEmail">
             {verified.length ? (
@@ -303,7 +359,12 @@ function SetupStep({
             )}
           </Field>
           <Field label="Replies go to" htmlFor="c-replyTo" optional>
-            <Input id="c-replyTo" type="email" value={setup.replyTo} onChange={(e) => set("replyTo", e.target.value)} />
+            <Input
+              id="c-replyTo"
+              type="email"
+              value={setup.replyTo}
+              onChange={(e) => set("replyTo", e.target.value)}
+            />
           </Field>
         </CardContent>
       </Card>
@@ -322,7 +383,8 @@ function AudienceStep({
   onChange: (ids: string[]) => void;
   estimate: { count: number; loading: boolean };
 }) {
-  const toggle = (id: string, on: boolean) => onChange(on ? [...listIds, id] : listIds.filter((x) => x !== id));
+  const toggle = (id: string, on: boolean) =>
+    onChange(on ? [...listIds, id] : listIds.filter((x) => x !== id));
   return (
     <div className="grid gap-page lg:grid-cols-[minmax(0,1fr)_20rem]">
       <Card>
@@ -346,12 +408,18 @@ function AudienceStep({
                     on ? "border-primary/50 bg-primary-soft/40" : "border-border hover:border-border-strong",
                   )}
                 >
-                  <Checkbox checked={on} onCheckedChange={(v) => toggle(a.id, v === true)} aria-label={a.name} />
+                  <Checkbox
+                    checked={on}
+                    onCheckedChange={(v) => toggle(a.id, v === true)}
+                    aria-label={a.name}
+                  />
                   <span className="grid flex-1">
                     <span className="font-medium">{a.name}</span>
                     {a.description && <span className="text-sm text-muted-foreground">{a.description}</span>}
                   </span>
-                  <span className="text-sm text-muted-foreground tabular">{formatNumber(a.subscriberCount)}</span>
+                  <span className="tabular text-sm text-muted-foreground">
+                    {formatNumber(a.subscriberCount)}
+                  </span>
                 </label>
               );
             })
@@ -364,12 +432,13 @@ function AudienceStep({
             <UsersRound className="size-5" />
           </span>
           <p className="text-sm text-muted-foreground">This email will go to</p>
-          <p className="flex items-center gap-2 text-metric font-semibold tabular" aria-live="polite">
+          <p className="flex items-center gap-2 tabular text-metric font-semibold" aria-live="polite">
             {formatNumber(estimate.count)}
             {estimate.loading && <Spinner className="size-4 text-muted-foreground" />}
           </p>
           <p className="text-sm text-muted-foreground">
-            people. Anyone on more than one list gets it once, and people who unsubscribed are left out automatically.
+            people. Anyone on more than one list gets it once, and people who unsubscribed are left out
+            automatically.
           </p>
         </CardContent>
       </Card>
@@ -383,7 +452,7 @@ function TemplateStrip({ templates, onPick }: { templates: Template[]; onPick: (
       <h3 className="flex items-center gap-2 text-sm font-medium">
         <LayoutTemplate className="size-4 text-muted-foreground" /> Start from a template
       </h3>
-      <div className="scrollbar-none mask-fade-x -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
+      <div className="-mx-1 scrollbar-none flex gap-3 overflow-x-auto mask-fade-x px-1 pb-1">
         {templates.map((t) => (
           <button
             key={t.id}
@@ -392,7 +461,9 @@ function TemplateStrip({ templates, onPick }: { templates: Template[]; onPick: (
             className="w-44 shrink-0 cursor-pointer overflow-hidden rounded-card border border-border bg-surface text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring"
           >
             <EmailThumbnail document={t.content} className="h-24" size="sm" />
-            <span className="block truncate border-t border-border-subtle px-3 py-2 text-sm font-medium">{t.name}</span>
+            <span className="block truncate border-t border-border-subtle px-3 py-2 text-sm font-medium">
+              {t.name}
+            </span>
           </button>
         ))}
       </div>
@@ -520,7 +591,10 @@ function ReviewStep({
         </Card>
 
         <Card>
-          <CardHeader title="Send a test" description="See exactly what people will get. Up to 5 addresses, separated by commas." />
+          <CardHeader
+            title="Send a test"
+            description="See exactly what people will get. Up to 5 addresses, separated by commas."
+          />
           <CardContent>
             <form
               className="flex flex-col gap-2 sm:flex-row"
@@ -530,12 +604,27 @@ function ReviewStep({
                 await test.run({ id: campaign.id, emails: testTo.split(/[,\s]+/).filter(Boolean) });
               }}
             >
-              <Input type="text" inputMode="email" placeholder="you@example.com" value={testTo} onChange={(e) => setTestTo(e.target.value)} aria-label="Test email addresses" />
-              <Button type="submit" variant="secondary" leftIcon={<SendHorizontal />} loading={test.pending} disabled={!testTo.trim()}>
+              <Input
+                type="text"
+                inputMode="email"
+                placeholder="you@example.com"
+                value={testTo}
+                onChange={(e) => setTestTo(e.target.value)}
+                aria-label="Test email addresses"
+              />
+              <Button
+                type="submit"
+                variant="secondary"
+                leftIcon={<SendHorizontal />}
+                loading={test.pending}
+                disabled={!testTo.trim()}
+              >
                 Send test
               </Button>
             </form>
-            {test.errorFor("emails") && <p className="mt-1.5 text-xs text-danger">{test.errorFor("emails")}</p>}
+            {test.errorFor("emails") && (
+              <p className="mt-1.5 text-xs text-danger">{test.errorFor("emails")}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -543,7 +632,10 @@ function ReviewStep({
           <CardHeader title="Send it" />
           <CardContent className="grid gap-4">
             {!canSend ? (
-              <Alert tone="info">Your role can prepare campaigns but not send them. Ask an administrator with sending rights to review and send it.</Alert>
+              <Alert tone="info">
+                Your role can prepare campaigns but not send them. Ask an administrator with sending rights to
+                review and send it.
+              </Alert>
             ) : (
               <>
                 <SegmentedControl
@@ -556,8 +648,19 @@ function ReviewStep({
                   ]}
                 />
                 {mode === "schedule" && (
-                  <Field label="Date and time" htmlFor="c-when" hint={`In your local time zone (${Intl.DateTimeFormat().resolvedOptions().timeZone}).`}>
-                    <Input id="c-when" type="datetime-local" min={minWhen} value={when} onChange={(e) => setWhen(e.target.value)} aria-describedby="c-when-msg" />
+                  <Field
+                    label="Date and time"
+                    htmlFor="c-when"
+                    hint={`In your local time zone (${Intl.DateTimeFormat().resolvedOptions().timeZone}).`}
+                  >
+                    <Input
+                      id="c-when"
+                      type="datetime-local"
+                      min={minWhen}
+                      value={when}
+                      onChange={(e) => setWhen(e.target.value)}
+                      aria-describedby="c-when-msg"
+                    />
                   </Field>
                 )}
                 <Button

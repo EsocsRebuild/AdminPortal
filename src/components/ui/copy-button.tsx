@@ -13,18 +13,35 @@ export function CopyButton({
   copiedLabel = "Copied",
   iconOnly = false,
   ...props
-}: Omit<ButtonProps, "onClick"> & { value: string; label?: string; copiedLabel?: string; iconOnly?: boolean }) {
+}: Omit<ButtonProps, "onClick"> & {
+  value: string;
+  label?: string;
+  copiedLabel?: string;
+  iconOnly?: boolean;
+}) {
   const { copied, copy } = useCopy();
   return (
     <Button
       variant="secondary"
       size={iconOnly ? "icon-sm" : "sm"}
       aria-label={iconOnly ? (copied ? copiedLabel : label) : undefined}
-      leftIcon={iconOnly ? undefined : copied ? <Check className="animate-scale-in text-success" /> : <Copy />}
+      leftIcon={
+        iconOnly ? undefined : copied ? <Check className="animate-scale-in text-success" /> : <Copy />
+      }
       onClick={() => copy(value)}
       {...props}
     >
-      {iconOnly ? copied ? <Check className="animate-scale-in text-success" /> : <Copy /> : copied ? copiedLabel : label}
+      {iconOnly ? (
+        copied ? (
+          <Check className="animate-scale-in text-success" />
+        ) : (
+          <Copy />
+        )
+      ) : copied ? (
+        copiedLabel
+      ) : (
+        label
+      )}
     </Button>
   );
 }

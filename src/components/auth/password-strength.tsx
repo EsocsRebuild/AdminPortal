@@ -31,7 +31,9 @@ export function PasswordStrength({ password, id }: { password: string; id?: stri
             </span>
           ))}
         </div>
-        <span className="w-16 text-right text-xs font-medium text-muted-foreground">{password ? level.label : ""}</span>
+        <span className="w-16 text-right text-xs font-medium text-muted-foreground">
+          {password ? level.label : ""}
+        </span>
       </div>
       <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5">
         {passwordRules.map((r) => {

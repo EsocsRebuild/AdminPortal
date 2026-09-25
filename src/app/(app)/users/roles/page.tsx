@@ -24,7 +24,10 @@ export default async function RolesPage() {
       <Stagger className="grid gap-page sm:grid-cols-2 xl:grid-cols-3">
         {roles.map((r) => (
           <StaggerItem key={r.id}>
-            <Link href={`/users/roles/${r.id}`} className="block h-full rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+            <Link
+              href={`/users/roles/${r.id}`}
+              className="block h-full rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
               <Card interactive className="h-full gap-4 p-card">
                 <div className="flex items-start gap-3">
                   <span className="grid size-10 shrink-0 place-items-center rounded-card bg-primary-soft text-primary-soft-foreground">
@@ -35,11 +38,14 @@ export default async function RolesPage() {
                       {r.name}
                       {r.system && <Badge tone="outline">Built-in</Badge>}
                     </span>
-                    <span className="line-clamp-2 text-sm text-muted-foreground">{r.description ?? "No description"}</span>
+                    <span className="line-clamp-2 text-sm text-muted-foreground">
+                      {r.description ?? "No description"}
+                    </span>
                   </div>
                 </div>
                 <p className="mt-auto text-sm text-muted-foreground">
-                  {pluralize(r.userCount, "person", "people")} · {pluralize(r.permissions.length, "permission")}
+                  {pluralize(r.userCount, "person", "people")} ·{" "}
+                  {pluralize(r.permissions.length, "permission")}
                 </p>
               </Card>
             </Link>

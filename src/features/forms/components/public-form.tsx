@@ -44,7 +44,12 @@ export function PublicForm({ form }: { form: PublicFormData }) {
       return;
     }
     setPending(true);
-    const res = await submitFormResponse({ slug: form.slug, answers, website: honeypot, startedAt: startedAt.current });
+    const res = await submitFormResponse({
+      slug: form.slug,
+      answers,
+      website: honeypot,
+      startedAt: startedAt.current,
+    });
     setPending(false);
     if (res.ok) {
       if (form.settings.redirectUrl && /^https:\/\//i.test(form.settings.redirectUrl)) {
@@ -55,7 +60,8 @@ export function PublicForm({ form }: { form: PublicFormData }) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    if (res.fieldErrors) setErrors(Object.fromEntries(Object.entries(res.fieldErrors).map(([k, v]) => [k, v?.[0]])));
+    if (res.fieldErrors)
+      setErrors(Object.fromEntries(Object.entries(res.fieldErrors).map(([k, v]) => [k, v?.[0]])));
     setBanner(res.message);
   }
 
@@ -63,7 +69,9 @@ export function PublicForm({ form }: { form: PublicFormData }) {
     return (
       <div className="grid gap-2 py-6 text-center">
         <h1 className="text-heading-lg font-semibold">{form.title}</h1>
-        <p className="text-md text-muted-foreground">This form is closed and no longer accepting responses. Thank you for your interest.</p>
+        <p className="text-md text-muted-foreground">
+          This form is closed and no longer accepting responses. Thank you for your interest.
+        </p>
       </div>
     );
   }
@@ -81,13 +89,19 @@ export function PublicForm({ form }: { form: PublicFormData }) {
         >
           <SuccessCheck />
           <h1 className="text-heading-lg font-semibold">{form.settings.confirmationTitle}</h1>
-          {form.settings.confirmationMessage && <p className="max-w-md text-md whitespace-pre-wrap text-muted-foreground">{form.settings.confirmationMessage}</p>}
+          {form.settings.confirmationMessage && (
+            <p className="max-w-md text-md whitespace-pre-wrap text-muted-foreground">
+              {form.settings.confirmationMessage}
+            </p>
+          )}
         </motion.div>
       ) : (
         <motion.form key="form" exit={{ opacity: 0 }} onSubmit={submit} noValidate className="grid gap-7">
           <header className="grid gap-2">
             <h1 className="text-heading-lg font-semibold">{form.title}</h1>
-            {form.description && <p className="text-md whitespace-pre-wrap text-muted-foreground">{form.description}</p>}
+            {form.description && (
+              <p className="text-md whitespace-pre-wrap text-muted-foreground">{form.description}</p>
+            )}
             {form.fields.some((f) => f.required) && (
               <p className="text-sm text-muted-foreground">
                 Questions marked <span className="text-danger">*</span> are required.
@@ -96,12 +110,26 @@ export function PublicForm({ form }: { form: PublicFormData }) {
           </header>
           {banner && <Alert tone="danger">{banner}</Alert>}
           {form.fields.map((f) => (
-            <FieldInput key={f.id} field={f} value={answers[f.id]} onChange={(v) => set(f.id, v)} error={errors[f.id]} disabled={pending} />
+            <FieldInput
+              key={f.id}
+              field={f}
+              value={answers[f.id]}
+              onChange={(v) => set(f.id, v)}
+              error={errors[f.id]}
+              disabled={pending}
+            />
           ))}
           {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
           <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
             <label htmlFor="website">Website</label>
-            <input id="website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+            <input
+              id="website"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
           </div>
           <Button type="submit" size="lg" loading={pending} className="w-full sm:w-fit sm:min-w-40">
             {form.settings.submitLabel}

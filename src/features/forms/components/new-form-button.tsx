@@ -6,7 +6,15 @@ import * as React from "react";
 
 import { Can } from "@/components/auth/session-provider";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogBody, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useAction } from "@/hooks/use-action";
@@ -40,11 +48,30 @@ export function NewFormButton() {
           >
             <DialogHeader>
               <DialogTitle>New form</DialogTitle>
-              <DialogDescription>For registrations, surveys, prayer requests, volunteer sign-ups… anything.</DialogDescription>
+              <DialogDescription>
+                For registrations, surveys, prayer requests, volunteer sign-ups… anything.
+              </DialogDescription>
             </DialogHeader>
             <DialogBody>
-              <Field label="Form title" htmlFor="nf-title" error={error} hint="People see this at the top of the form.">
-                <Input id="nf-title" autoFocus placeholder="e.g. Youth camp registration" value={title} onChange={(e) => { setTitle(e.target.value); setError(undefined); }} aria-invalid={!!error} aria-describedby="nf-title-msg" maxLength={150} />
+              <Field
+                label="Form title"
+                htmlFor="nf-title"
+                error={error}
+                hint="People see this at the top of the form."
+              >
+                <Input
+                  id="nf-title"
+                  autoFocus
+                  placeholder="e.g. Youth camp registration"
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                    setError(undefined);
+                  }}
+                  aria-invalid={!!error}
+                  aria-describedby="nf-title-msg"
+                  maxLength={150}
+                />
               </Field>
             </DialogBody>
             <DialogFooter>
