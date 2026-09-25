@@ -1,18 +1,40 @@
-import { rolePermissions } from "@/config/permissions";
-import type { Permission, SessionUser } from "@/types/auth";
+/**
+ * Permissions are granted by the backend per user (via their role) and
+ * returned with the session. The portal only reads them: every page and
+ * action re-checks on the server, and the API enforces them again.
+ */
+export const permissions = [
+  "dashboard:view",
+  "members:view",
+  "members:manage",
+  "members:export",
+  "campaigns:view",
+  "campaigns:manage",
+  "campaigns:send",
+  "audiences:view",
+  "audiences:manage",
+  "templates:manage",
+  "forms:view",
+  "forms:manage",
+  "users:view",
+  "users:manage",
+  "roles:manage",
+  "audit:view",
+  "settings:manage",
+] as const;
 
-type Subject = Pick<SessionUser, "role"> | null | undefined;
+export type Permission = (typeof permissions)[number];
+
+type Subject = { permissions: readonly string[] } | null | undefined;
 
 export function can(user: Subject, permission: Permission) {
-  if (!user) return false;
-  const granted = rolePermissions[user.role];
-  return granted === "*" || granted.includes(permission);
+  return !!user && user.permissions.includes(permission);
 }
 
-export function canAny(user: Subject, permissions: Permission[]) {
-  return permissions.some((p) => can(user, p));
+export function canAny(user: Subject, list: Permission[]) {
+  return list.some((p) => can(user, p));
 }
 
-export function canAll(user: Subject, permissions: Permission[]) {
-  return permissions.every((p) => can(user, p));
+export function canAll(user: Subject, list: Permission[]) {
+  return list.every((p) => can(user, p));
 }

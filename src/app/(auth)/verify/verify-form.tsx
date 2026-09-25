@@ -1,9 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, MailCheck } from "lucide-react";
+import { MailCheck } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { AuthHeader } from "@/components/auth/auth-header";
@@ -12,27 +11,32 @@ import { SuccessCheck } from "@/components/motion/success-check";
 import { Button } from "@/components/ui/button";
 import { OtpInput } from "@/components/ui/otp-input";
 import { toast } from "@/components/ui/toaster";
+import { resendVerification, verifyEmail } from "@/features/auth/actions";
 import { useCountdown } from "@/hooks/use-countdown";
-import { sleep } from "@/lib/utils";
 
-export function VerifyForm() {
-  const email = useSearchParams().get("email") ?? "your email";
+export function VerifyForm({ maskedEmail }: { maskedEmail: string }) {
   const [code, setCode] = React.useState("");
-  const [state, setState] = React.useState<"idle" | "checking" | "wrong" | "done">("idle");
+  const [state, setState] = React.useState<"idle" | "checking" | "done">("idle");
+  const [error, setError] = React.useState<string | null>(null);
   const [attempt, setAttempt] = React.useState(0);
-  const resend = useCountdown(30);
+  const resend = useCountdown(45);
 
   async function check(value: string) {
     setState("checking");
-    await sleep(700); // TODO: POST /auth/verify
-    // Demo: 000000 is treated as a wrong code.
-    if (value === "000000") {
-      setState("wrong");
-      setAttempt((n) => n + 1);
-      setCode("");
-      return;
-    }
-    setState("done");
+    setError(null);
+    const res = await verifyEmail({ code: value });
+    if (res.ok) return setState("done");
+    setState("idle");
+    setError(res.code === "VALIDATION" ? "That code didn’t work. Check the email and try again." : res.message);
+    setAttempt((n) => n + 1);
+    setCode("");
+  }
+
+  async function sendAgain() {
+    resend.restart();
+    const res = await resendVerification({});
+    if (res.ok) toast.success("New code sent", { description: `Check ${maskedEmail}.` });
+    else toast.error(res.message);
   }
 
   return (
@@ -47,14 +51,13 @@ export function VerifyForm() {
         >
           <SuccessCheck />
           <div className="grid gap-2">
-            <h1 className="text-heading-lg font-semibold">You’re all set</h1>
+            <h1 className="text-heading-lg font-semibold">Email confirmed</h1>
             <p className="text-md text-muted-foreground">
-              Your email is confirmed. An administrator will approve your access shortly. We’ll email you as
-              soon as they do.
+              Your request is now with an administrator. We’ll email you as soon as your access is approved.
             </p>
           </div>
-          <Button size="lg" fullWidth asChild rightIcon={<ArrowRight />}>
-            <Link href="/dashboard">Take a look around</Link>
+          <Button size="lg" fullWidth variant="secondary" asChild>
+            <Link href="/login">Back to sign in</Link>
           </Button>
         </motion.div>
       ) : (
@@ -64,8 +67,8 @@ export function VerifyForm() {
             title="Check your email"
             description={
               <>
-                We sent a 6-digit code to{" "}
-                <span className="font-medium break-all text-foreground">{email}</span>. Enter it below.
+                We sent a 6-digit code to <span className="font-medium text-foreground">{maskedEmail}</span>. It
+                expires in 15 minutes.
               </>
             }
           />
@@ -75,28 +78,20 @@ export function VerifyForm() {
                 value={code}
                 onChange={(v) => {
                   setCode(v);
-                  if (state === "wrong") setState("idle");
+                  setError(null);
                 }}
                 onComplete={check}
-                invalid={state === "wrong"}
+                invalid={!!error}
                 disabled={state === "checking"}
                 autoFocus
               />
             </div>
             <p aria-live="polite" className="min-h-5 text-sm">
               {state === "checking" && <span className="text-muted-foreground">Checking your code…</span>}
-              {state === "wrong" && (
-                <span className="text-danger">That code didn’t work. Check the email and try again.</span>
-              )}
+              {error && <span className="text-danger">{error}</span>}
             </p>
           </div>
-          <Button
-            size="lg"
-            fullWidth
-            loading={state === "checking"}
-            disabled={code.length < 6}
-            onClick={() => check(code)}
-          >
+          <Button size="lg" fullWidth loading={state === "checking"} disabled={code.length < 6} onClick={() => check(code)}>
             Confirm email
           </Button>
           <p className="text-center text-base text-muted-foreground">
@@ -105,10 +100,7 @@ export function VerifyForm() {
               <button
                 type="button"
                 className="cursor-pointer font-medium text-primary underline-offset-4 hover:underline"
-                onClick={() => {
-                  resend.restart();
-                  toast.success("New code sent", { description: `Check ${email}.` });
-                }}
+                onClick={sendAgain}
               >
                 send a new code
               </button>

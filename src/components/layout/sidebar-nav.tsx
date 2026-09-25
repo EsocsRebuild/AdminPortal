@@ -5,30 +5,18 @@ import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 
-import { useSession } from "@/components/auth/session-provider";
 import { Spinner } from "@/components/ui/spinner";
 import { Tooltip } from "@/components/ui/tooltip";
-import { activeNavItem, navigation, type NavItem } from "@/config/navigation";
+import { activeNavItem, type NavItem } from "@/config/navigation";
 import { usePreference } from "@/hooks/use-preference";
-import { can } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
 
+import { useVisibleNavigation } from "./shell-context";
+
 /** Spinner shown while a clicked link's page is still loading. */
-function PendingHint({ badge, rail }: { badge?: string; rail: boolean }) {
+function PendingHint() {
   const { pending } = useLinkStatus();
-  if (pending) return <Spinner className="size-3.5 text-sidebar-muted" label="Loading page" />;
-  if (!badge) return null;
-  return (
-    <span
-      className={cn(
-        "rounded-full bg-primary-soft px-1.5 tabular text-2xs font-semibold text-primary-soft-foreground",
-        rail &&
-          "lg:rail:absolute lg:rail:top-1.5 lg:rail:right-1.5 lg:rail:size-2 lg:rail:bg-primary lg:rail:p-0 lg:rail:text-[0px]",
-      )}
-    >
-      {badge}
-    </span>
-  );
+  return pending ? <Spinner className="size-3.5 text-sidebar-muted" label="Loading page" /> : null;
 }
 
 function NavLink({
@@ -82,8 +70,8 @@ function NavLink({
           )}
         />
         <span className={cn("relative flex-1 truncate", rail && "lg:rail:sr-only")}>{item.title}</span>
-        <span className="relative flex items-center">
-          <PendingHint badge={item.badge} rail={rail} />
+        <span className={cn("relative flex items-center", rail && "lg:rail:absolute lg:rail:top-1 lg:rail:right-1")}>
+          <PendingHint />
         </span>
       </Link>
     </Tooltip>
@@ -96,7 +84,7 @@ function NavLink({
  */
 export function SidebarNav({ rail = false, onNavigate }: { rail?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
-  const user = useSession();
+  const groups = useVisibleNavigation();
   const [sidebar] = usePreference("sidebar");
   const collapsed = rail && sidebar === "collapsed";
   const active = activeNavItem(pathname);
@@ -105,9 +93,7 @@ export function SidebarNav({ rail = false, onNavigate }: { rail?: boolean; onNav
   return (
     <LayoutGroup id={indicatorId}>
       <nav aria-label="Main" className="grid gap-6">
-        {navigation.map((group) => {
-          const items = group.items.filter((item) => !item.permission || can(user, item.permission));
-          if (items.length === 0) return null;
+        {groups.map(({ items, ...group }) => {
           return (
             <div key={group.title} className="grid gap-0.5">
               <p

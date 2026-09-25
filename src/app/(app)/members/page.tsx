@@ -1,20 +1,45 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
-import { Page } from "@/components/layout/page";
-import { members } from "@/lib/fixtures";
-
-import { MembersView } from "./_components/members-view";
+import { Can } from "@/components/auth/session-provider";
+import { Page, PageHeader } from "@/components/layout/page";
+import { getParishes } from "@/features/lookups/queries";
+import { MemberCreateLauncher } from "@/features/members/components/member-create-launcher";
+import { MembersTable } from "@/features/members/components/members-table";
+import { listMembers } from "@/features/members/queries";
+import { memberStatuses } from "@/features/members/types";
+import { enumParam, idParam, parseListParams } from "@/lib/list-params";
+import { pluralize } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Members" };
 
-export default function MembersPage() {
-  // TODO: fetch from the API, e.g. `await api.get<Paginated<Member>>("/members")`.
+export default async function MembersPage({ searchParams }: PageProps<"/members">) {
+  const params = parseListParams(await searchParams, { status: enumParam(memberStatuses), parishId: idParam });
+  const [result, parishes] = await Promise.all([listMembers(params), getParishes()]);
+
   return (
     <Page>
-      <Suspense>
-        <MembersView members={members} />
-      </Suspense>
+      <PageHeader
+        title="Members"
+        description={`${pluralize(result.meta.total, "person", "people")}${params.q || params.status || params.parishId ? " match your filters" : " registered"}.`}
+        actions={
+          <Can permission="members:manage">
+            <MemberCreateLauncher parishes={parishes} />
+          </Can>
+        }
+      />
+      <MembersTable
+        page={result.data}
+        parishes={parishes}
+        server={{
+          total: result.meta.total,
+          page: result.meta.page,
+          pageSize: result.meta.pageSize,
+          q: params.q,
+          sort: params.sort,
+          dir: params.dir,
+          filtered: Boolean(params.status || params.parishId),
+        }}
+      />
     </Page>
   );
 }

@@ -11,6 +11,19 @@ const statusTones: Record<string, Tone> = {
   pending: "warning",
   draft: "neutral",
   scheduled: "info",
+  sending: "info",
+  invited: "info",
+  subscribed: "success",
+  verified: "success",
+  delivered: "success",
+  unsubscribed: "neutral",
+  closed: "neutral",
+  paused: "warning",
+  bounced: "danger",
+  complained: "danger",
+  critical: "danger",
+  warning: "warning",
+  info: "info",
   inactive: "neutral",
   archived: "neutral",
   suspended: "danger",
@@ -18,11 +31,11 @@ const statusTones: Record<string, Tone> = {
   rejected: "danger",
 };
 
-export function StatusBadge({ status, className }: { status: string; className?: string }) {
+export function StatusBadge({ status, label, className }: { status: string; label?: string; className?: string }) {
   const tone = statusTones[status] ?? "neutral";
   return (
-    <Badge tone={tone} dot className={className}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+    <Badge tone={tone} dot={status === "sending" ? "pulse" : true} className={className}>
+      {label ?? (status.charAt(0).toUpperCase() + status.slice(1)).replace(/_/g, " ")}
     </Badge>
   );
 }

@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 
 import { Providers } from "@/components/theme/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { fontVariables } from "@/lib/fonts";
-import { demoUser } from "@/lib/fixtures";
 import { preferencesScript } from "@/lib/preferences";
 import { absoluteUrl } from "@/lib/utils";
 
@@ -15,8 +15,9 @@ export const metadata: Metadata = {
   title: { default: siteConfig.product, template: `%s · ${siteConfig.product}` },
   description: siteConfig.description,
   applicationName: siteConfig.product,
-  // Internal tool: keep it out of search engines.
-  robots: { index: false, follow: false },
+  // Internal software: never index.
+  robots: { index: false, follow: false, nocache: true },
+  referrer: "strict-origin-when-cross-origin",
 };
 
 export const viewport: Viewport = {
@@ -29,16 +30,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
-  // TODO: replace demoUser with the real session (e.g. from a cookie) once auth is wired up.
-  const user = demoUser;
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Per-request CSP nonce from the proxy; inline scripts must carry it.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: preferencesScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: preferencesScript }} />
       </head>
       <body>
-        <Providers user={user}>
+        <Providers nonce={nonce}>
           {children}
           <Toaster />
         </Providers>

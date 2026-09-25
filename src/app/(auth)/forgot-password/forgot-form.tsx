@@ -12,7 +12,7 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toaster";
 import { useCountdown } from "@/hooks/use-countdown";
-import { sleep } from "@/lib/utils";
+import { requestPasswordReset } from "@/features/auth/actions";
 
 export function ForgotForm() {
   const [email, setEmail] = React.useState("");
@@ -25,8 +25,9 @@ export function ForgotForm() {
     e.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) return setError("Enter the email you use to sign in.");
     setPending(true);
-    await sleep(700); // TODO: POST /auth/forgot-password
+    const res = await requestPasswordReset({ email });
     setPending(false);
+    if (!res.ok) return setError(res.fieldErrors?.email?.[0] ?? res.message);
     resend.restart();
     setSent(true);
   }
@@ -56,7 +57,7 @@ export function ForgotForm() {
             <ol className="grid gap-3 rounded-card bg-surface-muted p-4 text-sm text-muted-foreground">
               {[
                 "Open the email from ESOCS Admin",
-                "Tap “Choose a new password”",
+                "Select “Choose a new password”",
                 "Sign in with your new password",
               ].map((t, i) => (
                 <li key={t} className="flex items-center gap-3">
@@ -67,18 +68,17 @@ export function ForgotForm() {
                 </li>
               ))}
             </ol>
-            <Button size="lg" fullWidth asChild>
-              <Link href="/reset-password">I have the link, continue</Link>
-            </Button>
             <p className="text-center text-base text-muted-foreground">
               Nothing yet?{" "}
               {resend.done ? (
                 <button
                   type="button"
                   className="cursor-pointer font-medium text-primary underline-offset-4 hover:underline"
-                  onClick={() => {
+                  onClick={async () => {
                     resend.restart();
-                    toast.success("Email sent again");
+                    const res = await requestPasswordReset({ email });
+                    if (res.ok) toast.success("Email sent again");
+                    else toast.error(res.message);
                   }}
                 >
                   Send it again

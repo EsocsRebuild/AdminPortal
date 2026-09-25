@@ -11,16 +11,20 @@ import {
   HandCoins,
   Mail,
   Phone,
+  ShieldCheck,
   UserRound,
   UserRoundPlus,
+  type LucideIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import type { z } from "zod";
 
 import { AuthHeader } from "@/components/auth/auth-header";
 import { PasswordInput } from "@/components/auth/password-input";
-import { passwordScore, PasswordStrength } from "@/components/auth/password-strength";
+import { PasswordStrength } from "@/components/auth/password-strength";
 import { easeOutExpo } from "@/components/motion/reveal";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field } from "@/components/ui/field";
@@ -28,86 +32,65 @@ import { Input } from "@/components/ui/input";
 import { RadioCard } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Stepper } from "@/components/ui/stepper";
-import { sleep } from "@/lib/utils";
+import { signUp } from "@/features/auth/actions";
+import { signUpStep1, signUpStep2, signUpStep3 } from "@/features/auth/schemas";
+import type { PublicParish, PublicRole } from "@/features/auth/types";
 
-const parishes = [
-  "Mount Zion, Lagos",
-  "Holy Trinity, Ibadan",
-  "Seraph Temple, Abuja",
-  "Cherub Cathedral, Kaduna",
-  "Grace Parish, Port Harcourt",
-  "Bethel, Abeokuta",
-];
-
-const roles = [
-  {
-    value: "parish_admin",
-    icon: Church,
-    title: "Parish administrator",
-    text: "Manage members and events for a parish.",
-  },
-  { value: "finance", icon: HandCoins, title: "Finance", text: "Record giving and see financial reports." },
-  {
-    value: "editor",
-    icon: BookOpenText,
-    title: "Content editor",
-    text: "Publish sermons, news and announcements.",
-  },
-  { value: "viewer", icon: Eye, title: "Just looking", text: "View information without making changes." },
-];
+const roleIcons: Record<string, LucideIcon> = {
+  church: Church,
+  finance: HandCoins,
+  editor: BookOpenText,
+  viewer: Eye,
+  admin: ShieldCheck,
+};
 
 const steps = [
-  { label: "About you", title: "Let’s get you set up", description: "It takes about two minutes." },
+  { label: "About you", title: "Request an account", description: "It takes about two minutes. An administrator will approve it." },
   { label: "Your church", title: "Where do you serve?", description: "This decides what you’ll see first." },
   { label: "Security", title: "Create a password", description: "You’ll use it with your email to sign in." },
 ];
+
+const schemas = [signUpStep1, signUpStep2, signUpStep3] as const;
 
 type Form = {
   name: string;
   email: string;
   phone: string;
-  parish: string;
-  role: string;
+  parishId: string;
+  requestedRoleId: string;
   password: string;
   confirm: string;
   terms: boolean;
 };
+type Errors = Partial<Record<keyof Form, string>>;
 
-function validate(step: number, f: Form) {
-  const e: Partial<Record<keyof Form, string>> = {};
-  if (step === 0) {
-    if (f.name.trim().split(/\s+/).length < 2) e.name = "Please enter your first and last name.";
-    if (!/^\S+@\S+\.\S+$/.test(f.email)) e.email = "That email doesn’t look right. Check for typos.";
+function firstErrors(error: z.ZodError): Errors {
+  const out: Errors = {};
+  for (const issue of error.issues) {
+    const key = issue.path[0] as keyof Form;
+    if (!out[key]) out[key] = issue.message;
   }
-  if (step === 1) {
-    if (!f.parish) e.parish = "Choose the parish you serve in.";
-    if (!f.role) e.role = "Choose what you’ll mostly do.";
-  }
-  if (step === 2) {
-    if (passwordScore(f.password) < 3)
-      e.password = "Make your password a little stronger (see the list below).";
-    if (f.confirm !== f.password) e.confirm = "The two passwords don’t match yet.";
-    if (!f.terms) e.terms = "Please agree to continue.";
-  }
-  return e;
+  return out;
 }
 
-export function SignupFlow() {
+export function SignupFlow({ parishes, roles }: { parishes: PublicParish[]; roles: PublicRole[] }) {
   const router = useRouter();
   const [step, setStep] = React.useState(0);
   const [direction, setDirection] = React.useState(1);
   const [pending, setPending] = React.useState(false);
-  const [errors, setErrors] = React.useState<Partial<Record<keyof Form, string>>>({});
+  const [banner, setBanner] = React.useState<string | null>(null);
+  const [errors, setErrors] = React.useState<Errors>({});
   const [form, setForm] = React.useState<Form>({
     name: "",
     email: "",
     phone: "",
-    parish: "",
-    role: "",
+    parishId: "",
+    requestedRoleId: "",
     password: "",
     confirm: "",
     terms: false,
   });
+
   const set = <K extends keyof Form>(key: K, value: Form[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
@@ -116,23 +99,42 @@ export function SignupFlow() {
   const go = (next: number) => {
     setDirection(next > step ? 1 : -1);
     setErrors({});
+    setBanner(null);
     setStep(next);
+  };
+
+  const focusFirst = (found: Errors) => {
+    const first = Object.keys(found)[0];
+    if (first) requestAnimationFrame(() => document.getElementById(`su-${first}`)?.focus());
   };
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const found = validate(step, form);
-    setErrors(found);
-    if (Object.keys(found).length) {
-      // Move focus to the first problem so it's easy to fix.
-      const first = Object.keys(found)[0];
-      document.getElementById(`su-${first}`)?.focus();
+    const parsed = schemas[step].safeParse(form);
+    if (!parsed.success) {
+      const found = firstErrors(parsed.error);
+      setErrors(found);
+      focusFirst(found);
       return;
     }
     if (step < steps.length - 1) return go(step + 1);
+
     setPending(true);
-    await sleep(800); // TODO: POST /auth/signup
-    router.push(`/verify?email=${encodeURIComponent(form.email)}`);
+    const res = await signUp({ ...form, terms: form.terms as true });
+    if (res.ok) return router.push(res.data.redirectTo);
+    setPending(false);
+    if (res.fieldErrors) {
+      const found = Object.fromEntries(Object.entries(res.fieldErrors).map(([k, v]) => [k, v?.[0]])) as Errors;
+      // Jump back to the step that owns the first server-side error.
+      const owner = [signUpStep1, signUpStep2].findIndex((s) => Object.keys(found).some((k) => k in s.shape));
+      if (owner >= 0 && owner !== step) {
+        setDirection(-1);
+        setStep(owner);
+      }
+      setErrors(found);
+      focusFirst(found);
+    }
+    setBanner(res.code === "CONFLICT" ? "An account with this email already exists. Try signing in instead." : res.message);
   }
 
   const s = steps[step];
@@ -144,18 +146,14 @@ export function SignupFlow() {
       <AnimatePresence mode="wait" initial={false} custom={direction}>
         <motion.div
           key={step}
-          custom={direction}
           initial={{ opacity: 0, x: direction * 24 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: direction * -24 }}
           transition={{ duration: 0.3, ease: easeOutExpo }}
           className="grid gap-6"
         >
-          <AuthHeader
-            icon={step === 0 ? <UserRoundPlus /> : undefined}
-            title={s.title}
-            description={s.description}
-          />
+          <AuthHeader icon={step === 0 ? <UserRoundPlus /> : undefined} title={s.title} description={s.description} />
+          {banner && <Alert tone="danger">{banner}</Alert>}
 
           {step === 0 && (
             <div className="grid gap-4">
@@ -166,19 +164,15 @@ export function SignupFlow() {
                   autoComplete="name"
                   autoFocus
                   prefix={<UserRound />}
-                  placeholder="e.g. Adaeze Okafor"
+                  placeholder="First and last name"
                   value={form.name}
                   onChange={(e) => set("name", e.target.value)}
                   aria-invalid={!!errors.name}
                   aria-describedby="su-name-msg"
+                  maxLength={120}
                 />
               </Field>
-              <Field
-                label="Email address"
-                htmlFor="su-email"
-                error={errors.email}
-                hint="We’ll send a short code here to confirm it’s you."
-              >
+              <Field label="Email address" htmlFor="su-email" error={errors.email} hint="We’ll send a short code here to confirm it’s you.">
                 <Input
                   id="su-email"
                   type="email"
@@ -192,7 +186,7 @@ export function SignupFlow() {
                   aria-describedby="su-email-msg"
                 />
               </Field>
-              <Field label="Phone number" htmlFor="su-phone" optional>
+              <Field label="Phone number" htmlFor="su-phone" optional error={errors.phone}>
                 <Input
                   id="su-phone"
                   type="tel"
@@ -202,6 +196,8 @@ export function SignupFlow() {
                   placeholder="+234 800 000 0000"
                   value={form.phone}
                   onChange={(e) => set("phone", e.target.value)}
+                  aria-invalid={!!errors.phone}
+                  aria-describedby="su-phone-msg"
                 />
               </Field>
             </div>
@@ -209,20 +205,15 @@ export function SignupFlow() {
 
           {step === 1 && (
             <div className="grid gap-5">
-              <Field label="Parish" htmlFor="su-parish" error={errors.parish}>
-                <Select value={form.parish} onValueChange={(v) => set("parish", v)}>
-                  <SelectTrigger
-                    id="su-parish"
-                    size="lg"
-                    aria-invalid={!!errors.parish}
-                    aria-describedby="su-parish-msg"
-                  >
+              <Field label="Parish" htmlFor="su-parishId" error={errors.parishId}>
+                <Select value={form.parishId} onValueChange={(v) => set("parishId", v)}>
+                  <SelectTrigger id="su-parishId" size="lg" aria-invalid={!!errors.parishId} aria-describedby="su-parishId-msg">
                     <SelectValue placeholder="Choose your parish" />
                   </SelectTrigger>
                   <SelectContent>
                     {parishes.map((p) => (
-                      <SelectItem key={p} value={p}>
-                        {p}
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -233,31 +224,34 @@ export function SignupFlow() {
                   What will you mostly do?
                 </p>
                 <RadioPrimitive.Root
-                  id="su-role"
-                  value={form.role}
-                  onValueChange={(v) => set("role", v)}
+                  id="su-requestedRoleId"
+                  value={form.requestedRoleId}
+                  onValueChange={(v) => set("requestedRoleId", v)}
                   aria-labelledby="su-role-label"
-                  aria-describedby={errors.role ? "su-role-msg" : undefined}
+                  aria-describedby={errors.requestedRoleId ? "su-role-msg" : undefined}
                   className="grid gap-2"
                 >
-                  {roles.map((r) => (
-                    <RadioCard key={r.value} value={r.value} className="group flex items-center gap-3.5 p-3">
-                      <span className="grid size-9 shrink-0 place-items-center rounded-control bg-surface-muted text-muted-foreground transition-colors duration-200 group-data-[state=checked]:bg-primary group-data-[state=checked]:text-primary-foreground">
-                        <r.icon className="size-[1.125rem]" />
-                      </span>
-                      <span className="grid gap-0.5">
-                        <span className="text-base font-medium">{r.title}</span>
-                        <span className="text-sm text-muted-foreground">{r.text}</span>
-                      </span>
-                    </RadioCard>
-                  ))}
+                  {roles.map((r) => {
+                    const Icon = roleIcons[r.icon] ?? UserRound;
+                    return (
+                      <RadioCard key={r.id} value={r.id} className="group flex items-center gap-3.5 p-3">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-control bg-surface-muted text-muted-foreground transition-colors duration-200 group-data-[state=checked]:bg-primary group-data-[state=checked]:text-primary-foreground">
+                          <Icon className="size-[1.125rem]" />
+                        </span>
+                        <span className="grid gap-0.5">
+                          <span className="text-base font-medium">{r.name}</span>
+                          <span className="text-sm text-muted-foreground">{r.description}</span>
+                        </span>
+                      </RadioCard>
+                    );
+                  })}
                 </RadioPrimitive.Root>
-                {errors.role && (
+                {errors.requestedRoleId && (
                   <p id="su-role-msg" role="alert" className="text-xs text-danger">
-                    {errors.role}
+                    {errors.requestedRoleId}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground">An administrator will confirm your access.</p>
+                <p className="text-xs text-muted-foreground">An administrator confirms every request before access is granted.</p>
               </div>
             </div>
           )}
@@ -274,6 +268,7 @@ export function SignupFlow() {
                   onChange={(e) => set("password", e.target.value)}
                   aria-invalid={!!errors.password}
                   aria-describedby="su-password-msg su-strength"
+                  maxLength={128}
                 />
               </Field>
               <PasswordStrength id="su-strength" password={form.password} />
@@ -286,6 +281,7 @@ export function SignupFlow() {
                   onChange={(e) => set("confirm", e.target.value)}
                   aria-invalid={!!errors.confirm}
                   aria-describedby="su-confirm-msg"
+                  maxLength={128}
                 />
               </Field>
               <div className="grid gap-1.5">
@@ -309,13 +305,7 @@ export function SignupFlow() {
 
       <div className="flex items-center gap-3">
         {step > 0 && (
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={() => go(step - 1)}
-            leftIcon={<ArrowLeft />}
-            disabled={pending}
-          >
+          <Button variant="ghost" size="lg" onClick={() => go(step - 1)} leftIcon={<ArrowLeft />} disabled={pending}>
             Back
           </Button>
         )}
@@ -326,7 +316,7 @@ export function SignupFlow() {
           loading={pending}
           rightIcon={step < steps.length - 1 ? <ArrowRight /> : undefined}
         >
-          {step < steps.length - 1 ? "Continue" : pending ? "Creating your account…" : "Create account"}
+          {step < steps.length - 1 ? "Continue" : pending ? "Sending your request…" : "Request account"}
         </Button>
       </div>
     </form>

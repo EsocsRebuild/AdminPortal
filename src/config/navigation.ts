@@ -1,32 +1,30 @@
 import {
-  BarChart3,
-  Building2,
-  CalendarDays,
-  Church,
-  FileText,
-  HandCoins,
+
+  FormInput,
   LayoutDashboard,
-  Megaphone,
+  LayoutTemplate,
+  Mail,
   Palette,
   ScrollText,
   Settings,
   ShieldCheck,
   Users,
+  UsersRound,
   type LucideIcon,
 } from "lucide-react";
 
-import type { Permission } from "@/types/auth";
+import type { Permission } from "@/lib/permissions";
 
 export interface NavItem {
   title: string;
   href: string;
   icon: LucideIcon;
-  /** Hidden unless the user has this permission. */
+  /** Hidden unless the user holds this permission. The page re-checks on the server. */
   permission?: Permission;
-  /** Small count or label on the right, e.g. pending approvals. */
-  badge?: string;
-  /** Shown in the command palette. */
+  /** Extra words the command menu matches on. */
   keywords?: string[];
+  /** Only listed when the design system is enabled. */
+  devOnly?: boolean;
 }
 
 export interface NavGroup {
@@ -37,77 +35,31 @@ export interface NavGroup {
 export const navigation: NavGroup[] = [
   {
     title: "Overview",
+    items: [{ title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, permission: "dashboard:view", keywords: ["home"] }],
+  },
+  {
+    title: "People",
+    items: [{ title: "Members", href: "/members", icon: Users, permission: "members:view", keywords: ["people", "congregation"] }],
+  },
+  {
+    title: "Email marketing",
     items: [
-      { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard, permission: "dashboard:view" },
-      {
-        title: "Reports",
-        href: "/reports",
-        icon: BarChart3,
-        permission: "reports:view",
-        keywords: ["analytics"],
-      },
+      { title: "Campaigns", href: "/campaigns", icon: Mail, permission: "campaigns:view", keywords: ["newsletter", "email", "send"] },
+      { title: "Audiences", href: "/audiences", icon: UsersRound, permission: "audiences:view", keywords: ["lists", "contacts", "subscribers"] },
+      { title: "Templates", href: "/templates", icon: LayoutTemplate, permission: "templates:manage", keywords: ["design", "layout"] },
     ],
   },
   {
-    title: "Church",
-    items: [
-      {
-        title: "Members",
-        href: "/members",
-        icon: Users,
-        permission: "members:view",
-        badge: "12",
-        keywords: ["people"],
-      },
-      {
-        title: "Parishes",
-        href: "/parishes",
-        icon: Church,
-        permission: "parishes:view",
-        keywords: ["branches"],
-      },
-      { title: "Clergy", href: "/clergy", icon: Building2, permission: "clergy:view" },
-      {
-        title: "Events",
-        href: "/events",
-        icon: CalendarDays,
-        permission: "events:view",
-        keywords: ["calendar"],
-      },
-    ],
-  },
-  {
-    title: "Operations",
-    items: [
-      {
-        title: "Finance",
-        href: "/finance",
-        icon: HandCoins,
-        permission: "finance:view",
-        keywords: ["tithes", "giving"],
-      },
-      {
-        title: "Content",
-        href: "/content",
-        icon: FileText,
-        permission: "content:view",
-        keywords: ["sermons", "news"],
-      },
-      {
-        title: "Communications",
-        href: "/communications",
-        icon: Megaphone,
-        permission: "communications:send",
-      },
-    ],
+    title: "Forms",
+    items: [{ title: "Forms", href: "/forms", icon: FormInput, permission: "forms:view", keywords: ["survey", "registration", "responses"] }],
   },
   {
     title: "Administration",
     items: [
-      { title: "Users & roles", href: "/users", icon: ShieldCheck, permission: "users:manage" },
-      { title: "Audit log", href: "/audit-log", icon: ScrollText, permission: "audit:view" },
-      { title: "Settings", href: "/settings", icon: Settings },
-      { title: "Design system", href: "/design-system", icon: Palette, keywords: ["components", "ui"] },
+      { title: "Users & roles", href: "/users", icon: ShieldCheck, permission: "users:view", keywords: ["admins", "invite", "permissions"] },
+      { title: "Audit log", href: "/audit-log", icon: ScrollText, permission: "audit:view", keywords: ["history", "activity"] },
+      { title: "Settings", href: "/settings", icon: Settings, keywords: ["profile", "password", "security", "two-factor"] },
+      { title: "Design system", href: "/design-system", icon: Palette, devOnly: true, keywords: ["components"] },
     ],
   },
 ];
@@ -120,3 +72,4 @@ export function activeNavItem(pathname: string) {
     .filter((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
     .sort((a, b) => b.href.length - a.href.length)[0];
 }
+

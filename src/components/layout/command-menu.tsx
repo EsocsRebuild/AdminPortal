@@ -1,7 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Laptop, Moon, PanelLeft, Plus, Rows3, Search, Sun } from "lucide-react";
+import { FormInput, Laptop, MailPlus, Moon, PanelLeft, Rows3, Search, Sun, UserPlus, UserRoundPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import * as React from "react";
@@ -17,17 +17,26 @@ import {
 } from "@/components/ui/command";
 import { DialogOverlay } from "@/components/ui/dialog";
 import { Kbd } from "@/components/ui/kbd";
-import { navigation } from "@/config/navigation";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { setPreference } from "@/hooks/use-preference";
 import { can } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
+
+import { useVisibleNavigation } from "./shell-context";
+
+const quickActions = [
+  { label: "Add a member", href: "/members?new=1", icon: UserRoundPlus, permission: "members:manage" },
+  { label: "Create an email campaign", href: "/campaigns/new", icon: MailPlus, permission: "campaigns:manage" },
+  { label: "Build a form", href: "/forms/new", icon: FormInput, permission: "forms:manage" },
+  { label: "Invite an administrator", href: "/users?invite=1", icon: UserPlus, permission: "users:manage" },
+] as const;
 
 /** Global search and quick actions. Opens with ⌘K or `/`. */
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const user = useSession();
+  const groups = useVisibleNavigation();
   const { setTheme } = useTheme();
 
   useHotkey("mod+k", () => setOpen((o) => !o), { allowInInputs: true });
@@ -74,9 +83,7 @@ export function CommandMenu() {
             <CommandInput placeholder="Search pages and actions…" />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
-              {navigation.map((group) => {
-                const items = group.items.filter((i) => !i.permission || can(user, i.permission));
-                if (items.length === 0) return null;
+              {groups.map(({ items, ...group }) => {
                 return (
                   <CommandGroup key={group.title} heading={group.title}>
                     {items.map((item) => (
@@ -93,11 +100,13 @@ export function CommandMenu() {
                 );
               })}
               <CommandGroup heading="Actions">
-                {can(user, "members:manage") && (
-                  <CommandItem onSelect={() => run(() => router.push("/members?new=1"))}>
-                    <Plus /> Add member
-                  </CommandItem>
-                )}
+                {quickActions
+                  .filter((a) => can(user, a.permission))
+                  .map((a) => (
+                    <CommandItem key={a.href} onSelect={() => run(() => router.push(a.href))}>
+                      <a.icon /> {a.label}
+                    </CommandItem>
+                  ))}
                 <CommandItem onSelect={() => run(() => setTheme("light"))}>
                   <Sun /> Switch to light mode
                 </CommandItem>

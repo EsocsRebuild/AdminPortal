@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LogOut, Monitor, Moon, Palette, Settings, Sun, UserRound } from "lucide-react";
+import { Check, LogOut, Monitor, Moon, Palette, ShieldCheck, Sun, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
@@ -13,13 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { roleLabels } from "@/config/permissions";
+import { signOut } from "@/features/auth/actions";
 import { useMounted } from "@/hooks/use-mounted";
 
 const themes = [
@@ -48,19 +47,19 @@ export function UserMenu() {
           <span className="grid min-w-0">
             <span className="truncate text-base font-semibold text-foreground">{user.name}</span>
             <span className="truncate text-xs text-muted-foreground">{user.email}</span>
-            <span className="mt-1 text-2xs font-medium text-primary">{roleLabels[user.role]}</span>
+            <span className="mt-1 text-2xs font-medium text-primary">{user.role.name}</span>
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link href="/settings/profile">
               <UserRound /> Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
-              <Settings /> Settings <DropdownMenuShortcut>⌘,</DropdownMenuShortcut>
+            <Link href="/settings/security">
+              <ShieldCheck /> Security
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSub>
@@ -78,10 +77,8 @@ export function UserMenu() {
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild tone="danger">
-          <Link href="/login">
-            <LogOut /> Sign out
-          </Link>
+        <DropdownMenuItem tone="danger" onSelect={() => void signOut("manual")}>
+          <LogOut /> Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

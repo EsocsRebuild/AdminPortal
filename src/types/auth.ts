@@ -1,33 +1,14 @@
-export const roles = ["super_admin", "admin", "finance", "editor", "parish_admin", "viewer"] as const;
-export type Role = (typeof roles)[number];
+import type { Permission } from "@/lib/permissions";
 
-/** `<resource>:<action>` */
-export type Permission =
-  | "dashboard:view"
-  | "members:view"
-  | "members:manage"
-  | "parishes:view"
-  | "parishes:manage"
-  | "clergy:view"
-  | "clergy:manage"
-  | "events:view"
-  | "events:manage"
-  | "content:view"
-  | "content:publish"
-  | "finance:view"
-  | "finance:manage"
-  | "communications:send"
-  | "reports:view"
-  | "users:manage"
-  | "audit:view"
-  | "settings:manage";
-
+/** The signed-in admin, as returned by `GET /auth/me`. Safe to send to the client. */
 export interface SessionUser {
   id: string;
   name: string;
   email: string;
-  role: Role;
-  avatarUrl?: string;
-  /** Scope for parish-level admins. */
-  parishId?: string;
+  avatarUrl: string | null;
+  role: { id: string; name: string };
+  permissions: Permission[];
+  mfaEnabled: boolean;
+  /** Parish scope for parish-level admins; null means organisation-wide. */
+  parishId: string | null;
 }

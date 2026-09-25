@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { can } from "@/lib/permissions";
-import type { Permission, SessionUser } from "@/types/auth";
+import { can, type Permission } from "@/lib/permissions";
+import type { SessionUser } from "@/types/auth";
 
 const SessionContext = React.createContext<SessionUser | null>(null);
 
@@ -20,8 +20,8 @@ export function usePermission(permission: Permission) {
 }
 
 /**
- * Render children only when the current user holds `permission`.
- * This hides UI; the API must still enforce the same rule.
+ * Hides UI the user can't use. This is for clarity only: every page and
+ * Server Action re-checks the permission on the server, and the API enforces it.
  */
 export function Can({
   permission,
