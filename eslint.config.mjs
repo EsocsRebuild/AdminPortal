@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "test-results/**",
     "coverage/**",
+    // Local preview tooling, plain Node scripts.
+    "tools/**",
   ]),
 ]);
 

@@ -27,3 +27,6 @@ compose*.yml
 docker-compose*.yml
 .dockerignore
 tsconfig.tsbuildinfo
+
+# Local-only tooling (mock API) never ships in the image.
+tools

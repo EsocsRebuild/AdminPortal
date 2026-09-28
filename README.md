@@ -7,8 +7,18 @@ Administration software for the Eternal Sacred Order of Cherubim & Seraphim: mem
 The portal is a **backend-for-frontend**. It holds no data: every screen reads from the REST API described in [`docs/api-contract.md`](docs/api-contract.md), from the server. Browsers never talk to the API and never see a token.
 
 ```bash
-cp .env.example .env.local        # set BACKEND_API_URL
 npm install
+npm run dev:preview               # portal + mock API → http://localhost:3001
+```
+
+Sign in with **admin@esocs.test / Preview-Password-2026**. Two-step demo: **mfa@esocs.test**, same password, code **123456**.
+
+`dev:preview` starts a **mock API** (`tools/mock-api/`) that follows the API contract with sample data held in memory, so every screen can be explored before the real backend exists. It resets on restart and is never part of the product or the Docker image.
+
+With the real backend:
+
+```bash
+cp .env.example .env.local        # set BACKEND_API_URL
 npm run dev                       # http://localhost:3001
 npm run validate                  # lint + format + typecheck + unit tests
 npm run test:e2e                  # security + public pages at phone/tablet/desktop
@@ -78,6 +88,50 @@ src/
 The API must enforce the same rules on its side: see §2 of the API contract.
 
 ---
+
+## Docker & reverse proxy
+
+```
+Internet ──► nginx (proxy) :80/:443 ──► portal (Next.js standalone) :3000 ──► REST API
+             TLS, rate limits,           non-root, read-only,
+             caching, host checks        not published
+```
+
+| File                | Purpose                                                                                                                                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Dockerfile`        | Multi-stage build (deps → build → ~minimal runtime). Runs as a non-root user with no npm in the image, has a health check, and handles SIGTERM gracefully. The Server Actions key is a BuildKit **secret**, never a layer. |
+| `compose.yml`       | Production stack: `portal` + `proxy` (+ `certbot` profile). Read-only file systems, all capabilities dropped, `no-new-privileges`, resource limits, rotated logs, health-gated start-up.                                   |
+| `compose.local.yml` | The same stack on this machine at `https://localhost:8443` with a self-signed certificate.                                                                                                                                 |
+| `docker/nginx/`     | `nginx.conf`, the site template, snippets (proxy, TLS, real-IP) and the maintenance page.                                                                                                                                  |
+| `docker/scripts/`   | `dev-certs.sh` (self-signed), `init-letsencrypt.sh` (first real certificate).                                                                                                                                              |
+| `Makefile`          | `make help` lists everything: `secrets`, `build`, `up`, `down`, `logs`, `certs-init`, `certs-renew`, `local`.                                                                                                              |
+
+**What the proxy does**
+
+- **TLS:** 1.2/1.3 (Mozilla intermediate) with HTTP/2 and HTTP→HTTPS redirects.
+- **Hostname checks:** unknown hostnames are dropped on :80 and their TLS handshakes rejected on :443.
+- **Rate limits:** per IP generally, 10/min on sign-in POSTs, 6/min on public form submissions and 6/min on CSV exports, plus a cap on concurrent connections.
+- **Slow-client limits:** timeouts against slow-drip attacks and body size limits (5 MB, 256 KB for public forms).
+- **Client IP:** `X-Forwarded-For` is **overwritten** with the real client IP, so the app's rate limits and audit log can't be spoofed.
+- **Caching:** `/_next/static` assets are cached immutably; HTML and data never are.
+- **Logs:** JSON access logs with a request ID that is passed on to the app and the API.
+- **Maintenance page:** shown while the app restarts.
+
+**First deployment**
+
+```bash
+cp .env.docker.example .env        # SERVER_NAME, APP_URL, BACKEND_API_URL…
+make secrets >> .env               # stable Server Actions key
+make certs-init                    # Let's Encrypt (DNS must point here; ports 80/443 open)
+make up
+# daily cron: make certs-renew
+```
+
+**Try it locally:** `make certs-dev`, set the local values shown in `.env.docker.example`, then `make local` and open https://localhost:8443.
+
+> Building the image needs about 4 GB of memory for `next build`. On Docker Desktop, raise **Settings → Resources → Memory** to at least 4 GB.
+
+If a CDN or load balancer sits in front of nginx, enable `docker/nginx/snippets/real-ip.conf` with that provider's IP ranges only.
 
 ## Design system
 

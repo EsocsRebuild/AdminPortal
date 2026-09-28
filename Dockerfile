@@ -37,6 +37,8 @@ ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL} \
     NEXT_PUBLIC_IDLE_TIMEOUT_MINUTES=${NEXT_PUBLIC_IDLE_TIMEOUT_MINUTES} \
     DEPLOYMENT_VERSION=${DEPLOYMENT_VERSION} \
     NODE_ENV=production \
+    # Keep the build within small CI runners and Docker Desktop defaults.
+    NODE_OPTIONS=--max-old-space-size=3072 \
     # Every page renders per request, so the build never calls the API. This
     # placeholder only satisfies env validation; the real URL is set at runtime.
     BACKEND_API_URL=http://build.invalid

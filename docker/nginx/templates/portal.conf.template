@@ -46,6 +46,11 @@ server {
 
   limit_conn conn_per_ip 60;
 
+  # Upstream timeouts (a location may override, e.g. exports).
+  proxy_connect_timeout 5s;
+  proxy_send_timeout 60s;
+  proxy_read_timeout 60s;
+
   # The app sets CSP, HSTS, frame and cache headers itself; nginx doesn't
   # duplicate them (duplicate CSP headers would combine into a stricter policy).
 
@@ -78,6 +83,9 @@ server {
   # Fingerprinted build assets: cache hard, at the edge and in browsers.
   location ^~ /_next/static/ {
     include /etc/nginx/snippets/proxy.conf;
+    # Fingerprinted and immutable: cache whatever the upstream says, send one clean header.
+    proxy_ignore_headers Cache-Control Expires Set-Cookie;
+    proxy_hide_header Cache-Control;
     proxy_cache static;
     proxy_cache_valid 200 30d;
     proxy_cache_use_stale error timeout updating;

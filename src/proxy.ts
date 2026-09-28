@@ -130,7 +130,9 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: "/((?!api/health|_next/static|_next/image|favicon.ico|robots.txt).*)",
+      // Skip assets and metadata files (icons, robots, manifest): they must never redirect to sign-in.
+      source:
+        "/((?!api/health|_next/static|_next/image|favicon.ico|icon.svg|apple-icon|manifest.webmanifest|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml|webmanifest|woff2?)$).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
