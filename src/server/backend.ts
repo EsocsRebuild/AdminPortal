@@ -69,16 +69,23 @@ export function buildQuery(query?: Query) {
 
 async function forwardedHeaders() {
   const h = await headers();
+  const c = await cookies();
+  const scopeUnit = c.get("esocs_scope_unit")?.value;
+
   const out: Record<string, string> = {
     "X-Request-Id": h.get("x-request-id") ?? crypto.randomUUID(),
     "X-Tenant": h.get("x-tenant") ?? env().TENANT_SLUG,
   };
+  if (scopeUnit && scopeUnit !== "null" && scopeUnit !== "") {
+    out["X-Scope-Unit"] = scopeUnit;
+  }
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip");
   if (ip) out["X-Forwarded-For"] = ip;
   const ua = h.get("user-agent");
   if (ua) out["User-Agent"] = ua;
   return out;
 }
+
 
 /** Raw call returning the parsed JSON body (envelope included). */
 export async function backendRaw<T>(path: string, options: BackendOptions = {}): Promise<T> {

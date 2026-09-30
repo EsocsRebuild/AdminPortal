@@ -15,6 +15,10 @@ import { recentAuditEvents } from "@/features/audit/queries";
 import { listCampaigns } from "@/features/campaigns/queries";
 import { campaignStatusLabels, openRate } from "@/features/campaigns/types";
 import { getDashboardSummary } from "@/features/dashboard/queries";
+import { AttendanceChart } from "@/components/charts/attendance-chart";
+import { DistributionDonutChart } from "@/components/charts/distribution-donut";
+import { GivingChart } from "@/components/charts/giving-chart";
+import { MemberStageFunnel } from "@/components/charts/stage-funnel";
 import { ContextualTipCard } from "@/components/ui/contextual-tip-card";
 import { formatNumber, formatPercent, formatRelative } from "@/lib/format";
 import { can } from "@/lib/permissions";
@@ -25,6 +29,7 @@ import { Greeting } from "./_components/greeting";
 import { QuickActions } from "./_components/quick-actions";
 
 export const metadata: Metadata = { title: "Dashboard" };
+
 
 
 export default async function DashboardPage() {
@@ -172,7 +177,20 @@ export default async function DashboardPage() {
           </StaggerItem>
         )}
 
+        {/* Dynamic Interactive Charts: Attendance & Giving */}
+        <StaggerItem className="grid gap-page lg:grid-cols-2">
+          <AttendanceChart />
+          <GivingChart />
+        </StaggerItem>
+
+        {/* Dynamic Demographics & Discipleship Journey */}
+        <StaggerItem className="grid gap-page lg:grid-cols-2">
+          <DistributionDonutChart />
+          <MemberStageFunnel />
+        </StaggerItem>
+
         <StaggerItem className="grid gap-page xl:grid-cols-3">
+
           <Card className={campaigns ? "xl:col-span-2" : "xl:col-span-3"}>
             <CardHeader title="Needs your attention" description="Things waiting on you right now." />
             <CardContent className="grid content-start gap-1">
