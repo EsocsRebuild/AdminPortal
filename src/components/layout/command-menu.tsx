@@ -3,21 +3,27 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {
   FormInput,
+  HeartHandshake,
   Laptop,
+  Lightbulb,
   MailPlus,
   Moon,
   PanelLeft,
   Rows3,
   Search,
+  Sparkles,
   Sun,
   UserPlus,
   UserRoundPlus,
+  UsersRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
 import { useSession } from "@/components/auth/session-provider";
+import { QuickActionsModal, type QuickActionType } from "@/components/modals/quick-actions-modal";
+import { QuickTipsModal } from "@/components/modals/quick-tips-modal";
 import {
   Command,
   CommandEmpty,
@@ -50,6 +56,9 @@ const quickActions = [
 /** Global search and quick actions. Opens with ⌘K or `/`. */
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false);
+  const [quickTipsOpen, setQuickTipsOpen] = React.useState(false);
+  const [quickActionOpen, setQuickActionOpen] = React.useState(false);
+  const [quickActionTab, setQuickActionTab] = React.useState<QuickActionType>("member");
   const router = useRouter();
   const user = useSession();
   const groups = useVisibleNavigation();
@@ -63,9 +72,18 @@ export function CommandMenu() {
     fn();
   };
 
+  const openQuickModal = (tab: QuickActionType) => {
+    setOpen(false);
+    setQuickActionTab(tab);
+    setQuickActionOpen(true);
+  };
+
+
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
-      <DialogPrimitive.Trigger asChild>
+    <>
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        <DialogPrimitive.Trigger asChild>
+
         <button
           type="button"
           className={cn(
@@ -115,6 +133,20 @@ export function CommandMenu() {
                   </CommandGroup>
                 );
               })}
+              <CommandGroup heading="Instant Actions">
+                <CommandItem onSelect={() => { setOpen(false); setQuickTipsOpen(true); }}>
+                  <Lightbulb className="text-amber-500" /> Open Quick Tips & Guided Help
+                </CommandItem>
+                <CommandItem onSelect={() => openQuickModal("member")}>
+                  <UserPlus className="text-primary" /> Quick Add Member (Alt+N)
+                </CommandItem>
+                <CommandItem onSelect={() => openQuickModal("headcount")}>
+                  <UsersRound className="text-emerald-500" /> Record Sunday Headcount (Alt+H)
+                </CommandItem>
+                <CommandItem onSelect={() => openQuickModal("prayer")}>
+                  <HeartHandshake className="text-purple-500" /> Urgent Prayer & Pastoral Care
+                </CommandItem>
+              </CommandGroup>
               <CommandGroup heading="Actions">
                 {quickActions
                   .filter((a) => can(user, a.permission))
@@ -173,5 +205,14 @@ export function CommandMenu() {
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
+
+    <QuickTipsModal open={quickTipsOpen} onOpenChange={setQuickTipsOpen} />
+    <QuickActionsModal
+      open={quickActionOpen}
+      onOpenChange={setQuickActionOpen}
+      initialTab={quickActionTab}
+    />
+    </>
   );
 }
+

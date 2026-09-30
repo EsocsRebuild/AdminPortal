@@ -10,6 +10,9 @@ import { activeNavItem } from "@/config/navigation";
 import { CommandMenu } from "./command-menu";
 import { MobileNav } from "./mobile-nav";
 import { Notifications } from "./notifications";
+import { QuickActionButton } from "./quick-actions-button";
+import { QuickTipsTrigger } from "./quick-tips-button";
+import { UnitSwitcher } from "./unit-switcher";
 import { UserMenu } from "./user-menu";
 
 /** Readable names for sub-pages. Record ids are skipped: the page title already names the record. */
@@ -46,16 +49,21 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-40 flex h-topbar shrink-0 items-center gap-2 border-b border-border bg-background/80 px-gutter backdrop-blur-xl backdrop-saturate-150 supports-[not(backdrop-filter:blur(0))]:bg-background">
       <MobileNav />
+      <UnitSwitcher />
+      <Separator orientation="vertical" className="mx-1 hidden h-5 md:block" />
       <Breadcrumb items={crumbs} className="flex-1" />
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
+        <QuickActionButton />
+        <QuickTipsTrigger />
         <CommandMenu />
-        <Separator orientation="vertical" className="mx-1.5 hidden h-5 md:block" />
+        <Separator orientation="vertical" className="mx-1 hidden h-5 md:block" />
         <Notifications />
         <ThemeToggle className="max-sm:hidden" />
-        <div className="ml-1.5">
+        <div className="ml-1">
           <UserMenu />
         </div>
       </div>
     </header>
   );
 }
+

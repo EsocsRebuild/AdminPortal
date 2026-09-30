@@ -15,6 +15,7 @@ import { recentAuditEvents } from "@/features/audit/queries";
 import { listCampaigns } from "@/features/campaigns/queries";
 import { campaignStatusLabels, openRate } from "@/features/campaigns/types";
 import { getDashboardSummary } from "@/features/dashboard/queries";
+import { ContextualTipCard } from "@/components/ui/contextual-tip-card";
 import { formatNumber, formatPercent, formatRelative } from "@/lib/format";
 import { can } from "@/lib/permissions";
 import { requirePermission } from "@/server/session";
@@ -24,6 +25,7 @@ import { Greeting } from "./_components/greeting";
 import { QuickActions } from "./_components/quick-actions";
 
 export const metadata: Metadata = { title: "Dashboard" };
+
 
 export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
@@ -145,8 +147,18 @@ export default async function DashboardPage() {
         </StaggerItem>
 
         <StaggerItem>
+          <ContextualTipCard
+            id="sunday_readiness"
+            title="Sunday Service Operations: Fast Track"
+            description="Record today's attendance in under 30 seconds with Quick Action (Alt+H) or intake first-time guests (Alt+N)."
+            actionText="Quick Guide & Tips"
+          />
+        </StaggerItem>
+
+        <StaggerItem>
           <QuickActions user={user} />
         </StaggerItem>
+
 
         <StaggerItem>
           <GettingStarted steps={steps} />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Can } from "@/components/auth/session-provider";
 import { Page, PageHeader } from "@/components/layout/page";
+import { ContextualTipCard } from "@/components/ui/contextual-tip-card";
 import { getParishes } from "@/features/lookups/queries";
 import { MemberCreateLauncher } from "@/features/members/components/member-create-launcher";
 import { MembersTable } from "@/features/members/components/members-table";
@@ -30,7 +31,15 @@ export default async function MembersPage({ searchParams }: PageProps<"/members"
           </Can>
         }
       />
+      <ContextualTipCard
+        id="members_fast_intake"
+        title="Fast Member Registration & Visitor Tracking"
+        description="During Sunday service, quickly record first-time visitors with Alt+N. Scoped to your active parish automatically."
+        actionText="View Guide"
+        className="mb-4"
+      />
       <MembersTable
+
         page={result.data}
         parishes={parishes}
         server={{
