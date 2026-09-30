@@ -51,7 +51,7 @@ export interface Campaign extends CampaignSummary {
   fromName: string | null;
   fromEmail: string | null;
   replyTo: string | null;
-  audience: { listIds: string[] };
+  audience: { listIds: string[] } | null;
   content: EmailDocument;
 }
 

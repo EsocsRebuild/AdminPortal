@@ -53,7 +53,7 @@ export const sendTestEmail = secureAction(
 /** Re-validates the saved campaign on the server before scheduling or sending. */
 async function assertReady(id: string) {
   const c = await backend<Campaign>(`/campaigns/${id}`);
-  const check = readyToSendSchema.safeParse({ ...c, listIds: c.audience.listIds });
+  const check = readyToSendSchema.safeParse({ ...c, listIds: c.audience?.listIds ?? [] });
   if (!check.success)
     throw new BackendError(
       "VALIDATION",
