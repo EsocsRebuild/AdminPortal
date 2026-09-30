@@ -35,7 +35,7 @@ import { EmailEditor } from "@/features/email-builder/email-editor";
 import { EmailPreview } from "@/features/email-builder/email-preview";
 import { EmailThumbnail } from "@/features/email-builder/email-thumbnail";
 import { mergeTags } from "@/features/email-builder/merge-tags";
-import type { EmailDocument } from "@/features/email-builder/types";
+import { emptyDocument, type EmailDocument } from "@/features/email-builder/types";
 import type { Template } from "@/features/templates/types";
 import { useAction } from "@/hooks/use-action";
 import { useAutosave } from "@/hooks/use-autosave";
@@ -97,12 +97,14 @@ export function CampaignComposer({
     fromEmail: campaign.fromEmail ?? sender.fromAddresses.find((a) => a.verified)?.email ?? "",
     replyTo: campaign.replyTo ?? sender.defaultReplyTo ?? "",
   });
-  const [listIds, setListIds] = React.useState<string[]>(campaign.audience.listIds);
-  const [content, setContent] = React.useState<EmailDocument>(campaign.content);
+  const [listIds, setListIds] = React.useState<string[]>(
+    Array.isArray(campaign.audience?.listIds) ? campaign.audience.listIds : [],
+  );
+  const [content, setContent] = React.useState<EmailDocument>(campaign.content ?? emptyDocument());
 
   const draft = React.useMemo(() => ({ setup, listIds, content }), [setup, listIds, content]);
   const save = useAutosave(draft, (d) =>
-    updateCampaign({ id: campaign.id, setup: d.setup, audience: { listIds: d.listIds }, content: d.content }),
+    updateCampaign({ id: campaign.id, setup: d.setup, audience: { listIds: d.listIds ?? [] }, content: d.content }),
   );
 
   // Live recipient estimate.
@@ -114,7 +116,7 @@ export function CampaignComposer({
     let cancelled = false;
     const t = setTimeout(async () => {
       setEstimate((e) => ({ ...e, loading: true }));
-      const res = await estimateRecipients({ listIds });
+      const res = await estimateRecipients({ listIds: listIds ?? [] });
       if (!cancelled) setEstimate({ count: res.ok ? res.data.count : 0, loading: false });
     }, 400);
     return () => {
@@ -124,7 +126,7 @@ export function CampaignComposer({
   }, [listIds]);
 
   const readiness = React.useMemo(() => {
-    const r = readyToSendSchema.safeParse({ ...setup, listIds, content });
+    const r = readyToSendSchema.safeParse({ ...setup, listIds: listIds ?? [], content });
     const issues = r.success
       ? []
       : r.error.issues.map((i) => ({ step: issueStep[String(i.path[0])] ?? "content", message: i.message }));
@@ -185,7 +187,7 @@ export function CampaignComposer({
         >
           {current === "setup" && <SetupStep setup={setup} onChange={setSetup} sender={sender} />}
           {current === "audience" && (
-            <AudienceStep audiences={audiences} listIds={listIds} onChange={setListIds} estimate={estimate} />
+            <AudienceStep audiences={audiences} listIds={listIds ?? []} onChange={setListIds} estimate={estimate} />
           )}
           {current === "content" && (
             <div className="grid gap-5">
@@ -207,7 +209,7 @@ export function CampaignComposer({
               campaign={campaign}
               setup={setup}
               content={content}
-              audiences={audiences.filter((a) => listIds.includes(a.id))}
+              audiences={audiences.filter((a) => (listIds ?? []).includes(a.id))}
               recipients={estimate.count}
               issues={readiness}
               sender={sender}
