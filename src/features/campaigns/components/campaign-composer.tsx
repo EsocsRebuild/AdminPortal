@@ -376,17 +376,18 @@ function SetupStep({
 
 function AudienceStep({
   audiences,
-  listIds,
+  listIds = [],
   onChange,
   estimate,
 }: {
   audiences: AudienceList[];
-  listIds: string[];
+  listIds?: string[];
   onChange: (ids: string[]) => void;
   estimate: { count: number; loading: boolean };
 }) {
+  const safeListIds = Array.isArray(listIds) ? listIds : [];
   const toggle = (id: string, on: boolean) =>
-    onChange(on ? [...listIds, id] : listIds.filter((x) => x !== id));
+    onChange(on ? [...safeListIds, id] : safeListIds.filter((x) => x !== id));
   return (
     <div className="grid gap-page lg:grid-cols-[minmax(0,1fr)_20rem]">
       <Card>
@@ -401,7 +402,7 @@ function AudienceStep({
             </Alert>
           ) : (
             audiences.map((a) => {
-              const on = listIds.includes(a.id);
+              const on = safeListIds.includes(a.id);
               return (
                 <label
                   key={a.id}
