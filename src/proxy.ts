@@ -55,6 +55,7 @@ interface Tokens {
 async function refresh(refreshToken: string, request: NextRequest): Promise<Tokens | null> {
   const base = process.env.BACKEND_API_URL;
   if (!base) return null;
+  const tenant = request.headers.get("x-tenant") ?? process.env.TENANT_SLUG ?? "esocs";
   try {
     const res = await fetch(`${base.replace(/\/$/, "")}/auth/refresh`, {
       method: "POST",
@@ -63,6 +64,7 @@ async function refresh(refreshToken: string, request: NextRequest): Promise<Toke
         Accept: "application/json",
         "User-Agent": request.headers.get("user-agent") ?? "",
         "X-Forwarded-For": request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "",
+        "X-Tenant": tenant,
       },
       body: JSON.stringify({ refreshToken }),
       signal: AbortSignal.timeout(5_000),

@@ -10,6 +10,7 @@ const schema = z.object({
     .enum(["true", "false"])
     .default("false")
     .transform((v) => v === "true"),
+  TENANT_SLUG: z.string().default("esocs"),
 });
 
 let cached: z.infer<typeof schema> | undefined;

@@ -71,6 +71,7 @@ async function forwardedHeaders() {
   const h = await headers();
   const out: Record<string, string> = {
     "X-Request-Id": h.get("x-request-id") ?? crypto.randomUUID(),
+    "X-Tenant": h.get("x-tenant") ?? env().TENANT_SLUG,
   };
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip");
   if (ip) out["X-Forwarded-For"] = ip;

@@ -65,7 +65,7 @@ function NavLink({
         )}
         <Icon
           className={cn(
-            "relative size-[1.125rem] shrink-0 text-sidebar-muted transition-colors duration-200 group-hover:text-sidebar-active-foreground",
+            "relative size-4.5 shrink-0 text-sidebar-muted transition-colors duration-200 group-hover:text-sidebar-active-foreground",
             active && "text-primary group-hover:text-primary",
           )}
         />

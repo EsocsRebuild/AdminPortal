@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Edit template" };
 export default async function TemplatePage({ params }: PageProps<"/templates/[id]">) {
   const template = await findOrNotFound(getTemplate(assertId((await params).id)));
   return (
-    <Page width="full" className="max-w-[88rem]">
+    <Page width="full" className="max-w-352">
       <TemplateEditor template={template} />
     </Page>
   );
