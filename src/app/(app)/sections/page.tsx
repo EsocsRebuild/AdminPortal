@@ -119,7 +119,7 @@ export default async function SectionsPage() {
               }
               description={
                 <p className="mt-1 italic text-xs text-muted-foreground line-clamp-2">
-                  "{sec.motto}"
+                  &ldquo;{sec.motto}&rdquo;
                 </p>
               }
             />

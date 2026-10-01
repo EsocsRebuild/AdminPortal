@@ -141,7 +141,7 @@ export default async function SectionPublicPage({
               <span>National Fellowship & Directorate Section</span>
             </Badge>
             <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">{section.name}</h1>
-            <p className="italic text-lg text-primary font-medium">"{section.motto}"</p>
+            <p className="italic text-lg text-primary font-medium">&ldquo;{section.motto}&rdquo;</p>
             <p className="max-w-2xl text-base text-muted-foreground">{section.vision}</p>
           </div>
         </div>
