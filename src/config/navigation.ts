@@ -1,5 +1,8 @@
 import {
+  CalendarDays,
+  CheckCheck,
   FormInput,
+  Layers,
   LayoutDashboard,
   LayoutTemplate,
   Mail,
@@ -9,6 +12,7 @@ import {
   ShieldCheck,
   Users,
   UsersRound,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,7 +44,7 @@ export const navigation: NavGroup[] = [
         href: "/dashboard",
         icon: LayoutDashboard,
         permission: "dashboard:view",
-        keywords: ["home"],
+        keywords: ["home", "analytics"],
       },
     ],
   },
@@ -52,19 +56,61 @@ export const navigation: NavGroup[] = [
         href: "/members",
         icon: Users,
         permission: "members:view",
-        keywords: ["people", "congregation"],
+        keywords: ["people", "congregation", "roster"],
       },
     ],
   },
   {
-    title: "Email marketing",
+    title: "Services & Events",
+    items: [
+      {
+        title: "Events & Calendar",
+        href: "/events",
+        icon: CalendarDays,
+        permission: "events:view",
+        keywords: ["services", "calendar", "schedule", "revivals"],
+      },
+      {
+        title: "Attendance & Headcount",
+        href: "/attendance",
+        icon: CheckCheck,
+        permission: "attendance:view",
+        keywords: ["checkin", "sunday", "headcount"],
+      },
+    ],
+  },
+  {
+    title: "Stewardship",
+    items: [
+      {
+        title: "Giving & Batches",
+        href: "/giving",
+        icon: Wallet,
+        permission: "giving:view",
+        keywords: ["tithes", "offering", "donations", "finance"],
+      },
+    ],
+  },
+  {
+    title: "Fellowships & Wings",
+    items: [
+      {
+        title: "Autonomous Sections",
+        href: "/sections",
+        icon: Layers,
+        keywords: ["women", "youth", "mzys", "choir", "directorates"],
+      },
+    ],
+  },
+  {
+    title: "Communications",
     items: [
       {
         title: "Campaigns",
         href: "/campaigns",
         icon: Mail,
         permission: "campaigns:view",
-        keywords: ["newsletter", "email", "send"],
+        keywords: ["newsletter", "email", "send", "sms"],
       },
       {
         title: "Audiences",
@@ -94,6 +140,7 @@ export const navigation: NavGroup[] = [
       },
     ],
   },
+
   {
     title: "Administration",
     items: [

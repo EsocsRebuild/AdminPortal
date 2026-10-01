@@ -29,7 +29,12 @@ const segmentLabels: Record<string, string> = {
   appearance: "Appearance",
   notifications: "Notifications",
   email: "Email sending",
+  events: "Events & Calendar",
+  attendance: "Attendance & Headcount",
+  giving: "Giving & Stewardship",
+  sections: "Fellowships & Wings",
 };
+
 
 function useCrumbs(): Crumb[] {
   const pathname = usePathname();

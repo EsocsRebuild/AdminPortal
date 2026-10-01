@@ -8,6 +8,15 @@ export const permissions = [
   "members:view",
   "members:manage",
   "members:export",
+  "households:manage",
+  "pastoral:view",
+  "pastoral:manage",
+  "events:view",
+  "events:manage",
+  "attendance:view",
+  "attendance:record",
+  "giving:view",
+  "giving:manage",
   "campaigns:view",
   "campaigns:manage",
   "campaigns:send",
@@ -16,12 +25,15 @@ export const permissions = [
   "templates:manage",
   "forms:view",
   "forms:manage",
+  "content:view",
+  "content:manage",
   "users:view",
   "users:manage",
   "roles:manage",
   "audit:view",
   "settings:manage",
 ] as const;
+
 
 export type Permission = (typeof permissions)[number];
 
