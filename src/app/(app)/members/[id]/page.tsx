@@ -7,10 +7,12 @@ import { Page } from "@/components/layout/page";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { HouseholdCard } from "@/features/members/components/household-card";
 import { getParishes } from "@/features/lookups/queries";
 import { MemberActions } from "@/features/members/components/member-actions";
 import { getMember } from "@/features/members/queries";
 import { statusLabels } from "@/features/members/types";
+import type { Household } from "@/features/members/types-household";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { assertId, findOrNotFound } from "@/server/query";
 
@@ -112,6 +114,25 @@ export default async function MemberPage({ params }: PageProps<"/members/[id]">)
               </dl>
             </CardContent>
           </Card>
+
+          <HouseholdCard
+            household={{
+              id: "hh_101",
+              familyName: `${member.lastName} Family Household`,
+              headMemberId: member.id,
+              unitId: member.parish?.id ?? "mount-zion",
+              address: member.address,
+              members: [
+                {
+                  id: member.id,
+                  name: `${member.firstName} ${member.lastName}`,
+                  memberCode: member.memberNumber,
+                  role: "head",
+                  avatarUrl: member.avatarUrl,
+                },
+              ],
+            }}
+          />
 
           {member.notes && (
             <Card>

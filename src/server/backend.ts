@@ -71,6 +71,7 @@ async function forwardedHeaders() {
   const h = await headers();
   const c = await cookies();
   const scopeUnit = c.get("esocs_scope_unit")?.value;
+  const handlerId = h.get("x-handler-id");
 
   const out: Record<string, string> = {
     "X-Request-Id": h.get("x-request-id") ?? crypto.randomUUID(),
@@ -78,6 +79,9 @@ async function forwardedHeaders() {
   };
   if (scopeUnit && scopeUnit !== "null" && scopeUnit !== "") {
     out["X-Scope-Unit"] = scopeUnit;
+  }
+  if (handlerId) {
+    out["X-Handler-Id"] = handlerId;
   }
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? h.get("x-real-ip");
   if (ip) out["X-Forwarded-For"] = ip;

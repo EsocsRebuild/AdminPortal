@@ -13,7 +13,7 @@ import { COOKIE, cookieOptions } from "@/server/cookies";
  * session with the API again (see src/server/session.ts).
  */
 
-const PUBLIC = /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f)(\/|$)/;
+const PUBLIC = /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f|church|sections)(\/|$)/;
 const GUEST_ONLY = /^\/(login|signup|forgot-password)(\/|$)/;
 
 function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolean) {

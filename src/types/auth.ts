@@ -9,6 +9,19 @@ export interface SessionUser {
   role: { id: string; name: string };
   permissions: Permission[];
   mfaEnabled: boolean;
-  /** Parish scope for parish-level admins; null means organisation-wide. */
-  parishId: string | null;
+  /** Unit scope for unit/parish/section admins; null means organisation-wide (Global Super Admin). */
+  scopeUnitId?: string | null;
+  /** Legacy alias for parish-level scope. */
+  parishId?: string | null;
+  /** True if user has platform-wide super admin privileges across all units. */
+  isPlatformAdmin?: boolean;
 }
+
+export interface UnitScopeMetadata {
+  id: string | null;
+  name: string;
+  type: "global" | "province" | "parish" | "fellowship";
+  code?: string;
+  slug?: string;
+}
+

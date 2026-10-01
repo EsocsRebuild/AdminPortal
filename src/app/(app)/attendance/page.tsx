@@ -3,6 +3,7 @@ import { CheckCheck, Download, Filter, Plus, UsersRound } from "lucide-react";
 import type { Metadata } from "next";
 
 import { AttendanceChart } from "@/components/charts/attendance-chart";
+import { LiveHeadcountWidget } from "@/components/blocks/live-headcount-widget";
 import { Page, PageHeader } from "@/components/layout/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -105,6 +106,10 @@ export default async function AttendancePage() {
         actionText="Got it"
         className="mb-4"
       />
+
+      <div className="mb-6">
+        <LiveHeadcountWidget parishName="Mount Zion Parish" initialCount={425} />
+      </div>
 
       {/* Main Attendance Chart */}
       <AttendanceChart className="mb-6" />
