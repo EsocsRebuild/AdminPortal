@@ -31,8 +31,8 @@ const segmentLabels: Record<string, string> = {
   email: "Email sending",
   events: "Events & Calendar",
   attendance: "Attendance & Headcount",
-  giving: "Giving & Stewardship",
   sections: "Fellowships & Wings",
+  "build-tracker": "Build Tracker",
 };
 
 
