@@ -114,11 +114,22 @@ const mockBatches: GivingBatch[] = [
   },
 ];
 
+import { getGivingSummary, listBatches, listFunds } from "@/features/giving/queries";
+
 export default async function GivingPage() {
   await requirePermission("giving:view");
 
-  const totalFundsInVault = mockFunds.reduce((acc, f) => acc + f.currentBalance, 0);
-  const totalMonthToDate = mockFunds.reduce((acc, f) => acc + f.monthToDate, 0);
+  const [backendFunds, backendBatches, summary] = await Promise.all([
+    listFunds(),
+    listBatches(),
+    getGivingSummary(),
+  ]);
+
+  const funds = backendFunds.length > 0 ? backendFunds : mockFunds;
+  const batches = backendBatches.length > 0 ? backendBatches : mockBatches;
+
+  const totalFundsInVault = summary?.total ?? funds.reduce((acc, f) => acc + f.currentBalance, 0);
+  const totalMonthToDate = summary?.byMonth?.at(-1)?.total ?? funds.reduce((acc, f) => acc + f.monthToDate, 0);
 
   return (
     <Page>
@@ -181,7 +192,7 @@ export default async function GivingPage() {
 
       {/* Fund Ledgers Grid */}
       <div className="mb-6 grid gap-4 sm:grid-cols-2">
-        {mockFunds.map((f) => (
+        {funds.map((f) => (
           <Card key={f.id} className="flex flex-col justify-between">
             <CardHeader
               title={
@@ -234,7 +245,7 @@ export default async function GivingPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
-                {mockBatches.map((b) => (
+                {batches.map((b) => (
                   <tr key={b.id} className="transition-colors hover:bg-surface-hover">
                     <td className="py-3 pr-4 font-mono font-semibold text-primary">{b.batchNumber}</td>
                     <td className="px-4 py-3 text-foreground">{formatDate(b.date)}</td>

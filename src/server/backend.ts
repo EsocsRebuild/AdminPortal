@@ -142,10 +142,13 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
   return payload as T;
 }
 
-/** Call that unwraps `{ data }`. */
+/** Call that unwraps `{ data }`, or returns raw payload when un-enveloped. */
 export async function backend<T>(path: string, options?: BackendOptions): Promise<T> {
-  const payload = await backendRaw<{ data: T }>(path, options);
-  return payload?.data as T;
+  const payload = await backendRaw<{ data?: T } & T>(path, options);
+  if (payload && typeof payload === "object" && "data" in payload && (payload as { data?: T }).data !== undefined) {
+    return (payload as { data: T }).data;
+  }
+  return payload as T;
 }
 
 export function defaultMessage(code: ErrorCode) {

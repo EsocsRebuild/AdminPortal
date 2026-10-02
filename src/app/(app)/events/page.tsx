@@ -79,8 +79,13 @@ const mockEvents: ChurchEvent[] = [
   },
 ];
 
+import { listEvents } from "@/features/events/queries";
+
 export default async function EventsPage() {
   await requirePermission("events:view");
+
+  const backendEvents = await listEvents();
+  const events = backendEvents.length > 0 ? backendEvents : mockEvents;
 
   return (
     <Page>
@@ -103,7 +108,7 @@ export default async function EventsPage() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {mockEvents.map((evt) => {
+        {events.map((evt) => {
           const isCapacityCapped = evt.capacity !== undefined;
           const percentFilled = isCapacityCapped
             ? Math.round(((evt.registeredCount ?? 0) / evt.capacity!) * 100)

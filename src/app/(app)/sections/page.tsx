@@ -79,8 +79,13 @@ const mockSections: FellowshipSection[] = [
   },
 ];
 
+import { listSections } from "@/features/sections/queries";
+
 export default async function SectionsPage() {
   await requireSession();
+
+  const backendSections = await listSections();
+  const sections = backendSections.length > 0 ? backendSections : mockSections;
 
   return (
     <Page>
@@ -98,7 +103,7 @@ export default async function SectionsPage() {
       />
 
       <div className="grid gap-5 sm:grid-cols-2">
-        {mockSections.map((sec) => (
+        {sections.map((sec) => (
           <Card
             key={sec.id}
             className={`border-l-4 ${sec.accentColor} flex flex-col justify-between overflow-hidden`}

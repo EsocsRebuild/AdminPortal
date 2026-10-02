@@ -80,8 +80,13 @@ const mockHeadcounts: HeadcountRecord[] = [
   },
 ];
 
+import { listHeadcounts } from "@/features/attendance/queries";
+
 export default async function AttendancePage() {
   await requirePermission("attendance:view");
+
+  const backendHeadcounts = await listHeadcounts();
+  const headcounts = backendHeadcounts.length > 0 ? backendHeadcounts : mockHeadcounts;
 
   return (
     <Page>
@@ -106,7 +111,7 @@ export default async function AttendancePage() {
       />
 
       <div className="mb-6">
-        <LiveHeadcountWidget parishName="Mount Zion Parish" initialCount={425} />
+        <LiveHeadcountWidget parishName="Mount Zion Parish" initialCount={headcounts[0]?.total || 425} />
       </div>
 
       {/* Main Attendance Chart */}
@@ -134,7 +139,7 @@ export default async function AttendancePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
-                {mockHeadcounts.map((hc) => (
+                {headcounts.map((hc) => (
                   <tr key={hc.id} className="transition-colors hover:bg-surface-hover">
                     <td className="py-3 pr-4 font-semibold text-foreground">{formatDate(hc.date)}</td>
                     <td className="px-4 py-3 font-medium text-foreground">{hc.serviceType}</td>
