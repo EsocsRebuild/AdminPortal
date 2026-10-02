@@ -112,9 +112,49 @@ const mockParishes: Record<string, ParishData> = {
   },
 };
 
+import { backend } from "@/server/backend";
+
+async function getParishData(slug: string): Promise<ParishData | null> {
+  try {
+    const u = await backend<any>(`/public/units/${encodeURIComponent(slug)}`, { auth: false });
+    if (u) {
+      return {
+        name: u.name,
+        slug: u.slug,
+        tagline: u.tagline || "Holy Order of the Cherubim and Seraphim",
+        address: u.address || u.locality || "Cathedral Sanctuary",
+        phone: u.phones?.[0] || "+234 800 000 0000",
+        email: u.email || "info@esocs.org",
+        pastor: {
+          name: u.leaders?.[0]?.name || "Parish Presiding Minister",
+          title: u.leaders?.[0]?.role || "Minister-in-Charge",
+        },
+        services: [
+          { title: "Divine Worship", day: "Sunday", time: "09:00 AM - 12:30 PM", description: "Liturgical devotion and corporate communion." },
+          { title: "Midweek Spiritual Awakening", day: "Wednesday", time: "05:30 PM - 07:30 PM", description: "Bible study and spiritual intercession." },
+          { title: "Spiritual Warfare & Vigil", day: "Friday", time: "11:00 PM - 03:00 AM", description: "Deliverance and nocturnal prayer." },
+        ],
+        announcements: [
+          {
+            id: "ann-1",
+            title: "Sunday Harvest & Thanksgiving Service",
+            date: "Upcoming Sunday",
+            summary: "Corporate prayer, liturgical procession, and family thanksgiving.",
+          },
+        ],
+        givingFundId: "fund-general",
+      };
+    }
+  } catch {
+    // Network fallback
+  }
+
+  return mockParishes[slug] ?? null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const parish = mockParishes[slug];
+  const parish = await getParishData(slug);
   if (!parish) return { title: "Parish Not Found | ESOCS" };
   return {
     title: `${parish.name} | Eternal Sacred Order of the Cherubim and Seraphim`,
@@ -124,7 +164,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ParishPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const parish = mockParishes[slug];
+  const parish = await getParishData(slug);
 
   if (!parish) {
     notFound();

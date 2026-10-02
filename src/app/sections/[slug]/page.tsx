@@ -96,9 +96,50 @@ const mockSections: Record<string, SectionData> = {
   },
 };
 
+import { backend } from "@/server/backend";
+
+async function getSectionData(slug: string): Promise<SectionData | null> {
+  try {
+    const u = await backend<any>(`/public/units/${encodeURIComponent(slug)}`, { auth: false });
+    if (u) {
+      return {
+        name: u.name,
+        slug: u.slug,
+        motto: u.tagline || (Array.isArray(u.about) ? u.about[0] : "") || "Walking in righteousness and faith.",
+        vision: (Array.isArray(u.about) && u.about.length > 1 ? u.about[1] : u.tagline) || "Autonomous ministerial arm of the Holy Order dedicated to spiritual growth and service.",
+        executiveBoard: Array.isArray(u.leaders) && u.leaders.length > 0
+          ? u.leaders.map((l: any) => ({ name: l.name, role: l.role }))
+          : [{ name: "Executive Directorate", role: "Administration" }],
+        programmes: [
+          {
+            title: "Weekly Assembly & Fellowship",
+            date: "Every Sunday, 09:00 AM",
+            location: u.locality || "Cathedral Sanctuary",
+            description: "Fellowship gathering, Bible study, and ministerial coordination.",
+            registrationOpen: false,
+          },
+        ],
+        news: [
+          {
+            id: "news-1",
+            title: `${u.name} Directorate Updates`,
+            date: "Current Season",
+            category: "Announcements",
+            excerpt: "Stay connected with upcoming programs, service rosters, and ministry initiatives.",
+          },
+        ],
+      };
+    }
+  } catch {
+    // Fall back to seeded mock sections if offline or unseeded
+  }
+
+  return mockSections[slug] ?? null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const section = mockSections[slug];
+  const section = await getSectionData(slug);
   if (!section) return { title: "Section Not Found | ESOCS" };
   return {
     title: `${section.name} | ESOCS Order`,
@@ -108,7 +149,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function SectionPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const section = mockSections[slug];
+  const section = await getSectionData(slug);
 
   if (!section) {
     notFound();
