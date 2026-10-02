@@ -1,16 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  CalendarDays,
-  CheckCircle2,
-  HeartHandshake,
-  Minus,
-  Plus,
-  Sparkles,
-  UserPlus,
-  UsersRound,
-} from "lucide-react";
+import { HeartHandshake, Minus, Plus, Sparkles, UserPlus, UsersRound } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -39,10 +30,14 @@ export function QuickActionsModal({
   initialTab?: QuickActionType;
 }) {
   const [tab, setTab] = React.useState<QuickActionType>(initialTab);
+  const [prevOpen, setPrevOpen] = React.useState(open);
 
-  React.useEffect(() => {
-    if (open) setTab(initialTab);
-  }, [open, initialTab]);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) {
+      setTab(initialTab);
+    }
+  }
 
   // Global hotkeys to launch quick actions
   useHotkey("alt+n", () => {
@@ -93,7 +88,7 @@ export function QuickActionsModal({
     setIsSubmittingMember(true);
     try {
       // Post to members API endpoint
-      const res = await fetch("/api/members", {
+      await fetch("/api/members", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -110,7 +105,7 @@ export function QuickActionsModal({
       toast.success(
         stage === "FirstTimeGuest"
           ? `Welcome guest ${firstName} ${lastName}! Follow-up workflow initiated.`
-          : `Member ${firstName} ${lastName} added successfully!`
+          : `Member ${firstName} ${lastName} added successfully!`,
       );
 
       // Reset
@@ -137,7 +132,7 @@ export function QuickActionsModal({
     setIsSubmittingHeadcount(true);
     try {
       toast.success(
-        `Sunday headcount recorded: ${totalHeadcount} attendees (${menCount} men, ${womenCount} women, ${childrenCount} children)`
+        `Sunday headcount recorded: ${totalHeadcount} attendees (${menCount} men, ${womenCount} women, ${childrenCount} children)`,
       );
       setMenCount(0);
       setWomenCount(0);
@@ -159,7 +154,7 @@ export function QuickActionsModal({
 
     setIsSubmittingPrayer(true);
     try {
-      const res = await fetch("/api/comms/prayer-requests", {
+      await fetch("/api/comms/prayer-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -173,7 +168,7 @@ export function QuickActionsModal({
       toast.success(
         isUrgent
           ? "Urgent prayer request dispatched to intercessory team!"
-          : "Prayer request added to pastoral care register."
+          : "Prayer request added to pastoral care register.",
       );
       setPrayerName("");
       setPrayerNotes("");
@@ -326,11 +321,7 @@ export function QuickActionsModal({
                   </div>
                   <div>
                     <label className="text-xs font-medium text-foreground">Service Date</label>
-                    <Input
-                      type="date"
-                      value={serviceDate}
-                      onChange={(e) => setServiceDate(e.target.value)}
-                    />
+                    <Input type="date" value={serviceDate} onChange={(e) => setServiceDate(e.target.value)} />
                   </div>
                 </div>
 
@@ -500,7 +491,8 @@ export function QuickActionsModal({
                     className="size-4 rounded border-border text-primary focus:ring-primary"
                   />
                   <label htmlFor="urgent-check" className="text-xs font-medium text-foreground">
-                    Flag as <span className="font-semibold text-danger">Urgent Intercession</span> (alerts parish pastors immediately)
+                    Flag as <span className="font-semibold text-danger">Urgent Intercession</span> (alerts
+                    parish pastors immediately)
                   </label>
                 </div>
 

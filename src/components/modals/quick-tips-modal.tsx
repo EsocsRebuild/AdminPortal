@@ -3,12 +3,9 @@
 import * as React from "react";
 import {
   CalendarCheck,
-  CheckCircle2,
   Church,
   Compass,
-  ExternalLink,
   Flame,
-  HelpCircle,
   Keyboard,
   Layers,
   Lightbulb,
@@ -58,7 +55,8 @@ export function QuickTipsModal({
                 </span>
               </div>
               <DialogDescription className="text-sm">
-                Essential best practices to manage your parish, fellowship sections, and Sunday operations smoothly.
+                Essential best practices to manage your parish, fellowship sections, and Sunday operations
+                smoothly.
               </DialogDescription>
             </div>
           </div>
@@ -93,7 +91,8 @@ export function QuickTipsModal({
                   The 4-Step Sunday Service Operating Workflow
                 </h4>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Follow these four steps each Lord's Day to keep your parish records 100% up-to-date and visitor follow-up effortless.
+                  Follow these four steps each Lord&apos;s Day to keep your parish records 100% up-to-date and
+                  visitor follow-up effortless.
                 </p>
               </div>
 
@@ -105,7 +104,9 @@ export function QuickTipsModal({
                   <div>
                     <h5 className="text-sm font-semibold text-foreground">Pre-Service Bulletin</h5>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      Publish announcements under <span className="font-medium text-foreground">Communications</span> to push the order of service and hymn list to the public web portal.
+                      Publish announcements under{" "}
+                      <span className="font-medium text-foreground">Communications</span> to push the order of
+                      service and hymn list to the public web portal.
                     </p>
                   </div>
                 </div>
@@ -117,7 +118,8 @@ export function QuickTipsModal({
                   <div>
                     <h5 className="text-sm font-semibold text-foreground">Mid-Service Headcount</h5>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      Use the Quick Action button or press <Kbd keys={["Alt", "H"]} /> to record Men, Women, and Children counts directly during sermon time.
+                      Use the Quick Action button or press <Kbd keys={["Alt", "H"]} /> to record Men, Women,
+                      and Children counts directly during sermon time.
                     </p>
                   </div>
                 </div>
@@ -129,7 +131,8 @@ export function QuickTipsModal({
                   <div>
                     <h5 className="text-sm font-semibold text-foreground">Instant Guest Intake</h5>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      Ushering team registers first-time guests using <Kbd keys={["Alt", "N"]} />. Marking them as "First-Time Guest" queues immediate pastoral care.
+                      Ushering team registers first-time guests using <Kbd keys={["Alt", "N"]} />. Marking
+                      them as &ldquo;First-Time Guest&rdquo; queues immediate pastoral care.
                     </p>
                   </div>
                 </div>
@@ -141,7 +144,9 @@ export function QuickTipsModal({
                   <div>
                     <h5 className="text-sm font-semibold text-foreground">Tithes & Offerings</h5>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      Close the Sunday giving batch under <span className="font-medium text-foreground">Giving &gt; Batches</span> with cash and POS totals for audit reconciliation.
+                      Close the Sunday giving batch under{" "}
+                      <span className="font-medium text-foreground">Giving &gt; Batches</span> with cash and
+                      POS totals for audit reconciliation.
                     </p>
                   </div>
                 </div>
@@ -164,20 +169,28 @@ export function QuickTipsModal({
                 <div className="rounded-control border border-border p-3.5">
                   <div className="flex items-center gap-2">
                     <span className="size-2 rounded-full bg-emerald-500" />
-                    <h5 className="text-sm font-semibold text-foreground">Parish Administrators (e.g. Mount Zion)</h5>
+                    <h5 className="text-sm font-semibold text-foreground">
+                      Parish Administrators (e.g. Mount Zion)
+                    </h5>
                   </div>
                   <p className="mt-1.5 text-xs text-muted-foreground">
-                    Your account is permanently scoped to your local parish. You only see Mount Zion's members, attendance figures, finances, and forms. Submitting records automatically tags them to Mount Zion.
+                    Your account is permanently scoped to your local parish. You only see Mount Zion&apos;s
+                    members, attendance figures, finances, and forms. Submitting records automatically tags
+                    them to Mount Zion.
                   </p>
                 </div>
 
                 <div className="rounded-control border border-border p-3.5">
                   <div className="flex items-center gap-2">
                     <span className="size-2 rounded-full bg-blue-500" />
-                    <h5 className="text-sm font-semibold text-foreground">Super Administrators & Provincial Overseers</h5>
+                    <h5 className="text-sm font-semibold text-foreground">
+                      Super Administrators & Provincial Overseers
+                    </h5>
                   </div>
                   <p className="mt-1.5 text-xs text-muted-foreground">
-                    Use the <span className="font-medium text-foreground">Unit Switcher</span> in the top header bar to toggle between Global HQ overview and individual parishes or fellowships at any time.
+                    Use the <span className="font-medium text-foreground">Unit Switcher</span> in the top
+                    header bar to toggle between Global HQ overview and individual parishes or fellowships at
+                    any time.
                   </p>
                 </div>
               </div>
@@ -191,7 +204,8 @@ export function QuickTipsModal({
                   Autonomous Fellowship & Directorate Architecture
                 </h4>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Specialized arms have their own dedicated digital spaces with isolated rosters and event feeds.
+                  Specialized arms have their own dedicated digital spaces with isolated rosters and event
+                  feeds.
                 </p>
               </div>
 
@@ -199,7 +213,8 @@ export function QuickTipsModal({
                 <div className="rounded-control border border-border p-3">
                   <span className="text-xs font-semibold text-primary">🕊️ Women Fellowship</span>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Autonomous conference registrations, mothers' summit dues, and national directory updates.
+                    Autonomous conference registrations, mothers&apos; summit dues, and national directory
+                    updates.
                   </p>
                 </div>
                 <div className="rounded-control border border-border p-3">

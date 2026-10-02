@@ -9,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Kbd } from "@/components/ui/kbd";
@@ -38,7 +37,7 @@ export function QuickActionButton() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel className="flex items-center gap-1.5 text-2xs font-semibold uppercase text-muted-foreground">
+          <DropdownMenuLabel className="flex items-center gap-1.5 text-2xs font-semibold text-muted-foreground uppercase">
             <Sparkles className="size-3 text-primary" /> Instant Operations
           </DropdownMenuLabel>
           <DropdownMenuItem onClick={() => openAction("member")}>
@@ -69,11 +68,7 @@ export function QuickActionButton() {
         <Plus className="size-4" />
       </Button>
 
-      <QuickActionsModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        initialTab={activeTab}
-      />
+      <QuickActionsModal open={modalOpen} onOpenChange={setModalOpen} initialTab={activeTab} />
     </>
   );
 }

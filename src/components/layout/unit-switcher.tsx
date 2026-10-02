@@ -1,20 +1,10 @@
 "use client";
 
 import * as React from "react";
-import {
-  Building2,
-  Check,
-  ChevronDown,
-  Church,
-  Globe2,
-  Lock,
-  Search,
-  Users2,
-} from "lucide-react";
+import { Check, ChevronDown, Church, Globe2, Lock, Search, Users2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useSession } from "@/components/auth/session-provider";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,15 +27,27 @@ const defaultUnits: UnitScopeOption[] = [
   { id: "parish-london", name: "London Central Parish", type: "parish", code: "LCP", slug: "london-central" },
   { id: "section-women", name: "Women Fellowship", type: "fellowship", code: "WF", slug: "women-fellowship" },
   { id: "section-youth", name: "Youth Fellowship", type: "fellowship", code: "YF", slug: "youth-fellowship" },
-  { id: "section-choir", name: "Music Directorate / Choir", type: "fellowship", code: "MD", slug: "music-directorate" },
+  {
+    id: "section-choir",
+    name: "Music Directorate / Choir",
+    type: "fellowship",
+    code: "MD",
+    slug: "music-directorate",
+  },
 ];
+
+function saveUnitScopeCookie(unitId: string) {
+  if (typeof document !== "undefined") {
+    document.cookie = `esocs_scope_unit=${unitId}; path=/; max-age=2592000; SameSite=Lax`;
+  }
+}
 
 export function UnitSwitcher() {
   const user = useSession();
   const isSuperAdmin = Boolean(
     user?.isPlatformAdmin ||
-      user?.role?.name?.toLowerCase().includes("super") ||
-      user?.role?.name?.toLowerCase().includes("prelate")
+    user?.role?.name?.toLowerCase().includes("super") ||
+    user?.role?.name?.toLowerCase().includes("prelate"),
   );
 
   // Load active unit from cookie or localStorage
@@ -65,16 +67,17 @@ export function UnitSwitcher() {
 
   const [search, setSearch] = React.useState("");
 
-  const filteredUnits = defaultUnits.filter((u) =>
-    u.name.toLowerCase().includes(search.toLowerCase()) ||
-    (u.code && u.code.toLowerCase().includes(search.toLowerCase()))
+  const filteredUnits = defaultUnits.filter(
+    (u) =>
+      u.name.toLowerCase().includes(search.toLowerCase()) ||
+      (u.code && u.code.toLowerCase().includes(search.toLowerCase())),
   );
 
   function handleSelect(unit: UnitScopeOption) {
     setActiveUnit(unit);
     if (typeof window !== "undefined") {
       localStorage.setItem("esocs_active_unit", JSON.stringify(unit));
-      document.cookie = `esocs_scope_unit=${unit.id || ""}; path=/; max-age=2592000; SameSite=Lax`;
+      saveUnitScopeCookie(unit.id || "");
     }
     toast.success(`Active scope switched: ${unit.name}`);
     window.location.reload();
@@ -83,7 +86,7 @@ export function UnitSwitcher() {
   // Non-Super Admin: view locked to parish/unit
   if (!isSuperAdmin) {
     const parishName = user?.parishId
-      ? defaultUnits.find((u) => u.id === user.parishId)?.name ?? "Mount Zion Parish"
+      ? (defaultUnits.find((u) => u.id === user.parishId)?.name ?? "Mount Zion Parish")
       : "Mount Zion Parish";
 
     return (
@@ -108,25 +111,23 @@ export function UnitSwitcher() {
           aria-label="Switch active administrative unit scope"
           className={cn(
             "flex h-control-sm cursor-pointer items-center gap-2 rounded-control border border-border bg-surface px-2.5 text-xs font-medium text-foreground shadow-xs transition-colors",
-            "hover:border-border-strong hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-ring"
+            "hover:border-border-strong hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-ring",
           )}
         >
           {activeUnit.type === "global" ? (
-            <Globe2 className="size-3.5 text-blue-500 shrink-0" />
+            <Globe2 className="size-3.5 shrink-0 text-blue-500" />
           ) : activeUnit.type === "parish" ? (
-            <Church className="size-3.5 text-emerald-500 shrink-0" />
+            <Church className="size-3.5 shrink-0 text-emerald-500" />
           ) : (
-            <Users2 className="size-3.5 text-amber-500 shrink-0" />
+            <Users2 className="size-3.5 shrink-0 text-amber-500" />
           )}
-          <span className="max-w-[130px] truncate sm:max-w-[180px] font-semibold">
-            {activeUnit.name}
-          </span>
-          <ChevronDown className="size-3 text-muted-foreground shrink-0" />
+          <span className="max-w-[130px] truncate font-semibold sm:max-w-[180px]">{activeUnit.name}</span>
+          <ChevronDown className="size-3 shrink-0 text-muted-foreground" />
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="w-72 p-1.5">
-        <div className="flex items-center gap-2 border-b border-border-subtle px-2 pb-2 pt-1">
+        <div className="flex items-center gap-2 border-b border-border-subtle px-2 pt-1 pb-2">
           <Search className="size-3.5 text-muted-foreground" />
           <input
             type="text"
@@ -138,7 +139,7 @@ export function UnitSwitcher() {
         </div>
 
         <DropdownMenuGroup className="mt-1 max-h-64 overflow-y-auto">
-          <DropdownMenuLabel className="px-2 py-1 text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <DropdownMenuLabel className="px-2 py-1 text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
             Church Governance Scope
           </DropdownMenuLabel>
 
@@ -148,21 +149,19 @@ export function UnitSwitcher() {
               <DropdownMenuItem
                 key={u.id ?? "global"}
                 onClick={() => handleSelect(u)}
-                className="flex items-center justify-between text-xs py-1.5"
+                className="flex items-center justify-between py-1.5 text-xs"
               >
                 <div className="flex items-center gap-2 truncate">
                   {u.type === "global" ? (
-                    <Globe2 className="size-3.5 text-blue-500 shrink-0" />
+                    <Globe2 className="size-3.5 shrink-0 text-blue-500" />
                   ) : u.type === "parish" ? (
-                    <Church className="size-3.5 text-emerald-500 shrink-0" />
+                    <Church className="size-3.5 shrink-0 text-emerald-500" />
                   ) : (
-                    <Users2 className="size-3.5 text-amber-500 shrink-0" />
+                    <Users2 className="size-3.5 shrink-0 text-amber-500" />
                   )}
-                  <span className={cn(isSelected && "font-semibold text-primary")}>
-                    {u.name}
-                  </span>
+                  <span className={cn(isSelected && "font-semibold text-primary")}>{u.name}</span>
                 </div>
-                {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                {isSelected && <Check className="size-3.5 shrink-0 text-primary" />}
               </DropdownMenuItem>
             );
           })}
@@ -172,7 +171,7 @@ export function UnitSwitcher() {
 
         <div className="px-2 py-1.5 text-2xs text-muted-foreground">
           <span className="font-semibold text-foreground">Act-as-Unit:</span> Requests will transmit{" "}
-          <code className="text-2xs bg-surface-muted px-1 py-0.5 rounded border border-border-subtle">
+          <code className="rounded border border-border-subtle bg-surface-muted px-1 py-0.5 text-2xs">
             X-Scope-Unit
           </code>{" "}
           header automatically.

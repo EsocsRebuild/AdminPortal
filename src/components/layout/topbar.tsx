@@ -35,7 +35,6 @@ const segmentLabels: Record<string, string> = {
   "build-tracker": "Build Tracker",
 };
 
-
 function useCrumbs(): Crumb[] {
   const pathname = usePathname();
   const item = activeNavItem(pathname);
@@ -71,4 +70,3 @@ export function Topbar() {
     </header>
   );
 }
-

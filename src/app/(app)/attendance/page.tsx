@@ -1,11 +1,9 @@
-import * as React from "react";
-import { CheckCheck, Download, Filter, Plus, UsersRound } from "lucide-react";
+import { Download } from "lucide-react";
 import type { Metadata } from "next";
 
 import { AttendanceChart } from "@/components/charts/attendance-chart";
 import { LiveHeadcountWidget } from "@/components/blocks/live-headcount-widget";
 import { Page, PageHeader } from "@/components/layout/page";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ContextualTipCard } from "@/components/ui/contextual-tip-card";
@@ -83,7 +81,7 @@ const mockHeadcounts: HeadcountRecord[] = [
 ];
 
 export default async function AttendancePage() {
-  const user = await requirePermission("attendance:view");
+  await requirePermission("attendance:view");
 
   return (
     <Page>
@@ -124,35 +122,35 @@ export default async function AttendancePage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border text-2xs font-semibold uppercase text-muted-foreground">
+                <tr className="border-b border-border text-2xs font-semibold text-muted-foreground uppercase">
                   <th className="py-2.5 pr-4">Date</th>
-                  <th className="py-2.5 px-4">Service Type</th>
-                  <th className="py-2.5 px-4 text-center">Men</th>
-                  <th className="py-2.5 px-4 text-center">Women</th>
-                  <th className="py-2.5 px-4 text-center">Children</th>
-                  <th className="py-2.5 px-4 text-center font-bold text-foreground">Total</th>
-                  <th className="py-2.5 px-4">Notes</th>
+                  <th className="px-4 py-2.5">Service Type</th>
+                  <th className="px-4 py-2.5 text-center">Men</th>
+                  <th className="px-4 py-2.5 text-center">Women</th>
+                  <th className="px-4 py-2.5 text-center">Children</th>
+                  <th className="px-4 py-2.5 text-center font-bold text-foreground">Total</th>
+                  <th className="px-4 py-2.5">Notes</th>
                   <th className="py-2.5 pl-4">Recorded By</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
                 {mockHeadcounts.map((hc) => (
-                  <tr key={hc.id} className="hover:bg-surface-hover transition-colors">
+                  <tr key={hc.id} className="transition-colors hover:bg-surface-hover">
                     <td className="py-3 pr-4 font-semibold text-foreground">{formatDate(hc.date)}</td>
-                    <td className="py-3 px-4 font-medium text-foreground">{hc.serviceType}</td>
-                    <td className="py-3 px-4 text-center tabular text-blue-600 dark:text-blue-400 font-medium">
+                    <td className="px-4 py-3 font-medium text-foreground">{hc.serviceType}</td>
+                    <td className="px-4 py-3 text-center tabular font-medium text-blue-600 dark:text-blue-400">
                       {hc.men}
                     </td>
-                    <td className="py-3 px-4 text-center tabular text-emerald-600 dark:text-emerald-400 font-medium">
+                    <td className="px-4 py-3 text-center tabular font-medium text-emerald-600 dark:text-emerald-400">
                       {hc.women}
                     </td>
-                    <td className="py-3 px-4 text-center tabular text-amber-600 dark:text-amber-400 font-medium">
+                    <td className="px-4 py-3 text-center tabular font-medium text-amber-600 dark:text-amber-400">
                       {hc.children}
                     </td>
-                    <td className="py-3 px-4 text-center tabular font-bold text-foreground text-sm">
+                    <td className="px-4 py-3 text-center tabular text-sm font-bold text-foreground">
                       {formatNumber(hc.total)}
                     </td>
-                    <td className="py-3 px-4 text-muted-foreground">{hc.notes ?? "—"}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{hc.notes ?? "—"}</td>
                     <td className="py-3 pl-4 text-muted-foreground">{hc.recorder}</td>
                   </tr>
                 ))}

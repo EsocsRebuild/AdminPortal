@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, DollarSign, Wallet } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatPercent } from "@/lib/format";
@@ -43,7 +43,8 @@ export function GivingChart({
   const currentWeek = data[data.length - 1];
   const currentTotal = currentWeek.tithes + currentWeek.offering + currentWeek.welfare + currentWeek.building;
   const previousWeek = data[data.length - 2];
-  const previousTotal = previousWeek.tithes + previousWeek.offering + previousWeek.welfare + previousWeek.building;
+  const previousTotal =
+    previousWeek.tithes + previousWeek.offering + previousWeek.welfare + previousWeek.building;
   const growthRate = (currentTotal - previousTotal) / previousTotal;
 
   const activePoint = hoveredIndex !== null ? data[hoveredIndex] : currentWeek;
@@ -65,23 +66,37 @@ export function GivingChart({
         {/* Metric summary */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-muted-foreground">Total Collections</span>
+            <span className="text-2xs font-medium text-muted-foreground uppercase">Total Collections</span>
             <div className="mt-0.5 text-lg font-bold text-foreground">{formatCurrency(activeTotal)}</div>
             <span className="text-2xs text-muted-foreground">{activePoint.week}</span>
           </div>
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-primary">Tithes (10%)</span>
-            <div className="mt-0.5 text-lg font-bold text-foreground">{formatCurrency(activePoint.tithes)}</div>
-            <span className="text-2xs text-muted-foreground">{Math.round((activePoint.tithes / activeTotal) * 100)}% of total</span>
+            <span className="text-2xs font-medium text-primary uppercase">Tithes (10%)</span>
+            <div className="mt-0.5 text-lg font-bold text-foreground">
+              {formatCurrency(activePoint.tithes)}
+            </div>
+            <span className="text-2xs text-muted-foreground">
+              {Math.round((activePoint.tithes / activeTotal) * 100)}% of total
+            </span>
           </div>
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-emerald-600 dark:text-emerald-400">Sunday Offering</span>
-            <div className="mt-0.5 text-lg font-bold text-foreground">{formatCurrency(activePoint.offering)}</div>
-            <span className="text-2xs text-muted-foreground">{Math.round((activePoint.offering / activeTotal) * 100)}% of total</span>
+            <span className="text-2xs font-medium text-emerald-600 uppercase dark:text-emerald-400">
+              Sunday Offering
+            </span>
+            <div className="mt-0.5 text-lg font-bold text-foreground">
+              {formatCurrency(activePoint.offering)}
+            </div>
+            <span className="text-2xs text-muted-foreground">
+              {Math.round((activePoint.offering / activeTotal) * 100)}% of total
+            </span>
           </div>
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-purple-600 dark:text-purple-400">Projects & Welfare</span>
-            <div className="mt-0.5 text-lg font-bold text-foreground">{formatCurrency(activePoint.building + activePoint.welfare)}</div>
+            <span className="text-2xs font-medium text-purple-600 uppercase dark:text-purple-400">
+              Projects & Welfare
+            </span>
+            <div className="mt-0.5 text-lg font-bold text-foreground">
+              {formatCurrency(activePoint.building + activePoint.welfare)}
+            </div>
             <span className="text-2xs text-muted-foreground">Building & Charity</span>
           </div>
         </div>
@@ -103,15 +118,15 @@ export function GivingChart({
               return (
                 <div
                   key={d.week}
-                  className="group relative flex flex-1 flex-col items-center cursor-pointer"
+                  className="group relative flex flex-1 cursor-pointer flex-col items-center"
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   {/* Top value callout on hover */}
                   <div
                     className={cn(
-                      "absolute -top-7 whitespace-nowrap rounded-xs bg-surface-raised px-1.5 py-0.5 text-2xs font-bold shadow-xs transition-opacity",
-                      isHovered ? "opacity-100" : "opacity-0"
+                      "absolute -top-7 rounded-xs bg-surface-raised px-1.5 py-0.5 text-2xs font-bold whitespace-nowrap shadow-xs transition-opacity",
+                      isHovered ? "opacity-100" : "opacity-0",
                     )}
                   >
                     {formatCurrency(weekTotal)}
@@ -121,21 +136,23 @@ export function GivingChart({
                   <div
                     className={cn(
                       "flex w-full max-w-[42px] flex-col overflow-hidden rounded-t-control transition-all duration-200",
-                      isHovered ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-105" : "opacity-90"
+                      isHovered
+                        ? "scale-105 ring-2 ring-primary ring-offset-2 ring-offset-background"
+                        : "opacity-90",
                     )}
                     style={{ height: `${heightPercent}%` }}
                   >
                     <div style={{ height: `${buildingH}%` }} className="bg-purple-500" title="Building" />
                     <div style={{ height: `${welfareH}%` }} className="bg-amber-500" title="Welfare" />
                     <div style={{ height: `${offeringH}%` }} className="bg-emerald-500" title="Offering" />
-                    <div style={{ height: `${titheH}%` }} className="bg-primary flex-1" title="Tithes" />
+                    <div style={{ height: `${titheH}%` }} className="flex-1 bg-primary" title="Tithes" />
                   </div>
 
                   {/* X Label */}
                   <span
                     className={cn(
-                      "mt-2 text-2xs font-medium transition-colors tabular",
-                      isHovered ? "text-foreground font-bold" : "text-muted-foreground"
+                      "mt-2 tabular text-2xs font-medium transition-colors",
+                      isHovered ? "font-bold text-foreground" : "text-muted-foreground",
                     )}
                   >
                     {d.week}

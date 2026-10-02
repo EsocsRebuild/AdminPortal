@@ -104,7 +104,12 @@ export function CampaignComposer({
 
   const draft = React.useMemo(() => ({ setup, listIds, content }), [setup, listIds, content]);
   const save = useAutosave(draft, (d) =>
-    updateCampaign({ id: campaign.id, setup: d.setup, audience: { listIds: d.listIds ?? [] }, content: d.content }),
+    updateCampaign({
+      id: campaign.id,
+      setup: d.setup,
+      audience: { listIds: d.listIds ?? [] },
+      content: d.content,
+    }),
   );
 
   // Live recipient estimate.
@@ -187,7 +192,12 @@ export function CampaignComposer({
         >
           {current === "setup" && <SetupStep setup={setup} onChange={setSetup} sender={sender} />}
           {current === "audience" && (
-            <AudienceStep audiences={audiences} listIds={listIds ?? []} onChange={setListIds} estimate={estimate} />
+            <AudienceStep
+              audiences={audiences}
+              listIds={listIds ?? []}
+              onChange={setListIds}
+              estimate={estimate}
+            />
           )}
           {current === "content" && (
             <div className="grid gap-5">

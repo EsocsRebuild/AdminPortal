@@ -39,7 +39,6 @@ export default async function MembersPage({ searchParams }: PageProps<"/members"
         className="mb-4"
       />
       <MembersTable
-
         page={result.data}
         parishes={parishes}
         server={{

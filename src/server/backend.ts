@@ -90,7 +90,6 @@ async function forwardedHeaders() {
   return out;
 }
 
-
 /** Raw call returning the parsed JSON body (envelope included). */
 export async function backendRaw<T>(path: string, options: BackendOptions = {}): Promise<T> {
   const { method = "GET", body, query, auth = true, timeoutMs = 15_000 } = options;

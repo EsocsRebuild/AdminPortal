@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
-import { ArrowRight, CheckCircle2, Footprints, Sparkles, UserCheck } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { formatNumber, formatPercent } from "@/lib/format";
+import { formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export interface JourneyStage {
@@ -16,11 +15,41 @@ export interface JourneyStage {
 }
 
 const defaultStages: JourneyStage[] = [
-  { id: "visitor", label: "First-Time Guest", count: 48, color: "bg-blue-500", description: "Follow-up SMS within 24h" },
-  { id: "convert", label: "New Convert", count: 32, color: "bg-amber-500", description: "Discipleship foundation class" },
-  { id: "baptized", label: "Baptized / Sanctified", count: 195, color: "bg-emerald-500", description: "Active sacramental life" },
-  { id: "regular", label: "Regular Member", count: 142, color: "bg-indigo-500", description: "Committed tither & attendee" },
-  { id: "worker", label: "Ordained / Worker", count: 35, color: "bg-purple-500", description: "Elders, choir, ushers, clergy" },
+  {
+    id: "visitor",
+    label: "First-Time Guest",
+    count: 48,
+    color: "bg-blue-500",
+    description: "Follow-up SMS within 24h",
+  },
+  {
+    id: "convert",
+    label: "New Convert",
+    count: 32,
+    color: "bg-amber-500",
+    description: "Discipleship foundation class",
+  },
+  {
+    id: "baptized",
+    label: "Baptized / Sanctified",
+    count: 195,
+    color: "bg-emerald-500",
+    description: "Active sacramental life",
+  },
+  {
+    id: "regular",
+    label: "Regular Member",
+    count: 142,
+    color: "bg-indigo-500",
+    description: "Committed tither & attendee",
+  },
+  {
+    id: "worker",
+    label: "Ordained / Worker",
+    count: 35,
+    color: "bg-purple-500",
+    description: "Elders, choir, ushers, clergy",
+  },
 ];
 
 export function MemberStageFunnel({
@@ -41,16 +70,15 @@ export function MemberStageFunnel({
       />
       <CardContent className="space-y-4 pt-1">
         <div className="space-y-3">
-          {stages.map((stage, i) => {
+          {stages.map((stage) => {
             const widthPercent = Math.max(12, (stage.count / maxCount) * 100);
-            const conversionFromPrior = i > 0 ? (stage.count / stages[i - 1].count) : null;
 
             return (
               <div key={stage.id} className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-foreground">{stage.label}</span>
-                    <span className="text-2xs text-muted-foreground hidden sm:inline">
+                    <span className="hidden text-2xs text-muted-foreground sm:inline">
                       • {stage.description}
                     </span>
                   </div>
@@ -65,7 +93,7 @@ export function MemberStageFunnel({
                 {/* Progress bar representing funnel width */}
                 <div className="h-4 w-full overflow-hidden rounded-control bg-surface-muted">
                   <div
-                    className={cn("h-full transition-all duration-500 rounded-control", stage.color)}
+                    className={cn("h-full rounded-control transition-all duration-500", stage.color)}
                     style={{ width: `${widthPercent}%` }}
                   />
                 </div>
@@ -75,10 +103,12 @@ export function MemberStageFunnel({
         </div>
 
         {/* Funnel Insights */}
-        <div className="mt-4 flex flex-col gap-2 rounded-control border border-border bg-surface-muted/30 p-3 sm:flex-row sm:items-center sm:justify-between text-xs">
+        <div className="mt-4 flex flex-col gap-2 rounded-control border border-border bg-surface-muted/30 p-3 text-xs sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Sparkles className="size-3.5 text-primary" />
-            <span>Visitor to Convert retention rate: <strong className="text-foreground">66.7%</strong></span>
+            <span>
+              Visitor to Convert retention rate: <strong className="text-foreground">66.7%</strong>
+            </span>
           </div>
           <div className="text-2xs text-muted-foreground">
             Automated alerts remind pastoral team when visitors stall past 14 days without follow-up.

@@ -31,8 +31,6 @@ import { QuickActions } from "./_components/quick-actions";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-
-
 export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
   const [summary, campaigns, activity] = await Promise.all([
@@ -169,7 +167,6 @@ export default async function DashboardPage() {
           <QuickActions user={user} />
         </StaggerItem>
 
-
         <StaggerItem>
           <GettingStarted steps={steps} />
         </StaggerItem>
@@ -195,7 +192,6 @@ export default async function DashboardPage() {
         </StaggerItem>
 
         <StaggerItem className="grid gap-page xl:grid-cols-3">
-
           <Card className={campaigns ? "xl:col-span-2" : "xl:col-span-3"}>
             <CardHeader title="Needs your attention" description="Things waiting on you right now." />
             <CardContent className="grid content-start gap-1">

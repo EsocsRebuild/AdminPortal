@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Calendar,
-  CheckCircle2,
-  FileText,
-  Flame,
-  Globe2,
-  Newspaper,
-  Sparkles,
-  Users2,
-} from "lucide-react";
+import { Calendar, CheckCircle2, FileText, Newspaper, Users2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,7 +60,8 @@ const mockSections: Record<string, SectionData> = {
         title: "Women Fellowship Welfare Outreach Donates N2M to Orphanages",
         date: "September 28, 2026",
         category: "Welfare & Charity",
-        excerpt: "The National Women Executive Board presented food items and medical supplies across Lagos state.",
+        excerpt:
+          "The National Women Executive Board presented food items and medical supplies across Lagos state.",
       },
     ],
   },
@@ -104,11 +96,7 @@ const mockSections: Record<string, SectionData> = {
   },
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const section = mockSections[slug];
   if (!section) return { title: "Section Not Found | ESOCS" };
@@ -118,11 +106,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function SectionPublicPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function SectionPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const section = mockSections[slug];
 
@@ -136,12 +120,12 @@ export default async function SectionPublicPage({
       <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-amber-500/10 via-surface to-background py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-start gap-4">
-            <Badge tone="neutral" className="gap-1.5 py-1 px-3">
+            <Badge tone="neutral" className="gap-1.5 px-3 py-1">
               <Users2 className="size-3.5 text-amber-500" />
               <span>National Fellowship & Directorate Section</span>
             </Badge>
             <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">{section.name}</h1>
-            <p className="italic text-lg text-primary font-medium">&ldquo;{section.motto}&rdquo;</p>
+            <p className="text-lg font-medium text-primary italic">&ldquo;{section.motto}&rdquo;</p>
             <p className="max-w-2xl text-base text-muted-foreground">{section.vision}</p>
           </div>
         </div>
@@ -159,12 +143,10 @@ export default async function SectionPublicPage({
               </h2>
               <div className="grid gap-4">
                 {section.programmes.map((prog) => (
-                  <Card key={prog.title} className="p-6 space-y-3">
+                  <Card key={prog.title} className="space-y-3 p-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-lg">{prog.title}</h3>
-                      {prog.registrationOpen && (
-                        <Badge tone="success">Registration Open</Badge>
-                      )}
+                      <h3 className="text-lg font-bold">{prog.title}</h3>
+                      {prog.registrationOpen && <Badge tone="success">Registration Open</Badge>}
                     </div>
                     <div className="text-xs font-semibold text-amber-600 dark:text-amber-400">
                       {prog.date} • {prog.location}
@@ -198,7 +180,7 @@ export default async function SectionPublicPage({
                       <Badge tone="outline">{item.category}</Badge>
                       <span>{item.date}</span>
                     </div>
-                    <h3 className="mt-2 font-semibold text-base">{item.title}</h3>
+                    <h3 className="mt-2 text-base font-semibold">{item.title}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">{item.excerpt}</p>
                   </Card>
                 ))}
@@ -208,12 +190,12 @@ export default async function SectionPublicPage({
 
           {/* Sidebar Column */}
           <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <h3 className="font-bold text-base border-b border-border pb-2">Executive Board</h3>
+            <Card className="space-y-4 p-6">
+              <h3 className="border-b border-border pb-2 text-base font-bold">Executive Board</h3>
               <div className="space-y-3">
                 {section.executiveBoard.map((exec) => (
                   <div key={exec.name} className="flex items-start gap-2 text-sm">
-                    <CheckCircle2 className="size-4 text-emerald-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                     <div>
                       <div className="font-semibold">{exec.name}</div>
                       <div className="text-2xs text-muted-foreground">{exec.role}</div>

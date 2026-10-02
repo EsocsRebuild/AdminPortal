@@ -1,17 +1,6 @@
 import * as React from "react";
-import {
-  CalendarDays,
-  CheckCircle2,
-  Clock,
-  ExternalLink,
-  MapPin,
-  Plus,
-  QrCode,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { CalendarDays, Clock, MapPin, Plus, QrCode } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { Page, PageHeader } from "@/components/layout/page";
 import { Badge } from "@/components/ui/badge";
@@ -91,7 +80,7 @@ const mockEvents: ChurchEvent[] = [
 ];
 
 export default async function EventsPage() {
-  const user = await requirePermission("events:view");
+  await requirePermission("events:view");
 
   return (
     <Page>
@@ -126,7 +115,10 @@ export default async function EventsPage() {
                 title={
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-base font-bold text-foreground">{evt.title}</span>
-                    <Badge tone={evt.category === "service" ? "primary" : "info"} className="shrink-0 text-2xs uppercase">
+                    <Badge
+                      tone={evt.category === "service" ? "primary" : "info"}
+                      className="shrink-0 text-2xs uppercase"
+                    >
                       {evt.category}
                     </Badge>
                   </div>

@@ -21,22 +21,36 @@ export function ContextualTipCard({
   id,
   title,
   description,
-  shortcut,
   actionText = "Learn More",
   onAction,
   className,
 }: ContextualTipCardProps) {
-  const [dismissed, setDismissed] = React.useState(true);
+  const [localDismissed, setLocalDismissed] = React.useState(false);
+  const storedDismissed = React.useSyncExternalStore(
+    (onStoreChange) => {
+      window.addEventListener("storage", onStoreChange);
+      return () => window.removeEventListener("storage", onStoreChange);
+    },
+    () => {
+      try {
+        return localStorage.getItem(`tip_dismissed_${id}`) === "true";
+      } catch {
+        return false;
+      }
+    },
+    () => true,
+  );
+
+  const dismissed = localDismissed || storedDismissed;
   const [tipsModalOpen, setTipsModalOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    const isDismissed = localStorage.getItem(`tip_dismissed_${id}`);
-    setDismissed(isDismissed === "true");
-  }, [id]);
-
   function handleDismiss() {
-    setDismissed(true);
-    localStorage.setItem(`tip_dismissed_${id}`, "true");
+    setLocalDismissed(true);
+    try {
+      localStorage.setItem(`tip_dismissed_${id}`, "true");
+    } catch {
+      // ignore
+    }
   }
 
   if (dismissed) return null;
@@ -46,7 +60,7 @@ export function ContextualTipCard({
       <div
         className={cn(
           "relative flex flex-col gap-3 rounded-panel border border-amber-500/20 bg-amber-500/5 p-4 text-foreground shadow-2xs sm:flex-row sm:items-center sm:justify-between dark:border-amber-400/20 dark:bg-amber-400/5",
-          className
+          className,
         )}
       >
         <div className="flex items-start gap-3">

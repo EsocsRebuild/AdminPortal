@@ -1,16 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Building2,
-  Calendar,
-  Clock,
-  HeartHandshake,
-  MapPin,
-  Megaphone,
-  Phone,
-  UserCheck,
-} from "lucide-react";
+import { Building2, Calendar, Clock, MapPin, Megaphone, Phone, UserCheck } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -122,11 +112,7 @@ const mockParishes: Record<string, ParishData> = {
   },
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const parish = mockParishes[slug];
   if (!parish) return { title: "Parish Not Found | ESOCS" };
@@ -136,11 +122,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ParishPublicPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ParishPublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const parish = mockParishes[slug];
 
@@ -154,7 +136,7 @@ export default async function ParishPublicPage({
       <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/10 via-surface to-background py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-start gap-4">
-            <Badge tone="neutral" className="gap-1.5 py-1 px-3">
+            <Badge tone="neutral" className="gap-1.5 px-3 py-1">
               <Building2 className="size-3.5 text-primary" />
               <span>Official ESOCS Parish Portal</span>
             </Badge>
@@ -191,7 +173,7 @@ export default async function ParishPublicPage({
                   <UserCheck className="size-7" />
                 </div>
                 <div>
-                  <div className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <div className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Pastoral Leadership
                   </div>
                   <h2 className="text-xl font-bold">{parish.pastor.name}</h2>
@@ -229,7 +211,7 @@ export default async function ParishPublicPage({
               </h2>
               <div className="grid gap-4">
                 {parish.announcements.map((ann) => (
-                  <Card key={ann.id} className="p-5 border-l-4 border-l-primary">
+                  <Card key={ann.id} className="border-l-4 border-l-primary p-5">
                     <span className="text-2xs font-medium text-muted-foreground">{ann.date}</span>
                     <h3 className="text-base font-semibold">{ann.title}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">{ann.summary}</p>
@@ -241,11 +223,11 @@ export default async function ParishPublicPage({
 
           {/* Sidebar Column */}
           <div className="space-y-6">
-            <Card className="p-6 space-y-4">
-              <h3 className="font-bold text-base border-b border-border pb-2">Location & Contact</h3>
+            <Card className="space-y-4 p-6">
+              <h3 className="border-b border-border pb-2 text-base font-bold">Location & Contact</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-start gap-2.5">
-                  <MapPin className="size-4 shrink-0 text-primary mt-0.5" />
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
                   <span>{parish.address}</span>
                 </div>
                 <div className="flex items-center gap-2.5">
@@ -255,8 +237,8 @@ export default async function ParishPublicPage({
               </div>
             </Card>
 
-            <Card className="p-6 bg-surface-muted/60 text-center space-y-3">
-              <h4 className="font-semibold text-sm">Need Pastoral Counseling?</h4>
+            <Card className="space-y-3 bg-surface-muted/60 p-6 text-center">
+              <h4 className="text-sm font-semibold">Need Pastoral Counseling?</h4>
               <p className="text-xs text-muted-foreground">
                 Our pastors are available for spiritual guidance, prayers, and home visits.
               </p>

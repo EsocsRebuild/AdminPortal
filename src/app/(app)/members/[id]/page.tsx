@@ -12,7 +12,6 @@ import { getParishes } from "@/features/lookups/queries";
 import { MemberActions } from "@/features/members/components/member-actions";
 import { getMember } from "@/features/members/queries";
 import { statusLabels } from "@/features/members/types";
-import type { Household } from "@/features/members/types-household";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { assertId, findOrNotFound } from "@/server/query";
 

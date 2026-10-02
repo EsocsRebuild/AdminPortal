@@ -11,7 +11,6 @@ import {
   PanelLeft,
   Rows3,
   Search,
-  Sparkles,
   Sun,
   UserPlus,
   UserRoundPlus,
@@ -78,141 +77,143 @@ export function CommandMenu() {
     setQuickActionOpen(true);
   };
 
-
   return (
     <>
       <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
         <DialogPrimitive.Trigger asChild>
-
-        <button
-          type="button"
-          className={cn(
-            "group flex h-control-md cursor-pointer items-center gap-2 rounded-control text-muted-foreground transition-colors",
-            "focus-visible:outline-2 focus-visible:outline-ring",
-            // Icon button on phones, search field from `md`.
-            "w-control-md justify-center hover:bg-surface-hover hover:text-foreground",
-            "md:w-64 md:justify-start md:border md:border-border md:bg-surface md:px-2.5 md:shadow-xs md:hover:border-border-strong md:hover:bg-surface lg:w-72",
-          )}
-          aria-label="Search"
-        >
-          <Search className="size-4 shrink-0" />
-          <span className="hidden flex-1 text-left text-base text-subtle-foreground md:block">
-            Search or jump to…
-          </span>
-          <Kbd keys={["⌘", "K"]} className="hidden md:inline-flex" />
-        </button>
-      </DialogPrimitive.Trigger>
-      <DialogPrimitive.Portal>
-        <DialogOverlay />
-        <DialogPrimitive.Content
-          aria-describedby={undefined}
-          className={cn(
-            "fixed inset-x-3 top-3 z-50 overflow-hidden rounded-panel border border-border shadow-lg",
-            "sm:inset-x-auto sm:top-[14vh] sm:left-1/2 sm:w-full sm:max-w-xl sm:-translate-x-1/2",
-            "data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in",
-          )}
-        >
-          <DialogPrimitive.Title className="sr-only">Command menu</DialogPrimitive.Title>
-          <Command loop>
-            <CommandInput placeholder="Search pages and actions…" />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              {groups.map(({ items, ...group }) => {
-                return (
-                  <CommandGroup key={group.title} heading={group.title}>
-                    {items.map((item) => (
-                      <CommandItem
-                        key={item.href}
-                        value={`${item.title} ${item.keywords?.join(" ") ?? ""}`}
-                        onSelect={() => run(() => router.push(item.href))}
-                      >
-                        <item.icon />
-                        {item.title}
+          <button
+            type="button"
+            className={cn(
+              "group flex h-control-md cursor-pointer items-center gap-2 rounded-control text-muted-foreground transition-colors",
+              "focus-visible:outline-2 focus-visible:outline-ring",
+              // Icon button on phones, search field from `md`.
+              "w-control-md justify-center hover:bg-surface-hover hover:text-foreground",
+              "md:w-64 md:justify-start md:border md:border-border md:bg-surface md:px-2.5 md:shadow-xs md:hover:border-border-strong md:hover:bg-surface lg:w-72",
+            )}
+            aria-label="Search"
+          >
+            <Search className="size-4 shrink-0" />
+            <span className="hidden flex-1 text-left text-base text-subtle-foreground md:block">
+              Search or jump to…
+            </span>
+            <Kbd keys={["⌘", "K"]} className="hidden md:inline-flex" />
+          </button>
+        </DialogPrimitive.Trigger>
+        <DialogPrimitive.Portal>
+          <DialogOverlay />
+          <DialogPrimitive.Content
+            aria-describedby={undefined}
+            className={cn(
+              "fixed inset-x-3 top-3 z-50 overflow-hidden rounded-panel border border-border shadow-lg",
+              "sm:inset-x-auto sm:top-[14vh] sm:left-1/2 sm:w-full sm:max-w-xl sm:-translate-x-1/2",
+              "data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in",
+            )}
+          >
+            <DialogPrimitive.Title className="sr-only">Command menu</DialogPrimitive.Title>
+            <Command loop>
+              <CommandInput placeholder="Search pages and actions…" />
+              <CommandList>
+                <CommandEmpty>No results found.</CommandEmpty>
+                {groups.map(({ items, ...group }) => {
+                  return (
+                    <CommandGroup key={group.title} heading={group.title}>
+                      {items.map((item) => (
+                        <CommandItem
+                          key={item.href}
+                          value={`${item.title} ${item.keywords?.join(" ") ?? ""}`}
+                          onSelect={() => run(() => router.push(item.href))}
+                        >
+                          <item.icon />
+                          {item.title}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  );
+                })}
+                <CommandGroup heading="Instant Actions">
+                  <CommandItem
+                    onSelect={() => {
+                      setOpen(false);
+                      setQuickTipsOpen(true);
+                    }}
+                  >
+                    <Lightbulb className="text-amber-500" /> Open Quick Tips & Guided Help
+                  </CommandItem>
+                  <CommandItem onSelect={() => openQuickModal("member")}>
+                    <UserPlus className="text-primary" /> Quick Add Member (Alt+N)
+                  </CommandItem>
+                  <CommandItem onSelect={() => openQuickModal("headcount")}>
+                    <UsersRound className="text-emerald-500" /> Record Sunday Headcount (Alt+H)
+                  </CommandItem>
+                  <CommandItem onSelect={() => openQuickModal("prayer")}>
+                    <HeartHandshake className="text-purple-500" /> Urgent Prayer & Pastoral Care
+                  </CommandItem>
+                </CommandGroup>
+                <CommandGroup heading="Actions">
+                  {quickActions
+                    .filter((a) => can(user, a.permission))
+                    .map((a) => (
+                      <CommandItem key={a.href} onSelect={() => run(() => router.push(a.href))}>
+                        <a.icon /> {a.label}
                       </CommandItem>
                     ))}
-                  </CommandGroup>
-                );
-              })}
-              <CommandGroup heading="Instant Actions">
-                <CommandItem onSelect={() => { setOpen(false); setQuickTipsOpen(true); }}>
-                  <Lightbulb className="text-amber-500" /> Open Quick Tips & Guided Help
-                </CommandItem>
-                <CommandItem onSelect={() => openQuickModal("member")}>
-                  <UserPlus className="text-primary" /> Quick Add Member (Alt+N)
-                </CommandItem>
-                <CommandItem onSelect={() => openQuickModal("headcount")}>
-                  <UsersRound className="text-emerald-500" /> Record Sunday Headcount (Alt+H)
-                </CommandItem>
-                <CommandItem onSelect={() => openQuickModal("prayer")}>
-                  <HeartHandshake className="text-purple-500" /> Urgent Prayer & Pastoral Care
-                </CommandItem>
-              </CommandGroup>
-              <CommandGroup heading="Actions">
-                {quickActions
-                  .filter((a) => can(user, a.permission))
-                  .map((a) => (
-                    <CommandItem key={a.href} onSelect={() => run(() => router.push(a.href))}>
-                      <a.icon /> {a.label}
-                    </CommandItem>
-                  ))}
-                <CommandItem onSelect={() => run(() => setTheme("light"))}>
-                  <Sun /> Switch to light mode
-                </CommandItem>
-                <CommandItem onSelect={() => run(() => setTheme("dark"))}>
-                  <Moon /> Switch to dark mode
-                </CommandItem>
-                <CommandItem onSelect={() => run(() => setTheme("system"))}>
-                  <Laptop /> Use system colour mode
-                </CommandItem>
-                <CommandItem
-                  value="compact density"
-                  onSelect={() => run(() => setPreference("density", "compact"))}
-                >
-                  <Rows3 /> Compact density
-                </CommandItem>
-                <CommandItem
-                  value="comfortable density"
-                  onSelect={() => run(() => setPreference("density", "comfortable"))}
-                >
-                  <Rows3 /> Comfortable density
-                </CommandItem>
-                <CommandItem
-                  value="toggle sidebar"
-                  onSelect={() =>
-                    run(() => {
-                      const collapsed = document.documentElement.dataset.sidebar === "collapsed";
-                      setPreference("sidebar", collapsed ? "expanded" : "collapsed");
-                    })
-                  }
-                >
-                  <PanelLeft /> Toggle sidebar
-                </CommandItem>
-              </CommandGroup>
-            </CommandList>
-            <div className="hidden items-center gap-4 border-t border-border px-4 py-2 text-xs text-subtle-foreground sm:flex">
-              <span className="flex items-center gap-1.5">
-                <Kbd>↑</Kbd>
-                <Kbd>↓</Kbd> navigate
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Kbd>↵</Kbd> open
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Kbd>esc</Kbd> close
-              </span>
-            </div>
-          </Command>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+                  <CommandItem onSelect={() => run(() => setTheme("light"))}>
+                    <Sun /> Switch to light mode
+                  </CommandItem>
+                  <CommandItem onSelect={() => run(() => setTheme("dark"))}>
+                    <Moon /> Switch to dark mode
+                  </CommandItem>
+                  <CommandItem onSelect={() => run(() => setTheme("system"))}>
+                    <Laptop /> Use system colour mode
+                  </CommandItem>
+                  <CommandItem
+                    value="compact density"
+                    onSelect={() => run(() => setPreference("density", "compact"))}
+                  >
+                    <Rows3 /> Compact density
+                  </CommandItem>
+                  <CommandItem
+                    value="comfortable density"
+                    onSelect={() => run(() => setPreference("density", "comfortable"))}
+                  >
+                    <Rows3 /> Comfortable density
+                  </CommandItem>
+                  <CommandItem
+                    value="toggle sidebar"
+                    onSelect={() =>
+                      run(() => {
+                        const collapsed = document.documentElement.dataset.sidebar === "collapsed";
+                        setPreference("sidebar", collapsed ? "expanded" : "collapsed");
+                      })
+                    }
+                  >
+                    <PanelLeft /> Toggle sidebar
+                  </CommandItem>
+                </CommandGroup>
+              </CommandList>
+              <div className="hidden items-center gap-4 border-t border-border px-4 py-2 text-xs text-subtle-foreground sm:flex">
+                <span className="flex items-center gap-1.5">
+                  <Kbd>↑</Kbd>
+                  <Kbd>↓</Kbd> navigate
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Kbd>↵</Kbd> open
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Kbd>esc</Kbd> close
+                </span>
+              </div>
+            </Command>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
 
-    <QuickTipsModal open={quickTipsOpen} onOpenChange={setQuickTipsOpen} />
-    <QuickActionsModal
-      open={quickActionOpen}
-      onOpenChange={setQuickActionOpen}
-      initialTab={quickActionTab}
-    />
+      <QuickTipsModal open={quickTipsOpen} onOpenChange={setQuickTipsOpen} />
+      <QuickActionsModal
+        open={quickActionOpen}
+        onOpenChange={setQuickActionOpen}
+        initialTab={quickActionTab}
+      />
     </>
   );
 }
-

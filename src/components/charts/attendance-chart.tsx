@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, Calendar, Info, TrendingUp, Users } from "lucide-react";
+import { ArrowUpRight, Calendar } from "lucide-react";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Tooltip } from "@/components/ui/tooltip";
 import { formatNumber, formatPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -19,15 +18,63 @@ export interface AttendancePoint {
 }
 
 const mockWeeklyAttendance: AttendancePoint[] = [
-  { date: "2026-08-02", label: "Aug 2", total: 320, men: 110, women: 140, children: 70, notes: "Regular Sunday service" },
-  { date: "2026-08-09", label: "Aug 9", total: 345, men: 118, women: 152, children: 75, notes: "Youth Sunday" },
+  {
+    date: "2026-08-02",
+    label: "Aug 2",
+    total: 320,
+    men: 110,
+    women: 140,
+    children: 70,
+    notes: "Regular Sunday service",
+  },
+  {
+    date: "2026-08-09",
+    label: "Aug 9",
+    total: 345,
+    men: 118,
+    women: 152,
+    children: 75,
+    notes: "Youth Sunday",
+  },
   { date: "2026-08-16", label: "Aug 16", total: 310, men: 105, women: 135, children: 70 },
-  { date: "2026-08-23", label: "Aug 23", total: 360, men: 122, women: 160, children: 78, notes: "Thanksgiving service" },
+  {
+    date: "2026-08-23",
+    label: "Aug 23",
+    total: 360,
+    men: 122,
+    women: 160,
+    children: 78,
+    notes: "Thanksgiving service",
+  },
   { date: "2026-08-30", label: "Aug 30", total: 375, men: 128, women: 165, children: 82 },
-  { date: "2026-09-06", label: "Sep 6", total: 390, men: 135, women: 170, children: 85, notes: "First Sunday of the Month" },
+  {
+    date: "2026-09-06",
+    label: "Sep 6",
+    total: 390,
+    men: 135,
+    women: 170,
+    children: 85,
+    notes: "First Sunday of the Month",
+  },
   { date: "2026-09-13", label: "Sep 13", total: 382, men: 130, women: 168, children: 84 },
-  { date: "2026-09-20", label: "Sep 20", total: 410, men: 142, women: 178, children: 90, notes: "Annual Mothers' Day Service" },
-  { date: "2026-09-27", label: "Sep 27", total: 425, men: 146, women: 185, children: 94, notes: "Record attendance" },
+  {
+    date: "2026-09-20",
+    label: "Sep 20",
+    total: 410,
+    men: 142,
+    women: 178,
+    children: 90,
+    notes: "Annual Mothers' Day Service",
+  },
+  {
+    date: "2026-09-27",
+    label: "Sep 27",
+    total: 425,
+    men: 146,
+    women: 185,
+    children: 94,
+    notes: "Record attendance",
+  },
 ];
 
 export function AttendanceChart({
@@ -41,7 +88,6 @@ export function AttendanceChart({
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
 
   const maxVal = Math.max(...data.map((d) => d.total)) * 1.15;
-  const minVal = 0;
   const width = 640;
   const height = 220;
   const paddingBottom = 30;
@@ -83,7 +129,7 @@ export function AttendanceChart({
                 "rounded-xs px-2.5 py-1 text-xs font-medium transition-colors",
                 activeSeries === "total"
                   ? "bg-surface text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               Total
@@ -95,7 +141,7 @@ export function AttendanceChart({
                 "rounded-xs px-2.5 py-1 text-xs font-medium transition-colors",
                 activeSeries === "breakdown"
                   ? "bg-surface text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               Men / Women / Children
@@ -107,9 +153,11 @@ export function AttendanceChart({
         {/* Metric Overview Callouts */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-muted-foreground">Latest Service</span>
+            <span className="text-2xs font-medium text-muted-foreground uppercase">Latest Service</span>
             <div className="mt-0.5 flex items-baseline gap-1.5">
-              <span className="text-xl font-bold tracking-tight text-foreground">{formatNumber(latest.total)}</span>
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                {formatNumber(latest.total)}
+              </span>
               <span className="flex items-center text-xs font-semibold text-success">
                 <ArrowUpRight className="size-3" />
                 {formatPercent(delta)}
@@ -119,23 +167,33 @@ export function AttendanceChart({
           </div>
 
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-muted-foreground">12-Week Average</span>
+            <span className="text-2xs font-medium text-muted-foreground uppercase">12-Week Average</span>
             <div className="mt-0.5">
-              <span className="text-xl font-bold tracking-tight text-foreground">{formatNumber(averageAttendance)}</span>
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                {formatNumber(averageAttendance)}
+              </span>
             </div>
             <span className="text-2xs text-muted-foreground">attendees / service</span>
           </div>
 
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-emerald-600 dark:text-emerald-400">Women</span>
+            <span className="text-2xs font-medium text-emerald-600 uppercase dark:text-emerald-400">
+              Women
+            </span>
             <div className="mt-0.5">
-              <span className="text-xl font-bold tracking-tight text-foreground">{formatNumber(latest.women)}</span>
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                {formatNumber(latest.women)}
+              </span>
             </div>
-            <span className="text-2xs text-muted-foreground">{Math.round((latest.women / latest.total) * 100)}% of total</span>
+            <span className="text-2xs text-muted-foreground">
+              {Math.round((latest.women / latest.total) * 100)}% of total
+            </span>
           </div>
 
           <div className="rounded-control border border-border bg-surface-muted/30 p-2.5">
-            <span className="text-2xs font-medium uppercase text-blue-600 dark:text-blue-400">Men & Children</span>
+            <span className="text-2xs font-medium text-blue-600 uppercase dark:text-blue-400">
+              Men & Children
+            </span>
             <div className="mt-0.5 flex items-baseline gap-2">
               <span className="text-sm font-bold text-blue-600">{latest.men} Men</span>
               <span className="text-sm font-bold text-amber-500">{latest.children} Kids</span>
@@ -178,7 +236,7 @@ export function AttendanceChart({
                     x="15"
                     y={y + 3}
                     textAnchor="end"
-                    className="fill-muted-foreground text-[9px] tabular"
+                    className="fill-muted-foreground tabular text-[9px]"
                   >
                     {val}
                   </text>
@@ -265,7 +323,7 @@ export function AttendanceChart({
                       "transition-all duration-150",
                       isHovered
                         ? "fill-primary stroke-background stroke-2 shadow-md"
-                        : "fill-surface stroke-primary stroke-2"
+                        : "fill-surface stroke-primary stroke-2",
                     )}
                   />
 
@@ -275,8 +333,8 @@ export function AttendanceChart({
                     y={height - 10}
                     textAnchor="middle"
                     className={cn(
-                      "text-[10px] transition-colors tabular",
-                      isHovered ? "fill-foreground font-semibold" : "fill-muted-foreground"
+                      "tabular text-[10px] transition-colors",
+                      isHovered ? "fill-foreground font-semibold" : "fill-muted-foreground",
                     )}
                   >
                     {d.label}
@@ -284,7 +342,7 @@ export function AttendanceChart({
 
                   {/* Invisible hit target for hover */}
                   <rect
-                    x={x - (width / data.length) / 2}
+                    x={x - width / data.length / 2}
                     y={0}
                     width={width / data.length}
                     height={height}
@@ -299,10 +357,12 @@ export function AttendanceChart({
 
           {/* Interactive Floating Hover Info Banner */}
           {hoveredIndex !== null && (
-            <div className="mt-2 flex items-center justify-between rounded-control border border-border bg-surface px-3 py-2 text-xs shadow-xs animate-in fade-in">
+            <div className="animate-in fade-in mt-2 flex items-center justify-between rounded-control border border-border bg-surface px-3 py-2 text-xs shadow-xs">
               <div className="flex items-center gap-2">
                 <Calendar className="size-3.5 text-primary" />
-                <span className="font-semibold text-foreground">{activePoint.date} ({activePoint.label})</span>
+                <span className="font-semibold text-foreground">
+                  {activePoint.date} ({activePoint.label})
+                </span>
                 {activePoint.notes && (
                   <span className="rounded-full bg-primary/10 px-2 py-0.5 text-2xs text-primary">
                     {activePoint.notes}

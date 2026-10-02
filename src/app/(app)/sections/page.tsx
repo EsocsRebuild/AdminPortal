@@ -1,16 +1,5 @@
 import * as React from "react";
-import {
-  ArrowRight,
-  BookOpen,
-  CalendarCheck,
-  Crown,
-  HeartHandshake,
-  Layers,
-  Music,
-  Sparkles,
-  Users2,
-  UsersRound,
-} from "lucide-react";
+import { ArrowRight, CalendarCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -41,7 +30,8 @@ const mockSections: FellowshipSection[] = [
     id: "sec-women",
     slug: "women",
     name: "Women Fellowship (Mothers' Directorate)",
-    motto: "Encourage women of all ages to grow in their relationship with Christ through learning, sharing, and serving.",
+    motto:
+      "Encourage women of all ages to grow in their relationship with Christ through learning, sharing, and serving.",
     headLeader: "Senior Mother Adeleke (National President)",
     memberCount: 165,
     activeEventsCount: 2,
@@ -53,7 +43,8 @@ const mockSections: FellowshipSection[] = [
     id: "sec-youth",
     slug: "youth",
     name: "Youth Fellowship (Mount Zion Youth Society - MZYS)",
-    motto: "Directing the minds of the youth towards living a life of holiness, righteousness, and integrity.",
+    motto:
+      "Directing the minds of the youth towards living a life of holiness, righteousness, and integrity.",
     headLeader: "Special Apostle Adeyemi (Youth Coordinator)",
     memberCount: 98,
     activeEventsCount: 3,
@@ -77,7 +68,8 @@ const mockSections: FellowshipSection[] = [
     id: "sec-welfare",
     slug: "welfare",
     name: "Welfare, Mercy & Evangelical Directorate",
-    motto: "Pure religion before God and the Father is this: to visit orphans and widows in their affliction.",
+    motto:
+      "Pure religion before God and the Father is this: to visit orphans and widows in their affliction.",
     headLeader: "Elder Mrs. Folashade (Director of Welfare)",
     memberCount: 42,
     activeEventsCount: 1,
@@ -88,7 +80,7 @@ const mockSections: FellowshipSection[] = [
 ];
 
 export default async function SectionsPage() {
-  const user = await requireSession();
+  await requireSession();
 
   return (
     <Page>
@@ -107,7 +99,10 @@ export default async function SectionsPage() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         {mockSections.map((sec) => (
-          <Card key={sec.id} className={`border-l-4 ${sec.accentColor} flex flex-col justify-between overflow-hidden`}>
+          <Card
+            key={sec.id}
+            className={`border-l-4 ${sec.accentColor} flex flex-col justify-between overflow-hidden`}
+          >
             <CardHeader
               title={
                 <div className="flex items-start justify-between gap-2">
@@ -118,24 +113,26 @@ export default async function SectionsPage() {
                 </div>
               }
               description={
-                <p className="mt-1 italic text-xs text-muted-foreground line-clamp-2">
+                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground italic">
                   &ldquo;{sec.motto}&rdquo;
                 </p>
               }
             />
 
             <CardContent className="mt-auto space-y-3 pt-2">
-              <div className="rounded-control bg-surface-muted/40 p-2.5 text-xs space-y-1">
+              <div className="space-y-1 rounded-control bg-surface-muted/40 p-2.5 text-xs">
                 <div className="text-muted-foreground">
                   Presiding Leader: <strong className="text-foreground">{sec.headLeader}</strong>
                 </div>
-                <div className="flex items-center justify-between text-2xs pt-1 border-t border-border-subtle">
-                  <span>Active Roster: <strong className="text-foreground">{sec.memberCount} members</strong></span>
+                <div className="flex items-center justify-between border-t border-border-subtle pt-1 text-2xs">
+                  <span>
+                    Active Roster: <strong className="text-foreground">{sec.memberCount} members</strong>
+                  </span>
                   <span>{sec.activeEventsCount} upcoming events</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 text-xs text-primary font-medium">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-primary">
                 <CalendarCheck className="size-3.5 shrink-0" />
                 <span className="truncate">{sec.nextMajorEvent}</span>
               </div>

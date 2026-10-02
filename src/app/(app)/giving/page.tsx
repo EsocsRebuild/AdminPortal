@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  ArrowUpRight,
-  CheckCircle2,
-  DollarSign,
-  Download,
-  FileSpreadsheet,
-  Lock,
-  Plus,
-  ShieldCheck,
-  Wallet,
-} from "lucide-react";
+import { ArrowUpRight, CheckCircle2, FileSpreadsheet, Plus } from "lucide-react";
 import type { Metadata } from "next";
 
 import { GivingChart } from "@/components/charts/giving-chart";
@@ -125,7 +115,7 @@ const mockBatches: GivingBatch[] = [
 ];
 
 export default async function GivingPage() {
-  const user = await requirePermission("giving:view");
+  await requirePermission("giving:view");
 
   const totalFundsInVault = mockFunds.reduce((acc, f) => acc + f.currentBalance, 0);
   const totalMonthToDate = mockFunds.reduce((acc, f) => acc + f.monthToDate, 0);
@@ -156,22 +146,32 @@ export default async function GivingPage() {
       />
 
       {/* Summary KPI Cards */}
-      <div className="grid gap-3 sm:grid-cols-3 mb-6">
+      <div className="mb-6 grid gap-3 sm:grid-cols-3">
         <div className="rounded-control border border-border bg-surface p-4 shadow-xs">
-          <span className="text-2xs font-semibold uppercase text-muted-foreground">Total Parish Treasury</span>
-          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">{formatCurrency(totalFundsInVault)}</div>
+          <span className="text-2xs font-semibold text-muted-foreground uppercase">
+            Total Parish Treasury
+          </span>
+          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+            {formatCurrency(totalFundsInVault)}
+          </div>
           <span className="text-2xs text-muted-foreground">Across 4 verified accounts</span>
         </div>
         <div className="rounded-control border border-border bg-surface p-4 shadow-xs">
-          <span className="text-2xs font-semibold uppercase text-primary">Month-to-Date Collections</span>
-          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">{formatCurrency(totalMonthToDate)}</div>
-          <span className="text-2xs text-success font-semibold flex items-center gap-1">
+          <span className="text-2xs font-semibold text-primary uppercase">Month-to-Date Collections</span>
+          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+            {formatCurrency(totalMonthToDate)}
+          </div>
+          <span className="flex items-center gap-1 text-2xs font-semibold text-success">
             <ArrowUpRight className="size-3" /> +14.2% vs previous month
           </span>
         </div>
         <div className="rounded-control border border-border bg-surface p-4 shadow-xs">
-          <span className="text-2xs font-semibold uppercase text-purple-600 dark:text-purple-400">Restricted Capital Funds</span>
-          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">{formatCurrency(28400000)}</div>
+          <span className="text-2xs font-semibold text-purple-600 uppercase dark:text-purple-400">
+            Restricted Capital Funds
+          </span>
+          <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+            {formatCurrency(28400000)}
+          </div>
           <span className="text-2xs text-muted-foreground">Cathedral Building Project</span>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default async function GivingPage() {
       <GivingChart className="mb-6" />
 
       {/* Fund Ledgers Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 mb-6">
+      <div className="mb-6 grid gap-4 sm:grid-cols-2">
         {mockFunds.map((f) => (
           <Card key={f.id} className="flex flex-col justify-between">
             <CardHeader
@@ -198,7 +198,9 @@ export default async function GivingPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-2xs text-muted-foreground">Current Balance</span>
-                  <div className="text-base font-bold text-foreground">{formatCurrency(f.currentBalance)}</div>
+                  <div className="text-base font-bold text-foreground">
+                    {formatCurrency(f.currentBalance)}
+                  </div>
                 </div>
                 <div className="text-right">
                   <span className="text-2xs text-muted-foreground">This Month</span>
@@ -220,27 +222,35 @@ export default async function GivingPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border text-2xs font-semibold uppercase text-muted-foreground">
+                <tr className="border-b border-border text-2xs font-semibold text-muted-foreground uppercase">
                   <th className="py-2.5 pr-4">Batch Number</th>
-                  <th className="py-2.5 px-4">Service Date</th>
-                  <th className="py-2.5 px-4 text-right">Cash</th>
-                  <th className="py-2.5 px-4 text-right">POS Terminals</th>
-                  <th className="py-2.5 px-4 text-right">Online Transfer</th>
-                  <th className="py-2.5 px-4 text-right font-bold text-foreground">Total Verified</th>
-                  <th className="py-2.5 px-4 text-center">Status</th>
+                  <th className="px-4 py-2.5">Service Date</th>
+                  <th className="px-4 py-2.5 text-right">Cash</th>
+                  <th className="px-4 py-2.5 text-right">POS Terminals</th>
+                  <th className="px-4 py-2.5 text-right">Online Transfer</th>
+                  <th className="px-4 py-2.5 text-right font-bold text-foreground">Total Verified</th>
+                  <th className="px-4 py-2.5 text-center">Status</th>
                   <th className="py-2.5 pl-4">Verified By</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle">
                 {mockBatches.map((b) => (
-                  <tr key={b.id} className="hover:bg-surface-hover transition-colors">
+                  <tr key={b.id} className="transition-colors hover:bg-surface-hover">
                     <td className="py-3 pr-4 font-mono font-semibold text-primary">{b.batchNumber}</td>
-                    <td className="py-3 px-4 text-foreground">{formatDate(b.date)}</td>
-                    <td className="py-3 px-4 text-right tabular text-muted-foreground">{formatCurrency(b.cashTotal)}</td>
-                    <td className="py-3 px-4 text-right tabular text-muted-foreground">{formatCurrency(b.posTotal)}</td>
-                    <td className="py-3 px-4 text-right tabular text-muted-foreground">{formatCurrency(b.onlineTotal)}</td>
-                    <td className="py-3 px-4 text-right tabular font-bold text-foreground">{formatCurrency(b.total)}</td>
-                    <td className="py-3 px-4 text-center">
+                    <td className="px-4 py-3 text-foreground">{formatDate(b.date)}</td>
+                    <td className="px-4 py-3 text-right tabular text-muted-foreground">
+                      {formatCurrency(b.cashTotal)}
+                    </td>
+                    <td className="px-4 py-3 text-right tabular text-muted-foreground">
+                      {formatCurrency(b.posTotal)}
+                    </td>
+                    <td className="px-4 py-3 text-right tabular text-muted-foreground">
+                      {formatCurrency(b.onlineTotal)}
+                    </td>
+                    <td className="px-4 py-3 text-right tabular font-bold text-foreground">
+                      {formatCurrency(b.total)}
+                    </td>
+                    <td className="px-4 py-3 text-center">
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
                         <CheckCircle2 className="size-3" /> Reconciled
                       </span>

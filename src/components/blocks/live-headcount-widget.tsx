@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Activity, Church, Plus, Users } from "lucide-react";
+import { Activity, Church, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,11 @@ export function LiveHeadcountWidget({
   }
 
   return (
-    <Card className="p-5 border-l-4 border-l-emerald-500 shadow-sm">
+    <Card className="border-l-4 border-l-emerald-500 p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Church className="size-4 text-emerald-600 dark:text-emerald-400" />
-          <h3 className="font-semibold text-sm">{parishName} — Service Attendance</h3>
+          <h3 className="text-sm font-semibold">{parishName} — Service Attendance</h3>
         </div>
         <Badge tone={connected ? "success" : "neutral"} dot={connected ? "pulse" : false}>
           {connected ? "Live Stream Active" : "Connecting..."}
@@ -39,8 +39,8 @@ export function LiveHeadcountWidget({
       <div className="mt-4 flex items-baseline justify-between">
         <div>
           <div className="text-3xl font-extrabold tracking-tight text-foreground">{count}</div>
-          <p className="text-2xs text-muted-foreground mt-0.5 flex items-center gap-1">
-            <Activity className="size-3 text-emerald-500 animate-pulse" />
+          <p className="mt-0.5 flex items-center gap-1 text-2xs text-muted-foreground">
+            <Activity className="size-3 animate-pulse text-emerald-500" />
             <span>Updated in real-time from usher mobile check-ins</span>
           </p>
         </div>

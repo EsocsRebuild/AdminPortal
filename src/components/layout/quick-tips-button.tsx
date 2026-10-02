@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { HelpCircle, Lightbulb } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 import { Tooltip } from "@/components/ui/tooltip";
 import { QuickTipsModal } from "@/components/modals/quick-tips-modal";
@@ -18,7 +18,7 @@ export function QuickTipsTrigger() {
           onClick={() => setOpen(true)}
           className={cn(
             "flex size-control-sm cursor-pointer items-center justify-center rounded-control text-muted-foreground transition-colors",
-            "hover:bg-amber-500/10 hover:text-amber-500 focus-visible:outline-2 focus-visible:outline-ring"
+            "hover:bg-amber-500/10 hover:text-amber-500 focus-visible:outline-2 focus-visible:outline-ring",
           )}
           aria-label="Open Quick Tips & Guide"
         >

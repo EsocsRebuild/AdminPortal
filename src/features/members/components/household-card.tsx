@@ -2,18 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  ChevronRight,
-  Heart,
-  Home,
-  ShieldCheck,
-  User,
-  Users,
-} from "lucide-react";
+import { ChevronRight, Home, Users } from "lucide-react";
 
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Household, HouseholdRole } from "@/features/members/types-household";
 
@@ -66,7 +58,7 @@ export function HouseholdCard({ household }: HouseholdCardProps) {
               <div className="flex items-center gap-3">
                 <Avatar name={m.name} src={m.avatarUrl ?? undefined} size="sm" />
                 <div>
-                  <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
+                  <div className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
                     {m.name}
                   </div>
                   <div className="text-2xs text-muted-foreground">{m.memberCode}</div>

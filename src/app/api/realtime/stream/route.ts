@@ -20,7 +20,9 @@ export async function GET(request: NextRequest) {
     start(controller) {
       // Send initial connection message
       controller.enqueue(
-        encoder.encode(`data: ${JSON.stringify({ type: "CONNECTED", channel, unitId, timestamp: new Date().toISOString() })}\n\n`)
+        encoder.encode(
+          `data: ${JSON.stringify({ type: "CONNECTED", channel, unitId, timestamp: new Date().toISOString() })}\n\n`,
+        ),
       );
 
       // Heartbeat ping interval every 15 seconds to maintain TCP connection

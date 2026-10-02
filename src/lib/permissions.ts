@@ -34,7 +34,6 @@ export const permissions = [
   "settings:manage",
 ] as const;
 
-
 export type Permission = (typeof permissions)[number];
 
 type Subject = { permissions: readonly string[] } | null | undefined;

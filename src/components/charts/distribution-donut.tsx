@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Users2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatNumber } from "@/lib/format";
@@ -16,10 +15,28 @@ export interface FellowshipSlice {
 }
 
 const defaultSlices: FellowshipSlice[] = [
-  { id: "women", name: "Women Fellowship", count: 165, color: "#10b981", description: "Mothers' summit, prayer circle" },
+  {
+    id: "women",
+    name: "Women Fellowship",
+    count: 165,
+    color: "#10b981",
+    description: "Mothers' summit, prayer circle",
+  },
   { id: "men", name: "Men Fellowship", count: 124, color: "#3b82f6", description: "Elders, men's breakfast" },
-  { id: "youth", name: "Youth Fellowship", count: 98, color: "#f59e0b", description: "Campus rally, music, sports" },
-  { id: "children", name: "Children Department", count: 53, color: "#8b5cf6", description: "Sunday school, choir cubs" },
+  {
+    id: "youth",
+    name: "Youth Fellowship",
+    count: 98,
+    color: "#f59e0b",
+    description: "Campus rally, music, sports",
+  },
+  {
+    id: "children",
+    name: "Children Department",
+    count: 53,
+    color: "#8b5cf6",
+    description: "Sunday school, choir cubs",
+  },
 ];
 
 export function DistributionDonutChart({
@@ -39,7 +56,21 @@ export function DistributionDonutChart({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
-  let accumulatedPercent = 0;
+  const slicesWithOffsets = React.useMemo(() => {
+    return slices.map((slice, index) => {
+      const priorCount = slices.slice(0, index).reduce((sum, s) => sum + s.count, 0);
+      const priorPercent = total > 0 ? priorCount / total : 0;
+      const percent = total > 0 ? slice.count / total : 0;
+      const strokeDasharray = `${percent * circumference} ${circumference}`;
+      const strokeDashoffset = -priorPercent * circumference;
+      return {
+        ...slice,
+        percent,
+        strokeDasharray,
+        strokeDashoffset,
+      };
+    });
+  }, [slices, total, circumference]);
 
   const activeSlice = hoveredId ? slices.find((s) => s.id === hoveredId) : null;
 
@@ -54,12 +85,7 @@ export function DistributionDonutChart({
           {/* Donut Graphic */}
           <div className="relative grid place-items-center">
             <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[-90deg]">
-              {slices.map((slice) => {
-                const percent = slice.count / total;
-                const strokeDasharray = `${percent * circumference} ${circumference}`;
-                const strokeDashoffset = -accumulatedPercent * circumference;
-                accumulatedPercent += percent;
-
+              {slicesWithOffsets.map((slice) => {
                 const isHovered = hoveredId === slice.id;
 
                 return (
@@ -71,8 +97,8 @@ export function DistributionDonutChart({
                     fill="transparent"
                     stroke={slice.color}
                     strokeWidth={isHovered ? strokeWidth + 4 : strokeWidth}
-                    strokeDasharray={strokeDasharray}
-                    strokeDashoffset={strokeDashoffset}
+                    strokeDasharray={slice.strokeDasharray}
+                    strokeDashoffset={slice.strokeDashoffset}
                     className="cursor-pointer transition-all duration-200"
                     onMouseEnter={() => setHoveredId(slice.id)}
                     onMouseLeave={() => setHoveredId(null)}
@@ -86,7 +112,7 @@ export function DistributionDonutChart({
               <span className="text-xl font-bold tracking-tight text-foreground">
                 {activeSlice ? formatNumber(activeSlice.count) : formatNumber(total)}
               </span>
-              <span className="text-2xs font-medium uppercase text-muted-foreground">
+              <span className="text-2xs font-medium text-muted-foreground uppercase">
                 {activeSlice ? activeSlice.name.split(" ")[0] : "Members"}
               </span>
             </div>
@@ -102,19 +128,16 @@ export function DistributionDonutChart({
                 <div
                   key={slice.id}
                   className={cn(
-                    "flex items-center justify-between rounded-control border p-2.5 transition-colors cursor-pointer",
+                    "flex cursor-pointer items-center justify-between rounded-control border p-2.5 transition-colors",
                     isHovered
                       ? "border-primary bg-primary-soft/30"
-                      : "border-border bg-surface-muted/30 hover:border-border-strong hover:bg-surface-hover"
+                      : "border-border bg-surface-muted/30 hover:border-border-strong hover:bg-surface-hover",
                   )}
                   onMouseEnter={() => setHoveredId(slice.id)}
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span
-                      className="size-3 shrink-0 rounded-full"
-                      style={{ backgroundColor: slice.color }}
-                    />
+                    <span className="size-3 shrink-0 rounded-full" style={{ backgroundColor: slice.color }} />
                     <div>
                       <div className="text-xs font-semibold text-foreground">{slice.name}</div>
                       <div className="text-2xs text-muted-foreground">{slice.description}</div>

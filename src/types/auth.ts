@@ -24,4 +24,3 @@ export interface UnitScopeMetadata {
   code?: string;
   slug?: string;
 }
-
