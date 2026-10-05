@@ -50,6 +50,33 @@ export function UnitSwitcher() {
     user?.role?.name?.toLowerCase().includes("prelate"),
   );
 
+  const [units, setUnits] = React.useState<UnitScopeOption[]>(defaultUnits);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch("/api/lookups/parishes")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((parishes: Array<{ id: string; name: string }>) => {
+        if (isMounted && Array.isArray(parishes) && parishes.length > 0) {
+          const mapped: UnitScopeOption[] = [
+            defaultUnits[0], // Global HQ
+            ...parishes.map((p) => ({
+              id: p.id,
+              name: p.name,
+              type: "parish" as const,
+              slug: p.name.toLowerCase().replace(/\s+/g, "-"),
+            })),
+          ];
+          setUnits(mapped);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Load active unit from cookie or localStorage
   const [activeUnit, setActiveUnit] = React.useState<UnitScopeOption>(() => {
     if (typeof window !== "undefined") {
@@ -67,7 +94,7 @@ export function UnitSwitcher() {
 
   const [search, setSearch] = React.useState("");
 
-  const filteredUnits = defaultUnits.filter(
+  const filteredUnits = units.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       (u.code && u.code.toLowerCase().includes(search.toLowerCase())),
@@ -85,9 +112,9 @@ export function UnitSwitcher() {
 
   // Non-Super Admin: view locked to parish/unit
   if (!isSuperAdmin) {
-    const parishName = user?.parishId
-      ? (defaultUnits.find((u) => u.id === user.parishId)?.name ?? "Mount Zion Parish")
-      : "Mount Zion Parish";
+    const scopeId = user?.scopeUnitId || user?.parishId;
+    const currentUnit = units.find((u) => u.id === scopeId);
+    const parishName = currentUnit?.name ?? (user?.role?.name ? `${user.role.name} Jurisdiction` : "Local Parish");
 
     return (
       <Tooltip content={`Your administrative account is scoped exclusively to ${parishName}.`}>
