@@ -34,8 +34,8 @@ export async function listEvents(): Promise<ChurchEvent[]> {
       recurrenceRule?: string;
       status?: string;
     }
-    const raw = await backendRaw<{ items?: RawEventItem[] }>("/events");
-    const items = raw?.items || [];
+    const raw = await backend<{ items?: RawEventItem[] } | RawEventItem[]>("/events");
+    const items = Array.isArray(raw) ? raw : raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((evt) => {
         const startsAt = new Date(evt.startsAt);

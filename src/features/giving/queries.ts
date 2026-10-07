@@ -80,8 +80,8 @@ export async function listBatches(): Promise<GivingBatch[]> {
       status?: string;
       recordedCount?: number;
     }
-    const raw = await backendRaw<{ items?: RawBatchItem[] }>("/batches");
-    const items = raw?.items || [];
+    const raw = await backend<{ items?: RawBatchItem[] } | RawBatchItem[]>("/batches");
+    const items = Array.isArray(raw) ? raw : raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((b) => ({
         id: b.id,

@@ -145,6 +145,19 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
       (res.status >= 500 ? "UNAVAILABLE" : "UNKNOWN");
     throw new BackendError(code, e?.message ?? defaultMessage(code), res.status, e?.fields);
   }
+  if (payload && typeof payload === "object") {
+    const obj = payload as Record<string, unknown>;
+    if (!("data" in obj) && "items" in obj && Array.isArray(obj.items)) {
+      obj.data = obj.items;
+    }
+    if (!("meta" in obj) && ("totalCount" in obj || "total" in obj)) {
+      obj.meta = {
+        page: typeof obj.page === "number" ? obj.page : 1,
+        pageSize: typeof obj.pageSize === "number" ? obj.pageSize : 20,
+        total: typeof obj.totalCount === "number" ? obj.totalCount : typeof obj.total === "number" ? obj.total : 0,
+      };
+    }
+  }
   return payload as T;
 }
 

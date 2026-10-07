@@ -28,8 +28,8 @@ export async function listSections(): Promise<FellowshipSection[]> {
       leaders?: { name: string }[];
       childCount?: number;
     }
-    const raw = await backendRaw<{ items?: RawUnitItem[] }>("/units");
-    const items = raw?.items || [];
+    const raw = await backend<{ items?: RawUnitItem[] } | RawUnitItem[]>("/units");
+    const items = Array.isArray(raw) ? raw : raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((u, i) => {
         const leader = u.leaders?.[0]?.name ?? "Executive Directorate";

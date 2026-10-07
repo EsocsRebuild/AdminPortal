@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, LogOut, Monitor, Moon, Palette, ShieldCheck, Sun, UserRound } from "lucide-react";
+import { Check, Church, Globe, LogOut, Monitor, Moon, Palette, ShieldCheck, Sun, UserRound } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 
 import { useSession } from "@/components/auth/session-provider";
@@ -29,9 +30,12 @@ const themes = [
 
 export function UserMenu() {
   const user = useSession();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
   if (!user) return null;
+
+  const isWebAdmin = pathname?.startsWith("/admin-web");
 
   return (
     <DropdownMenu>
@@ -75,6 +79,22 @@ export function UserMenu() {
               ))}
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          {isWebAdmin ? (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard" className="font-semibold text-amber-500 focus:text-amber-600">
+                <Church className="size-4 text-amber-500" /> Switch to Main Admin
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem asChild>
+              <Link href="/admin-web/dashboard" className="font-semibold text-emerald-500 focus:text-emerald-600">
+                <Globe className="size-4 text-emerald-500" /> Switch to Web Studio
+              </Link>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem tone="danger" onSelect={() => void signOut("manual")}>

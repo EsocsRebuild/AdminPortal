@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Globe,
   LayoutDashboard,
+  Church,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { UserMenu } from "@/components/layout/user-menu";
@@ -86,6 +87,21 @@ export default function WebAdminLayout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/dashboard"
+                  className="hidden items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-400 transition-all hover:bg-amber-500/20 sm:flex"
+                >
+                  <Church className="size-3.5 text-amber-400" />
+                  Main Church Admin
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent className="border-slate-700 bg-slate-800 text-slate-200">
+                <p>Switch to Main Ecclesiastical Governance & Member Admin</p>
+              </TooltipContent>
+            </Tooltip>
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
