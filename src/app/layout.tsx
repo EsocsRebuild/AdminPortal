@@ -12,10 +12,22 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(absoluteUrl()),
-  title: { default: siteConfig.product, template: `%s · ${siteConfig.product}` },
+  title: { default: "The ESOCS Administration Portal", template: `%s · ESOCS Admin` },
   description: siteConfig.description,
-  applicationName: siteConfig.product,
-  // Internal software: never index.
+  applicationName: "ESOCS Administration Portal",
+  icons: {
+    icon: [
+      { url: "/brand/esocs-crest.png", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/brand/esocs-crest.png",
+    shortcut: "/brand/esocs-crest.png",
+  },
+  openGraph: {
+    title: "The ESOCS Administration Portal",
+    description: "Digital Church & Ordination Governance Portal for the Eternal Sacred Order of the Cherubim & Seraphim.",
+    images: [{ url: "/brand/hero-mount-zion.webp", width: 1200, height: 630, alt: "ESOCS Administration Portal" }],
+  },
   robots: { index: false, follow: false, nocache: true },
   referrer: "strict-origin-when-cross-origin",
 };

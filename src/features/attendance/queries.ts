@@ -21,7 +21,17 @@ export async function listHeadcounts(): Promise<HeadcountRecord[]> {
     const to = new Date();
     const from = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000); // last 90 days
 
-    const raw = await backend<any[]>("/attendance/reports/summary", {
+    interface RawAttendanceRow {
+      occurrenceId: string;
+      startsAt: string;
+      eventTitle?: string;
+      count: number;
+      createdByName?: string;
+      headCountTotal?: number;
+      recordedCount?: number;
+      eventType?: string;
+    }
+    const raw = await backend<RawAttendanceRow[]>("/attendance/reports/summary", {
       query: {
         from: from.toISOString(),
         to: to.toISOString(),

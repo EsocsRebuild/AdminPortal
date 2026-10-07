@@ -4,7 +4,7 @@ import { cookies, headers } from "next/headers";
 
 import type { ErrorCode, FieldErrors } from "@/lib/result";
 
-import { COOKIE } from "./cookies";
+import { COOKIE, COOKIE_WEB } from "./cookies";
 import { env } from "./env";
 
 /**
@@ -72,10 +72,13 @@ async function forwardedHeaders() {
   const c = await cookies();
   const scopeUnit = c.get("esocs_scope_unit")?.value;
   const handlerId = h.get("x-handler-id");
+  const pathname = h.get("x-pathname") ?? "";
+  const isWebPortal = pathname.startsWith("/admin-web");
 
   const out: Record<string, string> = {
     "X-Request-Id": h.get("x-request-id") ?? crypto.randomUUID(),
     "X-Tenant": h.get("x-tenant") ?? env().TENANT_SLUG,
+    "X-Portal-Type": isWebPortal ? "admin-web" : "admin-main",
   };
   if (scopeUnit && scopeUnit !== "null" && scopeUnit !== "") {
     out["X-Scope-Unit"] = scopeUnit;
@@ -102,7 +105,10 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
   };
   if (body !== undefined) requestHeaders["Content-Type"] = "application/json";
   if (auth) {
-    const token = (await cookies()).get(COOKIE.access)?.value;
+    const jar = await cookies();
+    const h = await headers();
+    const isWebPortal = (h.get("x-pathname") ?? "").startsWith("/admin-web");
+    const token = (isWebPortal ? jar.get(COOKIE_WEB.access)?.value : undefined) ?? jar.get(COOKIE.access)?.value;
     if (!token)
       throw new BackendError("UNAUTHENTICATED", "Your session has ended. Please sign in again.", 401);
     requestHeaders.Authorization = `Bearer ${token}`;

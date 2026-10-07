@@ -41,7 +41,16 @@ export interface GivingSummary {
 export async function listFunds(): Promise<FundLedger[]> {
   await requirePermission("giving:view");
   try {
-    const raw = await backend<any[]>("/funds");
+    interface RawFundItem {
+      id: string;
+      name: string;
+      code: string;
+      description?: string;
+      currentBalance?: number;
+      monthToDate?: number;
+      isActive?: boolean;
+    }
+    const raw = await backend<RawFundItem[]>("/funds");
     if (Array.isArray(raw) && raw.length > 0) {
       return raw.map((f) => ({
         id: f.id,
@@ -62,7 +71,16 @@ export async function listFunds(): Promise<FundLedger[]> {
 export async function listBatches(): Promise<GivingBatch[]> {
   await requirePermission("giving:view");
   try {
-    const raw = await backendRaw<{ items?: any[] }>("/batches");
+    interface RawBatchItem {
+      id: string;
+      name?: string;
+      batchDate: string;
+      recordedTotal?: number;
+      expectedTotal?: number;
+      status?: string;
+      recordedCount?: number;
+    }
+    const raw = await backendRaw<{ items?: RawBatchItem[] }>("/batches");
     const items = raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((b) => ({

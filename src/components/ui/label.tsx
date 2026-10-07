@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
 export function Label({
@@ -10,14 +9,14 @@ export function Label({
   ...props
 }: React.LabelHTMLAttributes<HTMLLabelElement> & { required?: boolean; optional?: boolean }) {
   return (
-    <label className={cn("text-sm font-medium text-foreground", className)} {...props}>
+    <label className={cn("text-sm font-semibold text-slate-900 dark:text-slate-100", className)} {...props}>
       {children}
       {required && (
-        <span aria-hidden className="ml-0.5 text-danger">
+        <span aria-hidden className="ml-0.5 text-danger font-bold">
           *
         </span>
       )}
-      {optional && <span className="ml-1.5 font-normal text-subtle-foreground">Optional</span>}
+      {optional && <span className="ml-1.5 font-normal text-slate-400">Optional</span>}
     </label>
   );
 }

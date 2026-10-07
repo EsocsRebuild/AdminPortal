@@ -1,38 +1,65 @@
+import Image from "next/image";
 import Link from "next/link";
-
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-// Placeholder mark. Replace with the official crest (SVG using currentColor).
-export function LogoMark({ className }: { className?: string }) {
+/** The official crest of the Eternal Sacred Order of the Cherubim & Seraphim. */
+export function Crest({
+  size = 40,
+  className,
+  priority = false,
+}: {
+  size?: number;
+  className?: string;
+  priority?: boolean;
+}) {
   return (
-    <span
-      aria-hidden
-      className={cn(
-        "grid size-8 shrink-0 place-items-center rounded-control bg-gradient-to-br from-royal-700 to-royal-950 text-gold-300 shadow-button ring-1 ring-white/10",
-        className,
-      )}
-    >
-      <svg viewBox="0 0 32 32" className="size-[62%]">
-        <path d="M14.6 4h2.8v7.6h7.6v2.8h-7.6V28h-2.8V14.4H7v-2.8h7.6z" fill="currentColor" />
-      </svg>
-    </span>
+    <Image
+      src="/brand/esocs-crest.png"
+      alt="ESOCS Official Crest"
+      width={size}
+      height={size}
+      priority={priority}
+      className={cn("shrink-0 rounded-full object-contain drop-shadow-md ring-2 ring-amber-400/70", className)}
+    />
   );
 }
 
-export function Logo({ className, collapsible = false }: { className?: string; collapsible?: boolean }) {
+/** Legacy / icon mark wrapper returning the official Crest */
+export function LogoMark({ className, size = 36 }: { className?: string; size?: number }) {
+  return <Crest size={size} className={className} />;
+}
+
+/** Official Crest and stacked brand wordmark */
+export function Logo({
+  className,
+  collapsible = false,
+  href = "/dashboard",
+  size = "md",
+}: {
+  className?: string;
+  collapsible?: boolean;
+  href?: string;
+  size?: "sm" | "md" | "lg";
+}) {
+  const crestSize = size === "lg" ? 52 : size === "sm" ? 32 : 40;
   return (
     <Link
-      href="/dashboard"
-      aria-label={`${siteConfig.product} home`}
-      className={cn("flex min-w-0 items-center gap-2.5 rounded-control", className)}
+      href={href}
+      aria-label={`${siteConfig.name} Home`}
+      className={cn("flex min-w-0 items-center gap-3 rounded-md transition-opacity hover:opacity-95", className)}
     >
-      <LogoMark />
-      <span className={cn("grid min-w-0 leading-none", collapsible && "lg:rail:hidden")}>
-        <span className="font-brand text-[1.3rem] font-semibold tracking-wide text-sidebar-active-foreground">
-          {siteConfig.name}
+      <Crest size={crestSize} className="ring-2 ring-amber-400/80 shadow-md shadow-amber-950/30" />
+      <span className={cn("grid min-w-0 leading-tight", collapsible && "lg:rail:hidden")}>
+        <span className={cn(
+          "font-brand font-bold tracking-tight text-white dark:text-white",
+          size === "lg" ? "text-xl" : size === "sm" ? "text-base" : "text-lg"
+        )}>
+          THE ESOCS
         </span>
-        <span className="mt-0.5 text-overline font-semibold text-sidebar-muted uppercase">Admin</span>
+        <span className="text-2xs font-medium tracking-wider text-amber-400 uppercase">
+          Administration Portal
+        </span>
       </span>
     </Link>
   );

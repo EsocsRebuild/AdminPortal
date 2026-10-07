@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Calendar, CheckCircle2, FileText, Newspaper, Users2 } from "lucide-react";
@@ -6,6 +7,7 @@ import { Calendar, CheckCircle2, FileText, Newspaper, Users2 } from "lucide-reac
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Crest } from "@/components/icons/logo";
 
 interface SectionData {
   slug: string;
@@ -100,7 +102,14 @@ import { backend } from "@/server/backend";
 
 async function getSectionData(slug: string): Promise<SectionData | null> {
   try {
-    const u = await backend<any>(`/public/units/${encodeURIComponent(slug)}`, { auth: false });
+    const u = await backend<{
+      name: string;
+      slug: string;
+      tagline?: string;
+      about?: string[];
+      locality?: string;
+      leaders?: { name: string; role: string }[];
+    }>(`/public/units/${encodeURIComponent(slug)}`, { auth: false });
     if (u) {
       return {
         name: u.name,
@@ -108,7 +117,7 @@ async function getSectionData(slug: string): Promise<SectionData | null> {
         motto: u.tagline || (Array.isArray(u.about) ? u.about[0] : "") || "Walking in righteousness and faith.",
         vision: (Array.isArray(u.about) && u.about.length > 1 ? u.about[1] : u.tagline) || "Autonomous ministerial arm of the Holy Order dedicated to spiritual growth and service.",
         executiveBoard: Array.isArray(u.leaders) && u.leaders.length > 0
-          ? u.leaders.map((l: any) => ({ name: l.name, role: l.role }))
+          ? u.leaders.map((l: { name: string; role: string }) => ({ name: l.name, role: l.role }))
           : [{ name: "Executive Directorate", role: "Administration" }],
         programmes: [
           {
@@ -157,17 +166,44 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Header */}
-      <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-amber-500/10 via-surface to-background py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-6">
+      {/* Hero Header with Web Background Image & Official Crest */}
+      <section className="relative overflow-hidden border-b border-border bg-slate-950 py-16 md:py-24 text-white">
+        {/* Dynamic section hero image mapping */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={
+              slug.includes("women")
+                ? "/brand/hero-women.webp"
+                : slug.includes("youth")
+                  ? "/brand/hero-youth.webp"
+                  : slug.includes("father")
+                    ? "/brand/hero-fathers.webp"
+                    : slug.includes("children")
+                      ? "/brand/hero-children.webp"
+                      : "/brand/hero-mount-zion.webp"
+            }
+            alt={section.name}
+            fill
+            priority
+            className="object-cover object-center opacity-30 filter contrast-125 saturate-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-slate-950/80 to-slate-950/60" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-start gap-4">
-            <Badge tone="neutral" className="gap-1.5 px-3 py-1">
-              <Users2 className="size-3.5 text-amber-500" />
-              <span>National Fellowship & Directorate Section</span>
-            </Badge>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">{section.name}</h1>
-            <p className="text-lg font-medium text-primary italic">&ldquo;{section.motto}&rdquo;</p>
-            <p className="max-w-2xl text-base text-muted-foreground">{section.vision}</p>
+            <div className="flex items-center gap-4">
+              <Crest size={56} priority className="ring-2 ring-amber-400/80 shadow-xl shadow-amber-950/50" />
+              <div>
+                <Badge tone="neutral" className="gap-1.5 px-3 py-1 bg-amber-400/10 border-amber-400/30 text-amber-400 font-semibold">
+                  <Users2 className="size-3.5 text-amber-400" />
+                  <span>National Fellowship & Directorate Section</span>
+                </Badge>
+                <h1 className="text-3xl font-bold tracking-tight sm:text-5xl font-brand text-white mt-1">{section.name}</h1>
+              </div>
+            </div>
+            <p className="text-lg font-semibold text-amber-400 italic">&ldquo;{section.motto}&rdquo;</p>
+            <p className="max-w-2xl text-base text-slate-300">{section.vision}</p>
           </div>
         </div>
       </section>

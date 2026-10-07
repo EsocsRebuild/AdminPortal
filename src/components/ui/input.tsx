@@ -1,11 +1,10 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
 /** Shared field chrome for Input, Textarea, Select triggers. */
 export const fieldBase = cn(
   "w-full min-w-0 rounded-control border border-input bg-surface text-foreground shadow-xs",
-  "placeholder:text-faint-foreground",
+  "placeholder:text-slate-400 dark:placeholder:text-slate-400",
   "transition-[border-color,box-shadow] duration-150",
   "hover:border-border-strong",
   "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none",
@@ -36,7 +35,7 @@ export function Input({ className, size = "md", prefix, suffix, type = "text", .
         fieldBase,
         sizes[size],
         "px-3 max-sm:text-[16px]",
-        prefix && "pl-9",
+        prefix && "pl-10",
         suffix && "pr-10",
         "file:mr-3 file:h-full file:border-0 file:bg-transparent file:text-sm file:font-medium",
         "[&::-webkit-search-cancel-button]:hidden",
@@ -49,13 +48,13 @@ export function Input({ className, size = "md", prefix, suffix, type = "text", .
   return (
     <div className="relative w-full">
       {prefix && (
-        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-subtle-foreground [&_svg]:size-4">
+        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-amber-500 dark:text-amber-400 [&_svg]:size-4">
           {prefix}
         </span>
       )}
       {input}
       {suffix && (
-        <span className="absolute inset-y-0 right-1.5 flex items-center text-subtle-foreground [&_svg]:size-4">
+        <span className="absolute inset-y-0 right-2 flex items-center text-slate-500 dark:text-slate-400 [&_svg]:size-4">
           {suffix}
         </span>
       )}

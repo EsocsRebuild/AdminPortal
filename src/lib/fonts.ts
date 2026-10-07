@@ -1,23 +1,23 @@
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Outfit, Playfair_Display } from "next/font/google";
 
-export const fontSans = Geist({
+export const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-sans",
   display: "swap",
 });
 
-export const fontMono = Geist_Mono({
+export const fontDisplay = Outfit({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-outfit",
   display: "swap",
 });
 
-/** Brand serif — wordmark and auth screens only. */
-export const fontBrand = Cormorant_Garamond({
+/** Executive regal brand font for wordmark and headers. */
+export const fontBrand = Playfair_Display({
   subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-cormorant",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-brand",
   display: "swap",
 });
 
-export const fontVariables = `${fontSans.variable} ${fontMono.variable} ${fontBrand.variable}`;
+export const fontVariables = `${fontSans.variable} ${fontDisplay.variable} ${fontBrand.variable}`;

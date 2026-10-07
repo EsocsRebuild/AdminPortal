@@ -43,8 +43,8 @@ export function Checkbox({ className, label, description, id, ...props }: Checkb
     <div className={cn("flex items-start gap-2.5", className)}>
       <span className="flex h-5 items-center">{box}</span>
       <label htmlFor={inputId} className="grid cursor-pointer gap-0.5 peer-disabled:cursor-not-allowed">
-        {label && <span className="text-base font-medium text-foreground">{label}</span>}
-        {description && <span className="text-sm text-muted-foreground">{description}</span>}
+        {label && <span className="text-sm font-semibold text-foreground dark:text-slate-100">{label}</span>}
+        {description && <span className="text-xs font-medium text-muted-foreground dark:text-slate-300">{description}</span>}
       </label>
     </div>
   );

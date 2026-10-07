@@ -19,7 +19,16 @@ export interface FellowshipSection {
 export async function listSections(): Promise<FellowshipSection[]> {
   await requireSession();
   try {
-    const raw = await backendRaw<{ items?: any[] }>("/units");
+    interface RawUnitItem {
+      id: string;
+      slug: string;
+      name: string;
+      tagline?: string;
+      about?: string[];
+      leaders?: { name: string }[];
+      childCount?: number;
+    }
+    const raw = await backendRaw<{ items?: RawUnitItem[] }>("/units");
     const items = raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((u, i) => {

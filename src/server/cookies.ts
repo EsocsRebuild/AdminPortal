@@ -19,6 +19,11 @@ export const COOKIE = {
   pendingEmail: `${prefix}esocs_pending`,
 } as const;
 
+export const COOKIE_WEB = {
+  access: `${prefix}esocs_web_at`,
+  refresh: `${prefix}esocs_web_rt`,
+} as const;
+
 export function cookieOptions(maxAgeSeconds: number) {
   return {
     httpOnly: true,

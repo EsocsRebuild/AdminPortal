@@ -20,7 +20,21 @@ export interface ChurchEvent {
 export async function listEvents(): Promise<ChurchEvent[]> {
   await requirePermission("events:view");
   try {
-    const raw = await backendRaw<{ items?: any[] }>("/events");
+    interface RawEventItem {
+      id: string;
+      title: string;
+      description?: string;
+      location?: string;
+      startsAt: string;
+      endsAt?: string;
+      type?: string;
+      isRecurring?: boolean;
+      capacity?: number;
+      registrationEnabled?: boolean;
+      recurrenceRule?: string;
+      status?: string;
+    }
+    const raw = await backendRaw<{ items?: RawEventItem[] }>("/events");
     const items = raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((evt) => {
@@ -31,9 +45,10 @@ export async function listEvents(): Promise<ChurchEvent[]> {
           minute: "2-digit",
         });
 
+        const typeLower = evt.type ? evt.type.toLowerCase() : "";
         const category = (
-          ["service", "conference", "revival", "fellowship"].includes(evt.type?.toLowerCase())
-            ? evt.type.toLowerCase()
+          ["service", "conference", "revival", "fellowship"].includes(typeLower)
+            ? typeLower
             : "service"
         ) as "service" | "conference" | "revival" | "fellowship";
 

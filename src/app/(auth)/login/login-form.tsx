@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -51,30 +51,31 @@ export function LoginForm({ next }: { next?: string }) {
           <Alert tone="danger">{banner}</Alert>
         </div>
       )}
-      <Field label="Email address" htmlFor="email" error={fieldError(result, "email")}>
+      <Field label={<span className="text-sm font-bold text-white">Email address</span>} htmlFor="email" error={fieldError(result, "email")}>
         <Input
           id="email"
           type="email"
           size="lg"
           autoComplete="username"
           autoFocus
-          prefix={<Mail />}
+          prefix={<Mail className="text-amber-400" />}
           placeholder="you@example.com"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           aria-invalid={!!fieldError(result, "email")}
           aria-describedby="email-msg"
           required
+          className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-400 font-medium focus-visible:ring-amber-400"
         />
       </Field>
       <div className="grid gap-1.5">
         <div className="flex items-center justify-between">
-          <label htmlFor="password" className="text-sm font-medium">
+          <label htmlFor="password" className="text-sm font-bold text-white">
             Password
           </label>
           <Link
             href="/forgot-password"
-            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            className="text-xs font-bold text-amber-400 hover:text-amber-300 underline-offset-4 hover:underline"
           >
             Forgot it?
           </Link>
@@ -87,6 +88,7 @@ export function LoginForm({ next }: { next?: string }) {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           aria-invalid={!!fieldError(result, "password")}
           required
+          className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-400 font-medium focus-visible:ring-amber-400"
         />
         {fieldError(result, "password") && (
           <p role="alert" className="text-xs text-danger">
@@ -94,14 +96,27 @@ export function LoginForm({ next }: { next?: string }) {
           </p>
         )}
       </div>
-      <Checkbox
-        label="Keep me signed in on this device"
-        description="Only on a computer you don’t share."
-        checked={form.remember}
-        onCheckedChange={(v) => setForm({ ...form, remember: v === true })}
-      />
-      <Button type="submit" size="lg" fullWidth loading={pending}>
-        {pending ? "Signing you in…" : "Sign in"}
+      <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 shadow-md backdrop-blur-md">
+        <Checkbox
+          label={<span className="text-sm font-bold text-white">Keep me signed in on this device</span>}
+          description={<span className="text-xs font-semibold text-slate-300">Only on a computer you don’t share.</span>}
+          checked={form.remember}
+          onCheckedChange={(v) => setForm({ ...form, remember: v === true })}
+        />
+      </div>
+      <Button
+        type="submit"
+        size="lg"
+        fullWidth
+        loading={pending}
+        className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-base py-3 shadow-xl shadow-amber-950/50 transition-all flex items-center justify-center gap-2"
+      >
+        {pending ? "Signing you in…" : (
+          <>
+            Sign in to Portal
+            <ArrowRight className="size-5" />
+          </>
+        )}
       </Button>
     </form>
   );
