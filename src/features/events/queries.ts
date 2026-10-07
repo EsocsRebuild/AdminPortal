@@ -1,6 +1,6 @@
 import "server-only";
 
-import { backendRaw } from "@/server/backend";
+import { backend, backendRaw } from "@/server/backend";
 import { requirePermission } from "@/server/session";
 
 export interface ChurchEvent {

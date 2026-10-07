@@ -1,6 +1,6 @@
 import "server-only";
 
-import { backendRaw } from "@/server/backend";
+import { backend, backendRaw } from "@/server/backend";
 import { requireSession } from "@/server/session";
 
 export interface FellowshipSection {
