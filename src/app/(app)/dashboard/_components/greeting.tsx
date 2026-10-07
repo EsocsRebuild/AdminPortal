@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Sparkles, Activity, CalendarDays, ShieldCheck } from "lucide-react";
+import { Sparkles, Activity, CalendarDays } from "lucide-react";
 import { useMounted } from "@/hooks/use-mounted";
 import { siteConfig } from "@/config/site";
 import { Crest } from "@/components/icons/logo";
