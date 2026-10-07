@@ -79,7 +79,7 @@ export function AppSplashLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[999999] flex flex-col justify-between bg-slate-950 text-white transition-opacity duration-500 overflow-hidden ${
+      className={`fixed inset-0 z-999999 flex flex-col justify-between bg-slate-950 text-white transition-opacity duration-500 overflow-hidden ${
         fadingOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
@@ -103,7 +103,7 @@ export function AppSplashLoader() {
         ))}
         {/* Ultra Deep Backdrop Blur & Dark Gradient Overlays */}
         <div className="absolute inset-0 backdrop-blur-[80px] bg-slate-950/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/70" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/85 to-slate-950/70" />
         <div className="absolute inset-0 bg-radial-vignette opacity-95" />
       </div>
 
@@ -144,7 +144,7 @@ export function AppSplashLoader() {
             Ecclesiastical Platform Loader
           </div>
           <h1 className="font-brand text-4xl md:text-5xl font-extrabold tracking-tight text-white">
-            Care for your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500">Church</span>
+            Care for your <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500">Church</span>
           </h1>
         </div>
 
@@ -158,7 +158,7 @@ export function AppSplashLoader() {
           {/* Shimmering Progress Bar */}
           <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800 shadow-inner relative">
             <div
-              className="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-300 rounded-full transition-all duration-150 ease-out shadow-[0_0_20px_#FBBF24]"
+              className="h-full bg-linear-to-r from-amber-500 via-yellow-400 to-amber-300 rounded-full transition-all duration-150 ease-out shadow-[0_0_20px_#FBBF24]"
               style={{ width: `${progress}%` }}
             />
           </div>

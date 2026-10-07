@@ -47,9 +47,9 @@ export default function LandingPage() {
 
       {/* Ambient Aurora Background Lighting */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 size-[1000px] rounded-full bg-gradient-to-b from-amber-500/10 via-royal-600/10 to-transparent blur-[140px] opacity-70 animate-pulse" />
-        <div className="absolute top-[30%] -left-[10%] size-[600px] rounded-full bg-emerald-500/5 blur-[120px]" />
-        <div className="absolute top-[65%] -right-[10%] size-[700px] rounded-full bg-amber-500/5 blur-[140px]" />
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 size-[1000px] rounded-full bg-linear-to-b from-amber-500/10 via-royal-600/10 to-transparent blur-[140px] opacity-70 animate-pulse" />
+        <div className="absolute top-[30%] left-[-10%] size-[600px] rounded-full bg-emerald-500/5 blur-[120px]" />
+        <div className="absolute top-[65%] right-[-10%] size-[700px] rounded-full bg-amber-500/5 blur-[140px]" />
         <div className="absolute inset-0 bg-grid opacity-20" />
       </div>
 
@@ -90,7 +90,7 @@ export default function LandingPage() {
 
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 px-5 py-2 text-xs font-extrabold text-slate-950 shadow-lg shadow-amber-500/25 transition-all hover:scale-105 hover:shadow-amber-500/40 active:scale-95"
+            className="flex items-center gap-2 rounded-full bg-linear-to-r from-amber-400 via-amber-500 to-yellow-500 px-5 py-2 text-xs font-extrabold text-slate-950 shadow-lg shadow-amber-500/25 transition-all hover:scale-105 hover:shadow-amber-500/40 active:scale-95"
           >
             <span>Enter Portal</span>
             <ArrowRight className="size-3.5" />
@@ -119,11 +119,11 @@ export default function LandingPage() {
           className="font-brand text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.1]"
         >
           The Unified Digital Ecosystem for{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500">
             Ecclesiastical Governance
           </span>{" "}
           & World-Class{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-400">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 via-emerald-400 to-teal-400">
             Web Content
           </span>
         </motion.h1>
@@ -146,7 +146,7 @@ export default function LandingPage() {
         >
           <Link
             href="/dashboard"
-            className="w-full sm:w-auto flex items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 px-7 py-3.5 text-sm font-extrabold text-slate-950 shadow-xl shadow-amber-500/30 transition-all hover:scale-105 hover:shadow-amber-500/45"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 rounded-xl bg-linear-to-r from-amber-400 via-amber-500 to-yellow-500 px-7 py-3.5 text-sm font-extrabold text-slate-950 shadow-xl shadow-amber-500/30 transition-all hover:scale-105 hover:shadow-amber-500/45"
           >
             <Church className="size-4 text-slate-950" />
             <span>Main Church Admin</span>
@@ -229,7 +229,7 @@ export default function LandingPage() {
                 onClick={() => setActivePortalTab("main")}
                 className={`flex items-center gap-2.5 px-6 py-3 rounded-full text-xs font-extrabold transition-all ${
                   activePortalTab === "main"
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 shadow-lg shadow-amber-500/30"
+                    ? "bg-linear-to-r from-amber-400 to-amber-500 text-slate-950 shadow-lg shadow-amber-500/30"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
@@ -241,7 +241,7 @@ export default function LandingPage() {
                 onClick={() => setActivePortalTab("web")}
                 className={`flex items-center gap-2.5 px-6 py-3 rounded-full text-xs font-extrabold transition-all ${
                   activePortalTab === "web"
-                    ? "bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 shadow-lg shadow-emerald-500/30"
+                    ? "bg-linear-to-r from-emerald-400 to-teal-500 text-slate-950 shadow-lg shadow-emerald-500/30"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
@@ -301,7 +301,7 @@ export default function LandingPage() {
                         <span className="text-amber-400">Stage 4 of 5 (80%)</span>
                       </div>
                       <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
-                        <div className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full w-[80%]" />
+                        <div className="h-full bg-linear-to-r from-amber-500 to-yellow-400 rounded-full w-[80%]" />
                       </div>
                     </div>
                     <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-2xs">
@@ -627,7 +627,7 @@ export default function LandingPage() {
       </section>
 
       {/* Scriptural Authority Banner */}
-      <section className="relative z-10 py-20 px-6 text-center border-y border-amber-400/20 bg-gradient-to-r from-amber-950/40 via-slate-950 to-amber-950/40 backdrop-blur-2xl">
+      <section className="relative z-10 py-20 px-6 text-center border-y border-amber-400/20 bg-linear-to-r from-amber-950/40 via-slate-950 to-amber-950/40 backdrop-blur-2xl">
         <div className="max-w-4xl mx-auto space-y-4">
           <Crest size={64} priority className="mx-auto ring-4 ring-amber-400/80 shadow-2xl shadow-amber-950/80" />
           <h3 className="font-brand text-2xl md:text-4xl font-extrabold text-white italic">
@@ -653,7 +653,7 @@ export default function LandingPage() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 text-xs tracking-wider uppercase text-amber-400">Main Admin</h4>
+            <h4 className="font-bold mb-3 text-xs tracking-wider uppercase text-amber-400">Main Admin</h4>
             <ul className="space-y-2 text-2xs font-semibold">
               <li><Link href="/dashboard" className="hover:text-white transition-colors">Executive Dashboard</Link></li>
               <li><Link href="/members" className="hover:text-white transition-colors">Member Registry</Link></li>
@@ -663,7 +663,7 @@ export default function LandingPage() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 text-xs tracking-wider uppercase text-emerald-400">Web Studio</h4>
+            <h4 className="font-bold mb-3 text-xs tracking-wider uppercase text-emerald-400">Web Studio</h4>
             <ul className="space-y-2 text-2xs font-semibold">
               <li><Link href="/admin-web/dashboard" className="hover:text-white transition-colors">Studio Dashboard</Link></li>
               <li><Link href="/admin-web/vetting" className="hover:text-white transition-colors">Super Vetting Queue</Link></li>
@@ -673,7 +673,7 @@ export default function LandingPage() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 text-xs tracking-wider uppercase text-slate-200">System Security</h4>
+            <h4 className="font-bold mb-3 text-xs tracking-wider uppercase text-slate-200">System Security</h4>
             <p className="text-2xs text-slate-400 leading-relaxed mb-3">
               Encrypted end-to-end with full parish unit scoping and audit traceability.
             </p>

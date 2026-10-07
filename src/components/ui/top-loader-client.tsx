@@ -36,10 +36,10 @@ export function TopLoaderClient() {
   if (!loading && progress === 0) return null;
 
   return (
-    <div className="pointer-events-none fixed top-0 right-0 left-0 z-[99999]">
+    <div className="pointer-events-none fixed top-0 right-0 left-0 z-99999">
       {/* Top glowing progress bar */}
       <div
-        className="h-1 bg-gradient-to-r from-amber-400 via-emerald-400 to-yellow-300 shadow-[0_0_15px_rgba(251,191,36,0.9)] transition-all duration-300 ease-out"
+        className="h-1 bg-linear-to-r from-amber-400 via-emerald-400 to-yellow-300 shadow-[0_0_15px_rgba(251,191,36,0.9)] transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}
       />
       {/* Leading particle light effect */}
