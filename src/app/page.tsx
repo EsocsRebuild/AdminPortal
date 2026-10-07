@@ -47,9 +47,9 @@ export default function LandingPage() {
 
       {/* Ambient Aurora Background Lighting */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 size-[1000px] rounded-full bg-linear-to-b from-amber-500/10 via-royal-600/10 to-transparent blur-[140px] opacity-70 animate-pulse" />
-        <div className="absolute top-[30%] left-[-10%] size-[600px] rounded-full bg-emerald-500/5 blur-[120px]" />
-        <div className="absolute top-[65%] right-[-10%] size-[700px] rounded-full bg-amber-500/5 blur-[140px]" />
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 size-250 rounded-full bg-linear-to-b from-amber-500/10 via-royal-600/10 to-transparent blur-[140px] opacity-70 animate-pulse" />
+        <div className="absolute top-[30%] left-[-10%] size-150 rounded-full bg-emerald-500/5 blur-[120px]" />
+        <div className="absolute top-[65%] right-[-10%] size-175 rounded-full bg-amber-500/5 blur-[140px]" />
         <div className="absolute inset-0 bg-grid opacity-20" />
       </div>
 

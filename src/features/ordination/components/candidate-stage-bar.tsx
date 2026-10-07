@@ -41,7 +41,7 @@ export function CandidateStageBar({ currentStage }: { currentStage: VettingStage
                 {isDone ? <Check className="size-4" /> : <Icon className="size-4" />}
               </div>
               <span
-                className={`max-w-[120px] text-2xs leading-tight font-semibold ${isDone || isCurrent ? "text-slate-200" : "text-slate-500"}`}
+                className={`max-w-30 text-2xs leading-tight font-semibold ${isDone || isCurrent ? "text-slate-200" : "text-slate-500"}`}
               >
                 {s.label}
               </span>
@@ -53,7 +53,7 @@ export function CandidateStageBar({ currentStage }: { currentStage: VettingStage
       {/* Progress Line */}
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
         <div
-          className="h-full bg-gradient-to-r from-emerald-500 to-amber-400 transition-all duration-500"
+          className="h-full bg-linear-to-r from-emerald-500 to-amber-400 transition-all duration-500"
           style={{ width: `${(currentIdx / 4) * 100}%` }}
         />
       </div>
