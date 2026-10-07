@@ -25,6 +25,7 @@ import { can } from "@/lib/permissions";
 import { requirePermission } from "@/server/session";
 
 import { HandlerCard } from "@/components/blocks/handler-card";
+import { JurisdictionScopeBanner } from "./_components/jurisdiction-scope-banner";
 import { GettingStarted, type SetupStep } from "./_components/getting-started";
 import { Greeting } from "./_components/greeting";
 import { QuickActions } from "./_components/quick-actions";
@@ -148,6 +149,10 @@ export default async function DashboardPage() {
       <Stagger className="grid grid-cols-[minmax(0,1fr)] gap-page" gap={0.07}>
         <StaggerItem>
           <Greeting name={user.name.split(" ")[0]} />
+        </StaggerItem>
+
+        <StaggerItem>
+          <JurisdictionScopeBanner user={user} />
         </StaggerItem>
 
         <StaggerItem>
