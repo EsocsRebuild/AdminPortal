@@ -55,10 +55,18 @@ export default function WebAdminLayout({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-800 bg-slate-900/90 px-4 backdrop-blur-xl md:px-8">
           <div className="flex items-center gap-6">
             <Link href="/admin-web/dashboard" className="group flex items-center gap-3">
-              <Crest size={38} priority className="ring-2 ring-emerald-500/50 shadow-md shadow-emerald-950/50 transition-transform group-hover:scale-105" />
+              <Crest
+                size={38}
+                priority
+                className="shadow-md ring-2 shadow-emerald-950/50 ring-emerald-500/50 transition-transform group-hover:scale-105"
+              />
               <div>
-                <span className="block text-sm font-extrabold tracking-wide text-white font-brand">THE ESOCS WEB STUDIO</span>
-                <span className="block text-2xs font-semibold text-emerald-400 uppercase tracking-wider">Content Administration</span>
+                <span className="block font-brand text-sm font-extrabold tracking-wide text-white">
+                  THE ESOCS WEB STUDIO
+                </span>
+                <span className="block text-2xs font-semibold tracking-wider text-emerald-400 uppercase">
+                  Content Administration
+                </span>
               </div>
             </Link>
 

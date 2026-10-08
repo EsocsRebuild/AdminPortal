@@ -36,22 +36,22 @@ export default async function SeriesPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {series.map((item) => (
-            <Card key={item.id} className="p-4 flex flex-col justify-between gap-3">
+            <Card key={item.id} className="flex flex-col justify-between gap-3 p-4">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="mb-2 flex items-center justify-between gap-2">
                   <Badge tone="info">{item.sermonCount} sermons</Badge>
                   {item.startsOn && (
-                    <span className="text-2xs text-muted-foreground flex items-center gap-1">
+                    <span className="flex items-center gap-1 text-2xs text-muted-foreground">
                       <Calendar className="size-3" /> {formatDate(item.startsOn)}
                     </span>
                   )}
                 </div>
-                <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
                 {item.description && (
-                  <p className="text-xs text-muted-foreground line-clamp-3 mt-1.5">{item.description}</p>
+                  <p className="mt-1.5 line-clamp-3 text-xs text-muted-foreground">{item.description}</p>
                 )}
               </div>
-              <div className="pt-2 border-t border-border-subtle text-2xs text-muted-foreground font-mono">
+              <div className="border-t border-border-subtle pt-2 font-mono text-2xs text-muted-foreground">
                 /{item.slug}
               </div>
             </Card>

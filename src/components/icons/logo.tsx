@@ -20,7 +20,10 @@ export function Crest({
       width={size}
       height={size}
       priority={priority}
-      className={cn("shrink-0 rounded-full object-contain drop-shadow-md ring-2 ring-amber-400/70", className)}
+      className={cn(
+        "shrink-0 rounded-full object-contain ring-2 ring-amber-400/70 drop-shadow-md",
+        className,
+      )}
     />
   );
 }
@@ -47,14 +50,19 @@ export function Logo({
     <Link
       href={href}
       aria-label={`${siteConfig.name} Home`}
-      className={cn("flex min-w-0 items-center gap-3 rounded-md transition-opacity hover:opacity-95", className)}
+      className={cn(
+        "flex min-w-0 items-center gap-3 rounded-md transition-opacity hover:opacity-95",
+        className,
+      )}
     >
-      <Crest size={crestSize} className="ring-2 ring-amber-400/80 shadow-md shadow-amber-950/30" />
+      <Crest size={crestSize} className="shadow-md ring-2 shadow-amber-950/30 ring-amber-400/80" />
       <span className={cn("grid min-w-0 leading-tight", collapsible && "lg:rail:hidden")}>
-        <span className={cn(
-          "font-brand font-bold tracking-tight text-white dark:text-white",
-          size === "lg" ? "text-xl" : size === "sm" ? "text-base" : "text-lg"
-        )}>
+        <span
+          className={cn(
+            "font-brand font-bold tracking-tight text-white dark:text-white",
+            size === "lg" ? "text-xl" : size === "sm" ? "text-base" : "text-lg",
+          )}
+        >
           THE ESOCS
         </span>
         <span className="text-2xs font-medium tracking-wider text-amber-400 uppercase">

@@ -56,7 +56,7 @@ export default function WebAdminLoginPage() {
                     type="email"
                     placeholder="web.admin@esocs.org"
                     required
-                    className="border-slate-700 bg-slate-950 text-white placeholder:text-slate-400 focus-visible:ring-emerald-500 font-medium"
+                    className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
                   />
                 </div>
 
@@ -69,7 +69,10 @@ export default function WebAdminLoginPage() {
                       <Lock className="size-3.5 text-emerald-400" />
                       Password
                     </label>
-                    <Link href="/forgot-password" className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:underline">
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:underline"
+                    >
                       Forgot?
                     </Link>
                   </div>
@@ -79,7 +82,7 @@ export default function WebAdminLoginPage() {
                     type="password"
                     placeholder="••••••••••••"
                     required
-                    className="border-slate-700 bg-slate-950 text-white placeholder:text-slate-400 focus-visible:ring-emerald-500 font-medium"
+                    className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
                   />
                 </div>
 

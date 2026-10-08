@@ -129,7 +129,8 @@ export default async function GivingPage() {
   const batches = backendBatches.length > 0 ? backendBatches : mockBatches;
 
   const totalFundsInVault = summary?.total ?? funds.reduce((acc, f) => acc + f.currentBalance, 0);
-  const totalMonthToDate = summary?.byMonth?.at(-1)?.total ?? funds.reduce((acc, f) => acc + f.monthToDate, 0);
+  const totalMonthToDate =
+    summary?.byMonth?.at(-1)?.total ?? funds.reduce((acc, f) => acc + f.monthToDate, 0);
 
   return (
     <Page>

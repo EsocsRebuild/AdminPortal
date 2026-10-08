@@ -1,6 +1,6 @@
 import "server-only";
 
-import { backend, backendRaw } from "@/server/backend";
+import { backend } from "@/server/backend";
 import { requireSession } from "@/server/session";
 
 export interface FellowshipSection {
@@ -33,13 +33,26 @@ export async function listSections(): Promise<FellowshipSection[]> {
     if (Array.isArray(items) && items.length > 0) {
       return items.map((u, i) => {
         const leader = u.leaders?.[0]?.name ?? "Executive Directorate";
-        const tones: ("success" | "warning" | "info" | "primary")[] = ["success", "warning", "info", "primary"];
-        const colors = ["border-l-emerald-500", "border-l-amber-500", "border-l-purple-500", "border-l-blue-500"];
+        const tones: ("success" | "warning" | "info" | "primary")[] = [
+          "success",
+          "warning",
+          "info",
+          "primary",
+        ];
+        const colors = [
+          "border-l-emerald-500",
+          "border-l-amber-500",
+          "border-l-purple-500",
+          "border-l-blue-500",
+        ];
         return {
           id: u.id,
           slug: u.slug,
           name: u.name,
-          motto: u.tagline || (Array.isArray(u.about) ? u.about[0] : "") || "Living a life of holiness and fellowship.",
+          motto:
+            u.tagline ||
+            (Array.isArray(u.about) ? u.about[0] : "") ||
+            "Living a life of holiness and fellowship.",
           headLeader: leader,
           memberCount: u.childCount || 100,
           activeEventsCount: 2,

@@ -3,7 +3,13 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export function TooltipProvider({ children }: { children: React.ReactNode; delayDuration?: number; skipDelayDuration?: number }) {
+export function TooltipProvider({
+  children,
+}: {
+  children: React.ReactNode;
+  delayDuration?: number;
+  skipDelayDuration?: number;
+}) {
   return <>{children}</>;
 }
 
@@ -15,7 +21,7 @@ export function TooltipContent({ children, className }: { children: React.ReactN
   return (
     <span
       className={cn(
-        "absolute bottom-full mb-1.5 text-2xs px-2.5 py-1 bg-slate-900 text-slate-100 border border-slate-700 rounded-md shadow-xl pointer-events-none hidden group-hover:block z-50 whitespace-nowrap",
+        "pointer-events-none absolute bottom-full z-50 mb-1.5 hidden rounded-md border border-slate-700 bg-slate-900 px-2.5 py-1 text-2xs whitespace-nowrap text-slate-100 shadow-xl group-hover:block",
         className,
       )}
     >
@@ -38,11 +44,11 @@ export function Tooltip({ content, children, disabled, className }: TooltipProps
   if (disabled) return <>{children}</>;
   if (content !== undefined) {
     return (
-      <div className="relative group inline-flex items-center">
+      <div className="group relative inline-flex items-center">
         {children}
         <TooltipContent className={className}>{content}</TooltipContent>
       </div>
     );
   }
-  return <div className="relative group inline-flex items-center">{children}</div>;
+  return <div className="group relative inline-flex items-center">{children}</div>;
 }

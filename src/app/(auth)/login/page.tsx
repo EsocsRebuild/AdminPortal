@@ -33,7 +33,10 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       <LoginForm next={typeof next === "string" ? next : undefined} />
       <p className="text-center text-sm font-medium text-slate-300">
         New here?{" "}
-        <Link href="/signup" className="font-semibold text-amber-400 hover:text-amber-300 underline-offset-4 hover:underline">
+        <Link
+          href="/signup"
+          className="font-semibold text-amber-400 underline-offset-4 hover:text-amber-300 hover:underline"
+        >
           Request an account
         </Link>
       </p>

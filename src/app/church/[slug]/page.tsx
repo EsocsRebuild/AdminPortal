@@ -142,9 +142,24 @@ async function getParishData(slug: string): Promise<ParishData | null> {
           title: u.leaders?.[0]?.role || "Minister-in-Charge",
         },
         services: [
-          { title: "Divine Worship", day: "Sunday", time: "09:00 AM - 12:30 PM", description: "Liturgical devotion and corporate communion." },
-          { title: "Midweek Spiritual Awakening", day: "Wednesday", time: "05:30 PM - 07:30 PM", description: "Bible study and spiritual intercession." },
-          { title: "Spiritual Warfare & Vigil", day: "Friday", time: "11:00 PM - 03:00 AM", description: "Deliverance and nocturnal prayer." },
+          {
+            title: "Divine Worship",
+            day: "Sunday",
+            time: "09:00 AM - 12:30 PM",
+            description: "Liturgical devotion and corporate communion.",
+          },
+          {
+            title: "Midweek Spiritual Awakening",
+            day: "Wednesday",
+            time: "05:30 PM - 07:30 PM",
+            description: "Bible study and spiritual intercession.",
+          },
+          {
+            title: "Spiritual Warfare & Vigil",
+            day: "Friday",
+            time: "11:00 PM - 03:00 AM",
+            description: "Deliverance and nocturnal prayer.",
+          },
         ],
         announcements: [
           {
@@ -185,14 +200,14 @@ export default async function ParishPublicPage({ params }: { params: Promise<{ s
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Banner Section with Official Web Hero Background & Crest */}
-      <section className="relative overflow-hidden border-b border-border bg-slate-950 py-16 md:py-24 text-white">
+      <section className="relative overflow-hidden border-b border-border bg-slate-950 py-16 text-white md:py-24">
         <div className="absolute inset-0 z-0">
           <Image
             src="/brand/hero-mount-zion.webp"
             alt="ESOCS Cathedral"
             fill
             priority
-            className="object-cover object-center opacity-30 filter contrast-125 saturate-110"
+            className="object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-slate-950/80 to-slate-950/60" />
         </div>
@@ -200,25 +215,39 @@ export default async function ParishPublicPage({ params }: { params: Promise<{ s
         <div className="relative z-10 mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-start gap-5">
             <div className="flex items-center gap-4">
-              <Crest size={56} priority className="ring-2 ring-amber-400/80 shadow-xl shadow-amber-950/50" />
+              <Crest size={56} priority className="shadow-xl ring-2 shadow-amber-950/50 ring-amber-400/80" />
               <div>
-                <Badge tone="neutral" className="gap-1.5 px-3 py-1 bg-amber-400/10 border-amber-400/30 text-amber-400 font-semibold">
+                <Badge
+                  tone="neutral"
+                  className="gap-1.5 border-amber-400/30 bg-amber-400/10 px-3 py-1 font-semibold text-amber-400"
+                >
                   <Building2 className="size-3.5 text-amber-400" />
                   <span>Official ESOCS Parish Portal</span>
                 </Badge>
-                <h1 className="text-3xl font-bold tracking-tight sm:text-5xl font-brand text-white mt-1">{parish.name}</h1>
+                <h1 className="mt-1 font-brand text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                  {parish.name}
+                </h1>
               </div>
             </div>
             <p className="max-w-2xl text-lg text-slate-300">{parish.tagline}</p>
 
             <div className="mt-2 flex flex-wrap items-center gap-3">
-              <Button size="lg" className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shadow-lg shadow-amber-950/40" asChild>
+              <Button
+                size="lg"
+                className="bg-amber-500 font-bold text-slate-950 shadow-lg shadow-amber-950/40 hover:bg-amber-400"
+                asChild
+              >
                 <a href="#services">
                   <Calendar className="mr-2 size-4" />
                   Service Schedule & Worship
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="border-slate-700 bg-slate-900/60 text-slate-200 hover:bg-slate-800" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-slate-700 bg-slate-900/60 text-slate-200 hover:bg-slate-800"
+                asChild
+              >
                 <a href="#contact">
                   <Phone className="mr-2 size-4" />
                   Contact Pastoral Team

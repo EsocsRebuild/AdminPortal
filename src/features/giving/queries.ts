@@ -1,6 +1,6 @@
 import "server-only";
 
-import { backend, backendRaw } from "@/server/backend";
+import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
 
 export interface FundLedger {
@@ -90,8 +90,9 @@ export async function listBatches(): Promise<GivingBatch[]> {
         cashTotal: b.recordedTotal ?? 0,
         posTotal: 0,
         onlineTotal: 0,
-        total: b.recordedTotal ?? (b.expectedTotal ?? 0),
-        status: (b.status?.toLowerCase() === "closed" ? "reconciled" : "open") as "open" | "verified" | "reconciled",
+        total: b.recordedTotal ?? b.expectedTotal ?? 0,
+        status: (b.status?.toLowerCase() === "closed" ? "reconciled" : "open") as
+          "open" | "verified" | "reconciled",
         verifiedBy: b.status === "Closed" ? "Parish Finance Committee" : "Pending Reconciliation",
       }));
     }

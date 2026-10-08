@@ -1,6 +1,6 @@
 import "server-only";
 
-import { backend, backendRaw } from "@/server/backend";
+import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
 
 export interface ChurchEvent {
@@ -47,9 +47,7 @@ export async function listEvents(): Promise<ChurchEvent[]> {
 
         const typeLower = evt.type ? evt.type.toLowerCase() : "";
         const category = (
-          ["service", "conference", "revival", "fellowship"].includes(typeLower)
-            ? typeLower
-            : "service"
+          ["service", "conference", "revival", "fellowship"].includes(typeLower) ? typeLower : "service"
         ) as "service" | "conference" | "revival" | "fellowship";
 
         return {

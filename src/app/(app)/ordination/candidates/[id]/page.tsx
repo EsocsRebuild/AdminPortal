@@ -22,33 +22,36 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
       <div className="space-y-6">
         {/* Top Back Navigation */}
         <div className="flex items-center justify-between">
-          <Link href="/ordination" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1.5 font-medium">
+          <Link
+            href="/ordination"
+            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="size-4" />
             Back to Ordination Candidate Roster
           </Link>
-          <span className="text-2xs text-muted-foreground font-mono">
-            Candidate ID: {candidate.id}
-          </span>
+          <span className="font-mono text-2xs text-muted-foreground">Candidate ID: {candidate.id}</span>
         </div>
 
         {/* Candidate Header Card */}
         <Card className="bg-card border-border">
-          <CardContent className="p-6 space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border pb-4">
+          <CardContent className="space-y-4 p-6">
+            <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-4 md:flex-row md:items-center">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="text-xl font-bold text-foreground">{candidate.fullName}</span>
-                  <span className="text-2xs px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold">
+                  <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-500">
                     TARGET RANK: {candidate.rankTarget}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Member ID: {candidate.memberId} • Parish: <strong className="text-foreground">{candidate.parishName}</strong> ({candidate.districtName})
+                  Member ID: {candidate.memberId} • Parish:{" "}
+                  <strong className="text-foreground">{candidate.parishName}</strong> (
+                  {candidate.districtName})
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs font-bold">
+                <span className="rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary">
                   {candidate.yearsOfService} Years Service
                 </span>
               </div>
@@ -56,7 +59,9 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
 
             {/* 4-Stage Progress Visualizer */}
             <div className="pt-2">
-              <h3 className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wider">Clearance Pipeline Progress</h3>
+              <h3 className="mb-1 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                Clearance Pipeline Progress
+              </h3>
               <CandidateStageBar currentStage={candidate.stageCurrent} />
             </div>
           </CardContent>
@@ -64,7 +69,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
 
         {/* Stage Advancement Clearance Action */}
         {candidate.stageCurrent !== "STAGE_4_SUPREME_APPROVED" && (
-          <Card className="bg-amber-500/5 border-amber-500/20">
+          <Card className="border-amber-500/20 bg-amber-500/5">
             <CardHeader
               title={
                 <div className="flex items-center gap-2 text-sm font-bold text-foreground">
@@ -82,7 +87,8 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                     candidateId: candidate.id,
                     currentStage: candidate.stageCurrent,
                     action: "APPROVED",
-                    clearanceNotes: (formData.get("notes") as string) || "Vetting clearance granted by board.",
+                    clearanceNotes:
+                      (formData.get("notes") as string) || "Vetting clearance granted by board.",
                   });
                 }}
                 className="space-y-3"
@@ -97,14 +103,14 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                     rows={2}
                     required
                     placeholder="Provide justification and verification details for this clearance stage..."
-                    className="w-full rounded-md bg-background border border-input p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full rounded-md border border-input bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-primary focus:outline-none"
                   />
                 </div>
 
                 <div className="flex items-center justify-end gap-2">
                   <Button
                     type="submit"
-                    className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium gap-1.5 shadow-md"
+                    className="gap-1.5 bg-emerald-600 text-xs font-medium text-white shadow-md hover:bg-emerald-500"
                   >
                     <CheckCircle2 className="size-4" />
                     Grant Stage Clearance & Advance
@@ -128,13 +134,15 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
           />
           <CardContent className="space-y-3">
             {candidate.vettingHistory.map((log, idx) => (
-              <div key={idx} className="p-3.5 rounded-xl bg-muted/40 border border-border space-y-1 text-xs">
+              <div key={idx} className="bg-muted/40 space-y-1 rounded-xl border border-border p-3.5 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-foreground">{log.stage}</span>
-                  <span className="text-2xs font-mono text-muted-foreground">{new Date(log.timestamp).toLocaleString()}</span>
+                  <span className="font-mono text-2xs text-muted-foreground">
+                    {new Date(log.timestamp).toLocaleString()}
+                  </span>
                 </div>
                 <p className="text-muted-foreground">{log.notes}</p>
-                <div className="text-2xs text-primary font-mono pt-1">Signed by Handler: {log.handlerId}</div>
+                <div className="pt-1 font-mono text-2xs text-primary">Signed by Handler: {log.handlerId}</div>
               </div>
             ))}
           </CardContent>

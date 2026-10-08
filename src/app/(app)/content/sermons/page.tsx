@@ -40,9 +40,9 @@ export default async function SermonsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sermons.map((sermon) => (
-            <Card key={sermon.id} className="p-4 flex flex-col justify-between gap-4">
+            <Card key={sermon.id} className="flex flex-col justify-between gap-4 p-4">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="mb-2 flex items-center justify-between gap-2">
                   <Badge
                     tone={
                       sermon.status === "Published"
@@ -56,17 +56,17 @@ export default async function SermonsPage() {
                   </Badge>
                   <span className="text-2xs text-muted-foreground">{formatDate(sermon.preachedOn)}</span>
                 </div>
-                <h3 className="font-semibold text-foreground text-sm">{sermon.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1">Preacher: {sermon.preacher}</p>
+                <h3 className="text-sm font-semibold text-foreground">{sermon.title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Preacher: {sermon.preacher}</p>
                 {sermon.seriesTitle && (
-                  <p className="text-2xs text-primary font-medium mt-0.5">Series: {sermon.seriesTitle}</p>
+                  <p className="mt-0.5 text-2xs font-medium text-primary">Series: {sermon.seriesTitle}</p>
                 )}
                 {sermon.summary && (
-                  <p className="text-xs text-muted-foreground line-clamp-2 mt-2">{sermon.summary}</p>
+                  <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{sermon.summary}</p>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 pt-2 border-t border-border-subtle">
+              <div className="flex items-center gap-2 border-t border-border-subtle pt-2">
                 {sermon.videoUrl && (
                   <span className="inline-flex items-center gap-1 text-2xs text-muted-foreground">
                     <Tv2 className="size-3 text-red-500" /> Video

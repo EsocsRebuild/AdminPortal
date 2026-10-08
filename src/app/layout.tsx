@@ -25,8 +25,11 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "The ESOCS Administration Portal",
-    description: "Digital Church & Ordination Governance Portal for the Eternal Sacred Order of the Cherubim & Seraphim.",
-    images: [{ url: "/brand/hero-mount-zion.webp", width: 1200, height: 630, alt: "ESOCS Administration Portal" }],
+    description:
+      "Digital Church & Ordination Governance Portal for the Eternal Sacred Order of the Cherubim & Seraphim.",
+    images: [
+      { url: "/brand/hero-mount-zion.webp", width: 1200, height: 630, alt: "ESOCS Administration Portal" },
+    ],
   },
   robots: { index: false, follow: false, nocache: true },
   referrer: "strict-origin-when-cross-origin",

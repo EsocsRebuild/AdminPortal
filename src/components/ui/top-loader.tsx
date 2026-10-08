@@ -10,4 +10,3 @@ export function TopLoader() {
     </React.Suspense>
   );
 }
-

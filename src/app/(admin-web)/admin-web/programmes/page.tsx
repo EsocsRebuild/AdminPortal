@@ -16,15 +16,15 @@ export default function ProgrammesSchedulePage() {
           <div>
             <div className="flex items-center gap-2">
               <Megaphone className="size-5 text-teal-400" />
-              <h1 className="text-2xl font-bold text-white tracking-tight">Programmes & Bulletin Schedule</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-white">Programmes & Bulletin Schedule</h1>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="mt-1 text-xs text-slate-400">
               Manage church annual summits, quarterly theme schedules, and bulletin attachments.
             </p>
           </div>
         </div>
 
-        <Card className="bg-slate-900/80 border-slate-800 shadow-xl max-w-2xl">
+        <Card className="max-w-2xl border-slate-800 bg-slate-900/80 shadow-xl">
           <CardHeader
             title={
               <div className="flex items-center gap-2 text-base font-semibold text-white">
@@ -57,7 +57,7 @@ export default function ProgrammesSchedulePage() {
                   name="title"
                   placeholder="e.g. Q4 District Ministerial Summit"
                   required
-                  className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
+                  className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
                 />
               </div>
 
@@ -70,7 +70,7 @@ export default function ProgrammesSchedulePage() {
                   name="theme"
                   placeholder="e.g. Expanding Kingdom Boundaries"
                   required
-                  className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
+                  className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
                 />
               </div>
 
@@ -83,7 +83,7 @@ export default function ProgrammesSchedulePage() {
                   name="speakers"
                   placeholder="His Eminence Elder Johnson, Senior Apostle Adeleke"
                   required
-                  className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
+                  className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
                 />
               </div>
 
@@ -96,7 +96,7 @@ export default function ProgrammesSchedulePage() {
                   name="scheduleDate"
                   type="datetime-local"
                   required
-                  className="bg-slate-950/60 border-slate-800 text-white focus-visible:ring-teal-500"
+                  className="border-slate-800 bg-slate-950/60 text-white focus-visible:ring-teal-500"
                 />
               </div>
 
@@ -108,16 +108,16 @@ export default function ProgrammesSchedulePage() {
                   id="prog-stream"
                   name="livestreamUrl"
                   placeholder="https://youtube.com/live/..."
-                  className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
+                  className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-teal-500"
                 />
               </div>
 
               <Tooltip content="Submits programme for Vetting Review">
                 <Button
                   type="submit"
-                  className="w-full bg-teal-600 hover:bg-teal-500 text-white font-medium py-2 text-xs shadow-md shadow-teal-950"
+                  className="w-full bg-teal-600 py-2 text-xs font-medium text-white shadow-md shadow-teal-950 hover:bg-teal-500"
                 >
-                  <Sparkles className="size-3.5 mr-1.5" />
+                  <Sparkles className="mr-1.5 size-3.5" />
                   Submit Programme Schedule
                 </Button>
               </Tooltip>

@@ -114,11 +114,15 @@ async function getSectionData(slug: string): Promise<SectionData | null> {
       return {
         name: u.name,
         slug: u.slug,
-        motto: u.tagline || (Array.isArray(u.about) ? u.about[0] : "") || "Walking in righteousness and faith.",
-        vision: (Array.isArray(u.about) && u.about.length > 1 ? u.about[1] : u.tagline) || "Autonomous ministerial arm of the Holy Order dedicated to spiritual growth and service.",
-        executiveBoard: Array.isArray(u.leaders) && u.leaders.length > 0
-          ? u.leaders.map((l: { name: string; role: string }) => ({ name: l.name, role: l.role }))
-          : [{ name: "Executive Directorate", role: "Administration" }],
+        motto:
+          u.tagline || (Array.isArray(u.about) ? u.about[0] : "") || "Walking in righteousness and faith.",
+        vision:
+          (Array.isArray(u.about) && u.about.length > 1 ? u.about[1] : u.tagline) ||
+          "Autonomous ministerial arm of the Holy Order dedicated to spiritual growth and service.",
+        executiveBoard:
+          Array.isArray(u.leaders) && u.leaders.length > 0
+            ? u.leaders.map((l: { name: string; role: string }) => ({ name: l.name, role: l.role }))
+            : [{ name: "Executive Directorate", role: "Administration" }],
         programmes: [
           {
             title: "Weekly Assembly & Fellowship",
@@ -167,7 +171,7 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Header with Web Background Image & Official Crest */}
-      <section className="relative overflow-hidden border-b border-border bg-slate-950 py-16 md:py-24 text-white">
+      <section className="relative overflow-hidden border-b border-border bg-slate-950 py-16 text-white md:py-24">
         {/* Dynamic section hero image mapping */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -185,7 +189,7 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
             alt={section.name}
             fill
             priority
-            className="object-cover object-center opacity-30 filter contrast-125 saturate-110"
+            className="object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-slate-950/80 to-slate-950/60" />
         </div>
@@ -193,13 +197,18 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
         <div className="relative z-10 mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-start gap-4">
             <div className="flex items-center gap-4">
-              <Crest size={56} priority className="ring-2 ring-amber-400/80 shadow-xl shadow-amber-950/50" />
+              <Crest size={56} priority className="shadow-xl ring-2 shadow-amber-950/50 ring-amber-400/80" />
               <div>
-                <Badge tone="neutral" className="gap-1.5 px-3 py-1 bg-amber-400/10 border-amber-400/30 text-amber-400 font-semibold">
+                <Badge
+                  tone="neutral"
+                  className="gap-1.5 border-amber-400/30 bg-amber-400/10 px-3 py-1 font-semibold text-amber-400"
+                >
                   <Users2 className="size-3.5 text-amber-400" />
                   <span>National Fellowship & Directorate Section</span>
                 </Badge>
-                <h1 className="text-3xl font-bold tracking-tight sm:text-5xl font-brand text-white mt-1">{section.name}</h1>
+                <h1 className="mt-1 font-brand text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                  {section.name}
+                </h1>
               </div>
             </div>
             <p className="text-lg font-semibold text-amber-400 italic">&ldquo;{section.motto}&rdquo;</p>

@@ -17,21 +17,21 @@ export default async function EventsStudioPage() {
     <TooltipProvider>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col items-start justify-between gap-4 border-b border-slate-800 pb-5 sm:flex-row sm:items-center">
           <div>
             <div className="flex items-center gap-2">
               <Calendar className="size-5 text-emerald-400" />
-              <h1 className="text-2xl font-bold text-white tracking-tight">Events Publishing Studio</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-white">Events Publishing Studio</h1>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="mt-1 text-xs text-slate-400">
               Create, manage, and submit church events for public web listing.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Left Column: Event Submission Form */}
-          <Card className="bg-slate-900/80 border-slate-800 shadow-xl lg:col-span-1">
+          <Card className="border-slate-800 bg-slate-900/80 shadow-xl lg:col-span-1">
             <CardHeader
               title={
                 <div className="flex items-center gap-2 text-base font-semibold text-white">
@@ -66,7 +66,7 @@ export default async function EventsStudioPage() {
                     name="title"
                     placeholder="e.g. 2026 Anointing Night Revival"
                     required
-                    className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
                   />
                 </div>
 
@@ -77,7 +77,7 @@ export default async function EventsStudioPage() {
                   <select
                     id="evt-category"
                     name="category"
-                    className="w-full h-9 rounded-md bg-slate-950/60 border border-slate-800 px-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="h-9 w-full rounded-md border border-slate-800 bg-slate-950/60 px-3 text-xs text-white focus:ring-1 focus:ring-emerald-500 focus:outline-none"
                   >
                     <option value="REVIVAL">Revival Service</option>
                     <option value="SUNDAY_SERVICE">Sunday Service</option>
@@ -96,7 +96,7 @@ export default async function EventsStudioPage() {
                     name="startDate"
                     type="datetime-local"
                     required
-                    className="bg-slate-950/60 border-slate-800 text-white focus-visible:ring-emerald-500"
+                    className="border-slate-800 bg-slate-950/60 text-white focus-visible:ring-emerald-500"
                   />
                 </div>
 
@@ -109,7 +109,7 @@ export default async function EventsStudioPage() {
                     name="venue"
                     placeholder="e.g. Mount Zion Main Sanctuary"
                     required
-                    className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
                   />
                 </div>
 
@@ -121,7 +121,7 @@ export default async function EventsStudioPage() {
                     id="evt-banner"
                     name="bannerUrl"
                     placeholder="https://..."
-                    className="bg-slate-950/60 border-slate-800 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
                   />
                 </div>
 
@@ -135,7 +135,7 @@ export default async function EventsStudioPage() {
                     rows={3}
                     required
                     placeholder="Provide event details, schedule highlights, and instructions for attendees..."
-                    className="w-full rounded-md bg-slate-950/60 border border-slate-800 p-2.5 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-md border border-slate-800 bg-slate-950/60 p-2.5 text-xs text-white placeholder:text-slate-600 focus:ring-1 focus:ring-emerald-500 focus:outline-none"
                   />
                 </div>
 
@@ -154,9 +154,9 @@ export default async function EventsStudioPage() {
                 <Tooltip content="Submits event to Super Admin queue with status PENDING_REVIEW">
                   <Button
                     type="submit"
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 text-xs shadow-md shadow-emerald-950"
+                    className="w-full bg-emerald-600 py-2 text-xs font-medium text-white shadow-md shadow-emerald-950 hover:bg-emerald-500"
                   >
-                    <Sparkles className="size-3.5 mr-1.5" />
+                    <Sparkles className="mr-1.5 size-3.5" />
                     Submit Event for Vetting
                   </Button>
                 </Tooltip>
@@ -165,9 +165,9 @@ export default async function EventsStudioPage() {
           </Card>
 
           {/* Right Column: Events Roster & Status */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-xl p-3 px-4">
-              <span className="text-xs font-semibold text-white flex items-center gap-2">
+          <div className="space-y-4 lg:col-span-2">
+            <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-3 px-4">
+              <span className="flex items-center gap-2 text-xs font-semibold text-white">
                 <Filter className="size-3.5 text-emerald-400" />
                 Active Unit Events ({events.length})
               </span>
@@ -176,52 +176,53 @@ export default async function EventsStudioPage() {
 
             <div className="space-y-3">
               {events.map((evt) => (
-                <Card key={evt.id} className="bg-slate-900/80 border-slate-800 overflow-hidden hover:border-slate-700 transition-all">
-                  <div className="p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-start">
-                    <div className="space-y-2 max-w-xl">
-                      <div className="flex items-center gap-2 flex-wrap">
+                <Card
+                  key={evt.id}
+                  className="overflow-hidden border-slate-800 bg-slate-900/80 transition-all hover:border-slate-700"
+                >
+                  <div className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:flex-row">
+                    <div className="max-w-xl space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-bold text-white">{evt.title}</span>
-                        <span className="text-2xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                        <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 font-mono text-2xs text-emerald-400">
                           {evt.category}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">{evt.description}</p>
+                      <p className="text-xs leading-relaxed text-slate-300">{evt.description}</p>
 
-                      <div className="grid grid-cols-2 gap-2 text-2xs text-slate-400 pt-2 border-t border-slate-800/60">
+                      <div className="grid grid-cols-2 gap-2 border-t border-slate-800/60 pt-2 text-2xs text-slate-400">
                         <div>📍 Venue: {evt.venue}</div>
                         <div>📅 Date: {new Date(evt.startDate).toLocaleDateString()}</div>
                       </div>
 
                       {evt.reviewNotes && (
-                        <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs">
+                        <div className="rounded-lg border border-rose-500/20 bg-rose-500/10 p-2.5 text-xs text-rose-300">
                           <strong>Vetting Feedback:</strong> {evt.reviewNotes}
                         </div>
                       )}
                     </div>
 
-                    <div className="shrink-0 flex flex-col items-end gap-2">
+                    <div className="flex shrink-0 flex-col items-end gap-2">
                       {evt.status === "APPROVED_LIVE" && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
                           <CheckCircle2 className="size-3.5" />
                           Approved Live
                         </span>
                       )}
                       {evt.status === "PENDING_REVIEW" && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold animate-pulse">
+                        <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400">
                           <Clock className="size-3.5" />
                           Pending Vetting
                         </span>
                       )}
                       {evt.status === "NEEDS_REVISION" && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-semibold">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400">
                           <AlertCircle className="size-3.5" />
                           Needs Revision
                         </span>
                       )}
 
-                      <span className="text-2xs text-slate-500">
-                        ID: {evt.id}
-                      </span>
+                      <span className="text-2xs text-slate-500">ID: {evt.id}</span>
                     </div>
                   </div>
                 </Card>

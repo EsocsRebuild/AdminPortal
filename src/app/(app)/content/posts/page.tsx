@@ -40,9 +40,9 @@ export default async function PostsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <Card key={post.id} className="p-4 flex flex-col justify-between gap-3">
+            <Card key={post.id} className="flex flex-col justify-between gap-3 p-4">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="mb-2 flex items-center justify-between gap-2">
                   <Badge
                     tone={
                       post.status === "Published"
@@ -60,13 +60,13 @@ export default async function PostsPage() {
                     </span>
                   )}
                 </div>
-                <h3 className="font-semibold text-foreground text-sm">{post.title}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{post.title}</h3>
                 {post.excerpt && (
-                  <p className="text-xs text-muted-foreground line-clamp-2 mt-1.5">{post.excerpt}</p>
+                  <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">{post.excerpt}</p>
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-border-subtle text-2xs text-muted-foreground">
+              <div className="flex items-center justify-between border-t border-border-subtle pt-2 text-2xs text-muted-foreground">
                 <span>By {post.authorName || "Editorial Team"}</span>
                 {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
               </div>

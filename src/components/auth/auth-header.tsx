@@ -17,8 +17,12 @@ export function AuthHeader({
     <div className={cn("grid gap-3.5", className)}>
       {icon && <div className="flex items-center">{icon}</div>}
       <div className="grid gap-1.5">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white dark:text-white font-brand">{title}</h1>
-        {description && <p className="text-sm font-semibold text-slate-200 dark:text-slate-200">{description}</p>}
+        <h1 className="font-brand text-3xl font-extrabold tracking-tight text-white dark:text-white">
+          {title}
+        </h1>
+        {description && (
+          <p className="text-sm font-semibold text-slate-200 dark:text-slate-200">{description}</p>
+        )}
       </div>
     </div>
   );

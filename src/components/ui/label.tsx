@@ -12,7 +12,7 @@ export function Label({
     <label className={cn("text-sm font-semibold text-slate-900 dark:text-slate-100", className)} {...props}>
       {children}
       {required && (
-        <span aria-hidden className="ml-0.5 text-danger font-bold">
+        <span aria-hidden className="ml-0.5 font-bold text-danger">
           *
         </span>
       )}

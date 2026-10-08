@@ -114,7 +114,8 @@ export function UnitSwitcher() {
   if (!isSuperAdmin) {
     const scopeId = user?.scopeUnitId || user?.parishId;
     const currentUnit = units.find((u) => u.id === scopeId);
-    const parishName = currentUnit?.name ?? (user?.role?.name ? `${user.role.name} Jurisdiction` : "Local Parish");
+    const parishName =
+      currentUnit?.name ?? (user?.role?.name ? `${user.role.name} Jurisdiction` : "Local Parish");
 
     return (
       <Tooltip content={`Your administrative account is scoped exclusively to ${parishName}.`}>

@@ -1,6 +1,17 @@
 "use client";
 
-import { Check, Church, Globe, LogOut, Monitor, Moon, Palette, ShieldCheck, Sun, UserRound } from "lucide-react";
+import {
+  Check,
+  Church,
+  Globe,
+  LogOut,
+  Monitor,
+  Moon,
+  Palette,
+  ShieldCheck,
+  Sun,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -90,7 +101,10 @@ export function UserMenu() {
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem asChild>
-              <Link href="/admin-web/dashboard" className="font-semibold text-emerald-500 focus:text-emerald-600">
+              <Link
+                href="/admin-web/dashboard"
+                className="font-semibold text-emerald-500 focus:text-emerald-600"
+              >
                 <Globe className="size-4 text-emerald-500" /> Switch to Web Studio
               </Link>
             </DropdownMenuItem>

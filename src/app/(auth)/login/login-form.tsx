@@ -51,7 +51,11 @@ export function LoginForm({ next }: { next?: string }) {
           <Alert tone="danger">{banner}</Alert>
         </div>
       )}
-      <Field label={<span className="text-sm font-bold text-white">Email address</span>} htmlFor="email" error={fieldError(result, "email")}>
+      <Field
+        label={<span className="text-sm font-bold text-white">Email address</span>}
+        htmlFor="email"
+        error={fieldError(result, "email")}
+      >
         <Input
           id="email"
           type="email"
@@ -65,7 +69,7 @@ export function LoginForm({ next }: { next?: string }) {
           aria-invalid={!!fieldError(result, "email")}
           aria-describedby="email-msg"
           required
-          className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-400 font-medium focus-visible:ring-amber-400"
+          className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
       </Field>
       <div className="grid gap-1.5">
@@ -75,7 +79,7 @@ export function LoginForm({ next }: { next?: string }) {
           </label>
           <Link
             href="/forgot-password"
-            className="text-xs font-bold text-amber-400 hover:text-amber-300 underline-offset-4 hover:underline"
+            className="text-xs font-bold text-amber-400 underline-offset-4 hover:text-amber-300 hover:underline"
           >
             Forgot it?
           </Link>
@@ -88,7 +92,7 @@ export function LoginForm({ next }: { next?: string }) {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           aria-invalid={!!fieldError(result, "password")}
           required
-          className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-400 font-medium focus-visible:ring-amber-400"
+          className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
         {fieldError(result, "password") && (
           <p role="alert" className="text-xs text-danger">
@@ -96,10 +100,12 @@ export function LoginForm({ next }: { next?: string }) {
           </p>
         )}
       </div>
-      <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 shadow-md backdrop-blur-md">
+      <div className="rounded-xl border border-slate-700/80 bg-slate-900/90 p-3 shadow-md backdrop-blur-md">
         <Checkbox
           label={<span className="text-sm font-bold text-white">Keep me signed in on this device</span>}
-          description={<span className="text-xs font-semibold text-slate-300">Only on a computer you don’t share.</span>}
+          description={
+            <span className="text-xs font-semibold text-slate-300">Only on a computer you don’t share.</span>
+          }
           checked={form.remember}
           onCheckedChange={(v) => setForm({ ...form, remember: v === true })}
         />
@@ -109,9 +115,11 @@ export function LoginForm({ next }: { next?: string }) {
         size="lg"
         fullWidth
         loading={pending}
-        className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-base py-3 shadow-xl shadow-amber-950/50 transition-all flex items-center justify-center gap-2"
+        className="flex items-center justify-center gap-2 bg-amber-500 py-3 text-base font-extrabold text-slate-950 shadow-xl shadow-amber-950/50 transition-all hover:bg-amber-400"
       >
-        {pending ? "Signing you in…" : (
+        {pending ? (
+          "Signing you in…"
+        ) : (
           <>
             Sign in to Portal
             <ArrowRight className="size-5" />

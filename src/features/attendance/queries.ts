@@ -45,7 +45,7 @@ export async function listHeadcounts(): Promise<HeadcountRecord[]> {
         serviceType: row.eventTitle || "Sunday Worship",
         men: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.35),
         women: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.45),
-        children: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.20),
+        children: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.2),
         total: row.headCountTotal || row.recordedCount || 0,
         notes: row.eventType,
         recorder: "Parish Ushering Desk",

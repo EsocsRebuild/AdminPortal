@@ -35,10 +35,10 @@ export default async function OrdinationOverviewPage() {
 
         {/* Summary Metric Cards */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <Card className="border-border bg-card">
+          <Card className="bg-card border-border">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold uppercase tracking-wider">Total Candidates</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">Total Candidates</span>
                 <Building2 className="size-4 text-primary" />
               </div>
               <div className="text-2xl font-bold text-foreground">{summary.totalCandidates}</div>
@@ -46,10 +46,10 @@ export default async function OrdinationOverviewPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-border bg-card">
+          <Card className="bg-card border-border">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold uppercase tracking-wider">District Vetting</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">District Vetting</span>
                 <ShieldCheck className="size-4 text-amber-500" />
               </div>
               <div className="text-2xl font-bold text-amber-500">{summary.stage2Count}</div>
@@ -57,10 +57,10 @@ export default async function OrdinationOverviewPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-border bg-card">
+          <Card className="bg-card border-border">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold uppercase tracking-wider">Zonal Clearance</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">Zonal Clearance</span>
                 <Award className="size-4 text-indigo-500" />
               </div>
               <div className="text-2xl font-bold text-indigo-500">{summary.stage3Count}</div>
@@ -68,10 +68,10 @@ export default async function OrdinationOverviewPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-border bg-card">
+          <Card className="bg-card border-border">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold uppercase tracking-wider">Supreme Approved</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">Supreme Approved</span>
                 <UserCheck className="size-4 text-emerald-500" />
               </div>
               <div className="text-2xl font-bold text-emerald-500">{summary.stage4ApprovedCount}</div>
@@ -87,14 +87,15 @@ export default async function OrdinationOverviewPage() {
               <Filter className="size-4 text-primary" />
               Candidate Vetting Docket Roster
             </h2>
-            <span className="font-mono text-2xs text-muted-foreground">
-              Audit Scope: All Church Units
-            </span>
+            <span className="font-mono text-2xs text-muted-foreground">Audit Scope: All Church Units</span>
           </div>
 
           <div className="grid grid-cols-1 gap-4">
             {candidates.map((c) => (
-              <Card key={c.id} className="overflow-hidden border-border bg-card transition-all hover:border-primary/40">
+              <Card
+                key={c.id}
+                className="bg-card overflow-hidden border-border transition-all hover:border-primary/40"
+              >
                 <CardContent className="space-y-4 p-5">
                   <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                     <div className="space-y-1">
@@ -105,17 +106,19 @@ export default async function OrdinationOverviewPage() {
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Current Rank: <strong className="text-foreground">{c.churchRankCurrent}</strong> • Parish: <strong className="text-foreground">{c.parishName}</strong> ({c.districtName})
+                        Current Rank: <strong className="text-foreground">{c.churchRankCurrent}</strong> •
+                        Parish: <strong className="text-foreground">{c.parishName}</strong> ({c.districtName})
                       </p>
                       <p className="text-2xs text-muted-foreground">
-                        Service Tenure: {c.yearsOfService} Years • Nominated on: {new Date(c.nominatedAt).toLocaleDateString()}
+                        Service Tenure: {c.yearsOfService} Years • Nominated on:{" "}
+                        {new Date(c.nominatedAt).toLocaleDateString()}
                       </p>
                     </div>
 
                     <div className="flex shrink-0 items-center gap-2">
                       <Tooltip content="Inspect vetting history and advance clearance stage">
                         <Link href={`/ordination/candidates/${c.id}`}>
-                          <Button variant="outline" className="gap-1.5 border-border text-xs hover:bg-muted">
+                          <Button variant="outline" className="hover:bg-muted gap-1.5 border-border text-xs">
                             Open Candidate Docket
                             <ChevronRight className="size-3.5" />
                           </Button>

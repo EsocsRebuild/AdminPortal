@@ -108,7 +108,8 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
     const jar = await cookies();
     const h = await headers();
     const isWebPortal = (h.get("x-pathname") ?? "").startsWith("/admin-web");
-    const token = (isWebPortal ? jar.get(COOKIE_WEB.access)?.value : undefined) ?? jar.get(COOKIE.access)?.value;
+    const token =
+      (isWebPortal ? jar.get(COOKIE_WEB.access)?.value : undefined) ?? jar.get(COOKIE.access)?.value;
     if (!token)
       throw new BackendError("UNAUTHENTICATED", "Your session has ended. Please sign in again.", 401);
     requestHeaders.Authorization = `Bearer ${token}`;
@@ -154,7 +155,8 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
       obj.meta = {
         page: typeof obj.page === "number" ? obj.page : 1,
         pageSize: typeof obj.pageSize === "number" ? obj.pageSize : 20,
-        total: typeof obj.totalCount === "number" ? obj.totalCount : typeof obj.total === "number" ? obj.total : 0,
+        total:
+          typeof obj.totalCount === "number" ? obj.totalCount : typeof obj.total === "number" ? obj.total : 0,
       };
     }
   }
@@ -164,7 +166,12 @@ export async function backendRaw<T>(path: string, options: BackendOptions = {}):
 /** Call that unwraps `{ data }`, or returns raw payload when un-enveloped. */
 export async function backend<T>(path: string, options?: BackendOptions): Promise<T> {
   const payload = await backendRaw<{ data?: T } & T>(path, options);
-  if (payload && typeof payload === "object" && "data" in payload && (payload as { data?: T }).data !== undefined) {
+  if (
+    payload &&
+    typeof payload === "object" &&
+    "data" in payload &&
+    (payload as { data?: T }).data !== undefined
+  ) {
     return (payload as { data: T }).data;
   }
   return payload as T;
