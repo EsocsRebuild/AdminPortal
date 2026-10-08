@@ -15,4 +15,3 @@ try {
 } catch (err) {
   console.warn("⚠️ Note: Git hooks setup skipped (not a git repository or git unavailable).");
 }
-

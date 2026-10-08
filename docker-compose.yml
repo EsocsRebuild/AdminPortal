@@ -45,4 +45,3 @@ services:
 networks:
   default:
     name: esocs-network
-
