@@ -37,7 +37,8 @@ ENV HOSTNAME="0.0.0.0"
 
 # Create non-root system user for security
 RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
+    adduser --system --uid 1001 nextjs && \
+    chown -R nextjs:nodejs /app
 
 # Copy standalone Next.js server build assets
 COPY --from=builder /app/public ./public

@@ -206,10 +206,11 @@ export default async function ParishPublicPage({ params }: { params: Promise<{ s
             src="/brand/hero-mount-zion.webp"
             alt="ESOCS Cathedral"
             fill
+            sizes="100vw"
             priority
             className="object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-slate-950/80 to-slate-950/60" />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-slate-950/80 to-slate-950/60" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl px-6">

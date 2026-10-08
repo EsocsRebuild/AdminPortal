@@ -15,8 +15,12 @@ RUN npm ci --ignore-scripts
 COPY . .
 
 ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
+
+# Ensure next-env.d.ts exists with write permissions to prevent EROFS
+RUN touch next-env.d.ts && chmod 666 next-env.d.ts
 
 EXPOSE 3001
 

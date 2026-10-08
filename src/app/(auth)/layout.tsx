@@ -72,6 +72,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
             src="/brand/hero-mount-zion.webp"
             alt="ESOCS Cathedral"
             fill
+            sizes="(max-width: 1024px) 100vw, 55vw"
             priority
             className="scale-105 object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
