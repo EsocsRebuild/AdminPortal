@@ -1,7 +1,7 @@
 # ESOCS Admin: common operations. Run `make help`.
 SHELL := /bin/sh
-COMPOSE := docker compose
-LOCAL := docker compose -f compose.yml -f compose.local.yml
+COMPOSE := docker compose -f docker-compose.yml
+LOCAL := docker compose -f docker-compose.dev.yml
 VERSION ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo latest)
 
 .DEFAULT_GOAL := help
