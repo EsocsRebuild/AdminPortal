@@ -1,0 +1,21 @@
+#!/bin/sh
+# Lightweight, non-cumbersome pre-commit hook for ESOCS Admin Portal
+echo "🔍 Running pre-commit validation (lint & typecheck)..."
+
+# 1. Run ESLint check
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Lint check failed. Please resolve lint issues before committing."
+  exit 1
+fi
+
+# 2. Run TypeScript typecheck
+npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript type check failed. Please fix type errors before committing."
+  exit 1
+fi
+
+echo "✅ Pre-commit validation passed cleanly!"
+exit 0
+

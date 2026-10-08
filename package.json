@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "validate": "npm run lint && npm run format:check && npm run typecheck && npm run test"
+    "validate": "npm run lint && npm run format:check && npm run typecheck && npm run test",
+    "prepare": "node tools/setup-hooks.mjs"
   },
   "engines": {
     "node": ">=22.12"
