@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: esocs-admin-portal-dev
     ports:
-      - "3001:3001"
+      - "${PORT:-3002}:3001"
     volumes:
       - .:/app
       - /app/node_modules
