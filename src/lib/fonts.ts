@@ -15,7 +15,6 @@ export const fontDisplay = Outfit({
 /** Executive regal brand font for wordmark and headers. */
 export const fontBrand = Playfair_Display({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
   variable: "--font-brand",
   display: "swap",
 });

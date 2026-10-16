@@ -14,8 +14,8 @@ services:
       - TENANT_SLUG=esocs-main
       - BACKEND_API_URL=http://mock-api:4000
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
-      interval: 30s
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 20s
       timeout: 5s
       retries: 3
       start_period: 15s
@@ -33,12 +33,13 @@ services:
       - "4000:4000"
     environment:
       - PORT=4000
+      - MOCK_API_PORT=4000
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "4000"]
-      interval: 10s
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
       timeout: 3s
       retries: 3
-      start_period: 5s
+      start_period: 3s
 
 networks:
   default:

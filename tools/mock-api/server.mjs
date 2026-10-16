@@ -15,7 +15,7 @@
 import { randomUUID } from "node:crypto";
 import http from "node:http";
 
-const PORT = Number(process.env.MOCK_API_PORT ?? 4010);
+const PORT = Number(process.env.MOCK_API_PORT ?? process.env.PORT ?? 4010);
 const PASSWORD = "Preview-Password-2026";
 const MFA_CODE = "123456";
 
@@ -573,6 +573,9 @@ const csv = (rows) =>
 const R = [];
 const route = (m, p, h) => R.push([m, new RegExp(`^${p.replace(/:(\w+)/g, "(?<$1>[^/]+)")}$`), h]);
 const ok = (data) => ({ data });
+
+// Health check endpoint for Docker / orchestration
+route("GET", "/health", () => ok({ status: "healthy" }));
 
 // Auth
 route("POST", "/auth/login", (b) => {
@@ -1281,7 +1284,7 @@ route("GET", "/audit-events/export", () => ({
 }));
 
 // ─── Server ──────────────────────────────────────────────────────────────────
-const PUBLIC = /^\/(auth\/(login|refresh|mfa\/verify|signup|verify-email|password)|public\/)/;
+const PUBLIC = /^\/(health|auth\/(login|refresh|mfa\/verify|signup|verify-email|password)|public\/)/;
 
 http
   .createServer((req, res) => {
