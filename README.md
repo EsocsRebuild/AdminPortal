@@ -8,20 +8,15 @@ The portal is a **backend-for-frontend**. It holds no data: every screen reads f
 
 ```bash
 npm install
-npm run dev:preview               # portal + mock API → http://localhost:3001
+npm run dev                         # http://localhost:3001
 ```
 
 Sign in with **admin@esocs.test / Preview-Password-2026**. Two-step demo: **mfa@esocs.test**, same password, code **123456**.
 
-`dev:preview` starts a **mock API** (`tools/mock-api/`) that follows the API contract with sample data held in memory, so every screen can be explored before the real backend exists. It resets on restart and is never part of the product or the Docker image.
-
-With the real backend:
+Connected directly to the real ASP.NET Core backend API on `http://localhost:5080/api/v1` (with PostgreSQL & Redis).
 
 ```bash
-cp .env.example .env.local        # set BACKEND_API_URL
-npm run dev                       # http://localhost:3001
-npm run validate                  # lint + format + typecheck + unit tests
-npm run test:e2e                  # security + public pages at phone/tablet/desktop
+npm run validate                    # lint + format + typecheck + unit tests
 ```
 
 To run the signed-in end-to-end suite against a staging API:
