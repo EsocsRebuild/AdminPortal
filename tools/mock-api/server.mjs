@@ -576,6 +576,7 @@ const ok = (data) => ({ data });
 
 // Health check endpoint for Docker / orchestration
 route("GET", "/health", () => ok({ status: "healthy" }));
+route("HEAD", "/health", () => ok({ status: "healthy" }));
 
 // Auth
 route("POST", "/auth/login", (b) => {
