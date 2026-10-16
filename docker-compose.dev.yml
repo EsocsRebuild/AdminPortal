@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: esocs-admin-portal-dev
     ports:
-      - "${PORT:-3002}:3001"
+      - "${PORT:-3030}:3001"
     volumes:
       - .:/app
       - /app/node_modules
@@ -16,6 +16,7 @@ services:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=1
       - PORT=3001
+      - WDS_SOCKET_PORT=3030
       - TENANT_SLUG=esocs
       - BACKEND_API_URL=http://host.docker.internal:5080/api/v1
     extra_hosts:

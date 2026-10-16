@@ -7,10 +7,10 @@ services:
     container_name: esocs-admin-portal
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "3030:3030"
     environment:
       - NODE_ENV=production
-      - PORT=3001
+      - PORT=3030
       - TENANT_SLUG=esocs
       - BACKEND_API_URL=http://host.docker.internal:5080/api/v1
     extra_hosts:
@@ -21,7 +21,7 @@ services:
           "CMD",
           "node",
           "-e",
-          "fetch('http://127.0.0.1:3001/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+          "fetch('http://127.0.0.1:3030/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
         ]
       interval: 20s
       timeout: 5s
