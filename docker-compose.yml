@@ -1,33 +1,48 @@
+# ==============================================================================
+# ESOCS Administration Platform — Development Stack (Hot-Reloading)
+# Run: docker compose up --build
+# ==============================================================================
+
+name: esocs-admin-dev
+
 services:
-  admin-portal:
+  admin-portal-dev:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: esocs/admin-portal:latest
-    container_name: esocs-admin-portal
+      dockerfile: Dockerfile.dev
+    container_name: esocs-admin-portal-dev
     restart: unless-stopped
     ports:
-      - "3030:3030"
+      - "${ADMIN_PORT:-3030}:3001"
+    volumes:
+      # Live bind mount for source code
+      - .:/app:delegated
+      # Preserve container-built Linux node_modules and .next cache
+      - admin_dev_node_modules:/app/node_modules
+      - admin_dev_next_cache:/app/.next
     environment:
-      - NODE_ENV=production
-      - PORT=3030
+      - NODE_ENV=development
+      - PORT=3001
+      - HOSTNAME=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+      # Polling watchers for macOS host-to-container boundary
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=1
+      - WDS_SOCKET_PORT=3030
       - TENANT_SLUG=esocs
       - BACKEND_API_URL=http://host.docker.internal:5080/api/v1
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://127.0.0.1:3030/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
-        ]
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
+    command: npm run dev
+    networks:
+      - esocs-network
+
+volumes:
+  admin_dev_node_modules:
+    name: esocs_admin_dev_node_modules
+  admin_dev_next_cache:
+    name: esocs_admin_dev_next_cache
 
 networks:
-  default:
+  esocs-network:
     name: esocs-network
