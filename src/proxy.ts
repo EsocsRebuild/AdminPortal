@@ -1,22 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { COOKIE, cookieOptions } from "@/server/cookies";
-
 /**
  * Runs before every page request:
- *  1. Builds a per-request Content-Security-Policy with a fresh nonce.
- *  2. Optimistic auth: no session cookie → sign-in page (with a safe `next`).
- *     An expired access token is silently renewed with the refresh token.
- *  3. Signed-in users are kept out of the sign-in/sign-up pages.
+ *  - Generates per-request Content-Security-Policy with a fresh cryptographic nonce.
+ *  - Forwards `x-nonce`, `x-pathname`, and `x-request-id` headers to Server Components.
  *
- * This is a fast first filter only. Every page and Server Action verifies the
- * session with the API again (see src/server/session.ts).
+ * All authentication & authorization checks are cleanly enforced in Server
+ * Components (Layouts & Pages via `requireSession()`) and Server Actions.
  */
-
-const PUBLIC =
-  /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f|admin-web\/login|admin-web\/signup|super-admin\/setup)(\/|$)/;
-const GUEST_ONLY =
-  /^\/(signup|forgot-password)(\/|$)/;
 
 function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolean) {
   const dev = process.env.NODE_ENV !== "production";
@@ -47,52 +38,6 @@ function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolea
     .join("; ");
 }
 
-interface Tokens {
-  accessToken: string;
-  expiresIn: number;
-  refreshToken: string;
-  refreshExpiresIn: number;
-}
-
-async function refresh(refreshToken: string, request: NextRequest): Promise<Tokens | null> {
-  const base = process.env.BACKEND_API_URL;
-  if (!base) return null;
-  const tenant = request.headers.get("x-tenant") ?? process.env.TENANT_SLUG ?? "esocs";
-  try {
-    const res = await fetch(`${base.replace(/\/$/, "")}/auth/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "User-Agent": request.headers.get("user-agent") ?? "",
-        "X-Forwarded-For": request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "",
-        "X-Tenant": tenant,
-      },
-      body: JSON.stringify({ refreshToken }),
-      signal: AbortSignal.timeout(5_000),
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    return ((await res.json()) as { data: Tokens }).data;
-  } catch {
-    return null;
-  }
-}
-
-function toLogin(request: NextRequest, clear: boolean) {
-  const isWebAdmin = request.nextUrl.pathname.startsWith("/admin-web");
-  const loginPath = isWebAdmin ? "/admin-web/login" : "/login";
-  const url = new URL(loginPath, request.url);
-  const next = request.nextUrl.pathname + request.nextUrl.search;
-  if (next !== "/" && next !== loginPath) url.searchParams.set("next", next);
-  const res = NextResponse.redirect(url);
-  if (clear) {
-    res.cookies.delete(COOKIE.access);
-    res.cookies.delete(COOKIE.refresh);
-  }
-  return res;
-}
-
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
@@ -105,39 +50,15 @@ export async function proxy(request: NextRequest) {
   requestHeaders.set("x-pathname", pathname + search);
   requestHeaders.set("x-request-id", request.headers.get("x-request-id") ?? crypto.randomUUID());
 
-  const hasAccess = request.cookies.has(COOKIE.access);
-  const refreshToken = request.cookies.get(COOKIE.refresh)?.value;
-  const isPublic = PUBLIC.test(pathname);
-  let renewed: Tokens | null = null;
-
-  if (!isPublic && !hasAccess) {
-    if (!refreshToken) return toLogin(request, false);
-    renewed = await refresh(refreshToken, request);
-    if (!renewed) return toLogin(request, true);
-    // Let this same request's server code see the new access token.
-    request.cookies.set(COOKIE.access, renewed.accessToken);
-    request.cookies.set(COOKIE.refresh, renewed.refreshToken);
-    requestHeaders.set("cookie", request.cookies.toString());
-  }
-
-  if (GUEST_ONLY.test(pathname) && (hasAccess || renewed)) {
-    const isWebAdmin = pathname.startsWith("/admin-web");
-    return NextResponse.redirect(new URL(isWebAdmin ? "/admin-web/dashboard" : "/dashboard", request.url));
-  }
-
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
-  if (renewed) {
-    response.cookies.set(COOKIE.access, renewed.accessToken, cookieOptions(renewed.expiresIn));
-    response.cookies.set(COOKIE.refresh, renewed.refreshToken, cookieOptions(renewed.refreshExpiresIn));
-  }
   return response;
 }
 
 export const config = {
   matcher: [
     {
-      // Skip assets and metadata files (icons, robots, manifest): they must never redirect to sign-in.
+      // Skip assets and metadata files (icons, robots, manifest): they must never pass through proxy.
       source:
         "/((?!api/health|_next/static|_next/image|favicon.ico|icon.svg|apple-icon|manifest.webmanifest|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml|webmanifest|woff2?)$).*)",
       missing: [
