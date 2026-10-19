@@ -21,19 +21,7 @@ import type { UnitScopeMetadata } from "@/types/auth";
 export type UnitScopeOption = UnitScopeMetadata;
 
 const defaultUnits: UnitScopeOption[] = [
-  { id: null, name: "Global HQ (All Church Units)", type: "global" },
-  { id: "parish-mount-zion", name: "Mount Zion Parish", type: "parish", code: "MZP", slug: "mount-zion" },
-  { id: "parish-surulere", name: "Surulere Parish", type: "parish", code: "SLP", slug: "surulere" },
-  { id: "parish-london", name: "London Central Parish", type: "parish", code: "LCP", slug: "london-central" },
-  { id: "section-women", name: "Women Fellowship", type: "fellowship", code: "WF", slug: "women-fellowship" },
-  { id: "section-youth", name: "Youth Fellowship", type: "fellowship", code: "YF", slug: "youth-fellowship" },
-  {
-    id: "section-choir",
-    name: "Music Directorate / Choir",
-    type: "fellowship",
-    code: "MD",
-    slug: "music-directorate",
-  },
+  { id: null, name: "The Holy Order (Global Headquarters)", type: "global" },
 ];
 
 function saveUnitScopeCookie(unitId: string) {
@@ -89,7 +77,7 @@ export function UnitSwitcher() {
         }
       }
     }
-    return isSuperAdmin ? defaultUnits[0] : defaultUnits[1];
+    return defaultUnits[0];
   });
 
   const [search, setSearch] = React.useState("");
@@ -114,8 +102,7 @@ export function UnitSwitcher() {
   if (!isSuperAdmin) {
     const scopeId = user?.scopeUnitId || user?.parishId;
     const currentUnit = units.find((u) => u.id === scopeId);
-    const parishName =
-      currentUnit?.name ?? (user?.role?.name ? `${user.role.name} Jurisdiction` : "Local Parish");
+    const parishName = currentUnit?.name ?? "Assigned Church Unit";
 
     return (
       <Tooltip content={`Your administrative account is scoped exclusively to ${parishName}.`}>

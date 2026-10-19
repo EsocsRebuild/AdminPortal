@@ -16,39 +16,7 @@ import { UserMenu } from "@/components/layout/user-menu";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Crest } from "@/components/icons/logo";
 import { getSession } from "@/server/session";
-
-const navItems = [
-  {
-    href: "/admin-web/dashboard",
-    label: "Studio Dashboard",
-    icon: LayoutDashboard,
-    tooltip: "Overview of your branch content and submission status",
-  },
-  {
-    href: "/admin-web/events",
-    label: "Events Studio",
-    icon: Calendar,
-    tooltip: "Manage and submit public church events",
-  },
-  {
-    href: "/admin-web/programmes",
-    label: "Programmes Schedule",
-    icon: Megaphone,
-    tooltip: "Manage quarterly church programmes and bulletins",
-  },
-  {
-    href: "/admin-web/vetting",
-    label: "Super Vetting Queue",
-    icon: CheckCircle2,
-    tooltip: "1-Click Super Admin content review & approval inbox",
-  },
-  {
-    href: "/admin-web/media",
-    label: "Media Gallery",
-    icon: ImageIcon,
-    tooltip: "Asset library for banners, logos, and photos",
-  },
-];
+import { resolveUserUnit } from "@/server/units";
 
 export default async function WebAdminLayout({ children }: { children: ReactNode }) {
   const headerList = await headers();
@@ -63,6 +31,50 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
   if (!sessionUser) {
     redirect(`/admin-web/login?next=${encodeURIComponent(pathname || "/admin-web/dashboard")}`);
   }
+
+  const userUnit = await resolveUserUnit(sessionUser.scopeUnitId);
+  const isPlatformAdmin = Boolean(
+    sessionUser.isPlatformAdmin ||
+    sessionUser.role?.name?.toLowerCase().includes("super") ||
+    sessionUser.role?.name?.toLowerCase().includes("prelate")
+  );
+
+  const navItems = [
+    {
+      href: "/admin-web/dashboard",
+      label: "Studio Dashboard",
+      icon: LayoutDashboard,
+      tooltip: `Overview of ${userUnit.unitName} content and submissions`,
+    },
+    {
+      href: "/admin-web/events",
+      label: "Events Studio",
+      icon: Calendar,
+      tooltip: "Manage and submit public church events",
+    },
+    {
+      href: "/admin-web/programmes",
+      label: "Programmes Schedule",
+      icon: Megaphone,
+      tooltip: "Manage quarterly church programmes and bulletins",
+    },
+    ...(isPlatformAdmin
+      ? [
+          {
+            href: "/admin-web/vetting",
+            label: "Super Vetting Queue",
+            icon: CheckCircle2,
+            tooltip: "Super Admin content review & approval inbox",
+          },
+        ]
+      : []),
+    {
+      href: "/admin-web/media",
+      label: "Media Gallery",
+      icon: ImageIcon,
+      tooltip: "Asset library for banners, logos, and photos",
+    },
+  ];
 
   return (
     <TooltipProvider>
@@ -129,7 +141,7 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/church/mount-zion"
+                  href={`/church/${userUnit.unitSlug}`}
                   target="_blank"
                   className="hidden items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20 sm:flex"
                 >
@@ -138,7 +150,7 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
                 </Link>
               </TooltipTrigger>
               <TooltipContent className="border-slate-700 bg-slate-800 text-slate-200">
-                <p>View live public Mount Zion Parish website</p>
+                <p>View live public {userUnit.unitName} website</p>
               </TooltipContent>
             </Tooltip>
 

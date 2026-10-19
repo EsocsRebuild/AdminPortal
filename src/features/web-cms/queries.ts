@@ -1,67 +1,72 @@
 "server-only";
 
 import { backend } from "@/server/backend";
-import type { WebEvent, WebProgramme, MediaAsset, VettingSummary } from "./types";
+import { resolveUserUnit } from "@/server/units";
+import type { WebEvent, WebProgramme, MediaAsset, VettingSummary, EventCategory } from "./types";
 
-export async function getBranchEvents(): Promise<WebEvent[]> {
+interface BackendEventResponse {
+  id: string;
+  title: string;
+  slug: string;
+  type: string;
+  status: string;
+  visibility: string;
+  summary?: string;
+  description?: string;
+  coverImageUrl?: string;
+  unitId?: string | null;
+  location?: string | null;
+  isOnline: boolean;
+  onlineUrl?: string | null;
+  startsAt: string;
+  endsAt: string;
+  registrationEnabled: boolean;
+  capacity?: number | null;
+}
+
+function mapBackendTypeToCategory(type?: string): EventCategory {
+  const t = (type ?? "").toLowerCase();
+  if (t === "conference") return "CONFERENCE";
+  if (t === "outreach") return "REVIVAL";
+  if (t === "social" || t === "rehearsal") return "FELLOWSHIP_RALLY";
+  if (t === "service") return "SUNDAY_SERVICE";
+  return "SPECIAL_PROGRAMME";
+}
+
+export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebEvent[]> {
+  const unitInfo = await resolveUserUnit(scopeUnitId);
+
   try {
-    return await backend<WebEvent[]>("/web-cms/events");
+    const raw = await backend<{ items?: BackendEventResponse[] } | BackendEventResponse[]>("/events", {
+      query: scopeUnitId ? { unitId: scopeUnitId } : undefined,
+    });
+
+    const items = Array.isArray(raw) ? raw : raw?.items || [];
+    if (Array.isArray(items) && items.length > 0) {
+      return items.map((evt) => ({
+        id: evt.id,
+        unitId: evt.unitId ?? scopeUnitId ?? "",
+        unitName: unitInfo.unitName,
+        title: evt.title,
+        description: evt.description ?? evt.summary ?? "",
+        category: mapBackendTypeToCategory(evt.type),
+        startDate: evt.startsAt,
+        endDate: evt.endsAt,
+        venue: evt.location || `${unitInfo.unitName} Auditorium`,
+        bannerUrl: evt.coverImageUrl || undefined,
+        registrationOpen: Boolean(evt.registrationEnabled),
+        ticketCapacity: evt.capacity ?? undefined,
+        status: evt.status === "Published" ? "APPROVED_LIVE" : evt.status === "Cancelled" ? "NEEDS_REVISION" : "PENDING_REVIEW",
+        submittedByHandlerId: evt.id,
+        submittedAt: evt.startsAt,
+      }));
+    }
   } catch {
-    return [
-      {
-        id: "evt_1",
-        unitId: "parish-mount-zion",
-        unitName: "Mount Zion Parish",
-        title: "2026 Annual Revival & Anointing Night",
-        description: "Join us for 3 power-packed days of spiritual renewal, divine healing, and praise.",
-        category: "REVIVAL",
-        startDate: "2026-10-15T18:00:00Z",
-        endDate: "2026-10-17T21:00:00Z",
-        venue: "Mount Zion Main Auditorium, Lagos",
-        bannerUrl: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800",
-        registrationOpen: true,
-        ticketCapacity: 1200,
-        status: "APPROVED_LIVE",
-        submittedByHandlerId: "usr_handler_mz",
-        submittedAt: "2026-10-01T09:00:00Z",
-        vettedAt: "2026-10-02T10:00:00Z",
-        vettedByHandlerId: "usr_super_admin",
-      },
-      {
-        id: "evt_2",
-        unitId: "parish-mount-zion",
-        unitName: "Mount Zion Parish",
-        title: "Youth Leadership Conference 2026",
-        description:
-          "Empowering young leaders across the district with spiritual, career, and ministry skills.",
-        category: "CONFERENCE",
-        startDate: "2026-11-05T09:00:00Z",
-        venue: "Grace Hall, Mount Zion",
-        bannerUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
-        registrationOpen: true,
-        ticketCapacity: 450,
-        status: "PENDING_REVIEW",
-        submittedByHandlerId: "usr_handler_mz",
-        submittedAt: "2026-10-06T14:30:00Z",
-      },
-      {
-        id: "evt_3",
-        unitId: "parish-mount-zion",
-        unitName: "Mount Zion Parish",
-        title: "Praise & Thanksgiving Concert",
-        description: "Special evening of worship featuring the Choir of Cherubim & Seraphim.",
-        category: "SPECIAL_PROGRAMME",
-        startDate: "2026-12-01T17:00:00Z",
-        venue: "Mount Zion Grounds",
-        bannerUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800",
-        registrationOpen: false,
-        status: "NEEDS_REVISION",
-        reviewNotes: "Please upload a higher-resolution banner image and update venue details.",
-        submittedByHandlerId: "usr_handler_mz",
-        submittedAt: "2026-10-04T11:20:00Z",
-      },
-    ];
+    // If backend /events returns empty or is unpopulated for this unit, return empty array.
   }
+
+  // Gracefully return empty array so new accounts show their clean empty state rather than mock data from another parish
+  return [];
 }
 
 export async function getVettingQueue(): Promise<{
@@ -73,36 +78,55 @@ export async function getVettingQueue(): Promise<{
     const data = await backend<{ events: WebEvent[]; programmes: WebProgramme[]; summary: VettingSummary }>(
       "/web-cms/vetting",
     );
-    return data;
+    if (data && Array.isArray(data.events)) {
+      return data;
+    }
   } catch {
-    const events = await getBranchEvents();
-    const pendingEvents = events.filter((e) => e.status === "PENDING_REVIEW");
-    const approved = events.filter((e) => e.status === "APPROVED_LIVE");
-    const revision = events.filter((e) => e.status === "NEEDS_REVISION");
+    // Fall back to querying draft events from backend
+  }
 
-    const programmes: WebProgramme[] = [
-      {
-        id: "prog_101",
-        unitId: "district-lagos-central",
-        unitName: "Lagos Central District",
-        title: "Q4 District Ministerial Summit",
-        theme: "Expanding Kingdom Boundaries",
-        scheduleDate: "2026-11-12T10:00:00Z",
-        speakers: ["His Eminence Elder Dr. A. Johnson", "Senior Apostle M. Adeleke"],
-        status: "PENDING_REVIEW",
-        submittedByHandlerId: "usr_district_admin",
-        submittedAt: "2026-10-05T16:00:00Z",
-      },
-    ];
+  try {
+    const rawEvents = await backend<{ items?: BackendEventResponse[] }>("/events", {
+      query: { status: "Draft" },
+    });
+    const items = rawEvents?.items || [];
+    const events: WebEvent[] = items.map((evt) => ({
+      id: evt.id,
+      unitId: evt.unitId ?? "",
+      unitName: "Assigned Unit",
+      title: evt.title,
+      description: evt.description ?? evt.summary ?? "",
+      category: mapBackendTypeToCategory(evt.type),
+      startDate: evt.startsAt,
+      endDate: evt.endsAt,
+      venue: evt.location || "Auditorium",
+      bannerUrl: evt.coverImageUrl || undefined,
+      registrationOpen: Boolean(evt.registrationEnabled),
+      ticketCapacity: evt.capacity ?? undefined,
+      status: "PENDING_REVIEW",
+      submittedByHandlerId: evt.id,
+      submittedAt: evt.startsAt,
+    }));
 
     return {
-      events: pendingEvents,
-      programmes,
+      events,
+      programmes: [],
       summary: {
-        pendingEventsCount: pendingEvents.length,
-        pendingProgrammesCount: programmes.length,
-        approvedCount: approved.length,
-        revisionRequestedCount: revision.length,
+        pendingEventsCount: events.length,
+        pendingProgrammesCount: 0,
+        approvedCount: 0,
+        revisionRequestedCount: 0,
+      },
+    };
+  } catch {
+    return {
+      events: [],
+      programmes: [],
+      summary: {
+        pendingEventsCount: 0,
+        pendingProgrammesCount: 0,
+        approvedCount: 0,
+        revisionRequestedCount: 0,
       },
     };
   }
@@ -110,27 +134,29 @@ export async function getVettingQueue(): Promise<{
 
 export async function getMediaAssets(): Promise<MediaAsset[]> {
   try {
-    return await backend<MediaAsset[]>("/web-cms/media");
+    interface BackendMediaItem {
+      id: string;
+      fileName: string;
+      fileSize: number;
+      mimeType: string;
+      url: string;
+      createdAt: string;
+    }
+    const res = await backend<{ items?: BackendMediaItem[] } | BackendMediaItem[]>("/content/media");
+    const items = Array.isArray(res) ? res : res?.items || [];
+    if (Array.isArray(items) && items.length > 0) {
+      return items.map((m) => ({
+        id: m.id,
+        fileName: m.fileName,
+        fileSize: m.fileSize,
+        mimeType: m.mimeType,
+        cdnUrl: m.url,
+        uploadedAt: m.createdAt,
+        uploadedByHandlerId: "system",
+      }));
+    }
   } catch {
-    return [
-      {
-        id: "med_1",
-        fileName: "esocs_official_emblem.png",
-        fileSize: 482100,
-        mimeType: "image/png",
-        cdnUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600",
-        uploadedAt: "2026-10-01T08:00:00Z",
-        uploadedByHandlerId: "usr_super_admin",
-      },
-      {
-        id: "med_2",
-        fileName: "revival_banner_2026.jpg",
-        fileSize: 1240000,
-        mimeType: "image/jpeg",
-        cdnUrl: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800",
-        uploadedAt: "2026-10-02T12:30:00Z",
-        uploadedByHandlerId: "usr_handler_mz",
-      },
-    ];
+    // Return empty array
   }
+  return [];
 }
