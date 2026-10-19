@@ -76,6 +76,44 @@ export const signUp = publicAction({ schema: signUpSchema }, async (input) => {
   return { redirectTo: "/verify" };
 });
 
+export const registerWebAdmin = publicAction({ schema: signUpSchema }, async (input) => {
+  try {
+    await backend("/auth/signup", {
+      method: "POST",
+      auth: false,
+      body: {
+        name: input.name,
+        email: input.email,
+        phone: input.phone || null,
+        parishId: input.parishId,
+        requestedRoleId: input.requestedRoleId,
+        password: input.password,
+      },
+    });
+  } catch (err) {
+    if (err instanceof BackendError && err.code !== "CONFLICT") {
+      throw err;
+    }
+  }
+
+  // Seamless auto-sign-in into Web Studio session so user is never ejected
+  try {
+    const loginRes = await backend<LoginResponse>("/auth/login", {
+      method: "POST",
+      auth: false,
+      body: { email: input.email, password: input.password, remember: true },
+    });
+    if (loginRes.status === "authenticated") {
+      await setAuthCookies(loginRes.tokens);
+      return { redirectTo: "/admin-web/dashboard" };
+    }
+  } catch {
+    // Fallback if verification needed
+  }
+
+  return { redirectTo: "/admin-web/login?registered=1" };
+});
+
 export const verifyEmail = publicAction({ schema: verifyEmailSchema }, async ({ code }) => {
   const jar = await cookies();
   const email = jar.get(COOKIE.pendingEmail)?.value;

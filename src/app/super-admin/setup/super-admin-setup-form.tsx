@@ -50,7 +50,7 @@ export function SuperAdminSetupForm() {
       setTimeout(() => {
         router.replace(res.data.redirectTo || "/admin-web/vetting");
         router.refresh();
-      }, 1500);
+      }, 1200);
       return;
     }
 
@@ -60,7 +60,7 @@ export function SuperAdminSetupForm() {
 
   if (success) {
     return (
-      <div className="space-y-4 rounded-xl border border-amber-500/30 bg-amber-950/40 p-6 text-center">
+      <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur-md">
         <CheckCircle2 className="mx-auto size-12 text-amber-400 animate-bounce" />
         <h3 className="text-lg font-bold text-white">Super Admin Authority Initialized!</h3>
         <p className="text-xs text-amber-200">
@@ -71,13 +71,13 @@ export function SuperAdminSetupForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="grid gap-4">
       {errorBanner && <Alert tone="danger">{errorBanner}</Alert>}
 
-      <div className="space-y-1.5">
-        <label htmlFor="super-name" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+      <div className="grid gap-1.5">
+        <label htmlFor="super-name" className="flex items-center gap-1.5 text-xs font-bold text-white">
           <Crown className="size-3.5 text-amber-400" />
-          Apex Administrator Name & Ecclesiastical Rank
+          Apex Administrator Name & Rank
         </label>
         <Input
           id="super-name"
@@ -88,12 +88,12 @@ export function SuperAdminSetupForm() {
           placeholder="e.g. Special Apostle Babatunde (Apex Board)"
           required
           autoFocus
-          className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-500"
+          className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
       </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="super-email" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+      <div className="grid gap-1.5">
+        <label htmlFor="super-email" className="flex items-center gap-1.5 text-xs font-bold text-white">
           <Mail className="size-3.5 text-amber-400" />
           Apex Authority Email
         </label>
@@ -105,13 +105,13 @@ export function SuperAdminSetupForm() {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           placeholder="apex.council@esocs.org"
           required
-          className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-500"
+          className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
       </div>
 
-      <div className="space-y-1.5">
+      <div className="grid gap-1.5">
         <div className="flex items-center justify-between">
-          <label htmlFor="authority-key" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+          <label htmlFor="authority-key" className="flex items-center gap-1.5 text-xs font-bold text-white">
             <KeyRound className="size-3.5 text-amber-400" />
             Central Authority Master Passcode
           </label>
@@ -125,13 +125,13 @@ export function SuperAdminSetupForm() {
           onChange={(e) => setForm({ ...form, authorityKey: e.target.value })}
           placeholder="ESOCS-APEX-2026"
           required
-          className="border-slate-700 bg-slate-950 font-mono text-sm tracking-wider text-amber-300 placeholder:text-slate-500 focus-visible:ring-amber-500"
+          className="border-slate-700 bg-slate-900 font-mono text-sm tracking-wider text-amber-300 placeholder:text-slate-500 focus-visible:ring-amber-400"
         />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <label htmlFor="super-pass" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+        <div className="grid gap-1.5">
+          <label htmlFor="super-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
             <Lock className="size-3.5 text-amber-400" />
             Master Password
           </label>
@@ -143,12 +143,12 @@ export function SuperAdminSetupForm() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             placeholder="••••••••••••"
             required
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label htmlFor="super-confirm-pass" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+        <div className="grid gap-1.5">
+          <label htmlFor="super-confirm-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
             Confirm Password
           </label>
           <Input
@@ -159,7 +159,7 @@ export function SuperAdminSetupForm() {
             onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
             placeholder="••••••••••••"
             required
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
       </div>
@@ -167,7 +167,7 @@ export function SuperAdminSetupForm() {
       <Button
         type="submit"
         disabled={pending}
-        className="w-full bg-amber-500 py-3 font-bold text-slate-950 shadow-xl shadow-amber-950/60 transition-all hover:bg-amber-400"
+        className="w-full bg-amber-500 py-3 text-base font-extrabold text-slate-950 shadow-xl shadow-amber-950/60 transition-all hover:bg-amber-400"
       >
         {pending ? (
           "Authorizing Apex Credentials…"

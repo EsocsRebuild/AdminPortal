@@ -45,7 +45,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         <div className="flex items-center gap-3 pt-1 text-2xs">
           <Link
             href="/admin-web/login"
-            className="text-emerald-400 hover:text-emerald-300 hover:underline"
+            className="text-amber-400 hover:text-amber-300 hover:underline"
           >
             Switch to Web Content Studio
           </Link>

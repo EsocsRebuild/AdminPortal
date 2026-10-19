@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, ShieldCheck } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Globe, Megaphone, Image as ImageIcon, ShieldCheck } from "lucide-react";
+import { AuthSplitLayout } from "@/components/auth/auth-split-layout";
 import { WebAdminLoginForm } from "./web-admin-login-form";
 
 export const metadata: Metadata = {
@@ -10,67 +9,73 @@ export const metadata: Metadata = {
   description: "Sign in to manage church website content, events, and public programmes.",
 };
 
+const studioBenefits = [
+  {
+    icon: Globe,
+    title: "Parish Website Publishing",
+    text: "Publish public church announcements, bulletins, and branch updates.",
+  },
+  {
+    icon: Megaphone,
+    title: "Live Programmes & Events",
+    text: "Manage revival nights, annual summits, and community programmes.",
+  },
+  {
+    icon: ImageIcon,
+    title: "Media & Banner Assets",
+    text: "Central library for banners, logos, and high-resolution church flyers.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Super Vetting Clearance",
+    text: "Direct routing to the Super Admin clearance queue for 1-click approvals.",
+  },
+];
+
 export default function WebAdminLoginPage() {
   return (
-    <TooltipProvider>
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-12 text-slate-100">
-        {/* Ambient Emerald Background Gradients */}
-        <div className="pointer-events-none absolute -top-40 -left-40 size-96 rounded-full bg-emerald-500/15 blur-3xl" />
-        <div className="pointer-events-none absolute -right-40 -bottom-40 size-96 rounded-full bg-teal-500/10 blur-3xl" />
+    <AuthSplitLayout
+      portalBadge="WEB CONTENT STUDIO"
+      pillTag="Content & Web Publishing"
+      eyebrow="Holy Order Digital System"
+      headlineMain="One unified studio to amplify your"
+      headlineHighlight="parish"
+      benefits={studioBenefits}
+    >
+      <div className="grid gap-6">
+        <div className="space-y-1.5">
+          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">
+            Welcome back
+          </h1>
+          <p className="text-xs font-medium text-slate-300">
+            Sign in to manage church website content, events, and public programmes.
+          </p>
+        </div>
 
-        <div className="relative z-10 w-full max-w-md space-y-6">
-          {/* Header Branding */}
-          <div className="space-y-2 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-emerald-400 uppercase">
-              <Sparkles className="size-3.5 animate-pulse" />
-              ESOCS Web Content Studio
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Web Admin Sign In</h1>
-            <p className="text-sm font-medium text-slate-200">
-              Manage public website events, programmes, and branch media content.
-            </p>
-          </div>
+        <WebAdminLoginForm />
 
-          <Card className="border-slate-700 bg-slate-900/95 shadow-2xl backdrop-blur-xl">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-lg font-bold text-white">Portal Credentials</CardTitle>
-              <CardDescription className="text-xs font-medium text-slate-300">
-                Enter your Web Administrator credentials to proceed.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <WebAdminLoginForm />
-
-              <div className="border-t border-slate-800 pt-3 text-center">
-                <p className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-                  <ShieldCheck className="size-3.5 text-emerald-400" />
-                  Authenticated via ESOCS Central Identity Backend
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="flex flex-col items-center gap-2 pt-2 text-center text-xs text-slate-400">
+          <p>
+            New Web Administrator?{" "}
             <Link
               href="/admin-web/signup"
-              className="font-medium text-emerald-400 hover:text-emerald-300 hover:underline"
+              className="font-semibold text-amber-400 underline-offset-4 hover:text-amber-300 hover:underline"
             >
-              + Register Content Admin
+              Register Content Admin
             </Link>
+          </p>
 
-            <Link href="/super-admin/setup" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
-              Super Admin Setup →
+          <div className="flex items-center gap-3 pt-1 text-2xs">
+            <Link href="/login" className="text-slate-400 hover:text-amber-300 hover:underline">
+              Switch to Main Governance Portal
             </Link>
-          </div>
-
-          <div className="text-center text-xs text-slate-500">
-            Need Church & Ordination Portal?{" "}
-            <Link href="/login" className="font-medium text-slate-300 underline hover:text-white">
-              Go to Main Governance Portal
+            <span className="text-slate-600">·</span>
+            <Link href="/super-admin/setup" className="text-slate-400 hover:text-amber-300 hover:underline">
+              Super Admin Setup
             </Link>
           </div>
         </div>
       </div>
-    </TooltipProvider>
+    </AuthSplitLayout>
   );
 }

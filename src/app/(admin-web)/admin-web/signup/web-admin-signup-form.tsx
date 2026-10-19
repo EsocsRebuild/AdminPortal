@@ -1,7 +1,6 @@
 "use client";
 
 import { UserRound, Mail, Lock, Building2, ShieldCheck, ArrowRight, CheckCircle2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
@@ -9,7 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { signUp } from "@/features/auth/actions";
+import { registerWebAdmin } from "@/features/auth/actions";
 import type { PublicParish, PublicRole } from "@/features/auth/types";
 
 interface WebAdminSignupFormProps {
@@ -48,7 +47,7 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
     }
 
     setPending(true);
-    const res = await signUp({
+    const res = await registerWebAdmin({
       name: form.name,
       email: form.email,
       phone: form.phone,
@@ -62,8 +61,9 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
     if (res.ok) {
       setSuccess(true);
       setTimeout(() => {
-        router.push("/admin-web/login");
-      }, 2000);
+        router.replace(res.data.redirectTo || "/admin-web/dashboard");
+        router.refresh();
+      }, 1200);
       return;
     }
 
@@ -73,17 +73,12 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
 
   if (success) {
     return (
-      <div className="space-y-4 rounded-xl border border-emerald-500/30 bg-emerald-950/40 p-6 text-center">
-        <CheckCircle2 className="mx-auto size-12 text-emerald-400 animate-bounce" />
-        <h3 className="text-lg font-bold text-white">Administrator Account Created!</h3>
+      <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur-md">
+        <CheckCircle2 className="mx-auto size-12 text-amber-400 animate-bounce" />
+        <h3 className="text-lg font-bold text-white">Administrator Account Activated!</h3>
         <p className="text-xs text-slate-300">
-          Your credentials have been registered. Redirecting you to the Web Studio sign-in...
+          Your credentials have been securely provisioned. Launching Web Content Studio...
         </p>
-        <Link href="/admin-web/login">
-          <Button className="mt-2 w-full bg-emerald-600 font-medium text-white hover:bg-emerald-500">
-            Proceed to Sign In Now
-          </Button>
-        </Link>
       </div>
     );
   }
@@ -93,8 +88,8 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
       {errorBanner && <Alert tone="danger">{errorBanner}</Alert>}
 
       <div className="space-y-1.5">
-        <label htmlFor="admin-name" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-          <UserRound className="size-3.5 text-emerald-400" />
+        <label htmlFor="admin-name" className="flex items-center gap-1.5 text-xs font-bold text-white">
+          <UserRound className="size-3.5 text-amber-400" />
           Full Name
         </label>
         <Input
@@ -106,14 +101,14 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
           placeholder="e.g. Bro. Emmanuel Adeyemi"
           required
           autoFocus
-          className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
+          className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <label htmlFor="admin-email" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-            <Mail className="size-3.5 text-emerald-400" />
+          <label htmlFor="admin-email" className="flex items-center gap-1.5 text-xs font-bold text-white">
+            <Mail className="size-3.5 text-amber-400" />
             Official Email
           </label>
           <Input
@@ -124,13 +119,13 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="emmanuel@esocs.org"
             required
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="admin-phone" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-            Phone Number (Optional)
+          <label htmlFor="admin-phone" className="flex items-center gap-1.5 text-xs font-bold text-white">
+            Phone (Optional)
           </label>
           <Input
             id="admin-phone"
@@ -139,21 +134,21 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             placeholder="+234 800 000 0000"
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="admin-parish" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-          <Building2 className="size-3.5 text-emerald-400" />
+        <label htmlFor="admin-parish" className="flex items-center gap-1.5 text-xs font-bold text-white">
+          <Building2 className="size-3.5 text-amber-400" />
           Assigned Parish / Branch Scope
         </label>
         <Select
           value={form.parishId}
           onValueChange={(val) => setForm({ ...form, parishId: val })}
         >
-          <SelectTrigger className="border-slate-700 bg-slate-950 font-medium text-white">
+          <SelectTrigger className="border-slate-700 bg-slate-900 font-medium text-white focus-visible:ring-amber-400">
             <SelectValue placeholder="Select your parish" />
           </SelectTrigger>
           <SelectContent className="border-slate-700 bg-slate-900 text-slate-100">
@@ -167,15 +162,15 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="admin-role" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-          <ShieldCheck className="size-3.5 text-emerald-400" />
+        <label htmlFor="admin-role" className="flex items-center gap-1.5 text-xs font-bold text-white">
+          <ShieldCheck className="size-3.5 text-amber-400" />
           Web Administrative Responsibility
         </label>
         <Select
           value={form.requestedRoleId}
           onValueChange={(val) => setForm({ ...form, requestedRoleId: val })}
         >
-          <SelectTrigger className="border-slate-700 bg-slate-950 font-medium text-white">
+          <SelectTrigger className="border-slate-700 bg-slate-900 font-medium text-white focus-visible:ring-amber-400">
             <SelectValue placeholder="Select responsibility" />
           </SelectTrigger>
           <SelectContent className="border-slate-700 bg-slate-900 text-slate-100">
@@ -190,8 +185,8 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <label htmlFor="admin-pass" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
-            <Lock className="size-3.5 text-emerald-400" />
+          <label htmlFor="admin-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
+            <Lock className="size-3.5 text-amber-400" />
             Password
           </label>
           <Input
@@ -202,12 +197,12 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             placeholder="••••••••••••"
             required
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="admin-confirm-pass" className="flex items-center gap-1.5 text-xs font-semibold text-slate-100">
+          <label htmlFor="admin-confirm-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
             Confirm Password
           </label>
           <Input
@@ -218,7 +213,7 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
             onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
             placeholder="••••••••••••"
             required
-            className="border-slate-700 bg-slate-950 font-medium text-white placeholder:text-slate-400 focus-visible:ring-emerald-500"
+            className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
       </div>
@@ -226,7 +221,7 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
       <Button
         type="submit"
         disabled={pending}
-        className="w-full bg-emerald-600 py-2.5 font-medium text-white shadow-lg shadow-emerald-950/50 transition-all hover:bg-emerald-500"
+        className="w-full bg-amber-500 py-3 font-bold text-slate-950 shadow-xl shadow-amber-950/50 transition-all hover:bg-amber-400"
       >
         {pending ? (
           "Registering Administrator Account…"

@@ -74,13 +74,13 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
               <Crest
                 size={38}
                 priority
-                className="shadow-md ring-2 shadow-emerald-950/50 ring-emerald-500/50 transition-transform group-hover:scale-105"
+                className="shadow-md ring-2 shadow-amber-950/40 ring-amber-400/80 transition-transform group-hover:scale-105"
               />
               <div>
                 <span className="block font-brand text-sm font-extrabold tracking-wide text-white">
                   THE ESOCS WEB STUDIO
                 </span>
-                <span className="block text-2xs font-semibold tracking-wider text-emerald-400 uppercase">
+                <span className="block text-2xs font-semibold tracking-wider text-amber-400 uppercase">
                   Content Administration
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
                         href={item.href}
                         className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
                       >
-                        <Icon className="size-3.5 text-emerald-400" />
+                        <Icon className="size-3.5 text-amber-400" />
                         {item.label}
                       </Link>
                     </TooltipTrigger>
