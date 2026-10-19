@@ -41,14 +41,27 @@ export default function WebAdminLoginPage() {
             <CardContent className="space-y-4">
               <WebAdminLoginForm />
 
-              <div className="border-t border-slate-800 pt-2 text-center">
-                <p className="flex items-center justify-center gap-1.5 text-xs text-slate-500">
-                  <ShieldCheck className="size-3.5 text-emerald-500" />
+              <div className="border-t border-slate-800 pt-3 text-center">
+                <p className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
+                  <ShieldCheck className="size-3.5 text-emerald-400" />
                   Authenticated via ESOCS Central Identity Backend
                 </p>
               </div>
             </CardContent>
           </Card>
+
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <Link
+              href="/admin-web/signup"
+              className="font-medium text-emerald-400 hover:text-emerald-300 hover:underline"
+            >
+              + Register Content Admin
+            </Link>
+
+            <Link href="/super-admin/setup" className="font-medium text-amber-400 hover:text-amber-300 hover:underline">
+              Super Admin Setup →
+            </Link>
+          </div>
 
           <div className="text-center text-xs text-slate-500">
             Need Church & Ordination Portal?{" "}

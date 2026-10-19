@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Crest } from "@/components/icons/logo";
+import { requireSession } from "@/server/session";
 
 interface ParishData {
   slug: string;
@@ -190,6 +191,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ParishPublicPage({ params }: { params: Promise<{ slug: string }> }) {
+  await requireSession();
   const { slug } = await params;
   const parish = await getParishData(slug);
 

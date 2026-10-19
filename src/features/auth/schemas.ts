@@ -104,3 +104,11 @@ export const acceptInviteSchema = z
     path: ["confirm"],
     error: "The two passwords don’t match yet.",
   });
+
+export const superAdminSetupSchema = z.object({
+  name: z.string().trim().min(3, { error: "Please enter your full name." }),
+  email,
+  authorityKey: z.string().trim().min(4, { error: "Enter the Central Authority Passcode." }),
+  password: newPassword,
+});
+export type SuperAdminSetupInput = z.input<typeof superAdminSetupSchema>;

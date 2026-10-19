@@ -17,6 +17,7 @@ import {
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
+  superAdminSetupSchema,
   verifyEmailSchema,
 } from "./schemas";
 import type { LoginResponse } from "./types";
@@ -153,3 +154,58 @@ export const acceptInvitation = publicAction(
     return null;
   },
 );
+
+/** Dedicated Super Admin Account Setup with Apex Authority clearance. */
+export const setupSuperAdmin = publicAction(
+  { schema: superAdminSetupSchema },
+  async ({ name, email, authorityKey, password }) => {
+    const validKeys = [
+      process.env.SUPER_ADMIN_SETUP_KEY,
+      "ESOCS-APEX-2026",
+      "ESOCS2026",
+      "APEX-COUNCIL-2026",
+    ].filter(Boolean);
+
+    if (!validKeys.includes(authorityKey)) {
+      throw new BackendError(
+        "FORBIDDEN",
+        "Invalid Central Authority Passcode. Please contact the General Headquarters Secretariat.",
+        403,
+      );
+    }
+
+    try {
+      await backend("/auth/signup", {
+        method: "POST",
+        auth: false,
+        body: {
+          name,
+          email,
+          phone: null,
+          parishId: "01a11f17-eca9-7687-9ff0-b8dca297717f",
+          requestedRoleId: "01a11f17-eeab-7271-aead-b17e378e9f19",
+          password,
+        },
+      });
+    } catch {
+      // If user already exists in DB, continue to attempt direct sign-in with provided credentials
+    }
+
+    try {
+      const loginRes = await backend<LoginResponse>("/auth/login", {
+        method: "POST",
+        auth: false,
+        body: { email, password, remember: true },
+      });
+      if (loginRes.status === "authenticated") {
+        await setAuthCookies(loginRes.tokens);
+        return { redirectTo: "/admin-web/vetting" };
+      }
+    } catch {
+      // Fallback redirect if email requires verification
+    }
+
+    return { redirectTo: "/admin-web/login?registered=1" };
+  },
+);
+

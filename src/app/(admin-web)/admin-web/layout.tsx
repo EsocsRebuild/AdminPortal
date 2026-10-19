@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   Calendar,
@@ -13,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { UserMenu } from "@/components/layout/user-menu";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Crest } from "@/components/icons/logo";
+import { getSession } from "@/server/session";
 
 const navItems = [
   {
@@ -47,7 +50,20 @@ const navItems = [
   },
 ];
 
-export default function WebAdminLayout({ children }: { children: ReactNode }) {
+export default async function WebAdminLayout({ children }: { children: ReactNode }) {
+  const headerList = await headers();
+  const pathname = headerList.get("x-pathname") ?? "";
+  const isAuthPage = pathname.includes("/admin-web/login") || pathname.includes("/admin-web/signup");
+
+  if (isAuthPage) {
+    return <>{children}</>;
+  }
+
+  const sessionUser = await getSession();
+  if (!sessionUser) {
+    redirect(`/admin-web/login?next=${encodeURIComponent(pathname || "/admin-web/dashboard")}`);
+  }
+
   return (
     <TooltipProvider>
       <div className="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-100">

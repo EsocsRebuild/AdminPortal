@@ -146,8 +146,11 @@ export default async function SectionsPage() {
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/members?fellowship=${sec.slug}`}>View Roster</Link>
                 </Button>
-                <Button variant="ghost" size="sm" rightIcon={<ArrowRight className="size-3.5" />}>
-                  Workspace
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={`/sections/${sec.slug}`} className="flex items-center gap-1">
+                    Portal View
+                    <ArrowRight className="size-3.5" />
+                  </Link>
                 </Button>
               </div>
             </CardContent>

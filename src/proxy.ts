@@ -14,8 +14,9 @@ import { COOKIE, cookieOptions } from "@/server/cookies";
  */
 
 const PUBLIC =
-  /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f|church|sections|admin-web\/login)(\/|$)/;
-const GUEST_ONLY = /^\/(login|signup|forgot-password|admin-web\/login)(\/|$)/;
+  /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f|admin-web\/login|admin-web\/signup|super-admin\/setup)(\/|$)/;
+const GUEST_ONLY =
+  /^\/(login|signup|forgot-password|admin-web\/login|admin-web\/signup|super-admin\/setup)(\/|$)/;
 
 function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolean) {
   const dev = process.env.NODE_ENV !== "production";
@@ -79,9 +80,11 @@ async function refresh(refreshToken: string, request: NextRequest): Promise<Toke
 }
 
 function toLogin(request: NextRequest, clear: boolean) {
-  const url = new URL("/login", request.url);
+  const isWebAdmin = request.nextUrl.pathname.startsWith("/admin-web");
+  const loginPath = isWebAdmin ? "/admin-web/login" : "/login";
+  const url = new URL(loginPath, request.url);
   const next = request.nextUrl.pathname + request.nextUrl.search;
-  if (next !== "/") url.searchParams.set("next", next);
+  if (next !== "/" && next !== loginPath) url.searchParams.set("next", next);
   const res = NextResponse.redirect(url);
   if (clear) {
     res.cookies.delete(COOKIE.access);
@@ -118,7 +121,8 @@ export async function proxy(request: NextRequest) {
   }
 
   if (GUEST_ONLY.test(pathname) && (hasAccess || renewed)) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    const isWebAdmin = pathname.startsWith("/admin-web");
+    return NextResponse.redirect(new URL(isWebAdmin ? "/admin-web/dashboard" : "/dashboard", request.url));
   }
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
