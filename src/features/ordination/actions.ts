@@ -81,18 +81,26 @@ export async function advanceVettingStageAction(
     // Expected while .NET backend ordination controller is in development
   }
 
-  // 2. Synchronize with Ordination Portal API & dispatch live Mailpit notifications
-  try {
-    const portalUrl = process.env.ORDINATION_PORTAL_URL || "http://localhost:3000";
-    const candRes = await fetch(`${portalUrl}/api/candidates/${check.data.candidateId}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-    });
+  const portalUrls = [
+    process.env.ORDINATION_PORTAL_URL,
+    "http://host.docker.internal:3010",
+    "http://localhost:3010",
+    "http://localhost:3000",
+    "http://172.17.0.1:3010",
+  ].filter(Boolean) as string[];
 
-    if (candRes.ok) {
-      const candJson = await candRes.json();
-      const current = candJson.data?.candidate;
-      if (current) {
+  for (const portalUrl of portalUrls) {
+    try {
+      const candRes = await fetch(`${portalUrl}/api/candidates/${check.data.candidateId}`, {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(2500),
+      });
+
+      if (candRes.ok) {
+        const candJson = await candRes.json();
+        const current = candJson.data?.candidate;
+        if (current) {
         const tierApprovals = { ...(current.tierApprovals || {}) };
         let stage = current.stage;
         let currentVettingTier = current.currentVettingTier;
@@ -143,7 +151,6 @@ export async function advanceVettingStageAction(
           stage = "board_approved";
         }
 
-        // PATCH to Ordination Portal (this automatically updates db.json and fires Mailpit email!)
         await fetch(`${portalUrl}/api/candidates/${check.data.candidateId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -154,12 +161,13 @@ export async function advanceVettingStageAction(
             actorName: approverName,
           }),
         });
+        break;
       }
     }
-  } catch (portalErr: unknown) {
-    const msg = portalErr instanceof Error ? portalErr.message : String(portalErr);
-    console.warn("[AdminPortal] Could not sync vetting advance with Ordination Portal:", msg);
+  } catch {
+    // Continue to next candidate URL
   }
+}
 
   revalidatePath("/ordination");
   revalidatePath(`/ordination/candidates/${check.data.candidateId}`);

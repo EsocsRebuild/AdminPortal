@@ -228,34 +228,42 @@ export async function getOrdinationCandidates(): Promise<{
   }
 
   // 2. Fetch live canonical candidates from Ordination Portal
-  try {
-    const portalUrl = process.env.ORDINATION_PORTAL_URL || "http://localhost:3000";
-    const res = await fetch(`${portalUrl}/api/candidates`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(3000),
-    });
+  const portalUrls = [
+    process.env.ORDINATION_PORTAL_URL,
+    "http://host.docker.internal:3010",
+    "http://localhost:3010",
+    "http://localhost:3000",
+    "http://172.17.0.1:3010",
+  ].filter(Boolean) as string[];
 
-    if (res.ok) {
-      const json = await res.json();
-      const rawCandidates = json.data?.candidates || [];
-      if (Array.isArray(rawCandidates) && rawCandidates.length > 0) {
-        const candidates = rawCandidates.map(mapToAdminCandidate);
-        return {
-          candidates,
-          summary: {
-            totalCandidates: candidates.length,
-            stage1Count: candidates.filter((c) => c.stageCurrent === "STAGE_1_PARISH").length,
-            stage2Count: candidates.filter((c) => c.stageCurrent === "STAGE_2_DISTRICT").length,
-            stage3Count: candidates.filter((c) => c.stageCurrent === "STAGE_3_ZONAL").length,
-            stage4ApprovedCount: candidates.filter((c) => c.stageCurrent === "STAGE_4_SUPREME_APPROVED").length,
-          },
-        };
+  for (const portalUrl of portalUrls) {
+    try {
+      const res = await fetch(`${portalUrl}/api/candidates`, {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(2500),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const rawCandidates = json.data?.candidates || [];
+        if (Array.isArray(rawCandidates) && rawCandidates.length > 0) {
+          const candidates = rawCandidates.map(mapToAdminCandidate);
+          return {
+            candidates,
+            summary: {
+              totalCandidates: candidates.length,
+              stage1Count: candidates.filter((c) => c.stageCurrent === "STAGE_1_PARISH").length,
+              stage2Count: candidates.filter((c) => c.stageCurrent === "STAGE_2_DISTRICT").length,
+              stage3Count: candidates.filter((c) => c.stageCurrent === "STAGE_3_ZONAL").length,
+              stage4ApprovedCount: candidates.filter((c) => c.stageCurrent === "STAGE_4_SUPREME_APPROVED").length,
+            },
+          };
+        }
       }
+    } catch {
+      // Continue to next candidate URL
     }
-  } catch (portalErr: unknown) {
-    const msg = portalErr instanceof Error ? portalErr.message : String(portalErr);
-    console.warn("[AdminPortal] Could not fetch candidates from Ordination Portal:", msg);
   }
 
   // 3. Fallback to default candidates
