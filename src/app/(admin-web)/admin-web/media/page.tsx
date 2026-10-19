@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { getMediaAssets } from "@/features/web-cms/queries";
+import { requireSession } from "@/server/session";
 
 export const metadata: Metadata = { title: "Media Asset Library · ESOCS Web Admin" };
 
 export default async function MediaGalleryPage() {
+  await requireSession();
   const media = await getMediaAssets();
 
   return (
@@ -17,7 +19,7 @@ export default async function MediaGalleryPage() {
         <div className="flex items-center justify-between border-b border-slate-800 pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <ImageIcon className="size-5 text-emerald-400" />
+              <ImageIcon className="size-5 text-amber-400" />
               <h1 className="text-2xl font-bold tracking-tight text-white">Media Asset Library</h1>
             </div>
             <p className="mt-1 text-xs text-slate-400">
@@ -25,7 +27,7 @@ export default async function MediaGalleryPage() {
             </p>
           </div>
 
-          <Button className="gap-1.5 bg-emerald-600 text-xs text-white shadow-md shadow-emerald-950 hover:bg-emerald-500">
+          <Button className="gap-1.5 bg-amber-500 text-xs font-bold text-slate-950 shadow-md shadow-amber-950/50 hover:bg-amber-400">
             <Upload className="size-4" />
             Upload New Media Asset
           </Button>

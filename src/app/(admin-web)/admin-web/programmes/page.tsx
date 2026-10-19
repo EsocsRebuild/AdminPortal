@@ -5,10 +5,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { submitProgrammeAction } from "@/features/web-cms/actions";
+import { requireSession } from "@/server/session";
 
 export const metadata: Metadata = { title: "Programmes Schedule · ESOCS Web Admin" };
 
-export default function ProgrammesSchedulePage() {
+export default async function ProgrammesSchedulePage() {
+  await requireSession();
   return (
     <TooltipProvider>
       <div className="space-y-6">

@@ -16,7 +16,7 @@ import { COOKIE, cookieOptions } from "@/server/cookies";
 const PUBLIC =
   /^\/(login|signup|verify|mfa|forgot-password|reset-password|invite|f|admin-web\/login|admin-web\/signup|super-admin\/setup)(\/|$)/;
 const GUEST_ONLY =
-  /^\/(login|signup|forgot-password|admin-web\/login|admin-web\/signup|super-admin\/setup)(\/|$)/;
+  /^\/(signup|forgot-password)(\/|$)/;
 
 function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolean) {
   const dev = process.env.NODE_ENV !== "production";

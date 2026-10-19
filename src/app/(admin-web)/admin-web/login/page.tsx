@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Globe, Megaphone, Image as ImageIcon, ShieldCheck } from "lucide-react";
+import { Globe, Megaphone, Image as ImageIcon, ShieldCheck, ArrowRight, UserCheck } from "lucide-react";
 import { AuthSplitLayout } from "@/components/auth/auth-split-layout";
+import { Button } from "@/components/ui/button";
+import { getSession } from "@/server/session";
 import { WebAdminLoginForm } from "./web-admin-login-form";
 
 export const metadata: Metadata = {
@@ -32,7 +34,9 @@ const studioBenefits = [
   },
 ];
 
-export default function WebAdminLoginPage() {
+export default async function WebAdminLoginPage() {
+  const sessionUser = await getSession();
+
   return (
     <AuthSplitLayout
       portalBadge="WEB CONTENT STUDIO"
@@ -51,6 +55,30 @@ export default function WebAdminLoginPage() {
             Sign in to manage church website content, events, and public programmes.
           </p>
         </div>
+
+        {sessionUser && (
+          <div className="rounded-xl border border-amber-400/40 bg-slate-900/95 p-4 shadow-xl backdrop-blur-md">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0 space-y-0.5">
+                <span className="flex items-center gap-1.5 text-2xs font-bold uppercase tracking-wider text-amber-400">
+                  <UserCheck className="size-3.5" />
+                  Currently Signed In
+                </span>
+                <p className="truncate text-sm font-bold text-white">{sessionUser.name}</p>
+                <p className="truncate text-xs text-slate-400">{sessionUser.email}</p>
+              </div>
+              <Link href="/admin-web/dashboard" className="shrink-0">
+                <Button size="sm" className="bg-amber-500 font-bold text-slate-950 hover:bg-amber-400">
+                  Go to Dashboard
+                  <ArrowRight className="ml-1.5 size-3.5" />
+                </Button>
+              </Link>
+            </div>
+            <p className="mt-2.5 border-t border-slate-800 pt-2 text-2xs text-slate-400">
+              Need another account? Sign in with different credentials below:
+            </p>
+          </div>
+        )}
 
         <WebAdminLoginForm />
 

@@ -7,10 +7,12 @@ import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { getBranchEvents } from "@/features/web-cms/queries";
 import { submitEventAction } from "@/features/web-cms/actions";
 import type { EventCategory } from "@/features/web-cms/types";
+import { requireSession } from "@/server/session";
 
 export const metadata: Metadata = { title: "Events Publishing Studio · ESOCS Web Admin" };
 
 export default async function EventsStudioPage() {
+  await requireSession();
   const events = await getBranchEvents();
 
   return (

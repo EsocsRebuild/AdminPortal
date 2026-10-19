@@ -5,10 +5,12 @@ import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { getVettingQueue } from "@/features/web-cms/queries";
 import { vetContentAction } from "@/features/web-cms/actions";
+import { requireSession } from "@/server/session";
 
 export const metadata: Metadata = { title: "Super Admin Vetting Queue · ESOCS Web Admin" };
 
 export default async function SuperVettingQueuePage() {
+  await requireSession();
   const { events, programmes, summary } = await getVettingQueue();
 
   return (
