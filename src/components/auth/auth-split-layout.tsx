@@ -64,7 +64,7 @@ export function AuthSplitLayout({
         </div>
 
         {/* Centered Form Area */}
-        <div className="relative mx-auto flex w-full max-w-[26rem] flex-1 flex-col justify-center py-8">
+        <div className="relative mx-auto flex w-full max-w-104 flex-1 flex-col justify-center py-8">
           {children}
         </div>
 
@@ -88,8 +88,8 @@ export function AuthSplitLayout({
             priority
             className="scale-105 object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/45" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/85 to-slate-950/45" />
+          <div className="absolute inset-0 bg-linear-to-r from-slate-950/95 via-slate-950/60 to-transparent" />
         </div>
 
         {/* Slow-drifting ambient light */}
@@ -119,7 +119,7 @@ export function AuthSplitLayout({
             </span>
             <h2 className="font-brand text-4xl leading-[1.1] font-bold text-balance text-white xl:text-5xl">
               {headlineMain}{" "}
-              <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 {headlineHighlight}
               </span>
               .
