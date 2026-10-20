@@ -17,7 +17,13 @@ import Link from "next/link";
 
 import type { SessionUser } from "@/types/auth";
 
-export function JurisdictionScopeBanner({ user }: { user: SessionUser }) {
+export function JurisdictionScopeBanner({
+  user,
+  unitName = "Assigned Church Unit",
+}: {
+  user: SessionUser;
+  unitName?: string;
+}) {
   const roleLower = (user.role?.name ?? "").toLowerCase();
   const isSuperAdmin = Boolean(
     user.isPlatformAdmin ||
@@ -27,6 +33,10 @@ export function JurisdictionScopeBanner({ user }: { user: SessionUser }) {
     roleLower.includes("secretary"),
   );
 
+  const isContentEditor =
+    roleLower.includes("content") ||
+    roleLower.includes("editor") ||
+    roleLower.includes("media");
   const isProvinceAdmin = roleLower.includes("province") || roleLower.includes("provincial");
   const isDistrictAdmin = roleLower.includes("district");
   const isFellowshipAdmin =
@@ -38,13 +48,15 @@ export function JurisdictionScopeBanner({ user }: { user: SessionUser }) {
   // Determine active jurisdiction context
   const scopeType = isSuperAdmin
     ? "global"
-    : isProvinceAdmin
-      ? "province"
-      : isDistrictAdmin
-        ? "district"
-        : isFellowshipAdmin
-          ? "fellowship"
-          : "parish";
+    : isContentEditor
+      ? "content"
+      : isProvinceAdmin
+        ? "province"
+        : isDistrictAdmin
+          ? "district"
+          : isFellowshipAdmin
+            ? "fellowship"
+            : "parish";
 
   const scopeDetails = {
     global: {
@@ -55,64 +67,74 @@ export function JurisdictionScopeBanner({ user }: { user: SessionUser }) {
       icon: Globe2,
       accentColor: "from-amber-500/20 via-yellow-500/10 to-transparent",
       summary:
-        "Global panoramic access across 1,200+ parishes worldwide, Holy Order ordination vetting, bank-grade financial ledgers, and platform security controls.",
+        "Global panoramic access across parishes worldwide, Holy Order ordination vetting, financial ledgers, and platform administration.",
       quickActions: [
         { label: "Ordination Vetting", href: "/ordination", icon: Award },
         { label: "Financial Ledgers", href: "/giving", icon: Wallet },
         { label: "Security & Users", href: "/users", icon: ShieldCheck },
       ],
     },
+    content: {
+      title: `${unitName} Content Studio`,
+      subtitle: `Web Content & Publishing Scope · ${user.role?.name ?? "Content Editor"}`,
+      badgeText: user.role?.name ?? "Content Editor",
+      badgeClass: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+      icon: Globe2,
+      accentColor: "from-amber-500/20 via-yellow-500/10 to-transparent",
+      summary: `Administrative workspace scoped to public web announcements, bulletins, events, and media publishing for ${unitName}.`,
+      quickActions: [
+        { label: "Web Studio", href: "/admin-web/dashboard", icon: Globe2 },
+        { label: "Submit Event", href: "/admin-web/events", icon: CalendarDays },
+        { label: "Media Library", href: "/admin-web/media", icon: Building2 },
+      ],
+    },
     province: {
-      title: "Provincial Secretariat Jurisdiction",
-      subtitle: "Provincial HQ Oversight · Multi-District Regional Scope",
-      badgeText: "Provincial Administrator",
+      title: `${unitName} Secretariat Jurisdiction`,
+      subtitle: `Provincial HQ Oversight · Multi-District Regional Scope`,
+      badgeText: user.role?.name ?? "Provincial Administrator",
       badgeClass: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
       icon: Building2,
       accentColor: "from-emerald-500/20 via-teal-500/10 to-transparent",
-      summary:
-        "Regional administrative jurisdiction oversight covering assigned district secretariats, regional ordination candidates, and parish compliance.",
+      summary: `Regional administrative jurisdiction oversight covering assigned district secretariats, ordination candidates, and compliance for ${unitName}.`,
       quickActions: [
         { label: "Regional Wings", href: "/sections", icon: Building2 },
         { label: "Parish Directory", href: "/members", icon: Church },
       ],
     },
     district: {
-      title: "District Secretariat Jurisdiction",
-      subtitle: "District Scope · Local Branch Parishes Group",
-      badgeText: "District Administrator",
+      title: `${unitName} Secretariat Jurisdiction`,
+      subtitle: `District Scope · Local Branch Parishes Group`,
+      badgeText: user.role?.name ?? "District Administrator",
       badgeClass: "bg-blue-500/20 text-blue-300 border-blue-500/40",
       icon: Shield,
       accentColor: "from-blue-500/20 via-indigo-500/10 to-transparent",
-      summary:
-        "District-level administration overseeing local parish Sunday attendance headcounts, member roster registrations, and parish tithe submissions.",
+      summary: `District-level administration overseeing local parish Sunday attendance headcounts, member roster registrations, and parish tithe submissions for ${unitName}.`,
       quickActions: [
         { label: "District Members", href: "/members", icon: Users2 },
         { label: "Sunday Headcount", href: "/attendance", icon: CalendarDays },
       ],
     },
     fellowship: {
-      title: "Autonomous Wing Directorate Scope",
-      subtitle: "Fellowship Directorate · Youth / Women / Music Wings",
-      badgeText: "Wing Executive",
+      title: `${unitName} Directorate Scope`,
+      subtitle: "Fellowship Directorate · Autonomous Wing",
+      badgeText: user.role?.name ?? "Wing Executive",
       badgeClass: "bg-purple-500/20 text-purple-300 border-purple-500/40",
       icon: Users2,
       accentColor: "from-purple-500/20 via-pink-500/10 to-transparent",
-      summary:
-        "Autonomous wing governance managing national fellowship conferences, revival programmes, wing rosters, and directorate stewardship.",
+      summary: `Autonomous wing governance managing national fellowship conferences, revival programmes, wing rosters, and directorate stewardship for ${unitName}.`,
       quickActions: [
         { label: "Wing Directorates", href: "/sections", icon: Users2 },
         { label: "Events Calendar", href: "/events", icon: CalendarDays },
       ],
     },
     parish: {
-      title: "Mount Zion Parish Secretariat Jurisdiction",
-      subtitle: "Local Branch Scope · Parish Clerk & Secretariat",
-      badgeText: "Parish Clerk Scoped",
+      title: `${unitName} Secretariat Jurisdiction`,
+      subtitle: `Local Branch Scope · ${user.role?.name ?? "Parish Secretariat"}`,
+      badgeText: user.role?.name ?? "Parish Scoped",
       badgeClass: "bg-amber-500/20 text-amber-300 border-amber-500/40",
       icon: Church,
       accentColor: "from-amber-500/20 via-yellow-500/10 to-transparent",
-      summary:
-        "Local parish administration scoped strictly to Mount Zion Parish congregation members, Sunday service attendance, and weekly tithe batch entries.",
+      summary: `Local parish administration scoped strictly to ${unitName} congregation members, Sunday service attendance, and unit operations.`,
       quickActions: [
         { label: "Sunday Attendance", href: "/attendance", icon: CalendarDays },
         { label: "Member Roster", href: "/members", icon: Users2 },

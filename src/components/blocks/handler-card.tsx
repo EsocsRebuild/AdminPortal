@@ -22,7 +22,7 @@ export function HandlerCard({
   handlerId,
   name,
   roleName,
-  unitName = "Mount Zion Parish",
+  unitName = "Assigned Church Unit",
   unitType = "parish",
   avatarUrl,
   mfaEnabled,
