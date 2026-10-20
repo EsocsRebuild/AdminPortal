@@ -132,7 +132,7 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                   className={cn(
                     "flex h-9 items-center gap-2.5 rounded-control px-2.5 text-xs font-medium transition-colors",
                     item.active
-                      ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+                      ? "bg-primary font-semibold text-primary-foreground shadow-xs"
                       : "text-muted-foreground hover:bg-surface-hover hover:text-foreground",
                     "lg:rail:justify-center lg:rail:px-0 [&_svg]:size-4 [&_svg]:shrink-0",
                   )}
@@ -207,16 +207,12 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
           {/* Studio Brand Header */}
           <div className="flex h-topbar shrink-0 items-center justify-between border-b border-sidebar-border px-4 lg:rail:justify-center lg:rail:px-0">
             <Link href="/admin-web/dashboard" className="flex items-center gap-2.5 overflow-hidden">
-              <Crest
-                size={32}
-                priority
-                className="shrink-0 ring-1 shadow-xs ring-amber-500/50"
-              />
+              <Crest size={32} priority className="shrink-0 shadow-xs ring-1 ring-amber-500/50" />
               <div className="min-w-0 lg:rail:hidden">
                 <span className="block truncate font-brand text-xs font-black tracking-wide text-foreground">
                   ESOCS WEB STUDIO
                 </span>
-                <span className="block truncate text-3xs font-semibold text-primary uppercase">
+                <span className="text-3xs block truncate font-semibold text-primary uppercase">
                   {userUnit.unitName}
                 </span>
               </div>
@@ -280,12 +276,12 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                 <SheetContent side="left" className="w-72 bg-sidebar p-0">
                   <SheetTitle className="sr-only">Web Studio Navigation</SheetTitle>
                   <div className="flex h-topbar shrink-0 items-center gap-3 border-b border-sidebar-border px-4">
-                    <Crest size={32} priority className="shrink-0 ring-1 shadow-xs ring-amber-500/50" />
+                    <Crest size={32} priority className="shrink-0 shadow-xs ring-1 ring-amber-500/50" />
                     <div>
                       <span className="block font-brand text-xs font-black text-foreground">
                         ESOCS WEB STUDIO
                       </span>
-                      <span className="block text-3xs font-semibold text-primary uppercase">
+                      <span className="text-3xs block font-semibold text-primary uppercase">
                         {userUnit.unitName}
                       </span>
                     </div>
@@ -298,10 +294,10 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
 
               {/* Breadcrumb / Title */}
               <div className="flex items-center gap-2">
-                <Badge tone="primary" className="hidden sm:inline-flex text-2xs uppercase">
+                <Badge tone="primary" className="hidden text-2xs uppercase sm:inline-flex">
                   Web Studio
                 </Badge>
-                <span className="text-xs font-bold text-foreground truncate max-w-[200px] sm:max-w-xs md:max-w-md">
+                <span className="max-w-50 truncate text-xs font-bold text-foreground sm:max-w-xs md:max-w-md">
                   {userUnit.unitName}
                 </span>
               </div>
@@ -313,7 +309,7 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                 <TooltipTrigger asChild>
                   <Link
                     href="/dashboard"
-                    className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs sm:text-xs font-bold text-amber-500 transition-all hover:bg-amber-500/20"
+                    className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-500 transition-all hover:bg-amber-500/20 sm:text-xs"
                   >
                     <Church className="size-3.5 text-amber-500" />
                     <span className="hidden sm:inline">Main Church Admin</span>
@@ -327,7 +323,7 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                   <Link
                     href={`/church/${userUnit.unitSlug}`}
                     target="_blank"
-                    className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs sm:text-xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 dark:text-emerald-400"
+                    className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 sm:text-xs dark:text-emerald-400"
                   >
                     <Globe className="size-3.5" />
                     <span className="hidden sm:inline">Live Web Preview</span>
@@ -350,4 +346,3 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
     </TooltipProvider>
   );
 }
-

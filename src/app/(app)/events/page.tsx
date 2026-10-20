@@ -87,7 +87,9 @@ export default async function EventsPage() {
                 />
                 <CardContent className="mt-auto space-y-3 pt-2">
                   <div className="flex items-center justify-between border-t border-border-subtle pt-3 text-xs">
-                    <span className="font-medium text-muted-foreground">{evt.unitName || userUnit.unitName}</span>
+                    <span className="font-medium text-muted-foreground">
+                      {evt.unitName || userUnit.unitName}
+                    </span>
                     {isCapacityCapped ? (
                       <span className="font-semibold text-foreground">
                         {evt.registeredCount} / {evt.capacity} registered ({percentFilled}%)

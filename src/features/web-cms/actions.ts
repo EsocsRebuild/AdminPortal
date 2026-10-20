@@ -86,7 +86,10 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
       "Event submitted and published successfully",
     );
   } catch {
-    return fail("UNAVAILABLE", "Failed to submit event to backend server. Please verify backend connectivity.");
+    return fail(
+      "UNAVAILABLE",
+      "Failed to submit event to backend server. Please verify backend connectivity.",
+    );
   }
 }
 

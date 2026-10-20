@@ -19,13 +19,7 @@ function formatCurrency(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }
 
-export function GivingChart({
-  data = [],
-  className,
-}: {
-  data?: GivingWeeklyPoint[];
-  className?: string;
-}) {
+export function GivingChart({ data = [], className }: { data?: GivingWeeklyPoint[]; className?: string }) {
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
 
   if (!data || data.length === 0) {

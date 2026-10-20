@@ -28,7 +28,8 @@ export default async function EventsStudioPage() {
               <h1 className="text-2xl font-bold tracking-tight text-white">Events Publishing Studio</h1>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Create, manage, and publish church events for <span className="font-semibold text-amber-300">{unitInfo.unitName}</span>.
+              Create, manage, and publish church events for{" "}
+              <span className="font-semibold text-amber-300">{unitInfo.unitName}</span>.
             </p>
           </div>
         </div>
@@ -164,7 +165,7 @@ export default async function EventsStudioPage() {
                 <Filter className="size-3.5 text-emerald-400" />
                 Active Unit Events ({events.length})
               </span>
-              <span className="text-2xs text-slate-400 flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 text-2xs text-slate-400">
                 <Building2 className="size-3 text-amber-400" />
                 {unitInfo.unitName}
               </span>
@@ -175,9 +176,12 @@ export default async function EventsStudioPage() {
                 <div className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
                   <Calendar className="size-6" />
                 </div>
-                <h4 className="mt-3 text-sm font-bold text-white">No active events for {unitInfo.unitName}</h4>
+                <h4 className="mt-3 text-sm font-bold text-white">
+                  No active events for {unitInfo.unitName}
+                </h4>
                 <p className="mt-1 max-w-md text-xs text-slate-400">
-                  Your unit does not have any active events yet. Use the form on the left to submit an event for publication.
+                  Your unit does not have any active events yet. Use the form on the left to submit an event
+                  for publication.
                 </p>
               </div>
             ) : (

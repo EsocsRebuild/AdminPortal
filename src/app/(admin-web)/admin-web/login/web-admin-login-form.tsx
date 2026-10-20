@@ -53,10 +53,7 @@ export function WebAdminLoginForm() {
       {banner && <Alert tone="danger">{banner}</Alert>}
 
       <div className="grid gap-1.5">
-        <label
-          htmlFor="web-email"
-          className="text-sm font-bold text-white flex items-center gap-1.5"
-        >
+        <label htmlFor="web-email" className="flex items-center gap-1.5 text-sm font-bold text-white">
           <Mail className="size-3.5 text-amber-400" />
           Email address
         </label>
@@ -71,17 +68,12 @@ export function WebAdminLoginForm() {
           autoFocus
           className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
-        {fieldError(result, "email") && (
-          <p className="text-xs text-red-400">{fieldError(result, "email")}</p>
-        )}
+        {fieldError(result, "email") && <p className="text-xs text-red-400">{fieldError(result, "email")}</p>}
       </div>
 
       <div className="grid gap-1.5">
         <div className="flex items-center justify-between">
-          <label
-            htmlFor="web-pass"
-            className="text-sm font-bold text-white flex items-center gap-1.5"
-          >
+          <label htmlFor="web-pass" className="flex items-center gap-1.5 text-sm font-bold text-white">
             <Lock className="size-3.5 text-amber-400" />
             Password
           </label>

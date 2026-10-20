@@ -40,7 +40,7 @@ export function AuthSplitLayout({
   children,
 }: AuthSplitLayoutProps) {
   return (
-    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] bg-slate-950 font-sans text-slate-100">
+    <div className="grid min-h-dvh bg-slate-950 font-sans text-slate-100 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
       {/* Left Form Panel */}
       <main
         id="main"
@@ -114,9 +114,7 @@ export function AuthSplitLayout({
         {/* Core Narrative & Feature Highlights */}
         <div className="relative z-10 my-auto grid max-w-lg gap-8 py-8">
           <div className="space-y-3">
-            <span className="text-2xs font-bold tracking-widest text-amber-400 uppercase">
-              {eyebrow}
-            </span>
+            <span className="text-2xs font-bold tracking-widest text-amber-400 uppercase">{eyebrow}</span>
             <h2 className="font-brand text-4xl leading-[1.1] font-bold text-balance text-white xl:text-5xl">
               {headlineMain}{" "}
               <span className="bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
@@ -162,4 +160,3 @@ export function AuthSplitLayout({
     </div>
   );
 }
-

@@ -74,7 +74,7 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
   if (success) {
     return (
       <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur-md">
-        <CheckCircle2 className="mx-auto size-12 text-amber-400 animate-bounce" />
+        <CheckCircle2 className="mx-auto size-12 animate-bounce text-amber-400" />
         <h3 className="text-lg font-bold text-white">Administrator Account Activated!</h3>
         <p className="text-xs text-slate-300">
           Your credentials have been securely provisioned. Launching Web Content Studio...
@@ -144,10 +144,7 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
           <Building2 className="size-3.5 text-amber-400" />
           Assigned Parish / Branch Scope
         </label>
-        <Select
-          value={form.parishId}
-          onValueChange={(val) => setForm({ ...form, parishId: val })}
-        >
+        <Select value={form.parishId} onValueChange={(val) => setForm({ ...form, parishId: val })}>
           <SelectTrigger className="border-slate-700 bg-slate-900 font-medium text-white focus-visible:ring-amber-400">
             <SelectValue placeholder="Select your parish" />
           </SelectTrigger>
@@ -202,7 +199,10 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="admin-confirm-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
+          <label
+            htmlFor="admin-confirm-pass"
+            className="flex items-center gap-1.5 text-xs font-bold text-white"
+          >
             Confirm Password
           </label>
           <Input

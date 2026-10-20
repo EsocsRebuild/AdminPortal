@@ -15,10 +15,7 @@ export const metadata: Metadata = { title: "Attendance & Headcount" };
 
 export default async function AttendancePage() {
   const user = await requirePermission("attendance:view");
-  const [userUnit, headcounts] = await Promise.all([
-    resolveUserUnit(user.scopeUnitId),
-    listHeadcounts(),
-  ]);
+  const [userUnit, headcounts] = await Promise.all([resolveUserUnit(user.scopeUnitId), listHeadcounts()]);
 
   return (
     <Page>

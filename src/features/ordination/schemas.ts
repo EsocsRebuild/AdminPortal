@@ -4,6 +4,9 @@ export const candidateNominationSchema = z.object({
   fullName: z.string().min(3, "Full name is required"),
   memberId: z.string().min(1, "Member ID is required"),
   rankTarget: z.enum([
+    "ALADURA",
+    "RABBI",
+    "EVANGELIST",
     "DEACON",
     "DEACONESS",
     "SUB_LEADER",
@@ -12,6 +15,7 @@ export const candidateNominationSchema = z.object({
     "APOSTLE",
     "SENIOR_APOSTLE",
     "MOST_SENIOR_APOSTLE",
+    "SPECIAL_APOSTLE",
   ]),
   yearsOfService: z.number().int().min(1, "Service years must be at least 1"),
   parishName: z.string().min(2, "Parish name is required"),

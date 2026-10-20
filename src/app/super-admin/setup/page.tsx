@@ -44,9 +44,7 @@ export default function SuperAdminSetupPage() {
     >
       <div className="grid gap-6">
         <div className="space-y-1.5">
-          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">
-            Super Admin Setup
-          </h1>
+          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">Super Admin Setup</h1>
           <p className="text-xs font-medium text-slate-300">
             Initialize apex ecclesiastical authority for universal vetting and national governance.
           </p>
@@ -62,10 +60,7 @@ export default function SuperAdminSetupPage() {
             ← Web Studio Sign In
           </Link>
 
-          <Link
-            href="/login"
-            className="font-semibold text-amber-400 hover:text-amber-300 hover:underline"
-          >
+          <Link href="/login" className="font-semibold text-amber-400 hover:text-amber-300 hover:underline">
             Main Governance Portal →
           </Link>
         </div>

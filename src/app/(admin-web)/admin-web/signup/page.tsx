@@ -52,9 +52,7 @@ export default async function WebAdminSignupPage() {
     >
       <div className="grid gap-6">
         <div className="space-y-1.5">
-          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">
-            Create Admin Account
-          </h1>
+          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">Create Admin Account</h1>
           <p className="text-xs font-medium text-slate-300">
             Register your credentials to publish public church bulletins, programmes, and media.
           </p>

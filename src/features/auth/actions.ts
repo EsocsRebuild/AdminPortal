@@ -215,12 +215,13 @@ export const setupSuperAdmin = publicAction(
     try {
       const [parishes, roles] = await Promise.all([
         backend<Array<{ id: string; name: string }>>("/public/parishes", { auth: false }).catch(() => []),
-        backend<Array<{ id: string; name: string }>>("/public/requestable-roles", { auth: false }).catch(() => []),
+        backend<Array<{ id: string; name: string }>>("/public/requestable-roles", { auth: false }).catch(
+          () => [],
+        ),
       ]);
       const targetParishId =
         parishes.find((p) => p.name.toLowerCase().includes("headquarters"))?.id ?? parishes[0]?.id;
-      const targetRoleId =
-        roles.find((r) => r.name.toLowerCase().includes("admin"))?.id ?? roles[0]?.id;
+      const targetRoleId = roles.find((r) => r.name.toLowerCase().includes("admin"))?.id ?? roles[0]?.id;
 
       await backend("/auth/signup", {
         method: "POST",
@@ -255,4 +256,3 @@ export const setupSuperAdmin = publicAction(
     return { redirectTo: "/admin-web/login?registered=1" };
   },
 );
-

@@ -1,12 +1,20 @@
 "server-only";
 
 import { backend } from "@/server/backend";
-import type { OrdinationCandidate, OrdinationSummary, VettingStage, VettingLogEntry, EcclesiasticalRank } from "./types";
+import type {
+  OrdinationCandidate,
+  OrdinationSummary,
+  VettingStage,
+  VettingLogEntry,
+  EcclesiasticalRank,
+} from "./types";
 
 interface RawPortalCandidate {
   id: string;
   fullName: string;
   regNumber?: string;
+  email?: string;
+  phone?: string;
   currentRank?: string;
   targetRankName?: string;
   parish?: string;
@@ -16,6 +24,10 @@ interface RawPortalCandidate {
   tenureYears?: number;
   submissionDate?: string;
   branchPriestName?: string;
+  duesStatus?: "pending" | "cleared" | "exempt";
+  duesAmountPaid?: number;
+  conductRating?: string;
+  passportPhotoUrl?: string;
   tierApprovals?: {
     branch?: { approved?: boolean; approverName?: string; date?: string; comments?: string };
     district?: { approved?: boolean; approverName?: string; date?: string; comments?: string };
@@ -32,7 +44,11 @@ function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
     ["board_approved", "investiture_assigned", "ordained"].includes(c.stage || "")
   ) {
     stageCurrent = "STAGE_4_SUPREME_APPROVED";
-  } else if (c.tierApprovals?.cmc?.approved || c.tierApprovals?.province?.approved || c.stage === "cmc_review") {
+  } else if (
+    c.tierApprovals?.cmc?.approved ||
+    c.tierApprovals?.province?.approved ||
+    c.stage === "cmc_review"
+  ) {
     stageCurrent = "STAGE_3_ZONAL";
   } else if (c.tierApprovals?.branch?.approved || c.stage === "district_review") {
     stageCurrent = "STAGE_2_DISTRICT";
@@ -76,8 +92,10 @@ function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
     });
   }
 
-  // Normalize target rank to valid enum value or fallback to LEADER
   const validRanks: EcclesiasticalRank[] = [
+    "ALADURA",
+    "RABBI",
+    "EVANGELIST",
     "DEACON",
     "DEACONESS",
     "SUB_LEADER",
@@ -86,23 +104,29 @@ function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
     "APOSTLE",
     "SENIOR_APOSTLE",
     "MOST_SENIOR_APOSTLE",
+    "SPECIAL_APOSTLE",
   ];
-  const targetNormalized = (c.targetRankName || "")
-    .toUpperCase()
-    .replace(/\s+/g, "_") as EcclesiasticalRank;
+  const targetNormalized = (c.targetRankName || "").toUpperCase().replace(/\s+/g, "_") as EcclesiasticalRank;
   const rankTarget = validRanks.includes(targetNormalized) ? targetNormalized : "LEADER";
 
   return {
     id: c.id,
     memberId: c.regNumber || c.id,
     fullName: c.fullName,
+    email: c.email,
+    phone: c.phone,
     churchRankCurrent: c.currentRank || "Member",
     rankTarget,
     parishId: `parish-${(c.parish || "general").toLowerCase().replace(/\s+/g, "-")}`,
     parishName: c.parish || "Parish",
     districtName: c.district || "District",
+    provinceName: c.province || "Province",
     stageCurrent,
     yearsOfService: c.tenureYears || 5,
+    duesStatus: c.duesStatus,
+    duesAmountPaid: c.duesAmountPaid,
+    conductRating: c.conductRating,
+    passportPhotoUrl: c.passportPhotoUrl,
     vettingHistory,
     nominatedAt: c.submissionDate || new Date().toISOString(),
     nominatedByHandlerId: c.branchPriestName || "Branch Rector",
@@ -128,6 +152,8 @@ export async function getOrdinationCandidates(): Promise<{
   // 2. Fetch live canonical candidates from Ordination Portal
   const portalUrls = [
     process.env.ORDINATION_PORTAL_URL,
+    "http://esocs-ordination-portal-dev:3000",
+    "http://portal-dev:3000",
     "http://host.docker.internal:3010",
     "http://localhost:3010",
     "http://localhost:3000",
@@ -139,7 +165,7 @@ export async function getOrdinationCandidates(): Promise<{
       const res = await fetch(`${portalUrl}/api/candidates`, {
         cache: "no-store",
         headers: { Accept: "application/json" },
-        signal: AbortSignal.timeout(2500),
+        signal: AbortSignal.timeout(3000),
       });
 
       if (res.ok) {
@@ -154,7 +180,8 @@ export async function getOrdinationCandidates(): Promise<{
               stage1Count: candidates.filter((c) => c.stageCurrent === "STAGE_1_PARISH").length,
               stage2Count: candidates.filter((c) => c.stageCurrent === "STAGE_2_DISTRICT").length,
               stage3Count: candidates.filter((c) => c.stageCurrent === "STAGE_3_ZONAL").length,
-              stage4ApprovedCount: candidates.filter((c) => c.stageCurrent === "STAGE_4_SUPREME_APPROVED").length,
+              stage4ApprovedCount: candidates.filter((c) => c.stageCurrent === "STAGE_4_SUPREME_APPROVED")
+                .length,
             },
           };
         }

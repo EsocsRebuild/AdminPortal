@@ -61,7 +61,7 @@ export function SuperAdminSetupForm() {
   if (success) {
     return (
       <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur-md">
-        <CheckCircle2 className="mx-auto size-12 text-amber-400 animate-bounce" />
+        <CheckCircle2 className="mx-auto size-12 animate-bounce text-amber-400" />
         <h3 className="text-lg font-bold text-white">Super Admin Authority Initialized!</h3>
         <p className="text-xs text-amber-200">
           Apex ecclesiastical credentials authorized. Navigating to the Super Vetting Board...
@@ -148,7 +148,10 @@ export function SuperAdminSetupForm() {
         </div>
 
         <div className="grid gap-1.5">
-          <label htmlFor="super-confirm-pass" className="flex items-center gap-1.5 text-xs font-bold text-white">
+          <label
+            htmlFor="super-confirm-pass"
+            className="flex items-center gap-1.5 text-xs font-bold text-white"
+          >
             Confirm Password
           </label>
           <Input

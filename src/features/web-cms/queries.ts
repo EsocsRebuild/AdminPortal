@@ -56,7 +56,12 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
         bannerUrl: evt.coverImageUrl || undefined,
         registrationOpen: Boolean(evt.registrationEnabled),
         ticketCapacity: evt.capacity ?? undefined,
-        status: evt.status === "Published" ? "APPROVED_LIVE" : evt.status === "Cancelled" ? "NEEDS_REVISION" : "PENDING_REVIEW",
+        status:
+          evt.status === "Published"
+            ? "APPROVED_LIVE"
+            : evt.status === "Cancelled"
+              ? "NEEDS_REVISION"
+              : "PENDING_REVIEW",
         submittedByHandlerId: evt.id,
         submittedAt: evt.startsAt,
       }));

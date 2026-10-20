@@ -17,13 +17,7 @@ export interface AttendancePoint {
   notes?: string;
 }
 
-export function AttendanceChart({
-  data = [],
-  className,
-}: {
-  data?: AttendancePoint[];
-  className?: string;
-}) {
+export function AttendanceChart({ data = [], className }: { data?: AttendancePoint[]; className?: string }) {
   const [activeSeries, setActiveSeries] = React.useState<"total" | "breakdown">("total");
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
 

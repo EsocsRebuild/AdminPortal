@@ -62,7 +62,9 @@ export default async function MediaGalleryPage() {
                 </div>
                 <CardContent className="space-y-2 p-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="max-w-44 truncate text-xs font-semibold text-white">{item.fileName}</span>
+                    <span className="max-w-44 truncate text-xs font-semibold text-white">
+                      {item.fileName}
+                    </span>
                     <span className="font-mono text-2xs text-slate-400">
                       {(item.fileSize / 1024).toFixed(0)} KB
                     </span>

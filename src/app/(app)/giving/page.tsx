@@ -22,11 +22,7 @@ export default async function GivingPage() {
   const session = await requirePermission("giving:view");
   const userUnit = await resolveUserUnit(session.scopeUnitId);
 
-  const [funds, batches, summary] = await Promise.all([
-    listFunds(),
-    listBatches(),
-    getGivingSummary(),
-  ]);
+  const [funds, batches, summary] = await Promise.all([listFunds(), listBatches(), getGivingSummary()]);
 
   const totalFundsInVault = summary?.total ?? funds.reduce((acc, f) => acc + f.currentBalance, 0);
   const totalMonthToDate =
@@ -55,9 +51,7 @@ export default async function GivingPage() {
       {/* Summary KPI Cards */}
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         <div className="rounded-control border border-border bg-surface p-4 shadow-xs">
-          <span className="text-2xs font-semibold text-muted-foreground uppercase">
-            Total Unit Treasury
-          </span>
+          <span className="text-2xs font-semibold text-muted-foreground uppercase">Total Unit Treasury</span>
           <div className="mt-1 text-2xl font-bold tracking-tight text-foreground">
             {formatCurrency(totalFundsInVault)}
           </div>
@@ -134,7 +128,9 @@ export default async function GivingPage() {
                     </div>
                     <div className="text-right">
                       <span className="text-2xs text-muted-foreground">This Month</span>
-                      <div className="text-sm font-semibold text-primary">{formatCurrency(f.monthToDate)}</div>
+                      <div className="text-sm font-semibold text-primary">
+                        {formatCurrency(f.monthToDate)}
+                      </div>
                     </div>
                   </div>
                 </CardContent>

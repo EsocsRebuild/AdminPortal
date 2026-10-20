@@ -48,9 +48,7 @@ export default async function WebAdminLoginPage() {
     >
       <div className="grid gap-6">
         <div className="space-y-1.5">
-          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">
-            Welcome back
-          </h1>
+          <h1 className="font-brand text-3xl font-bold tracking-tight text-white">Welcome back</h1>
           <p className="text-xs font-medium text-slate-300">
             Sign in to manage church website content, events, and public programmes.
           </p>
@@ -60,7 +58,7 @@ export default async function WebAdminLoginPage() {
           <div className="rounded-xl border border-amber-400/40 bg-slate-900/95 p-4 shadow-xl backdrop-blur-md">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0 space-y-0.5">
-                <span className="flex items-center gap-1.5 text-2xs font-bold uppercase tracking-wider text-amber-400">
+                <span className="flex items-center gap-1.5 text-2xs font-bold tracking-wider text-amber-400 uppercase">
                   <UserCheck className="size-3.5" />
                   Currently Signed In
                 </span>

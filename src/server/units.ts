@@ -60,4 +60,3 @@ export async function resolveUserUnit(scopeUnitId?: string | null): Promise<{
     isGlobal: false,
   };
 }
-

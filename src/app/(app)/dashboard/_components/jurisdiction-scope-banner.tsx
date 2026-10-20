@@ -34,9 +34,7 @@ export function JurisdictionScopeBanner({
   );
 
   const isContentEditor =
-    roleLower.includes("content") ||
-    roleLower.includes("editor") ||
-    roleLower.includes("media");
+    roleLower.includes("content") || roleLower.includes("editor") || roleLower.includes("media");
   const isProvinceAdmin = roleLower.includes("province") || roleLower.includes("provincial");
   const isDistrictAdmin = roleLower.includes("district");
   const isFellowshipAdmin =

@@ -43,17 +43,11 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         </p>
 
         <div className="flex items-center gap-3 pt-1 text-2xs">
-          <Link
-            href="/admin-web/login"
-            className="text-amber-400 hover:text-amber-300 hover:underline"
-          >
+          <Link href="/admin-web/login" className="text-amber-400 hover:text-amber-300 hover:underline">
             Switch to Web Content Studio
           </Link>
           <span className="text-slate-600">·</span>
-          <Link
-            href="/super-admin/setup"
-            className="text-slate-400 hover:text-amber-300 hover:underline"
-          >
+          <Link href="/super-admin/setup" className="text-slate-400 hover:text-amber-300 hover:underline">
             Apex Super Admin Setup
           </Link>
         </div>

@@ -26,7 +26,7 @@ export default async function WebAdminLayout({ children }: { children: ReactNode
   const isPlatformAdmin = Boolean(
     sessionUser.isPlatformAdmin ||
     sessionUser.role?.name?.toLowerCase().includes("super") ||
-    sessionUser.role?.name?.toLowerCase().includes("prelate")
+    sessionUser.role?.name?.toLowerCase().includes("prelate"),
   );
 
   return (
