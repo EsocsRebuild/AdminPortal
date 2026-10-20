@@ -288,7 +288,7 @@ export function Showcase() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="lagos">Mount Zion, Lagos</SelectItem>
+                  <SelectItem value="lagos">Provincial Headquarters</SelectItem>
                   <SelectItem value="abuja">Seraph Temple, Abuja</SelectItem>
                   <SelectItem value="ibadan">Holy Trinity, Ibadan</SelectItem>
                 </SelectContent>
@@ -347,7 +347,7 @@ export function Showcase() {
                 </DialogHeader>
                 <DialogBody>
                   <Field label="Parish name" htmlFor="ds-dlg">
-                    <Input id="ds-dlg" defaultValue="Mount Zion, Lagos" />
+                    <Input id="ds-dlg" defaultValue="Provincial Headquarters" />
                   </Field>
                 </DialogBody>
                 <DialogFooter>

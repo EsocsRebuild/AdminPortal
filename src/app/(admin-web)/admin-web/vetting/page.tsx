@@ -121,7 +121,7 @@ export default async function SuperVettingQueuePage() {
                           });
                         }}
                       >
-                        <Tooltip content="Publishes content instantly to public Mount Zion web page">
+                        <Tooltip content={`Publishes content instantly to public ${item.unitName} web page`}>
                           <Button
                             type="submit"
                             className="gap-1.5 bg-emerald-600 text-xs text-white shadow-md shadow-emerald-950 hover:bg-emerald-500"

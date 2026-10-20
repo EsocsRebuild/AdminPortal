@@ -33,42 +33,54 @@ export default async function MediaGalleryPage() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {media.map((item) => (
-            <Card
-              key={item.id}
-              className="group overflow-hidden border-slate-800 bg-slate-900/80 transition-all hover:border-slate-700"
-            >
-              <div className="relative flex h-40 items-center justify-center overflow-hidden border-b border-slate-800 bg-slate-950">
-                <Image
-                  src={item.cdnUrl}
-                  alt={item.fileName}
-                  width={400}
-                  height={200}
-                  unoptimized
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <CardContent className="space-y-2 p-3.5">
-                <div className="flex items-center justify-between">
-                  <span className="max-w-44 truncate text-xs font-semibold text-white">{item.fileName}</span>
-                  <span className="font-mono text-2xs text-slate-400">
-                    {(item.fileSize / 1024).toFixed(0)} KB
-                  </span>
+        {media.length === 0 ? (
+          <Card className="border-slate-800 bg-slate-900/60 p-10 text-center">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-amber-500/10 text-amber-400">
+              <ImageIcon className="size-6" />
+            </div>
+            <h3 className="mt-3 text-sm font-semibold text-white">No media assets uploaded yet</h3>
+            <p className="mt-1 text-xs text-slate-400">
+              Upload church banners, flyers, and logos to use across public website events and bulletins.
+            </p>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+            {media.map((item) => (
+              <Card
+                key={item.id}
+                className="group overflow-hidden border-slate-800 bg-slate-900/80 transition-all hover:border-slate-700"
+              >
+                <div className="relative flex h-40 items-center justify-center overflow-hidden border-b border-slate-800 bg-slate-950">
+                  <Image
+                    src={item.cdnUrl}
+                    alt={item.fileName}
+                    width={400}
+                    height={200}
+                    unoptimized
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-                <div className="flex items-center justify-between text-2xs text-slate-500">
-                  <span>{new Date(item.uploadedAt).toLocaleDateString()}</span>
-                  <Tooltip content="Copies asset CDN URL to clipboard">
-                    <button className="flex items-center gap-1 font-medium text-emerald-400 hover:text-emerald-300">
-                      <Copy className="size-3" />
-                      Copy CDN URL
-                    </button>
-                  </Tooltip>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                <CardContent className="space-y-2 p-3.5">
+                  <div className="flex items-center justify-between">
+                    <span className="max-w-44 truncate text-xs font-semibold text-white">{item.fileName}</span>
+                    <span className="font-mono text-2xs text-slate-400">
+                      {(item.fileSize / 1024).toFixed(0)} KB
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-2xs text-slate-500">
+                    <span>{new Date(item.uploadedAt).toLocaleDateString()}</span>
+                    <Tooltip content="Copies asset CDN URL to clipboard">
+                      <button className="flex items-center gap-1 font-medium text-emerald-400 hover:text-emerald-300">
+                        <Copy className="size-3" />
+                        Copy CDN URL
+                      </button>
+                    </Tooltip>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </TooltipProvider>
   );

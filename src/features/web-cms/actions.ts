@@ -166,11 +166,8 @@ export async function vetContentAction(
     revalidatePath("/admin-web/events");
     revalidatePath("/admin-web/vetting");
     return ok({ success: true, newStatus });
-  } catch {
-    // If publish endpoint differed
-    revalidatePath("/admin-web/dashboard");
-    revalidatePath("/admin-web/events");
-    revalidatePath("/admin-web/vetting");
-    return ok({ success: true, newStatus });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to update publication status on backend server.";
+    return fail("UNAVAILABLE", msg);
   }
 }

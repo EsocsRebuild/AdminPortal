@@ -281,7 +281,7 @@ export default function LandingPage() {
                         Main Church Governance Admin
                       </h3>
                       <p className="text-xs font-medium text-amber-400">
-                        Scoped Unit: Mount Zion Parish (HQ) · X-Portal-Type: admin-main
+                        Scoped Unit: Assigned Ecclesiastical Jurisdiction · X-Portal-Type: admin-main
                       </p>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <h4 className="font-mono text-3xl font-extrabold text-white">1,482</h4>
-                      <p className="text-2xs text-slate-400">Sunday Service · Mount Zion Cathedral</p>
+                      <p className="text-2xs text-slate-400">Sunday Divine Service · Main Sanctuary</p>
                     </div>
                     <div className="grid grid-cols-3 gap-2 pt-2 text-center text-2xs">
                       <div className="rounded border border-slate-800 bg-slate-950 p-2">
@@ -424,7 +424,7 @@ export default function LandingPage() {
                       <CheckCircle2 className="size-4 text-emerald-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Surulere Parish Bulletin</h4>
+                      <h4 className="text-sm font-bold text-white">Parish Service Bulletin</h4>
                       <p className="text-2xs text-slate-400">Submitted by Media Team · 10 mins ago</p>
                     </div>
                     <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
@@ -479,7 +479,7 @@ export default function LandingPage() {
                       <CalendarDays className="size-4 text-purple-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">78th Mount Zion Revival</h4>
+                      <h4 className="text-sm font-bold text-white">Annual General Revival & Assembly</h4>
                       <p className="text-2xs text-slate-400">Oct 14 - Oct 21, 2026</p>
                     </div>
                     <div className="space-y-2 pt-1 text-2xs">

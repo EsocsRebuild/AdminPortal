@@ -170,13 +170,13 @@ export function QuickTipsModal({
                   <div className="flex items-center gap-2">
                     <span className="size-2 rounded-full bg-emerald-500" />
                     <h5 className="text-sm font-semibold text-foreground">
-                      Parish Administrators (e.g. Mount Zion)
+                      Parish Administrators
                     </h5>
                   </div>
                   <p className="mt-1.5 text-xs text-muted-foreground">
-                    Your account is permanently scoped to your local parish. You only see Mount Zion&apos;s
+                    Your account is permanently scoped to your local parish. You only see your assigned unit&apos;s
                     members, attendance figures, finances, and forms. Submitting records automatically tags
-                    them to Mount Zion.
+                    them to your local jurisdiction.
                   </p>
                 </div>
 
