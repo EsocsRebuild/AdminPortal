@@ -350,3 +350,4 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
     </TooltipProvider>
   );
 }
+

@@ -1,4 +1,4 @@
-import { CheckCheck, Download, Plus } from "lucide-react";
+import { CheckCheck, Download } from "lucide-react";
 import type { Metadata } from "next";
 
 import { LiveHeadcountWidget } from "@/components/blocks/live-headcount-widget";
