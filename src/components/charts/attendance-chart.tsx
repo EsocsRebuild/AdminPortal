@@ -17,68 +17,8 @@ export interface AttendancePoint {
   notes?: string;
 }
 
-const mockWeeklyAttendance: AttendancePoint[] = [
-  {
-    date: "2026-08-02",
-    label: "Aug 2",
-    total: 320,
-    men: 110,
-    women: 140,
-    children: 70,
-    notes: "Regular Sunday service",
-  },
-  {
-    date: "2026-08-09",
-    label: "Aug 9",
-    total: 345,
-    men: 118,
-    women: 152,
-    children: 75,
-    notes: "Youth Sunday",
-  },
-  { date: "2026-08-16", label: "Aug 16", total: 310, men: 105, women: 135, children: 70 },
-  {
-    date: "2026-08-23",
-    label: "Aug 23",
-    total: 360,
-    men: 122,
-    women: 160,
-    children: 78,
-    notes: "Thanksgiving service",
-  },
-  { date: "2026-08-30", label: "Aug 30", total: 375, men: 128, women: 165, children: 82 },
-  {
-    date: "2026-09-06",
-    label: "Sep 6",
-    total: 390,
-    men: 135,
-    women: 170,
-    children: 85,
-    notes: "First Sunday of the Month",
-  },
-  { date: "2026-09-13", label: "Sep 13", total: 382, men: 130, women: 168, children: 84 },
-  {
-    date: "2026-09-20",
-    label: "Sep 20",
-    total: 410,
-    men: 142,
-    women: 178,
-    children: 90,
-    notes: "Annual Mothers' Day Service",
-  },
-  {
-    date: "2026-09-27",
-    label: "Sep 27",
-    total: 425,
-    men: 146,
-    women: 185,
-    children: 94,
-    notes: "Record attendance",
-  },
-];
-
 export function AttendanceChart({
-  data = mockWeeklyAttendance,
+  data = [],
   className,
 }: {
   data?: AttendancePoint[];
@@ -86,6 +26,10 @@ export function AttendanceChart({
 }) {
   const [activeSeries, setActiveSeries] = React.useState<"total" | "breakdown">("total");
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
+
+  if (!data || data.length === 0) {
+    return null;
+  }
 
   const maxVal = Math.max(...data.map((d) => d.total)) * 1.15;
   const width = 640;

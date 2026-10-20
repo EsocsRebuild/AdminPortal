@@ -15,27 +15,22 @@ export interface GivingWeeklyPoint {
   building: number;
 }
 
-const mockGivingData: GivingWeeklyPoint[] = [
-  { week: "Week 34", tithes: 1850000, offering: 620000, welfare: 210000, building: 450000 },
-  { week: "Week 35", tithes: 2100000, offering: 710000, welfare: 250000, building: 500000 },
-  { week: "Week 36", tithes: 1950000, offering: 680000, welfare: 190000, building: 480000 },
-  { week: "Week 37", tithes: 2400000, offering: 850000, welfare: 310000, building: 620000 },
-  { week: "Week 38", tithes: 2650000, offering: 920000, welfare: 340000, building: 700000 },
-  { week: "Week 39", tithes: 2900000, offering: 980000, welfare: 380000, building: 850000 },
-];
-
 function formatCurrency(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }
 
 export function GivingChart({
-  data = mockGivingData,
+  data = [],
   className,
 }: {
   data?: GivingWeeklyPoint[];
   className?: string;
 }) {
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
+
+  if (!data || data.length === 0) {
+    return null;
+  }
 
   const totals = data.map((d) => d.tithes + d.offering + d.welfare + d.building);
   const maxTotal = Math.max(...totals) * 1.15;

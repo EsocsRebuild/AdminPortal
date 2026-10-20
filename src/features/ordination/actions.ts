@@ -32,32 +32,9 @@ export async function nominateCandidateAction(
     });
     revalidatePath("/ordination");
     return ok(res, "Candidate nomination submitted");
-  } catch {
-    const mock: OrdinationCandidate = {
-      id: `ord_${Date.now()}`,
-      memberId: input.memberId,
-      fullName: input.fullName,
-      churchRankCurrent: "Brother",
-      rankTarget: input.rankTarget,
-      parishId: "parish-mount-zion",
-      parishName: input.parishName,
-      districtName: "Lagos Central District",
-      stageCurrent: "STAGE_1_PARISH",
-      yearsOfService: input.yearsOfService,
-      vettingHistory: [
-        {
-          stage: "STAGE_1_PARISH",
-          action: "APPROVED",
-          handlerId: "usr_handler_mz",
-          notes: input.recommendationNotes,
-          timestamp: new Date().toISOString(),
-        },
-      ],
-      nominatedAt: new Date().toISOString(),
-      nominatedByHandlerId: "usr_handler_mz",
-    };
-    revalidatePath("/ordination");
-    return ok(mock, "Candidate nomination submitted");
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to submit candidate nomination to the backend";
+    return fail("UNAVAILABLE", message);
   }
 }
 

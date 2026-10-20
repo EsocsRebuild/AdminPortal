@@ -57,7 +57,7 @@ export async function listEvents(): Promise<ChurchEvent[]> {
           date: dateStr,
           time: timeStr,
           location: evt.location || "Main Sanctuary",
-          unitName: "Mount Zion Parish",
+          unitName: evt.location || "Local Assembly",
           capacity: evt.capacity ?? undefined,
           registeredCount: evt.registrationEnabled ? 0 : undefined,
           isRecurring: !!evt.recurrenceRule,

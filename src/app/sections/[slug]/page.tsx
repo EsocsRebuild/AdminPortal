@@ -36,69 +36,6 @@ interface SectionData {
   }>;
 }
 
-const mockSections: Record<string, SectionData> = {
-  "women-fellowship": {
-    slug: "women-fellowship",
-    name: "Women Fellowship (National Wing)",
-    motto: "Virtue, Prayer, and Christian Stewardship",
-    vision: "To raise spiritually vibrant, virtuous women of integrity in the church and society.",
-    executiveBoard: [
-      { name: "Mother in Israel E. A. Adebayo", role: "National President" },
-      { name: "Senior Mother O. F. Williams", role: "General Secretary" },
-      { name: "Mother S. O. Balogun", role: "National Treasurer" },
-    ],
-    programmes: [
-      {
-        title: "Annual National Women Conference 2026",
-        date: "November 12 - 15, 2026",
-        location: "Cathedral HQ, Lagos & Virtual Stream",
-        description: "4-day spiritual retreat focusing on Christian marriage, health, and leadership.",
-        registrationOpen: true,
-        formSlug: "women-conference-2026",
-      },
-    ],
-    news: [
-      {
-        id: "wf-1",
-        title: "Women Fellowship Welfare Outreach Donates N2M to Orphanages",
-        date: "September 28, 2026",
-        category: "Welfare & Charity",
-        excerpt:
-          "The National Women Executive Board presented food items and medical supplies across Lagos state.",
-      },
-    ],
-  },
-  "youth-fellowship": {
-    slug: "youth-fellowship",
-    name: "Youth Fellowship & Young Adults Wing",
-    motto: "Arise, Shine; For Thy Light Is Come",
-    vision: "Mobilizing a generation of kingdom-minded youths for spiritual impact and excellence.",
-    executiveBoard: [
-      { name: "Bro. Emmanuel Okeke", role: "National Youth Leader" },
-      { name: "Sis. Grace Danjuma", role: "Secretary General" },
-    ],
-    programmes: [
-      {
-        title: "National Youth Leadership & Empowerment Retreat",
-        date: "December 4 - 6, 2026",
-        location: "ESOCS Youth Camp Ground, Abeokuta",
-        description: "Capacity building, tech skills workshops, and intense spiritual revival.",
-        registrationOpen: true,
-        formSlug: "youth-retreat-2026",
-      },
-    ],
-    news: [
-      {
-        id: "yf-1",
-        title: "Registration Opens for 2026 Youth Camp (Seat Limit: 120)",
-        date: "October 1, 2026",
-        category: "Events",
-        excerpt: "Early bird registration is now open with live seat capacity tracking.",
-      },
-    ],
-  },
-};
-
 import { backend } from "@/server/backend";
 
 async function getSectionData(slug: string): Promise<SectionData | null> {
@@ -145,10 +82,10 @@ async function getSectionData(slug: string): Promise<SectionData | null> {
       };
     }
   } catch {
-    // Fall back to seeded mock sections if offline or unseeded
+    // Network fallback
   }
 
-  return mockSections[slug] ?? null;
+  return null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

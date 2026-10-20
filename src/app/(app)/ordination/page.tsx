@@ -4,6 +4,7 @@ import { Award, Plus, Building2, ShieldCheck, UserCheck, Filter, ChevronRight } 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
+import { EmptyState } from "@/components/ui/empty-state";
 import { getOrdinationCandidates } from "@/features/ordination/queries";
 import { CandidateStageBar } from "@/features/ordination/components/candidate-stage-bar";
 
@@ -90,49 +91,67 @@ export default async function OrdinationOverviewPage() {
             <span className="font-mono text-2xs text-muted-foreground">Audit Scope: All Church Units</span>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {candidates.map((c) => (
-              <Card
-                key={c.id}
-                className="bg-card overflow-hidden border-border transition-all hover:border-primary/40"
-              >
-                <CardContent className="space-y-4 p-5">
-                  <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-base font-bold text-foreground">{c.fullName}</span>
-                        <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-500">
-                          TARGET RANK: {c.rankTarget}
-                        </span>
+          {candidates.length === 0 ? (
+            <Card className="border-border">
+              <CardContent className="p-6">
+                <EmptyState
+                  icon={<Award className="size-6 text-amber-500" />}
+                  title="No Ordination Candidates in Pipeline"
+                  description="There are currently no candidates actively undergoing the 4-stage ecclesiastical rank promotion vetting process."
+                  action={
+                    <Button className="gap-1.5 bg-primary text-xs font-medium text-primary-foreground shadow-md hover:bg-primary/90">
+                      <Plus className="size-4" />
+                      Nominate Candidate
+                    </Button>
+                  }
+                />
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              {candidates.map((c) => (
+                <Card
+                  key={c.id}
+                  className="bg-card overflow-hidden border-border transition-all hover:border-primary/40"
+                >
+                  <CardContent className="space-y-4 p-5">
+                    <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-base font-bold text-foreground">{c.fullName}</span>
+                          <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-500">
+                            TARGET RANK: {c.rankTarget}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Current Rank: <strong className="text-foreground">{c.churchRankCurrent}</strong> •
+                          Parish: <strong className="text-foreground">{c.parishName}</strong> ({c.districtName})
+                        </p>
+                        <p className="text-2xs text-muted-foreground">
+                          Service Tenure: {c.yearsOfService} Years • Nominated on:{" "}
+                          {new Date(c.nominatedAt).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Current Rank: <strong className="text-foreground">{c.churchRankCurrent}</strong> •
-                        Parish: <strong className="text-foreground">{c.parishName}</strong> ({c.districtName})
-                      </p>
-                      <p className="text-2xs text-muted-foreground">
-                        Service Tenure: {c.yearsOfService} Years • Nominated on:{" "}
-                        {new Date(c.nominatedAt).toLocaleDateString()}
-                      </p>
+
+                      <div className="flex shrink-0 items-center gap-2">
+                        <Tooltip content="Inspect vetting history and advance clearance stage">
+                          <Link href={`/ordination/candidates/${c.id}`}>
+                            <Button variant="outline" className="hover:bg-muted gap-1.5 border-border text-xs">
+                              Open Candidate Docket
+                              <ChevronRight className="size-3.5" />
+                            </Button>
+                          </Link>
+                        </Tooltip>
+                      </div>
                     </div>
 
-                    <div className="flex shrink-0 items-center gap-2">
-                      <Tooltip content="Inspect vetting history and advance clearance stage">
-                        <Link href={`/ordination/candidates/${c.id}`}>
-                          <Button variant="outline" className="hover:bg-muted gap-1.5 border-border text-xs">
-                            Open Candidate Docket
-                            <ChevronRight className="size-3.5" />
-                          </Button>
-                        </Link>
-                      </Tooltip>
-                    </div>
-                  </div>
-
-                  {/* 4-Stage Progress Line */}
-                  <CandidateStageBar currentStage={c.stageCurrent} />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    {/* 4-Stage Progress Line */}
+                    <CandidateStageBar currentStage={c.stageCurrent} />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </TooltipProvider>

@@ -36,85 +36,6 @@ interface ParishData {
   givingFundId: string;
 }
 
-const mockParishes: Record<string, ParishData> = {
-  "mount-zion": {
-    slug: "mount-zion",
-    name: "Mount Zion Parish",
-    tagline: "A sanctuary of worship, spiritual growth, and community transformation.",
-    address: "12 Mount Zion Way, Surulere, Lagos, Nigeria",
-    phone: "+234 (0) 803 123 4567",
-    email: "mountzion@esocs.org",
-    pastor: {
-      name: "Senior Apostle D. A. Okunola",
-      title: "Parish Pastor & Sub-District Chairman",
-    },
-    services: [
-      {
-        title: "Sunday Divine Service & Communion",
-        day: "Sundays",
-        time: "09:00 AM - 12:30 PM",
-        description: "Join us for praise, worship, prophetic teaching, and holy communion.",
-      },
-      {
-        title: "Midweek Power & Mercy Hour",
-        day: "Wednesdays",
-        time: "05:30 PM - 07:00 PM",
-        description: "Intercessory prayers, deliverance, and spiritual warfare teachings.",
-      },
-      {
-        title: "Koinonia Fellowship & Youth Bible Study",
-        day: "Fridays",
-        time: "06:00 PM - 07:30 PM",
-        description: "Interactive word study, mentoring, and fellowship for youths.",
-      },
-    ],
-    announcements: [
-      {
-        id: "1",
-        title: "Annual Mount Zion Covenant Convention 2026",
-        date: "October 15 - 18, 2026",
-        summary: "Join us for 4 days of divine visitation, healing, and prophetic empowerment.",
-      },
-      {
-        id: "2",
-        title: "Harvest & Stewardship Committee Registration",
-        date: "October 8, 2026",
-        summary: "Volunteer members are invited to register for the upcoming Harvest Planning Team.",
-      },
-    ],
-    givingFundId: "fund-mount-zion-general",
-  },
-  surulere: {
-    slug: "surulere",
-    name: "Surulere Central Parish",
-    tagline: "Empowering lives through the eternal Gospel of Christ.",
-    address: "88 Western Avenue, Surulere, Lagos, Nigeria",
-    phone: "+234 (0) 802 987 6543",
-    email: "surulere@esocs.org",
-    pastor: {
-      name: "Special Apostle F. A. Johnson",
-      title: "Parish Minister-in-Charge",
-    },
-    services: [
-      {
-        title: "Sunday Restoration Service",
-        day: "Sundays",
-        time: "08:30 AM - 11:45 AM",
-        description: "Encounter God's presence through sacred songs and anointed preaching.",
-      },
-    ],
-    announcements: [
-      {
-        id: "3",
-        title: "Parish Welfare Outreach Drive",
-        date: "October 12, 2026",
-        summary: "Food distribution and free medical checks for community elders.",
-      },
-    ],
-    givingFundId: "fund-surulere-general",
-  },
-};
-
 import { backend } from "@/server/backend";
 
 async function getParishData(slug: string): Promise<ParishData | null> {
@@ -177,7 +98,7 @@ async function getParishData(slug: string): Promise<ParishData | null> {
     // Network fallback
   }
 
-  return mockParishes[slug] ?? null;
+  return null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

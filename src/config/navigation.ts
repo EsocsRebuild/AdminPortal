@@ -1,13 +1,17 @@
 import {
   BookOpen,
+  Calendar,
   CalendarDays,
   CheckCheck,
   FileText,
   FormInput,
+  Globe,
+  Image as ImageIcon,
   Layers,
   LayoutDashboard,
   LayoutTemplate,
   Mail,
+  Megaphone,
   Newspaper,
   Palette,
   ScrollText,
@@ -109,6 +113,34 @@ export const navigation: NavGroup[] = [
   {
     title: "Website & Content",
     items: [
+      {
+        title: "Web Studio",
+        href: "/admin-web/dashboard",
+        icon: Globe,
+        permission: "content:view",
+        keywords: ["studio", "cms", "events", "announcements", "public"],
+      },
+      {
+        title: "Events Studio",
+        href: "/admin-web/events",
+        icon: Calendar,
+        permission: "events:manage",
+        keywords: ["events", "services", "publish", "web"],
+      },
+      {
+        title: "Programmes Schedule",
+        href: "/admin-web/programmes",
+        icon: Megaphone,
+        permission: "content:manage",
+        keywords: ["programmes", "bulletin", "quarterly", "themes"],
+      },
+      {
+        title: "Media Asset Library",
+        href: "/admin-web/media",
+        icon: ImageIcon,
+        permission: "content:view",
+        keywords: ["media", "banners", "gallery", "photos", "assets"],
+      },
       {
         title: "Sermons & Media",
         href: "/content/sermons",
