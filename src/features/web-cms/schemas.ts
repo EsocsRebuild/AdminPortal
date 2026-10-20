@@ -31,6 +31,17 @@ export const vettingDecisionSchema = z.object({
   reviewNotes: z.string().optional(),
 });
 
+export const bulletinInputSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters").max(150, "Title is too long"),
+  category: z.string().min(2, "Category is required"),
+  summary: z.string().min(10, "Summary must be at least 10 characters").max(500, "Summary is too long"),
+  imageUrl: z.string().url("Invalid image URL").optional().or(z.literal("")),
+  ctaText: z.string().min(2, "Call-to-action text is required"),
+  ctaLink: z.string().min(1, "Target link is required"),
+  isUrgent: z.boolean().default(false),
+});
+
 export type EventInput = z.infer<typeof eventInputSchema>;
 export type ProgrammeInput = z.infer<typeof programmeInputSchema>;
 export type VettingDecisionInput = z.infer<typeof vettingDecisionSchema>;
+export type BulletinInput = z.infer<typeof bulletinInputSchema>;

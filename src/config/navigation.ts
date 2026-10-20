@@ -1,4 +1,5 @@
 import {
+  Award,
   BookOpen,
   Calendar,
   CalendarDays,
@@ -107,6 +108,17 @@ export const navigation: NavGroup[] = [
         href: "/sections",
         icon: Layers,
         keywords: ["women", "youth", "mzys", "choir", "directorates"],
+      },
+    ],
+  },
+  {
+    title: "Ordination & Ministry",
+    items: [
+      {
+        title: "Ordination Pipeline",
+        href: "/ordination",
+        icon: Award,
+        keywords: ["ordination", "candidates", "vetting", "dossier", "ranks", "rabbi", "aladura", "board"],
       },
     ],
   },

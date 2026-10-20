@@ -135,7 +135,7 @@ export function RoleEditor({ role }: { role?: Role }) {
       ))}
 
       {canEdit && (
-        <div className="sticky bottom-3 z-20 flex flex-wrap items-center justify-between gap-3 rounded-panel border border-border bg-surface-raised/95 p-3 shadow-lg backdrop-blur">
+        <div className="sticky bottom-3 z-20 flex flex-wrap items-center justify-between gap-3 rounded-panel border border-border bg-surface-raised p-3">
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             {sensitive.length > 0 ? (
               <>

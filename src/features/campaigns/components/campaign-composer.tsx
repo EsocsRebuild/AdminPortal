@@ -233,7 +233,7 @@ export function CampaignComposer({
       </AnimatePresence>
 
       {/* Step navigation */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/85 backdrop-blur-xl lg:left-[var(--spacing-sidebar)] lg:rail:left-[var(--spacing-rail)]">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background lg:left-[var(--spacing-sidebar)] lg:rail:left-[var(--spacing-rail)]">
         <div className="mx-auto flex max-w-app items-center justify-between gap-3 px-gutter py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <Button
             variant="ghost"

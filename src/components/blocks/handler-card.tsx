@@ -39,7 +39,7 @@ export function HandlerCard({
     sessionUser?.role?.name?.toLowerCase().includes("prelate");
 
   return (
-    <Card className="relative overflow-hidden border-l-4 border-l-primary bg-linear-to-r from-surface via-surface/95 to-surface-muted/60 p-4 shadow-sm backdrop-blur-md transition-all duration-200 hover:shadow-md sm:p-5">
+    <Card className="relative overflow-hidden border border-l-4 border-border border-l-primary bg-surface p-4 sm:p-5">
       {/* Decorative subtle ambient gradient ring */}
       <div className="pointer-events-none absolute -top-12 -right-12 size-36 rounded-full bg-primary/5 blur-2xl" />
 

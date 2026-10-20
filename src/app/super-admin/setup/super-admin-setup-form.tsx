@@ -60,7 +60,7 @@ export function SuperAdminSetupForm() {
 
   if (success) {
     return (
-      <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900/90 p-6 text-center shadow-2xl backdrop-blur-md">
+      <div className="space-y-4 rounded-xl border border-amber-500/40 bg-slate-900 p-6 text-center">
         <CheckCircle2 className="mx-auto size-12 animate-bounce text-amber-400" />
         <h3 className="text-lg font-bold text-white">Super Admin Authority Initialized!</h3>
         <p className="text-xs text-amber-200">

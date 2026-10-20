@@ -31,7 +31,7 @@ export default async function WebStudioDashboardPage() {
     <TooltipProvider>
       <div className="space-y-6">
         {/* Onboarding Guidance Banner for Web Administrators */}
-        <div className="relative overflow-hidden rounded-2xl border border-amber-400/30 bg-linear-to-r from-slate-900 via-slate-900 to-slate-950 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="relative overflow-hidden rounded-2xl border border-amber-400/30 bg-slate-900 p-6">
           <div className="relative z-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div className="max-w-2xl space-y-2">
               <div className="flex flex-wrap items-center gap-2">

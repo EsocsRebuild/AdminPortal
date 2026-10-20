@@ -55,7 +55,7 @@ export default async function WebAdminLoginPage() {
         </div>
 
         {sessionUser && (
-          <div className="rounded-xl border border-amber-400/40 bg-slate-900/95 p-4 shadow-xl backdrop-blur-md">
+          <div className="rounded-xl border border-amber-400/40 bg-slate-900 p-4">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0 space-y-0.5">
                 <span className="flex items-center gap-1.5 text-2xs font-bold tracking-wider text-amber-400 uppercase">

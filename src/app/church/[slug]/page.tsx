@@ -140,7 +140,7 @@ export default async function ParishPublicPage({ params }: { params: Promise<{ s
       {session && (
         <aside
           aria-label="Admin Preview Mode"
-          className="sticky top-0 z-50 flex items-center justify-between border-b border-amber-500/30 bg-slate-900/95 px-4 py-2.5 backdrop-blur-xl sm:px-8"
+          className="sticky top-0 z-50 flex items-center justify-between border-b border-amber-500/30 bg-slate-900 px-4 py-2.5 sm:px-8"
         >
           <div className="flex items-center gap-2.5">
             <span className="flex size-2 animate-pulse rounded-full bg-emerald-400" />
@@ -171,7 +171,7 @@ export default async function ParishPublicPage({ params }: { params: Promise<{ s
       )}
 
       {/* 2. Official Public Website Navbar */}
-      <header className="border-b border-slate-800/80 bg-slate-900/80 px-4 backdrop-blur-xl md:px-8">
+      <header className="border-b border-slate-800 bg-slate-900 px-4 md:px-8">
         <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4">
           <Link href={`/church/${parish.slug}`} className="group flex items-center gap-3">
             <Crest

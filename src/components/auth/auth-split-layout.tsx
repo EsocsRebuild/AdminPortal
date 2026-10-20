@@ -104,11 +104,11 @@ export function AuthSplitLayout({
 
         {/* Header Tag Pill & Crest */}
         <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2 rounded-full border border-amber-400/30 bg-slate-900/90 px-3.5 py-1.5 text-xs font-bold tracking-wider text-amber-400 uppercase shadow-md backdrop-blur-md">
+          <div className="flex items-center gap-2 rounded-full border border-amber-400/30 bg-slate-900 px-3.5 py-1.5 text-xs font-bold tracking-wider text-amber-400 uppercase">
             <span className="size-2 animate-ping rounded-full bg-amber-400" />
             {pillTag}
           </div>
-          <Crest size={52} className="shadow-xl ring-2 shadow-amber-950/60 ring-amber-400/80" />
+          <Crest size={52} className="ring-2 ring-amber-400/80" />
         </div>
 
         {/* Core Narrative & Feature Highlights */}
@@ -130,7 +130,7 @@ export function AuthSplitLayout({
               return (
                 <li
                   key={b.title}
-                  className="flex items-start gap-4 rounded-xl border border-slate-700/80 bg-slate-900/90 p-3.5 shadow-xl backdrop-blur-md transition-all hover:border-amber-500/40 hover:bg-slate-900/95"
+                  className="flex items-start gap-4 rounded-xl border border-slate-700 bg-slate-900 p-3.5 transition-all hover:border-amber-500/40"
                 >
                   <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-amber-400/15 text-amber-400 ring-1 ring-amber-400/40">
                     <Icon className="size-5" />
@@ -147,7 +147,7 @@ export function AuthSplitLayout({
 
         {/* Ecclesiastical Scripture Card */}
         {quote && (
-          <figure className="relative z-10 grid gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 p-4 pt-5 backdrop-blur-md">
+          <figure className="relative z-10 grid gap-2 rounded-xl border border-slate-700 bg-slate-900 p-4 pt-5">
             <blockquote className="font-brand text-base font-medium text-white italic">
               {quote.text}
             </blockquote>

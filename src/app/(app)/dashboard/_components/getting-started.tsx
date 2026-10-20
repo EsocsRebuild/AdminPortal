@@ -89,7 +89,7 @@ export function GettingStarted({ steps }: { steps: SetupStep[] }) {
                   <li key={s.id}>
                     <Link
                       href={s.href}
-                      className="group flex min-h-12 items-center gap-3 rounded-control border border-border bg-surface/80 px-3 py-2 backdrop-blur transition-all duration-200 hover:border-border-strong hover:bg-surface focus-visible:outline-2 focus-visible:outline-ring"
+                      className="group flex min-h-12 items-center gap-3 rounded-control border border-border bg-surface px-3 py-2 transition-all duration-200 hover:border-border-strong hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-ring"
                     >
                       <span
                         className={cn(

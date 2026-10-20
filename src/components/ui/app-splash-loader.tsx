@@ -3,38 +3,37 @@
 import * as React from "react";
 import Image from "next/image";
 import { Crest } from "@/components/icons/logo";
-import { ArrowRight, CheckCircle2, Sparkles, Building2, ShieldCheck, Award, UsersRound } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sparkles, Building2, ShieldCheck, UsersRound } from "lucide-react";
 
 const steps = [
   {
     at: 0,
-    title: "Engine Initialization",
-    text: "Initializing Ecclesiastical Governance Core...",
+    title: "Holy Order Connection",
+    text: "Connecting to Holy Order Unit & Parish Ledger...",
     icon: Building2,
   },
   {
-    at: 20,
-    title: "Unit & Ledger Sync",
-    text: "Connecting to Holy Order Unit & Parish Ledger...",
+    at: 25,
+    title: "Ecclesiastical Security",
+    text: "Verifying Handler Credentials & Audit Traceability...",
     icon: ShieldCheck,
   },
   {
-    at: 45,
-    title: "Audit Traceability",
-    text: "Verifying Handler Workspace & Audit Traceability...",
-    icon: Award,
-  },
-  {
-    at: 70,
-    title: "Record Management",
-    text: "Loading Member & Ordination Candidate Records...",
+    at: 55,
+    title: "Registry & Records",
+    text: "Synchronizing Member & Ordination Candidate Records...",
     icon: UsersRound,
   },
-  { at: 90, title: "Portal Interface", text: "Preparing The ESOCS Administration System...", icon: Sparkles },
+  {
+    at: 80,
+    title: "Interface Assembly",
+    text: "Preparing Administration & Content Publishing Core...",
+    icon: Sparkles,
+  },
   {
     at: 100,
     title: "Platform Ready",
-    text: "Welcome to The ESOCS Administration Portal",
+    text: "Welcome to The Eternal Sacred Order of the Cherubim and Seraphim",
     icon: CheckCircle2,
   },
 ];
@@ -55,180 +54,102 @@ export function AppSplashLoader() {
   ];
 
   React.useEffect(() => {
-    // Brisk 6.5-second duration for optimal loading speed and visual polish
     const startTime = Date.now();
-    const duration = 6500; // 6.5s energetic pace
+    const duration = 2800; // Crisp, prompt pace
 
-    // Fast 1.4-second image cross-fade interval
-    const bgInterval = setInterval(() => {
-      setBgIndex((prev) => (prev + 1) % images.length);
-    }, 1400);
-
-    const progressInterval = setInterval(() => {
+    const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const pct = Math.min(100, Math.floor((elapsed / duration) * 100));
-      setProgress(pct);
+      const rawPct = Math.min(100, Math.floor((elapsed / duration) * 100));
 
-      // Update active status milestone
-      const matchedStep = [...steps].reverse().find((s) => pct >= s.at);
-      if (matchedStep) {
-        setCurrentStepText(matchedStep.text);
+      setProgress(rawPct);
+
+      const activeStep = steps
+        .slice()
+        .reverse()
+        .find((s) => rawPct >= s.at);
+      if (activeStep) {
+        setCurrentStepText(activeStep.text);
       }
 
-      if (pct >= 100) {
-        clearInterval(progressInterval);
-        clearInterval(bgInterval);
+      const nextBg = Math.floor((rawPct / 100) * images.length) % images.length;
+      setBgIndex(nextBg);
+
+      if (rawPct >= 100) {
+        clearInterval(interval);
+        setFadingOut(true);
         setTimeout(() => {
-          setFadingOut(true);
-          setTimeout(() => {
-            setMounted(false);
-          }, 500);
-        }, 300);
+          setMounted(false);
+        }, 350);
       }
-    }, 20);
+    }, 40);
 
-    return () => {
-      clearInterval(progressInterval);
-      clearInterval(bgInterval);
-    };
+    return () => clearInterval(interval);
   }, [images.length]);
-
-  const handleSkip = () => {
-    setFadingOut(true);
-    setTimeout(() => {
-      setMounted(false);
-    }, 300);
-  };
 
   if (!mounted) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-999999 flex flex-col justify-between overflow-hidden bg-slate-950 text-white transition-opacity duration-500 ${
-        fadingOut ? "pointer-events-none opacity-0" : "opacity-100"
+      role="status"
+      aria-label="Loading platform"
+      className={`fixed inset-0 z-99999 flex flex-col items-center justify-center overflow-hidden bg-slate-950 transition-opacity duration-300 ${
+        fadingOut ? "opacity-0" : "opacity-100"
       }`}
     >
-      {/* Cinematic Media Background Slideshow with Ultra Deep Frosted Blur */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        {images.map((src, idx) => (
-          <div
-            key={src}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              idx === bgIndex ? "scale-110 opacity-45" : "scale-100 opacity-0"
-            }`}
-          >
-            <Image
-              src={src}
-              alt="ESOCS Sanctuary Background"
-              fill
-              priority
-              className="object-cover object-center blur-2xl contrast-125 saturate-125 filter"
-            />
-          </div>
-        ))}
-        {/* Ultra Deep Backdrop Blur & Dark Gradient Overlays */}
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[80px]" />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/85 to-slate-950/70" />
-        <div className="bg-radial-vignette absolute inset-0 opacity-95" />
+      {/* Background imagery with solid high-contrast dark overlay - no blur */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={images[bgIndex]}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-20 transition-opacity duration-500"
+        />
+        <div className="absolute inset-0 bg-slate-950/90" />
       </div>
 
-      {/* Top Header Bar */}
-      <div className="relative z-10 flex items-center justify-between p-6 md:p-8">
-        <div className="flex items-center gap-3">
-          <Crest size={44} priority className="shadow-xl ring-2 shadow-amber-950/60 ring-amber-400/80" />
-          <div className="flex flex-col">
-            <span className="font-brand text-xl font-extrabold tracking-tight text-white">THE ESOCS</span>
-            <span className="text-2xs font-bold tracking-widest text-amber-400 uppercase">
-              Administration System
-            </span>
-          </div>
+      {/* Main Solid Architectural Content Card - Sharp 1px Border, No Heavy Box-Shadow */}
+      <div className="relative z-10 mx-4 flex max-w-lg flex-col items-center rounded-xl border border-slate-800 bg-slate-900 p-8 text-center sm:p-10">
+        {/* Sacred Official Crest */}
+        <div className="relative mb-5 flex size-24 items-center justify-center rounded-xl border border-amber-500/30 bg-slate-950 p-3 sm:size-28">
+          <Crest className="size-full text-amber-400" />
         </div>
 
-        <button
-          onClick={handleSkip}
-          className="flex items-center gap-2 rounded-full border border-amber-400/30 bg-slate-900/90 px-4 py-2 text-xs font-bold text-amber-400 shadow-xl backdrop-blur-xl transition-all hover:bg-slate-800"
-        >
-          <span>Enter Portal Now</span>
-          <ArrowRight className="size-3.5" />
-        </button>
-      </div>
+        {/* Full Complete Name of the Holy Order */}
+        <h1 className="text-sm font-bold tracking-wider text-amber-400 uppercase sm:text-base">
+          The Eternal Sacred Order of the Cherubim and Seraphim
+        </h1>
+        <p className="mt-1 text-xs font-medium tracking-wide text-slate-400 uppercase">
+          Administration & Governance Portal
+        </p>
 
-      {/* Center Cinematic Loader Box */}
-      <div className="relative z-10 mx-auto my-auto flex max-w-xl flex-col items-center px-4 text-center">
-        {/* Outer Pulsing & Rotating Gold Emblem Rings */}
-        <div className="relative mb-8 flex items-center justify-center">
-          <div className="absolute size-36 animate-spin rounded-full border-2 border-amber-400/30 border-t-amber-400" />
-          <div className="absolute size-48 animate-spin rounded-full border border-amber-400/20 border-b-amber-400/60 [animation-direction:reverse] [animation-duration:8s]" />
-          <div className="absolute size-56 animate-pulse rounded-full bg-amber-400/10 blur-3xl" />
-
-          <Crest
-            size={96}
-            priority
-            className="shadow-[0_0_60px_rgba(251,191,36,0.7)] ring-4 ring-amber-400/90"
-          />
-        </div>
-
-        {/* Brand Title */}
-        <div className="mb-8 space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs font-extrabold tracking-widest text-amber-400 uppercase shadow-inner backdrop-blur-xl">
-            <Sparkles className="size-3.5 animate-pulse" />
-            Ecclesiastical Platform Loader
-          </div>
-          <h1 className="font-brand text-4xl font-extrabold tracking-tight text-white md:text-5xl">
-            Care for your{" "}
-            <span className="bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              Church
-            </span>
-          </h1>
-        </div>
-
-        {/* Progress Bar & Percentage Card */}
-        <div className="w-full space-y-4 rounded-2xl border border-slate-700/80 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-3xl">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-200">
-            <span className="max-w-[320px] truncate font-semibold text-amber-300">{currentStepText}</span>
-            <span className="font-mono text-base font-extrabold text-amber-400">{progress}%</span>
-          </div>
-
-          {/* Shimmering Progress Bar */}
-          <div className="relative h-3 w-full overflow-hidden rounded-full border border-slate-800 bg-slate-950 p-0.5 shadow-inner">
+        {/* Crisp Progress Bar */}
+        <div className="mt-6 w-full max-w-xs space-y-2">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
             <div
-              className="h-full rounded-full bg-linear-to-r from-amber-500 via-yellow-400 to-amber-300 shadow-[0_0_20px_#FBBF24] transition-all duration-150 ease-out"
+              className="h-full bg-linear-to-r from-amber-500 to-amber-300 transition-all duration-150 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
-
-          {/* Stage Milestones Checklist */}
-          <div className="grid grid-cols-5 gap-1.5 pt-2">
-            {steps.slice(0, 5).map((s) => {
-              const active = progress >= s.at;
-              return (
-                <div
-                  key={s.at}
-                  className={`flex flex-col items-center gap-1 rounded-lg border p-2 text-center transition-all ${
-                    active
-                      ? "border-amber-400/50 bg-amber-400/15 text-amber-300 shadow-md"
-                      : "border-slate-800 bg-slate-950/70 text-slate-500 opacity-60"
-                  }`}
-                >
-                  <s.icon
-                    className={`size-4 ${active ? "animate-pulse text-amber-400" : "text-slate-600"}`}
-                  />
-                  <span className="w-full truncate text-2xs font-semibold">{s.title}</span>
-                </div>
-              );
-            })}
+          <div className="flex items-center justify-between text-[0.6875rem] font-semibold tracking-wider text-slate-400 uppercase">
+            <span>Loading</span>
+            <span className="font-mono text-amber-400">{progress}%</span>
           </div>
         </div>
-      </div>
 
-      {/* Footer Scripture Banner */}
-      <div className="relative z-10 border-t border-slate-800/80 bg-slate-900/80 p-6 text-center backdrop-blur-xl md:p-8">
-        <p className="font-brand text-base font-medium text-white italic md:text-lg">
-          “Let all things be done decently and in order.”
-        </p>
-        <span className="mt-1 block text-2xs font-extrabold tracking-widest text-amber-400 uppercase">
-          1 Corinthians 14:40 · Eternal Sacred Order of the Cherubim & Seraphim
-        </span>
+        {/* Dynamic status line */}
+        <p className="mt-4 min-h-[1.5rem] text-xs font-medium text-slate-300">{currentStepText}</p>
+
+        {/* Quick Dismiss / Skip Button for Returning Admins */}
+        <button
+          type="button"
+          onClick={() => setMounted(false)}
+          className="hover:bg-slate-750 mt-6 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300 transition-colors hover:border-slate-600 hover:text-white"
+        >
+          <span>Continue</span>
+          <ArrowRight className="size-3" />
+        </button>
       </div>
     </div>
   );

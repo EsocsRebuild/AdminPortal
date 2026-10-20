@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 
 import { Providers } from "@/components/theme/providers";
+import { AppSplashLoader } from "@/components/ui/app-splash-loader";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { fontVariables } from "@/lib/fonts";
@@ -54,6 +55,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <script nonce={nonce} dangerouslySetInnerHTML={{ __html: preferencesScript }} />
       </head>
       <body>
+        <AppSplashLoader />
         <Providers nonce={nonce}>
           {children}
           <Toaster />

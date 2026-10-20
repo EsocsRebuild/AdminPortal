@@ -143,9 +143,7 @@ export function JurisdictionScopeBanner({
   const ScopeIcon = scopeDetails.icon;
 
   return (
-    <div
-      className={`relative overflow-hidden rounded-card border border-slate-800 bg-linear-to-r ${scopeDetails.accentColor} bg-slate-900/90 p-5 shadow-2xl backdrop-blur-3xl md:p-6`}
-    >
+    <div className="relative overflow-hidden rounded-card border border-slate-800 bg-slate-900 p-5 md:p-6">
       <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
         <div className="flex items-start gap-4">
           <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3.5 text-amber-400 shadow-xl">
@@ -158,7 +156,7 @@ export function JurisdictionScopeBanner({
                 {scopeDetails.title}
               </h2>
               <span
-                className={`rounded-full border px-3 py-1 text-2xs font-extrabold tracking-widest uppercase backdrop-blur-xl ${scopeDetails.badgeClass}`}
+                className={`rounded-full border px-3 py-1 text-2xs font-extrabold tracking-widest uppercase ${scopeDetails.badgeClass}`}
               >
                 {scopeDetails.badgeText}
               </span>
