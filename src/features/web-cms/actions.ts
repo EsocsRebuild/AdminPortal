@@ -1,15 +1,19 @@
-"server-only";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { backend } from "@/server/backend";
 import { type ActionResult, ok, fail } from "@/lib/result";
+import { requireSession } from "@/server/session";
+import { resolveUserUnit } from "@/server/units";
 import {
   eventInputSchema,
   programmeInputSchema,
   vettingDecisionSchema,
+  bulletinInputSchema,
   type EventInput,
   type ProgrammeInput,
   type VettingDecisionInput,
+  type BulletinInput,
 } from "./schemas";
 import type { WebEvent, WebProgramme } from "./types";
 
@@ -18,37 +22,76 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
   if (!check.success) {
     return fail("VALIDATION", "Invalid event parameters");
   }
+
+  const user = await requireSession();
+  const unitInfo = await resolveUserUnit(user.scopeUnitId);
+
+  const typeMap: Record<string, string> = {
+    REVIVAL: "Outreach",
+    SUNDAY_SERVICE: "Service",
+    FELLOWSHIP_RALLY: "Social",
+    CONFERENCE: "Conference",
+    SPECIAL_PROGRAMME: "Other",
+  };
+
+  const starts = new Date(check.data.startDate);
+  const ends = check.data.endDate
+    ? new Date(check.data.endDate)
+    : new Date(starts.getTime() + 3 * 3600 * 1000);
+
+  const payload = {
+    title: check.data.title,
+    type: typeMap[check.data.category] || "Service",
+    visibility: "Public",
+    summary: check.data.description,
+    description: check.data.description,
+    coverImageUrl: check.data.bannerUrl || null,
+    unitId: user.scopeUnitId || null,
+    location: check.data.venue || `${unitInfo.unitName} Sanctuary`,
+    isOnline: false,
+    startsAt: starts.toISOString(),
+    endsAt: ends.toISOString(),
+    timeZone: "Africa/Lagos",
+    allDay: false,
+    registrationEnabled: Boolean(check.data.registrationOpen),
+    capacity: check.data.ticketCapacity || null,
+  };
+
   try {
-    const res = await backend<WebEvent>("/web-cms/events", {
+    const res = await backend<{ id: string }>("/events", {
       method: "POST",
-      body: check.data,
+      body: payload,
     });
+
     revalidatePath("/admin-web/dashboard");
     revalidatePath("/admin-web/events");
     revalidatePath("/admin-web/vetting");
-    return ok(res, "Event submitted for vetting");
+
+    return ok(
+      {
+        id: res?.id || `evt_${Date.now()}`,
+        unitId: unitInfo.unitId || "",
+        unitName: unitInfo.unitName,
+        title: check.data.title,
+        description: check.data.description,
+        category: check.data.category,
+        startDate: check.data.startDate,
+        endDate: check.data.endDate,
+        venue: check.data.venue,
+        bannerUrl: check.data.bannerUrl,
+        registrationOpen: check.data.registrationOpen,
+        ticketCapacity: check.data.ticketCapacity,
+        status: "APPROVED_LIVE",
+        submittedByHandlerId: user.id,
+        submittedAt: new Date().toISOString(),
+      },
+      "Event submitted and published successfully",
+    );
   } catch {
-    // Graceful fallback for mock / development environment
-    const mockEvent: WebEvent = {
-      id: `evt_${Date.now()}`,
-      unitId: "parish-mount-zion",
-      unitName: "Mount Zion Parish",
-      title: input.title,
-      description: input.description,
-      category: input.category,
-      startDate: input.startDate,
-      endDate: input.endDate,
-      venue: input.venue,
-      bannerUrl: input.bannerUrl || "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800",
-      registrationOpen: input.registrationOpen,
-      ticketCapacity: input.ticketCapacity,
-      status: "PENDING_REVIEW",
-      submittedByHandlerId: "usr_handler_mz",
-      submittedAt: new Date().toISOString(),
-    };
-    revalidatePath("/admin-web/dashboard");
-    revalidatePath("/admin-web/events");
-    return ok(mockEvent, "Event submitted for vetting");
+    return fail(
+      "UNAVAILABLE",
+      "Failed to submit event to backend server. Please verify backend connectivity.",
+    );
   }
 }
 
@@ -57,32 +100,57 @@ export async function submitProgrammeAction(input: ProgrammeInput): Promise<Acti
   if (!check.success) {
     return fail("VALIDATION", "Invalid programme parameters");
   }
+
+  const user = await requireSession();
+  const unitInfo = await resolveUserUnit(user.scopeUnitId);
+
+  const scheduleDate = new Date(check.data.scheduleDate);
+  const ends = new Date(scheduleDate.getTime() + 4 * 3600 * 1000);
+
+  const payload = {
+    title: `${check.data.title} — ${check.data.theme}`,
+    type: "Conference",
+    visibility: "Public",
+    summary: `Theme: ${check.data.theme}. Keynote Speakers: ${check.data.speakers.join(", ")}`,
+    unitId: user.scopeUnitId || null,
+    location: `${unitInfo.unitName} Main Sanctuary`,
+    isOnline: Boolean(check.data.livestreamUrl),
+    onlineUrl: check.data.livestreamUrl || null,
+    startsAt: scheduleDate.toISOString(),
+    endsAt: ends.toISOString(),
+    timeZone: "Africa/Lagos",
+    allDay: false,
+    registrationEnabled: false,
+  };
+
   try {
-    const res = await backend<WebProgramme>("/web-cms/programmes", {
+    const res = await backend<{ id: string }>("/events", {
       method: "POST",
-      body: check.data,
+      body: payload,
     });
+
     revalidatePath("/admin-web/dashboard");
     revalidatePath("/admin-web/programmes");
-    return ok(res, "Programme schedule published");
+
+    return ok(
+      {
+        id: res?.id || `prog_${Date.now()}`,
+        unitId: unitInfo.unitId || "",
+        unitName: unitInfo.unitName,
+        title: check.data.title,
+        theme: check.data.theme,
+        scheduleDate: check.data.scheduleDate,
+        speakers: check.data.speakers,
+        bulletinPdfUrl: check.data.bulletinPdfUrl,
+        livestreamUrl: check.data.livestreamUrl,
+        status: "PENDING_REVIEW",
+        submittedByHandlerId: user.id,
+        submittedAt: new Date().toISOString(),
+      },
+      "Programme schedule submitted for vetting",
+    );
   } catch {
-    const mockProgramme: WebProgramme = {
-      id: `prog_${Date.now()}`,
-      unitId: "parish-mount-zion",
-      unitName: "Mount Zion Parish",
-      title: input.title,
-      theme: input.theme,
-      scheduleDate: input.scheduleDate,
-      speakers: input.speakers,
-      bulletinPdfUrl: input.bulletinPdfUrl,
-      livestreamUrl: input.livestreamUrl,
-      status: "PENDING_REVIEW",
-      submittedByHandlerId: "usr_handler_mz",
-      submittedAt: new Date().toISOString(),
-    };
-    revalidatePath("/admin-web/dashboard");
-    revalidatePath("/admin-web/programmes");
-    return ok(mockProgramme, "Programme schedule submitted for vetting");
+    return fail("UNAVAILABLE", "Failed to submit programme schedule. Please try again.");
   }
 }
 
@@ -94,19 +162,75 @@ export async function vetContentAction(
     return fail("VALIDATION", "Invalid decision payload");
   }
   const newStatus = check.data.action === "APPROVE" ? "APPROVED_LIVE" : "NEEDS_REVISION";
+
   try {
-    await backend(`/web-cms/vetting/${check.data.contentId}`, {
+    await backend(`/events/${check.data.contentId}/publish`, {
       method: "POST",
-      body: { action: check.data.action, reviewNotes: check.data.reviewNotes },
     });
-    revalidatePath("/admin-web/vetting");
-    revalidatePath("/admin-web/events");
     revalidatePath("/admin-web/dashboard");
-    return ok({ success: true, newStatus }, `Content updated to ${newStatus}`);
+    revalidatePath("/admin-web/events");
+    revalidatePath("/admin-web/vetting");
+    return ok({ success: true, newStatus });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to update publication status on backend server.";
+    return fail("UNAVAILABLE", msg);
+  }
+}
+
+export async function submitBulletinAction(
+  input: BulletinInput,
+): Promise<ActionResult<{ id: string; title: string; category: string }>> {
+  const check = bulletinInputSchema.safeParse(input);
+  if (!check.success) {
+    return fail("VALIDATION", "Invalid bulletin parameters");
+  }
+
+  const user = await requireSession();
+  const unitInfo = await resolveUserUnit(user.scopeUnitId);
+
+  const payload = {
+    title: check.data.title,
+    kind: check.data.isUrgent ? "message" : "news",
+    unitSlug: unitInfo.unitId || "esocs",
+    tags: [check.data.category.toLowerCase().replace(/\s+/g, "-")],
+    body: [check.data.summary],
+    date: new Date().toISOString().slice(0, 10),
+    images: check.data.imageUrl
+      ? [
+          {
+            url: check.data.imageUrl,
+            width: 1200,
+            height: 675,
+            alt: check.data.title,
+          },
+        ]
+      : [],
+    ctaText: check.data.ctaText,
+    ctaLink: check.data.ctaLink,
+    isUrgent: check.data.isUrgent,
+  };
+
+  try {
+    const res = await backend<{ id: string }>("/content/posts", {
+      method: "POST",
+      body: payload,
+    });
+
+    revalidatePath("/admin-web/dashboard");
+    revalidatePath("/admin-web/events");
+
+    return ok(
+      {
+        id: res?.id || `bulletin_${Date.now()}`,
+        title: check.data.title,
+        category: check.data.category,
+      },
+      "Spotlight bulletin broadcasted live successfully",
+    );
   } catch {
-    revalidatePath("/admin-web/vetting");
-    revalidatePath("/admin-web/events");
-    revalidatePath("/admin-web/dashboard");
-    return ok({ success: true, newStatus }, `Content updated to ${newStatus}`);
+    return fail(
+      "UNAVAILABLE",
+      "Failed to publish spotlight bulletin to backend. Please verify backend service status.",
+    );
   }
 }

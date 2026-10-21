@@ -31,15 +31,27 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
       />
       {notice && <Alert tone={notice.tone}>{notice.text}</Alert>}
       <LoginForm next={typeof next === "string" ? next : undefined} />
-      <p className="text-center text-sm font-medium text-slate-300">
-        New here?{" "}
-        <Link
-          href="/signup"
-          className="font-semibold text-amber-400 underline-offset-4 hover:text-amber-300 hover:underline"
-        >
-          Request an account
-        </Link>
-      </p>
+      <div className="flex flex-col items-center gap-2 text-center text-xs text-slate-400">
+        <p>
+          New here?{" "}
+          <Link
+            href="/signup"
+            className="font-semibold text-amber-400 underline-offset-4 hover:text-amber-300 hover:underline"
+          >
+            Request an account
+          </Link>
+        </p>
+
+        <div className="flex items-center gap-3 pt-1 text-2xs">
+          <Link href="/admin-web/login" className="text-amber-400 hover:text-amber-300 hover:underline">
+            Switch to Web Content Studio
+          </Link>
+          <span className="text-slate-600">·</span>
+          <Link href="/super-admin/setup" className="text-slate-400 hover:text-amber-300 hover:underline">
+            Apex Super Admin Setup
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -46,9 +46,9 @@ export default function SettingsLayout({ children }: LayoutProps<"/settings">) {
   return (
     <Page>
       <PageHeader title="Settings" description="Your account, security and how the portal works for you." />
-      <div className="grid gap-page lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10">
+      <div className="grid gap-page lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
         <SectionNav items={items} label="Settings sections" />
-        <div className="grid max-w-3xl min-w-0 content-start gap-page">{children}</div>
+        <div className="grid max-w-5xl min-w-0 content-start gap-page">{children}</div>
       </div>
     </Page>
   );

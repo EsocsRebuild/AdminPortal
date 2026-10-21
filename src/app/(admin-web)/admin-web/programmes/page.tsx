@@ -5,10 +5,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { submitProgrammeAction } from "@/features/web-cms/actions";
+import { requireSession } from "@/server/session";
+import { resolveUserUnit } from "@/server/units";
 
 export const metadata: Metadata = { title: "Programmes Schedule · ESOCS Web Admin" };
 
-export default function ProgrammesSchedulePage() {
+export default async function ProgrammesSchedulePage() {
+  const user = await requireSession();
+  const unitInfo = await resolveUserUnit(user.scopeUnitId);
+
   return (
     <TooltipProvider>
       <div className="space-y-6">
@@ -19,7 +24,8 @@ export default function ProgrammesSchedulePage() {
               <h1 className="text-2xl font-bold tracking-tight text-white">Programmes & Bulletin Schedule</h1>
             </div>
             <p className="mt-1 text-xs text-slate-400">
-              Manage church annual summits, quarterly theme schedules, and bulletin attachments.
+              Manage church annual summits, quarterly theme schedules, and bulletin attachments for{" "}
+              <span className="font-semibold text-amber-300">{unitInfo.unitName}</span>.
             </p>
           </div>
         </div>
@@ -32,7 +38,7 @@ export default function ProgrammesSchedulePage() {
                 Submit Programme Schedule
               </div>
             }
-            description="Submit quarterly themes, keynote speakers, and downloadable bulletin links."
+            description={`Submit quarterly themes, keynote speakers, and downloadable bulletin links for ${unitInfo.unitName}.`}
           />
           <CardContent>
             <form

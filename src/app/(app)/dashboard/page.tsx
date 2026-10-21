@@ -15,14 +15,10 @@ import { recentAuditEvents } from "@/features/audit/queries";
 import { listCampaigns } from "@/features/campaigns/queries";
 import { campaignStatusLabels, openRate } from "@/features/campaigns/types";
 import { getDashboardSummary } from "@/features/dashboard/queries";
-import { AttendanceChart } from "@/components/charts/attendance-chart";
-import { DistributionDonutChart } from "@/components/charts/distribution-donut";
-import { GivingChart } from "@/components/charts/giving-chart";
-import { MemberStageFunnel } from "@/components/charts/stage-funnel";
-import { ContextualTipCard } from "@/components/ui/contextual-tip-card";
 import { formatNumber, formatPercent, formatRelative } from "@/lib/format";
 import { can } from "@/lib/permissions";
 import { requirePermission } from "@/server/session";
+import { resolveUserUnit } from "@/server/units";
 
 import { HandlerCard } from "@/components/blocks/handler-card";
 import { JurisdictionScopeBanner } from "./_components/jurisdiction-scope-banner";
@@ -34,7 +30,8 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
-  const [summary, campaigns, activity] = await Promise.all([
+  const [userUnit, summary, campaigns, activity] = await Promise.all([
+    resolveUserUnit(user.scopeUnitId),
     getDashboardSummary(),
     can(user, "campaigns:view")
       ? listCampaigns({ page: 1, pageSize: 5, sort: "updatedAt", dir: "desc" }).then((r) => r.data)
@@ -152,19 +149,18 @@ export default async function DashboardPage() {
         </StaggerItem>
 
         <StaggerItem>
-          <JurisdictionScopeBanner user={user} />
+          <JurisdictionScopeBanner user={user} unitName={userUnit.unitName} />
         </StaggerItem>
 
         <StaggerItem>
-          <HandlerCard />
-        </StaggerItem>
-
-        <StaggerItem>
-          <ContextualTipCard
-            id="sunday_readiness"
-            title="Sunday Service Operations: Fast Track"
-            description="Record today's attendance in under 30 seconds with Quick Action (Alt+H) or intake first-time guests (Alt+N)."
-            actionText="Quick Guide & Tips"
+          <HandlerCard
+            handlerId={user.id}
+            name={user.name}
+            roleName={user.role?.name}
+            unitName={userUnit.unitName}
+            unitType={userUnit.isGlobal ? "global" : "parish"}
+            avatarUrl={user.avatarUrl}
+            mfaEnabled={user.mfaEnabled}
           />
         </StaggerItem>
 
@@ -183,18 +179,6 @@ export default async function DashboardPage() {
             </section>
           </StaggerItem>
         )}
-
-        {/* Dynamic Interactive Charts: Attendance & Giving */}
-        <StaggerItem className="grid gap-page lg:grid-cols-2">
-          <AttendanceChart />
-          <GivingChart />
-        </StaggerItem>
-
-        {/* Dynamic Demographics & Discipleship Journey */}
-        <StaggerItem className="grid gap-page lg:grid-cols-2">
-          <DistributionDonutChart />
-          <MemberStageFunnel />
-        </StaggerItem>
 
         <StaggerItem className="grid gap-page xl:grid-cols-3">
           <Card className={campaigns ? "xl:col-span-2" : "xl:col-span-3"}>

@@ -14,8 +14,8 @@ interface LiveHeadcountProps {
 }
 
 export function LiveHeadcountWidget({
-  parishName = "Mount Zion Parish",
-  initialCount = 342,
+  parishName = "Parish Assembly",
+  initialCount = 0,
 }: LiveHeadcountProps) {
   const [count, setCount] = React.useState(initialCount);
   const { connected } = useRealtimeStream("headcount");

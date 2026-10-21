@@ -49,12 +49,12 @@ export default function LandingPage() {
       </div>
 
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800/80 bg-slate-950/80 px-6 backdrop-blur-2xl md:px-12">
+      <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-6 md:px-12">
         <Link href="/" className="group flex items-center gap-3">
           <Crest
             size={44}
             priority
-            className="shadow-xl ring-2 shadow-amber-950/60 ring-amber-400/80 transition-transform group-hover:scale-105"
+            className="ring-2 ring-amber-400/80 transition-transform group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span className="font-brand text-xl font-extrabold tracking-tight text-white transition-colors group-hover:text-amber-300">
@@ -107,7 +107,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 shadow-inner backdrop-blur-xl"
+          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5"
         >
           <Sparkles className="size-4 animate-pulse text-amber-400" />
           <span className="text-2xs font-extrabold tracking-widest text-amber-300 uppercase">
@@ -159,7 +159,7 @@ export default function LandingPage() {
 
           <Link
             href="/admin-web/dashboard"
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-7 py-3.5 text-sm font-extrabold text-emerald-400 backdrop-blur-xl transition-all hover:scale-105 hover:border-emerald-500/60 hover:bg-emerald-500/20 sm:w-auto"
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-7 py-3.5 text-sm font-extrabold text-emerald-400 transition-all hover:scale-105 hover:border-emerald-500/60 hover:bg-emerald-500/20 sm:w-auto"
           >
             <Globe className="size-4 text-emerald-400" />
             <span>Web Content Studio</span>
@@ -171,7 +171,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 grid grid-cols-2 gap-4 rounded-2xl border border-slate-800/90 bg-slate-900/60 p-6 shadow-2xl backdrop-blur-2xl md:grid-cols-4"
+          className="mt-16 grid grid-cols-2 gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 md:grid-cols-4"
         >
           <div className="flex flex-col items-center border-r border-slate-800/80 p-3 last:border-0">
             <div className="mb-1 flex items-center gap-1.5 text-amber-400">
@@ -281,7 +281,7 @@ export default function LandingPage() {
                         Main Church Governance Admin
                       </h3>
                       <p className="text-xs font-medium text-amber-400">
-                        Scoped Unit: Mount Zion Parish (HQ) · X-Portal-Type: admin-main
+                        Scoped Unit: Assigned Ecclesiastical Jurisdiction · X-Portal-Type: admin-main
                       </p>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <h4 className="font-mono text-3xl font-extrabold text-white">1,482</h4>
-                      <p className="text-2xs text-slate-400">Sunday Service · Mount Zion Cathedral</p>
+                      <p className="text-2xs text-slate-400">Sunday Divine Service · Main Sanctuary</p>
                     </div>
                     <div className="grid grid-cols-3 gap-2 pt-2 text-center text-2xs">
                       <div className="rounded border border-slate-800 bg-slate-950 p-2">
@@ -424,7 +424,7 @@ export default function LandingPage() {
                       <CheckCircle2 className="size-4 text-emerald-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Surulere Parish Bulletin</h4>
+                      <h4 className="text-sm font-bold text-white">Parish Service Bulletin</h4>
                       <p className="text-2xs text-slate-400">Submitted by Media Team · 10 mins ago</p>
                     </div>
                     <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
@@ -459,6 +459,7 @@ export default function LandingPage() {
                         src="/brand/hero-mount-zion.webp"
                         alt="Media Preview"
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40">
@@ -478,7 +479,7 @@ export default function LandingPage() {
                       <CalendarDays className="size-4 text-purple-400" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">78th Mount Zion Revival</h4>
+                      <h4 className="text-sm font-bold text-white">Annual General Revival & Assembly</h4>
                       <p className="text-2xs text-slate-400">Oct 14 - Oct 21, 2026</p>
                     </div>
                     <div className="space-y-2 pt-1 text-2xs">
@@ -516,7 +517,7 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {/* Feature 1 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-amber-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-amber-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10 text-amber-400 transition-transform group-hover:scale-110">
               <Award className="size-6" />
             </div>
@@ -528,7 +529,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 2 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-emerald-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-emerald-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-emerald-400/30 bg-emerald-400/10 text-emerald-400 transition-transform group-hover:scale-110">
               <Wallet className="size-6" />
             </div>
@@ -540,7 +541,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 3 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-blue-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-blue-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-blue-400/30 bg-blue-400/10 text-blue-400 transition-transform group-hover:scale-110">
               <UsersRound className="size-6" />
             </div>
@@ -552,7 +553,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 4 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-purple-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-purple-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-purple-400/30 bg-purple-400/10 text-purple-400 transition-transform group-hover:scale-110">
               <Layers className="size-6" />
             </div>
@@ -564,7 +565,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 5 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-pink-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-pink-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-pink-400/30 bg-pink-400/10 text-pink-400 transition-transform group-hover:scale-110">
               <CheckCircle2 className="size-6" />
             </div>
@@ -576,7 +577,7 @@ export default function LandingPage() {
           </div>
 
           {/* Feature 6 */}
-          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-xl transition-all hover:border-amber-400/40">
+          <div className="group space-y-4 rounded-3xl border border-slate-800 bg-slate-900 p-8 transition-all hover:border-amber-400/40">
             <div className="flex size-12 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10 text-amber-400 transition-transform group-hover:scale-110">
               <ShieldCheck className="size-6" />
             </div>
@@ -692,7 +693,7 @@ export default function LandingPage() {
       </section>
 
       {/* Scriptural Authority Banner */}
-      <section className="relative z-10 border-y border-amber-400/20 bg-linear-to-r from-amber-950/40 via-slate-950 to-amber-950/40 px-6 py-20 text-center backdrop-blur-2xl">
+      <section className="relative z-10 border-y border-amber-400/20 bg-linear-to-r from-amber-950/40 via-slate-950 to-amber-950/40 px-6 py-20 text-center">
         <div className="mx-auto max-w-4xl space-y-4">
           <Crest
             size={64}

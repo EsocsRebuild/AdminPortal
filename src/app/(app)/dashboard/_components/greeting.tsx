@@ -40,12 +40,12 @@ export function Greeting({ name }: { name: string }) {
       <div className="relative z-10 flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-2xs font-extrabold tracking-widest text-amber-300 uppercase backdrop-blur-xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-2xs font-extrabold tracking-widest text-amber-300 uppercase">
               <Sparkles className="size-3 animate-pulse text-amber-400" />
               Executive Command Hub
             </span>
 
-            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-2xs font-extrabold tracking-widest text-emerald-300 uppercase backdrop-blur-xl sm:inline-flex">
+            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-2xs font-extrabold tracking-widest text-emerald-300 uppercase sm:inline-flex">
               <Activity className="size-3 text-emerald-400" />
               System Status: Active
             </span>
@@ -64,7 +64,7 @@ export function Greeting({ name }: { name: string }) {
         </div>
 
         {/* Date & System Clock Widget */}
-        <div className="flex shrink-0 items-center gap-3 rounded-control border border-slate-800 bg-slate-950/80 p-3 shadow-inner backdrop-blur-xl">
+        <div className="flex shrink-0 items-center gap-3 rounded-control border border-slate-800 bg-slate-950 p-3">
           <div className="rounded-lg border border-amber-400/20 bg-amber-400/10 p-2 text-amber-400">
             <CalendarDays className="size-5" />
           </div>

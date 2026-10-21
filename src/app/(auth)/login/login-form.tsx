@@ -100,7 +100,7 @@ export function LoginForm({ next }: { next?: string }) {
           </p>
         )}
       </div>
-      <div className="rounded-xl border border-slate-700/80 bg-slate-900/90 p-3 shadow-md backdrop-blur-md">
+      <div className="rounded-xl border border-slate-700 bg-slate-900 p-3">
         <Checkbox
           label={<span className="text-sm font-bold text-white">Keep me signed in on this device</span>}
           description={

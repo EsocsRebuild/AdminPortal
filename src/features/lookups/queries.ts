@@ -9,5 +9,10 @@ export interface Parish {
   name: string;
 }
 
-/** Reference data used by forms and filters. Memoised per request. */
-export const getParishes = cache(() => backend<Parish[]>("/lookups/parishes"));
+export const getParishes = cache(async () => {
+  try {
+    return await backend<Parish[]>("/lookups/parishes");
+  } catch {
+    return await backend<Parish[]>("/public/parishes", { auth: false });
+  }
+});

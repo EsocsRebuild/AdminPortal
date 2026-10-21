@@ -72,6 +72,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
             src="/brand/hero-mount-zion.webp"
             alt="ESOCS Cathedral"
             fill
+            sizes="(max-width: 1024px) 100vw, 55vw"
             priority
             className="scale-105 object-cover object-center opacity-30 contrast-125 saturate-110 filter"
           />
@@ -90,11 +91,11 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
         />
 
         <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-2 rounded-full border border-amber-400/30 bg-slate-900/90 px-3.5 py-1.5 text-xs font-bold tracking-wider text-amber-400 uppercase shadow-md backdrop-blur-md">
+          <div className="flex items-center gap-2 rounded-full border border-amber-400/30 bg-slate-900 px-3.5 py-1.5 text-xs font-bold tracking-wider text-amber-400 uppercase">
             <span className="size-2 animate-ping rounded-full bg-amber-400" />
             Ecclesiastical Administration
           </div>
-          <Crest size={52} className="shadow-xl ring-2 shadow-amber-950/60 ring-amber-400/80" />
+          <Crest size={52} className="ring-2 ring-amber-400/80" />
         </div>
 
         <div className="relative z-10 my-auto grid max-w-lg gap-8 py-8">
@@ -104,7 +105,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
             </span>
             <h2 className="font-brand text-4xl leading-[1.1] font-bold text-balance text-white xl:text-5xl">
               One calm place to care for your{" "}
-              <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 church
               </span>
               .
@@ -115,7 +116,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
             {benefits.map((b) => (
               <li
                 key={b.title}
-                className="flex items-start gap-4 rounded-xl border border-slate-700/80 bg-slate-900/90 p-3.5 shadow-xl backdrop-blur-md transition-all hover:border-amber-500/40 hover:bg-slate-900/95"
+                className="flex items-start gap-4 rounded-xl border border-slate-700 bg-slate-900 p-3.5 transition-all hover:border-amber-500/40"
               >
                 <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-amber-400/15 text-amber-400 ring-1 ring-amber-400/40">
                   <b.icon className="size-5" />
@@ -129,7 +130,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
           </ul>
         </div>
 
-        <figure className="relative z-10 grid gap-2 rounded-xl border border-t border-slate-700/60 border-slate-700/80 bg-slate-900/80 p-4 pt-6 backdrop-blur-md">
+        <figure className="relative z-10 grid gap-2 rounded-xl border border-slate-700 bg-slate-900 p-4 pt-6">
           <blockquote className="font-brand text-lg font-medium text-white italic">
             “Let all things be done decently and in order.”
           </blockquote>

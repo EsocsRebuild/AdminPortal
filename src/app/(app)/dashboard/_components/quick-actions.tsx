@@ -1,4 +1,4 @@
-import { FormInput, MailPlus, UserPlus, UserRoundPlus, type LucideIcon } from "lucide-react";
+import { Calendar, FormInput, Globe, MailPlus, UserPlus, UserRoundPlus, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 import { can, type Permission } from "@/lib/permissions";
@@ -44,6 +44,22 @@ const actions: {
     icon: UserPlus,
     permission: "users:manage",
     tint: "bg-[oklch(0.95_0.03_10)] text-[oklch(0.5_0.16_10)] dark:bg-[oklch(0.32_0.07_10)] dark:text-[oklch(0.86_0.08_10)]",
+  },
+  {
+    href: "/admin-web/events",
+    title: "Publish an event",
+    text: "Services & announcements",
+    icon: Calendar,
+    permission: "events:manage",
+    tint: "bg-[oklch(0.95_0.05_145)] text-[oklch(0.45_0.12_145)] dark:bg-[oklch(0.3_0.06_145)] dark:text-[oklch(0.85_0.09_145)]",
+  },
+  {
+    href: "/admin-web/dashboard",
+    title: "Web Content Studio",
+    text: "Manage public web media",
+    icon: Globe,
+    permission: "content:view",
+    tint: "bg-[oklch(0.95_0.05_85)] text-[oklch(0.5_0.11_65)] dark:bg-[oklch(0.33_0.06_70)] dark:text-[oklch(0.88_0.09_85)]",
   },
 ];
 

@@ -2,6 +2,9 @@ export type VettingStage =
   "STAGE_1_PARISH" | "STAGE_2_DISTRICT" | "STAGE_3_ZONAL" | "STAGE_4_SUPREME_APPROVED";
 
 export type EcclesiasticalRank =
+  | "ALADURA"
+  | "RABBI"
+  | "EVANGELIST"
   | "DEACON"
   | "DEACONESS"
   | "SUB_LEADER"
@@ -9,7 +12,8 @@ export type EcclesiasticalRank =
   | "SENIOR_LEADER"
   | "APOSTLE"
   | "SENIOR_APOSTLE"
-  | "MOST_SENIOR_APOSTLE";
+  | "MOST_SENIOR_APOSTLE"
+  | "SPECIAL_APOSTLE";
 
 export interface VettingLogEntry {
   stage: VettingStage;
@@ -23,14 +27,21 @@ export interface OrdinationCandidate {
   id: string;
   memberId: string;
   fullName: string;
+  email?: string;
+  phone?: string;
   churchRankCurrent: string;
   rankTarget: EcclesiasticalRank;
   parishId: string;
   parishName: string;
   districtName: string;
+  provinceName?: string;
   stageCurrent: VettingStage;
   baptismDate?: string;
   yearsOfService: number;
+  duesStatus?: "pending" | "cleared" | "exempt";
+  duesAmountPaid?: number;
+  conductRating?: string;
+  passportPhotoUrl?: string;
   recommendationLetterUrl?: string;
   courseCertificateUrl?: string;
   vettingHistory: VettingLogEntry[];

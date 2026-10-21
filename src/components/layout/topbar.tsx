@@ -1,11 +1,15 @@
 "use client";
 
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Breadcrumb, type Crumb } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Tooltip } from "@/components/ui/tooltip";
 import { activeNavItem } from "@/config/navigation";
+import { usePreference } from "@/hooks/use-preference";
 
 import { CommandMenu } from "./command-menu";
 import { MobileNav } from "./mobile-nav";
@@ -33,6 +37,8 @@ const segmentLabels: Record<string, string> = {
   attendance: "Attendance & Headcount",
   sections: "Fellowships & Wings",
   "build-tracker": "Build Tracker",
+  ordination: "Ordination Pipeline",
+  candidates: "Candidates",
 };
 
 function useCrumbs(): Crumb[] {
@@ -50,9 +56,24 @@ function useCrumbs(): Crumb[] {
 
 export function Topbar() {
   const crumbs = useCrumbs();
+  const [sidebar, setSidebar] = usePreference("sidebar");
+  const collapsed = sidebar === "collapsed";
+  const toggleSidebar = () => setSidebar(collapsed ? "expanded" : "collapsed");
+
   return (
-    <header className="sticky top-0 z-40 flex h-topbar shrink-0 items-center gap-2 border-b border-border bg-background/80 px-gutter backdrop-blur-xl backdrop-saturate-150 supports-[not(backdrop-filter:blur(0))]:bg-background">
+    <header className="sticky top-0 z-40 flex h-topbar shrink-0 items-center gap-2 border-b border-border bg-background px-gutter">
       <MobileNav />
+      <Tooltip content={collapsed ? "Expand sidebar (⌘B)" : "Collapse sidebar (⌘B)"}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="hidden size-8 text-muted-foreground hover:text-foreground lg:flex"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
+        </Button>
+      </Tooltip>
       <UnitSwitcher />
       <Separator orientation="vertical" className="mx-1 hidden h-5 md:block" />
       <Breadcrumb items={crumbs} className="flex-1" />

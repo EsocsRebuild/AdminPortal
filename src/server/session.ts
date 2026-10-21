@@ -36,7 +36,10 @@ async function currentPath() {
 
 export async function requireSession(): Promise<SessionUser> {
   const user = await getSession();
-  if (!user) redirect(`/login?next=${encodeURIComponent(await currentPath())}`);
+  const path = await currentPath();
+  const isWebAdmin = path.startsWith("/admin-web");
+  const loginPath = isWebAdmin ? "/admin-web/login" : "/login";
+  if (!user) redirect(`${loginPath}?next=${encodeURIComponent(path)}`);
   return user;
 }
 

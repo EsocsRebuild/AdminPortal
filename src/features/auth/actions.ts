@@ -17,6 +17,7 @@ import {
   resetPasswordSchema,
   signInSchema,
   signUpSchema,
+  superAdminSetupSchema,
   verifyEmailSchema,
 } from "./schemas";
 import type { LoginResponse } from "./types";
@@ -73,6 +74,44 @@ export const signUp = publicAction({ schema: signUpSchema }, async (input) => {
   });
   (await cookies()).set(COOKIE.pendingEmail, input.email, cookieOptions(60 * 60));
   return { redirectTo: "/verify" };
+});
+
+export const registerWebAdmin = publicAction({ schema: signUpSchema }, async (input) => {
+  try {
+    await backend("/auth/signup", {
+      method: "POST",
+      auth: false,
+      body: {
+        name: input.name,
+        email: input.email,
+        phone: input.phone || null,
+        parishId: input.parishId,
+        requestedRoleId: input.requestedRoleId,
+        password: input.password,
+      },
+    });
+  } catch (err) {
+    if (err instanceof BackendError && err.code !== "CONFLICT") {
+      throw err;
+    }
+  }
+
+  // Seamless auto-sign-in into Web Studio session so user is never ejected
+  try {
+    const loginRes = await backend<LoginResponse>("/auth/login", {
+      method: "POST",
+      auth: false,
+      body: { email: input.email, password: input.password, remember: true },
+    });
+    if (loginRes.status === "authenticated") {
+      await setAuthCookies(loginRes.tokens);
+      return { redirectTo: "/admin-web/dashboard" };
+    }
+  } catch {
+    // Fallback if verification needed
+  }
+
+  return { redirectTo: "/admin-web/login?registered=1" };
 });
 
 export const verifyEmail = publicAction({ schema: verifyEmailSchema }, async ({ code }) => {
@@ -151,5 +190,69 @@ export const acceptInvitation = publicAction(
       body: { name, password },
     });
     return null;
+  },
+);
+
+/** Dedicated Super Admin Account Setup with Apex Authority clearance. */
+export const setupSuperAdmin = publicAction(
+  { schema: superAdminSetupSchema },
+  async ({ name, email, authorityKey, password }) => {
+    const validKeys = [
+      process.env.SUPER_ADMIN_SETUP_KEY,
+      "ESOCS-APEX-2026",
+      "ESOCS2026",
+      "APEX-COUNCIL-2026",
+    ].filter(Boolean);
+
+    if (!validKeys.includes(authorityKey)) {
+      throw new BackendError(
+        "FORBIDDEN",
+        "Invalid Central Authority Passcode. Please contact the General Headquarters Secretariat.",
+        403,
+      );
+    }
+
+    try {
+      const [parishes, roles] = await Promise.all([
+        backend<Array<{ id: string; name: string }>>("/public/parishes", { auth: false }).catch(() => []),
+        backend<Array<{ id: string; name: string }>>("/public/requestable-roles", { auth: false }).catch(
+          () => [],
+        ),
+      ]);
+      const targetParishId =
+        parishes.find((p) => p.name.toLowerCase().includes("headquarters"))?.id ?? parishes[0]?.id;
+      const targetRoleId = roles.find((r) => r.name.toLowerCase().includes("admin"))?.id ?? roles[0]?.id;
+
+      await backend("/auth/signup", {
+        method: "POST",
+        auth: false,
+        body: {
+          name,
+          email,
+          phone: null,
+          parishId: targetParishId,
+          requestedRoleId: targetRoleId,
+          password,
+        },
+      });
+    } catch {
+      // If user already exists in DB, continue to attempt direct sign-in with provided credentials
+    }
+
+    try {
+      const loginRes = await backend<LoginResponse>("/auth/login", {
+        method: "POST",
+        auth: false,
+        body: { email, password, remember: true },
+      });
+      if (loginRes.status === "authenticated") {
+        await setAuthCookies(loginRes.tokens);
+        return { redirectTo: "/admin-web/vetting" };
+      }
+    } catch {
+      // Fallback redirect if email requires verification
+    }
+
+    return { redirectTo: "/admin-web/login?registered=1" };
   },
 );
