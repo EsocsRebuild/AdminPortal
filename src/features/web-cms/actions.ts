@@ -1,4 +1,4 @@
-"server-only";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { backend } from "@/server/backend";
