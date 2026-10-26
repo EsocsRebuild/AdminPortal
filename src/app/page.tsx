@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Church, Globe, Award, Wallet, Building2, ArrowRight, Lock } from "lucide-react";
 
 import { Crest } from "@/components/icons/logo";
+import { LandingFooter } from "@/components/layout/landing-footer";
 
 export default function LandingPage() {
   return (
@@ -293,48 +294,9 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. MINIMALIST EXECUTIVE FOOTER                                            */}
+      {/* 5. STATELY EXECUTIVE FOOTER (LEGAL, GOVERNANCE & PRIVACY)                 */}
       {/* ========================================================================= */}
-      <footer className="mt-auto border-t border-slate-800 bg-[#060913] px-4 py-8 text-xs text-slate-400 sm:px-8 md:px-12">
-        <div className="mx-auto max-w-5xl space-y-6">
-          <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-800/80 pb-6 sm:flex-row">
-            <div className="flex items-center gap-3">
-              <Crest size={28} priority className="text-amber-400" />
-              <div className="flex flex-col text-left">
-                <span className="font-brand text-xs font-extrabold text-white sm:text-sm">
-                  THE ETERNAL SACRED ORDER OF THE CHERUBIM & SERAPHIM
-                </span>
-                <span className="font-mono text-[10px] text-amber-400">
-                  Central Secretariat & Administration
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-5 text-xs">
-              <Link href="/dashboard" className="transition-colors hover:text-amber-400">
-                Dashboard
-              </Link>
-              <Link href="/ordination" className="transition-colors hover:text-amber-400">
-                Ordination Vetting
-              </Link>
-              <Link href="/admin-web/dashboard" className="transition-colors hover:text-amber-400">
-                Web Studio
-              </Link>
-              <Link href="/login" className="transition-colors hover:text-amber-400">
-                Sign In
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-between gap-2 text-[11px] text-slate-500 sm:flex-row">
-            <div>
-              &copy; {new Date().getFullYear()} The Eternal Sacred Order of the Cherubim & Seraphim. All
-              rights reserved.
-            </div>
-            <div className="font-mono text-slate-400">Mount Zion Worldwide</div>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 }

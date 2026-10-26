@@ -11,7 +11,7 @@ interface AppSplashLoaderProps {
 
 export function AppSplashLoader({
   message = "Loading Central Administration Portal...",
-  subMessage = "The Eternal Sacred Order of the Cherubim and Seraphim • Mount Zion Worldwide",
+  subMessage = "The Eternal Sacred Order of the Cherubim and Seraphim • Central Secretariat Worldwide",
   fullScreen = true,
 }: AppSplashLoaderProps) {
   const [mounted, setMounted] = React.useState(true);
