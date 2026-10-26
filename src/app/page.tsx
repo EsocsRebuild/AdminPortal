@@ -2,27 +2,18 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Church,
-  Globe,
-  Award,
-  Wallet,
-  Building2,
-  ArrowRight,
-  Lock,
-} from "lucide-react";
+import { Church, Globe, Award, Wallet, Building2, ArrowRight, Lock } from "lucide-react";
 
 import { Crest } from "@/components/icons/logo";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30 selection:text-amber-300">
-      
+    <div className="flex min-h-screen flex-col bg-slate-950 font-sans text-slate-100 selection:bg-amber-500/30 selection:text-amber-300">
       {/* Ambient Lighting & Grid */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute top-[-20%] left-1/2 w-[600px] h-[600px] -translate-x-1/2 rounded-full bg-linear-to-b from-amber-500/10 via-amber-600/5 to-transparent blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-500/5 blur-[120px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25" />
+        <div className="absolute top-[-20%] left-1/2 h-150 w-150 -translate-x-1/2 rounded-full bg-linear-to-b from-amber-500/10 via-amber-600/5 to-transparent blur-[140px]" />
+        <div className="absolute right-[-10%] bottom-[-10%] h-125 w-125 rounded-full bg-emerald-500/5 blur-[120px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] bg-size-[24px_24px] opacity-25" />
       </div>
 
       {/* ========================================================================= */}
@@ -77,25 +68,24 @@ export default function LandingPage() {
       {/* 2. STATELY HERO SECTION                                                   */}
       {/* ========================================================================= */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pt-16 pb-20 text-center md:px-12 md:pt-24 md:pb-28">
-        
         {/* Eyebrow Badge */}
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 shadow-sm">
-          <span className="size-2 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-[11px] font-mono font-extrabold tracking-widest text-amber-300 uppercase">
+          <span className="size-2 animate-pulse rounded-full bg-amber-400" />
+          <span className="font-mono text-[11px] font-extrabold tracking-widest text-amber-300 uppercase">
             EST. 1925 &bull; ESOCS CENTRAL ADMINISTRATION WORLDWIDE
           </span>
         </div>
 
         {/* Headline */}
-        <h1 className="mx-auto max-w-4xl font-brand text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.12]">
+        <h1 className="mx-auto max-w-4xl font-brand text-3xl leading-[1.12] font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
           The Central Administration & <br className="hidden sm:inline" />
-          <span className="italic text-transparent bg-clip-text bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 font-normal">
+          <span className="bg-linear-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text font-normal text-transparent italic">
             Secretariat Platform
           </span>
         </h1>
 
         {/* Concise Subtitle */}
-        <p className="mx-auto mt-5 max-w-2xl text-xs sm:text-sm md:text-base leading-relaxed text-slate-300 font-normal">
+        <p className="mx-auto mt-5 max-w-2xl text-xs leading-relaxed font-normal text-slate-300 sm:text-sm md:text-base">
           The centralized executive portal for ecclesiastical governance, holy order ordination vetting,
           financial stewardship, and digital church records worldwide.
         </p>
@@ -104,7 +94,7 @@ export default function LandingPage() {
         <div className="mx-auto mt-9 flex max-w-md flex-col items-center justify-center gap-3.5 sm:flex-row">
           <Link
             href="/dashboard"
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-linear-to-r from-amber-400 via-amber-500 to-yellow-500 px-6 py-3 text-xs sm:text-sm font-extrabold text-slate-950 shadow-lg shadow-amber-500/25 transition-all hover:scale-105 active:scale-95 sm:w-auto"
+            className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-linear-to-r from-amber-400 via-amber-500 to-yellow-500 px-6 py-3 text-xs font-extrabold text-slate-950 shadow-lg shadow-amber-500/25 transition-all hover:scale-105 active:scale-95 sm:w-auto sm:text-sm"
           >
             <Church className="size-4" />
             <span>Enter Administration Portal</span>
@@ -113,7 +103,7 @@ export default function LandingPage() {
 
           <Link
             href="/admin-web/dashboard"
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-700 bg-slate-900/90 px-6 py-3 text-xs sm:text-sm font-semibold text-slate-200 transition-all hover:border-amber-400 hover:text-white sm:w-auto"
+            className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-700 bg-slate-900/90 px-6 py-3 text-xs font-semibold text-slate-200 transition-all hover:border-amber-400 hover:text-white sm:w-auto sm:text-sm"
           >
             <Globe className="size-4 text-emerald-400" />
             <span>Web Content Studio</span>
@@ -134,21 +124,19 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       <section className="relative z-10 border-y border-slate-800/80 bg-slate-900/40 px-6 py-16 md:px-12 md:py-20">
         <div className="mx-auto max-w-6xl">
-          
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <span className="text-[11px] font-mono font-bold tracking-widest text-amber-400 uppercase">
+            <span className="font-mono text-[11px] font-bold tracking-widest text-amber-400 uppercase">
               Core Secretariat Modules
             </span>
-            <h2 className="mt-1 font-brand text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="mt-1 font-brand text-2xl font-extrabold text-white sm:text-3xl">
               Unified Ecclesiastical Operations
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-400">
+            <p className="mt-2 text-xs text-slate-400 sm:text-sm">
               Access the four primary administrative directorates from a single secure gateway.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            
             {/* Card 1: Ordination Directorate */}
             <Link
               href="/ordination"
@@ -159,15 +147,16 @@ export default function LandingPage() {
                   <Award className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-brand text-base font-bold text-white group-hover:text-amber-300 transition-colors">
+                  <h3 className="font-brand text-base font-bold text-white transition-colors group-hover:text-amber-300">
                     Ordination Directorate
                   </h3>
-                  <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                    Review candidate dossiers across 5 vetting stages, manage examination scores, and ratify Synod elevations.
+                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    Review candidate dossiers across 5 vetting stages, manage examination scores, and ratify
+                    Synod elevations.
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-amber-400 pt-3 border-t border-slate-800/80">
+              <div className="mt-5 flex items-center gap-1.5 border-t border-slate-800/80 pt-3 text-xs font-bold text-amber-400">
                 <span>Manage Ordinations</span>
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </div>
@@ -183,15 +172,16 @@ export default function LandingPage() {
                   <Building2 className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-brand text-base font-bold text-white group-hover:text-blue-300 transition-colors">
+                  <h3 className="font-brand text-base font-bold text-white transition-colors group-hover:text-blue-300">
                     Parish & Member Registry
                   </h3>
-                  <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                    Access church directory across 1,200+ parishes, manage membership numbers, and coordinate provincial structures.
+                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    Access church directory across 1,200+ parishes, manage membership numbers, and coordinate
+                    provincial structures.
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-400 pt-3 border-t border-slate-800/80">
+              <div className="mt-5 flex items-center gap-1.5 border-t border-slate-800/80 pt-3 text-xs font-bold text-blue-400">
                 <span>Open Member Registry</span>
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </div>
@@ -207,15 +197,16 @@ export default function LandingPage() {
                   <Wallet className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-brand text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <h3 className="font-brand text-base font-bold text-white transition-colors group-hover:text-emerald-300">
                     Stewardship Ledgers
                   </h3>
-                  <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                    Reconcile statutory ordination dues, branch remittances, and tithe batches with instant audit verification.
+                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    Reconcile statutory ordination dues, branch remittances, and tithe batches with instant
+                    audit verification.
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-emerald-400 pt-3 border-t border-slate-800/80">
+              <div className="mt-5 flex items-center gap-1.5 border-t border-slate-800/80 pt-3 text-xs font-bold text-emerald-400">
                 <span>View Ledgers</span>
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </div>
@@ -231,70 +222,69 @@ export default function LandingPage() {
                   <Globe className="size-5" />
                 </div>
                 <div>
-                  <h3 className="font-brand text-base font-bold text-white group-hover:text-purple-300 transition-colors">
+                  <h3 className="font-brand text-base font-bold text-white transition-colors group-hover:text-purple-300">
                     Web Content Studio
                   </h3>
-                  <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-                    Publish church bulletins, manage General Conference media galleries, and coordinate public livestreams.
+                  <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    Publish church bulletins, manage General Conference media galleries, and coordinate public
+                    livestreams.
                   </p>
                 </div>
               </div>
-              <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-purple-400 pt-3 border-t border-slate-800/80">
+              <div className="mt-5 flex items-center gap-1.5 border-t border-slate-800/80 pt-3 text-xs font-bold text-purple-400">
                 <span>Launch Web Studio</span>
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </div>
             </Link>
-
           </div>
-
         </div>
       </section>
-
-
 
       {/* ========================================================================= */}
       {/* 5. MINIMALIST EXECUTIVE FOOTER                                            */}
       {/* ========================================================================= */}
-      <footer className="mt-auto border-t border-slate-800 bg-slate-950 py-10 px-6 text-xs text-slate-400 md:px-12">
+      <footer className="mt-auto border-t border-slate-800 bg-slate-950 px-6 py-10 text-xs text-slate-400 md:px-12">
         <div className="mx-auto max-w-5xl space-y-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
+          <div className="flex flex-col items-center justify-between gap-4 border-b border-slate-800/80 pb-6 sm:flex-row">
             <div className="flex items-center gap-3">
               <Crest size={32} priority className="ring-1 ring-amber-400/80" />
               <div className="flex flex-col">
-                <span className="font-brand font-extrabold text-sm text-white">THE ESOCS ADMINISTRATION</span>
-                <span className="text-[10px] text-amber-400 font-mono">Central Secretariat</span>
+                <span className="font-brand text-sm font-extrabold text-white">THE ESOCS ADMINISTRATION</span>
+                <span className="font-mono text-[10px] text-amber-400">Central Secretariat</span>
               </div>
             </div>
 
             <div className="flex items-center gap-5 text-xs">
-              <Link href="/dashboard" className="hover:text-amber-400 transition-colors">
+              <Link href="/dashboard" className="transition-colors hover:text-amber-400">
                 Dashboard
               </Link>
-              <Link href="/ordination" className="hover:text-amber-400 transition-colors">
+              <Link href="/ordination" className="transition-colors hover:text-amber-400">
                 Ordination Vetting
               </Link>
-              <Link href="/admin-web/dashboard" className="hover:text-amber-400 transition-colors">
+              <Link href="/admin-web/dashboard" className="transition-colors hover:text-amber-400">
                 Web Studio
               </Link>
-              <Link href="/login" className="hover:text-amber-400 transition-colors">
+              <Link href="/login" className="transition-colors hover:text-amber-400">
                 Sign In
               </Link>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+          <div className="flex flex-col items-center justify-between gap-2 text-[11px] text-slate-500 sm:flex-row">
             <div>
-              &copy; {new Date().getFullYear()} The Eternal Sacred Order of the Cherubim & Seraphim. All rights reserved.
+              &copy; {new Date().getFullYear()} The Eternal Sacred Order of the Cherubim & Seraphim. All
+              rights reserved.
             </div>
             <div className="flex items-center gap-2 font-mono">
-              <span className="italic text-slate-400 font-serif">“Let all things be done decently and in order.”</span>
+              <span className="font-serif text-slate-400 italic">
+                “Let all things be done decently and in order.”
+              </span>
               <span>&bull;</span>
               <span>1 Cor 14:40</span>
             </div>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
