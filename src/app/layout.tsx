@@ -17,10 +17,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   applicationName: "ESOCS Administration Portal",
   icons: {
-    icon: [
-      { url: "/brand/esocs-crest.png", type: "image/png" },
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/brand/esocs-crest.png", type: "image/png" }],
     apple: "/brand/esocs-crest.png",
     shortcut: "/brand/esocs-crest.png",
   },
@@ -28,9 +25,7 @@ export const metadata: Metadata = {
     title: "The ESOCS Administration Portal",
     description:
       "Digital Church & Ordination Governance Portal for the Eternal Sacred Order of the Cherubim & Seraphim.",
-    images: [
-      { url: "/brand/hero-mount-zion.webp", width: 1200, height: 630, alt: "ESOCS Administration Portal" },
-    ],
+    images: [{ url: "/brand/esocs-crest.png", width: 512, height: 512, alt: "ESOCS Official Crest" }],
   },
   robots: { index: false, follow: false, nocache: true },
   referrer: "strict-origin-when-cross-origin",
