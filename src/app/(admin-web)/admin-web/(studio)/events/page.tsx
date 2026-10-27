@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Calendar, Plus, Sparkles, Filter, CheckCircle2, Clock, AlertCircle, Building2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Calendar, Plus, Filter, CheckCircle2, Clock, AlertCircle, Building2 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { getBranchEvents } from "@/features/web-cms/queries";
-import { submitEventAction } from "@/features/web-cms/actions";
-import type { EventCategory } from "@/features/web-cms/types";
+import { StudioEventForm } from "@/features/events/components/studio-event-form";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 
@@ -47,114 +44,7 @@ export default async function EventsStudioPage() {
               description={`Form data is automatically associated with ${unitInfo.unitName} and saved directly.`}
             />
             <CardContent>
-              <form
-                action={async (formData) => {
-                  "use server";
-                  await submitEventAction({
-                    title: formData.get("title") as string,
-                    description: formData.get("description") as string,
-                    category: (formData.get("category") as EventCategory) || "REVIVAL",
-                    startDate: formData.get("startDate") as string,
-                    venue: formData.get("venue") as string,
-                    bannerUrl: formData.get("bannerUrl") as string,
-                    registrationOpen: formData.get("registrationOpen") === "on",
-                  });
-                }}
-                className="space-y-4 text-xs"
-              >
-                <div className="space-y-1.5">
-                  <label htmlFor="evt-title" className="font-medium text-slate-300">
-                    Event Title *
-                  </label>
-                  <Input
-                    id="evt-title"
-                    name="title"
-                    placeholder="e.g. 2026 Anointing Night Revival"
-                    required
-                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="evt-category" className="font-medium text-slate-300">
-                    Category *
-                  </label>
-                  <select
-                    id="evt-category"
-                    name="category"
-                    className="h-9 w-full rounded-md border border-slate-800 bg-slate-950/60 px-3 text-xs text-white focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-                  >
-                    <option value="REVIVAL">Revival Service</option>
-                    <option value="SUNDAY_SERVICE">Sunday Service</option>
-                    <option value="FELLOWSHIP_RALLY">Fellowship Rally</option>
-                    <option value="CONFERENCE">Leadership Conference</option>
-                    <option value="SPECIAL_PROGRAMME">Special Programme</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="evt-date" className="font-medium text-slate-300">
-                    Start Date & Time *
-                  </label>
-                  <Input
-                    id="evt-date"
-                    name="startDate"
-                    type="datetime-local"
-                    required
-                    className="border-slate-800 bg-slate-950/60 text-white focus-visible:ring-emerald-500"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="evt-venue" className="font-medium text-slate-300">
-                    Venue *
-                  </label>
-                  <Input
-                    id="evt-venue"
-                    name="venue"
-                    defaultValue={`${unitInfo.unitName} Auditorium`}
-                    placeholder="e.g. Main Auditorium"
-                    required
-                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="evt-banner" className="font-medium text-slate-300">
-                    Banner URL (Optional)
-                  </label>
-                  <Input
-                    id="evt-banner"
-                    name="bannerUrl"
-                    type="url"
-                    placeholder="https://images.unsplash.com/..."
-                    className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
-                  />
-                </div>
-
-                <div className="flex items-center gap-2 pt-2">
-                  <input
-                    type="checkbox"
-                    id="reg-open"
-                    name="registrationOpen"
-                    defaultChecked
-                    className="size-4 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
-                  />
-                  <label htmlFor="reg-open" className="text-xs text-slate-300">
-                    Enable Public Registration Form
-                  </label>
-                </div>
-
-                <Tooltip content="Submits event to backend database">
-                  <Button
-                    type="submit"
-                    className="w-full bg-emerald-600 py-2 text-xs font-medium text-white shadow-md shadow-emerald-950 hover:bg-emerald-500"
-                  >
-                    <Sparkles className="mr-1.5 size-3.5" />
-                    Submit Event
-                  </Button>
-                </Tooltip>
-              </form>
+              <StudioEventForm unitName={unitInfo.unitName} />
             </CardContent>
           </Card>
 

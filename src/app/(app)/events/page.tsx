@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CalendarDays, Clock, MapPin, Plus, QrCode } from "lucide-react";
+import { CalendarDays, Clock, MapPin, QrCode } from "lucide-react";
 import type { Metadata } from "next";
 
 import { Page, PageHeader } from "@/components/layout/page";
@@ -11,6 +11,7 @@ import { formatDate } from "@/lib/format";
 import { requirePermission } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 import { listEvents } from "@/features/events/queries";
+import { CreateEventDialog } from "@/features/events/components/create-event-dialog";
 
 export const metadata: Metadata = { title: "Events & Calendar" };
 
@@ -24,11 +25,7 @@ export default async function EventsPage() {
       <PageHeader
         title="Events & Calendar"
         description={`Parish worship services, liturgical celebrations, and fellowship rallies for ${userUnit.unitName}.`}
-        actions={
-          <Button variant="primary" leftIcon={<Plus className="size-4" />}>
-            Create Event
-          </Button>
-        }
+        actions={<CreateEventDialog unitName={userUnit.unitName} triggerButtonText="Create Event" />}
       />
 
       {events.length === 0 ? (
@@ -39,9 +36,10 @@ export default async function EventsPage() {
               title="No Church Events Scheduled"
               description={`There are currently no liturgical services, revival conferences, or fellowship events scheduled for ${userUnit.unitName}.`}
               action={
-                <Button variant="primary" leftIcon={<Plus className="size-4" />}>
-                  Create First Event
-                </Button>
+                <CreateEventDialog
+                  unitName={userUnit.unitName}
+                  triggerButtonText="Create First Event"
+                />
               }
             />
           </CardContent>

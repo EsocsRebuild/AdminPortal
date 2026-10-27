@@ -247,74 +247,68 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
     }
   }
 
-  // Fallback canonical dataset if portal is starting up or in offline mode
+  // 3. Local filesystem read of live ordination portal database if direct API bridge is offline
   if (allRawCandidates.length === 0) {
+    try {
+      const fs = await import("fs/promises");
+      const dbPath = "/Users/testapp/Documents/TechDev/EsocsRebuild/ordinationPortal/data/db.json";
+      const fileContent = await fs.readFile(dbPath, "utf-8");
+      const parsed = JSON.parse(fileContent);
+      const rawList = parsed.candidates || [];
+      if (Array.isArray(rawList) && rawList.length > 0) {
+        allRawCandidates = rawList.map(mapToAdminCandidate);
+      }
+    } catch {
+      // No live candidates available; fallback to empty set
+    }
+  }
+
+  // Unit testing dataset strictly isolated to test environment
+  if (allRawCandidates.length === 0 && process.env.NODE_ENV === "test") {
     allRawCandidates = [
       {
-        id: "cand-007",
-        memberId: "ESOCS/ORD/2026/7821",
-        fullName: "Senior Apostle Daniel W. Briggs",
+        id: "cand-diobu-test",
+        memberId: "ESOCS/ORD/2026/7781",
+        fullName: "Daniel W. Briggs",
         email: "daniel.briggs@esocs.test",
-        phone: "+234 803 777 9922",
+        phone: "+234 803 111 2233",
         churchRankCurrent: "Senior Leader",
         rankTarget: "APOSTLE",
-        parishId: "parish-diobu-central",
-        parishName: "Diobu Central Cathedral (Provincial Seat)",
+        parishId: "parish-diobu-cathedral",
+        parishName: "Diobu Central Cathedral",
         districtName: "Diobu District",
         provinceName: "Diobu Province",
         isProvincialWorshipper: true,
         stageCurrent: "STAGE_3_PROVINCIAL",
-        yearsOfService: 7,
+        yearsOfService: 12,
         duesStatus: "cleared",
-        duesAmountPaid: 65000,
-        conductRating: "exemplary",
+        duesAmountPaid: 45000,
+        conductRating: "Exemplary",
         vettingHistory: [],
-        nominatedAt: "2026-10-21T10:00:00Z",
-        nominatedByHandlerId: "Special Senior Apostle T. J. George",
+        nominatedAt: "2026-10-20T10:00:00Z",
+        nominatedByHandlerId: "Diobu Provincial Council",
       },
       {
-        id: "cand-006",
+        id: "cand-lagos-test",
         memberId: "ESOCS/ORD/2026/6416",
-        fullName: "peter chima tester",
+        fullName: "Peter Chima Tester",
         email: "peter4tech@gmail.com",
         phone: "+234 808 639 2101",
         churchRankCurrent: "Brother",
         rankTarget: "ALADURA",
-        parishId: "parish-mount-zion",
-        parishName: "Mount Zion Cathedral Branch (National Headquarters)",
-        districtName: "Ebute Metta District (Mother District)",
+        parishId: "parish-ebute-metta",
+        parishName: "Ebute Metta Branch",
+        districtName: "Ebute Metta District",
         provinceName: "Lagos Central Province",
-        isProvincialWorshipper: true,
+        isProvincialWorshipper: false,
         stageCurrent: "STAGE_1_BRANCH",
         yearsOfService: 4,
         duesStatus: "pending",
         duesAmountPaid: 0,
         conductRating: "exemplary",
         vettingHistory: [],
-        nominatedAt: "2026-10-19T14:00:00Z",
-        nominatedByHandlerId: "Branch Presiding Officer",
-      },
-      {
-        id: "cand-002",
-        memberId: "ESOCS/ORD/2026/8929",
-        fullName: "Pastor Michael Chukwuma",
-        email: "michael.chukwuma@esocs.test",
-        phone: "+234 803 123 4567",
-        churchRankCurrent: "Leader",
-        rankTarget: "RABBI",
-        parishId: "parish-mount-zion",
-        parishName: "Mount Zion Cathedral",
-        districtName: "Lagos Central District",
-        provinceName: "Lagos Province",
-        isProvincialWorshipper: false,
-        stageCurrent: "STAGE_2_DISTRICT",
-        yearsOfService: 6,
-        duesStatus: "cleared",
-        duesAmountPaid: 45000,
-        conductRating: "exemplary",
-        vettingHistory: [],
-        nominatedAt: "2026-10-19T21:20:00Z",
-        nominatedByHandlerId: "Senior Apostle J. K. Babalola",
+        nominatedAt: "2026-10-19T10:00:00Z",
+        nominatedByHandlerId: "Parish Nomination Officer",
       },
     ];
   }

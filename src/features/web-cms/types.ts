@@ -50,6 +50,19 @@ export interface MediaAsset {
   uploadedByHandlerId: string;
 }
 
+export interface WebBulletin {
+  id: string;
+  title: string;
+  summary: string;
+  category: string;
+  publishedAt?: string;
+  submittedAt: string;
+  submittedByHandlerId?: string;
+  imageUrl?: string;
+  ctaLink?: string;
+  ctaText?: string;
+}
+
 export interface VettingSummary {
   pendingEventsCount: number;
   pendingProgrammesCount: number;
