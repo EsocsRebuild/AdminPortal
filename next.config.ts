@@ -18,6 +18,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Empty turbopack config silences the warning when running with webpack config
+  turbopack: {},
   // Minimal self-contained server for the Docker image (see Dockerfile).
   output: "standalone",
   // Version-skew protection across rolling deploys; set by the image build.
