@@ -62,7 +62,7 @@ export function WebAdminLoginForm() {
           name="email"
           type="email"
           value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, email: e.target.value })}
           placeholder="admin@esocs.test"
           required
           autoFocus
@@ -89,7 +89,7 @@ export function WebAdminLoginForm() {
           name="password"
           type="password"
           value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, password: e.target.value })}
           placeholder="••••••••••••"
           required
           className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
@@ -106,7 +106,7 @@ export function WebAdminLoginForm() {
             <span className="text-xs font-semibold text-slate-300">Only on a computer you don’t share.</span>
           }
           checked={form.remember}
-          onCheckedChange={(v) => setForm({ ...form, remember: v === true })}
+          onCheckedChange={(v: boolean | "indeterminate") => setForm({ ...form, remember: v === true })}
         />
       </div>
 
