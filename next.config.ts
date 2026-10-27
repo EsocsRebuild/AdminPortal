@@ -34,6 +34,16 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
   },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // Enables hot-reload polling inside Docker across macOS filesystem boundary
+      config.watchOptions = {
+        poll: 800,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
