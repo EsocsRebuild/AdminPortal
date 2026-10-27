@@ -63,11 +63,12 @@ export function NominateCandidateModal({
           <div className="flex items-center gap-2 text-amber-500">
             <Award className="size-5" />
             <SheetTitle className="text-base font-bold text-foreground">
-              Ecclesiastical Rank Promotion Docket
+              Branch Level Nomination Docket
             </SheetTitle>
           </div>
           <p className="text-xs text-muted-foreground">
-            Nominate a church worker or clergy member for ecclesiastical rank promotion vetting.
+            Nominate a church worker or clergy member for ecclesiastical rank promotion vetting starting at
+            Branch Level.
           </p>
         </SheetHeader>
 
@@ -131,13 +132,14 @@ export function NominateCandidateModal({
 
           <div className="space-y-1.5">
             <label htmlFor="nom-parish" className="font-medium text-foreground">
-              Parish Jurisdiction *
+              Branch Jurisdiction / Cathedral Seat *
             </label>
             <Input
               id="nom-parish"
               name="parishName"
               defaultValue={defaultParishName}
               required
+              placeholder="e.g. Diobu Central Cathedral or Local Branch"
               className="text-xs"
             />
           </div>

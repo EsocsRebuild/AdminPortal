@@ -142,33 +142,39 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
           <Card className="bg-card border-border shadow-xs">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">District Vetting</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">District Review</span>
                 <ShieldCheck className="size-4 text-amber-500" />
               </div>
-              <div className="text-2xl font-bold text-amber-500">{summary.stage2Count}</div>
-              <p className="text-2xs text-muted-foreground">Stage 2 Screening</p>
+              <div className="text-2xl font-bold text-amber-500">
+                {summary.stage2DistrictCount ?? summary.stage2Count}
+              </div>
+              <p className="text-2xs text-muted-foreground">Stage 2 District Screening</p>
             </CardContent>
           </Card>
 
           <Card className="bg-card border-border shadow-xs">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">Zonal Clearance</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">Provincial Review</span>
                 <Award className="size-4 text-indigo-500" />
               </div>
-              <div className="text-2xl font-bold text-indigo-500">{summary.stage3Count}</div>
-              <p className="text-2xs text-muted-foreground">Stage 3 Exam Passed</p>
+              <div className="text-2xl font-bold text-indigo-500">
+                {summary.stage3ProvincialCount ?? summary.stage3Count}
+              </div>
+              <p className="text-2xs text-muted-foreground">Stage 3 Provincial Conclave</p>
             </CardContent>
           </Card>
 
           <Card className="bg-card border-border shadow-xs">
             <CardContent className="space-y-1 p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">Supreme Approved</span>
+                <span className="text-2xs font-semibold tracking-wider uppercase">National Level</span>
                 <UserCheck className="size-4 text-emerald-500" />
               </div>
-              <div className="text-2xl font-bold text-emerald-500">{summary.stage4ApprovedCount}</div>
-              <p className="text-2xs text-muted-foreground">Approved for Ordination</p>
+              <div className="text-2xl font-bold text-emerald-500">
+                {summary.stage4NationalCount ?? summary.stage4ApprovedCount}
+              </div>
+              <p className="text-2xs text-muted-foreground">Stage 4 Synod Ratified</p>
             </CardContent>
           </Card>
         </div>
@@ -241,6 +247,11 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                             <Building className="mr-1 inline-block size-3" />
                             {c.provinceName}
                           </span>
+                          {c.isProvincialWorshipper && (
+                            <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-2xs font-bold text-primary">
+                              Provincial Seat Branch
+                            </span>
+                          )}
                           {c.duesStatus === "cleared" ? (
                             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
                               <CheckCircle2 className="size-3" /> Dues Cleared
@@ -262,7 +273,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                           </span>
                           <span>•</span>
                           <span>
-                            Parish: <strong className="text-foreground">{c.parishName}</strong>
+                            Branch: <strong className="text-foreground">{c.parishName}</strong>
                           </span>
                           <span>•</span>
                           <span>
@@ -321,7 +332,10 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                     </div>
 
                     {/* 4-Stage Progress Line */}
-                    <CandidateStageBar currentStage={c.stageCurrent} />
+                    <CandidateStageBar
+                      currentStage={c.stageCurrent}
+                      isProvincialWorshipper={c.isProvincialWorshipper}
+                    />
                   </CardContent>
                 </Card>
               ))}

@@ -2,16 +2,7 @@
 
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  Search,
-  Filter,
-  RotateCcw,
-  Lock,
-  Building,
-  CheckCircle2,
-  Clock,
-  X,
-} from "lucide-react";
+import { Search, Filter, RotateCcw, Lock, Building, CheckCircle2, Clock, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CandidateSortOption } from "../queries";
@@ -163,10 +154,10 @@ export function OrdinationFilters({
             className="h-control-sm w-full rounded-control border border-input bg-surface px-3 py-1 text-xs text-foreground shadow-xs transition-colors focus-visible:border-ring focus-visible:outline-none"
           >
             <option value="ALL">All Vetting Stages</option>
-            <option value="STAGE_1_PARISH">Stage 1: Parish Nomination</option>
-            <option value="STAGE_2_DISTRICT">Stage 2: District Vetting</option>
-            <option value="STAGE_3_ZONAL">Stage 3: Zonal Exam Clearance</option>
-            <option value="STAGE_4_SUPREME_APPROVED">Stage 4: Supreme Approved</option>
+            <option value="STAGE_1_BRANCH">Stage 1: Branch Level</option>
+            <option value="STAGE_2_DISTRICT">Stage 2: District Review</option>
+            <option value="STAGE_3_PROVINCIAL">Stage 3: Provincial Review</option>
+            <option value="STAGE_4_NATIONAL">Stage 4: National Level</option>
           </select>
         </div>
 
@@ -230,7 +221,13 @@ export function OrdinationFilters({
           {currentStage && currentStage !== "ALL" && (
             <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-2xs font-semibold text-indigo-400">
               <Filter className="size-3" />
-              {currentStage.replace(/_/g, " ")}
+              {currentStage === "STAGE_1_BRANCH" || currentStage === "STAGE_1_PARISH"
+                ? "Stage 1: Branch"
+                : currentStage === "STAGE_2_DISTRICT"
+                  ? "Stage 2: District"
+                  : currentStage === "STAGE_3_PROVINCIAL" || currentStage === "STAGE_3_ZONAL"
+                    ? "Stage 3: Provincial"
+                    : "Stage 4: National"}
               <button
                 type="button"
                 onClick={() => updateFilters({ stage: null })}

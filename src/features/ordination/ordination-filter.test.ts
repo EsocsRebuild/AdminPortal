@@ -55,10 +55,21 @@ describe("Ordination Candidates Jurisdiction & Filtering Engine", () => {
   });
 
   it("filters accurately by vetting pipeline stage", async () => {
-    const stage2Result = await getOrdinationCandidates({ stage: "STAGE_2_DISTRICT" });
-    for (const c of stage2Result.candidates) {
-      expect(c.stageCurrent).toBe("STAGE_2_DISTRICT");
+    const stage1Result = await getOrdinationCandidates({ stage: "STAGE_1_BRANCH" });
+    for (const c of stage1Result.candidates) {
+      expect(c.stageCurrent === "STAGE_1_BRANCH" || c.stageCurrent === "STAGE_1_PARISH").toBe(true);
     }
+
+    const stage3Result = await getOrdinationCandidates({ stage: "STAGE_3_PROVINCIAL" });
+    for (const c of stage3Result.candidates) {
+      expect(c.stageCurrent === "STAGE_3_PROVINCIAL" || c.stageCurrent === "STAGE_3_ZONAL").toBe(true);
+    }
+  });
+
+  it("accurately identifies provincial worshippers at provincial cathedrals", async () => {
+    const result = await getOrdinationCandidates({ province: "Diobu Province" });
+    const diobu = result.candidates.find((c) => c.fullName.includes("Daniel W. Briggs"));
+    expect(diobu?.isProvincialWorshipper).toBe(true);
   });
 
   it("performs multi-field search across candidate name, regNumber, and parish", async () => {

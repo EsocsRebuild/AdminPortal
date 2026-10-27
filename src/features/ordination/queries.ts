@@ -38,56 +38,80 @@ interface RawPortalCandidate {
 }
 
 function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
-  let stageCurrent: VettingStage = "STAGE_1_PARISH";
+  const isProvincialWorshipper = Boolean(
+    (c.parish || "").toLowerCase().includes("provincial") ||
+    (c.parish || "").toLowerCase().includes("cathedral") ||
+    (c.parish || "").toLowerCase().includes("seat") ||
+    (c.district || "").toLowerCase().includes("provincial"),
+  );
+
+  let stageCurrent: VettingStage = "STAGE_1_BRANCH";
   if (
     c.tierApprovals?.national?.approved ||
     ["board_approved", "investiture_assigned", "ordained"].includes(c.stage || "")
   ) {
-    stageCurrent = "STAGE_4_SUPREME_APPROVED";
+    stageCurrent = "STAGE_4_NATIONAL";
   } else if (
-    c.tierApprovals?.cmc?.approved ||
     c.tierApprovals?.province?.approved ||
-    c.stage === "cmc_review"
+    c.tierApprovals?.cmc?.approved ||
+    ["provincial_review", "province_approved", "cmc_review"].includes(c.stage || "")
   ) {
-    stageCurrent = "STAGE_3_ZONAL";
-  } else if (c.tierApprovals?.branch?.approved || c.stage === "district_review") {
+    stageCurrent = "STAGE_3_PROVINCIAL";
+  } else if (c.tierApprovals?.district?.approved || c.stage === "district_review") {
     stageCurrent = "STAGE_2_DISTRICT";
+  } else if (c.tierApprovals?.branch?.approved) {
+    // If candidate worships at the provincial level, branch nomination progresses directly to Provincial Review
+    stageCurrent = isProvincialWorshipper ? "STAGE_3_PROVINCIAL" : "STAGE_2_DISTRICT";
   }
 
   const vettingHistory: VettingLogEntry[] = [];
   if (c.tierApprovals?.branch?.approved) {
     vettingHistory.push({
-      stage: "STAGE_1_PARISH",
+      stage: "STAGE_1_BRANCH",
       action: "APPROVED",
-      handlerId: c.tierApprovals.branch.approverName || "Parish Rector",
-      notes: c.tierApprovals.branch.comments || "Parish Priest endorsement verified.",
+      handlerId: c.tierApprovals.branch.approverName || "Branch Presiding Officer",
+      notes:
+        c.tierApprovals.branch.comments ||
+        (isProvincialWorshipper
+          ? "Provincial Cathedral Branch nomination endorsed."
+          : "Branch Level nomination endorsed."),
       timestamp: c.tierApprovals.branch.date || c.submissionDate || new Date().toISOString(),
     });
   }
-  if (c.tierApprovals?.district?.approved) {
+  if (
+    c.tierApprovals?.district?.approved ||
+    (isProvincialWorshipper &&
+      (c.tierApprovals?.province?.approved ||
+        stageCurrent === "STAGE_3_PROVINCIAL" ||
+        stageCurrent === "STAGE_4_NATIONAL"))
+  ) {
     vettingHistory.push({
       stage: "STAGE_2_DISTRICT",
       action: "APPROVED",
-      handlerId: c.tierApprovals.district.approverName || "District Superintendent",
-      notes: c.tierApprovals.district.comments || "District character verification cleared.",
-      timestamp: c.tierApprovals.district.date || c.submissionDate || new Date().toISOString(),
+      handlerId: c.tierApprovals?.district?.approverName || "District Review Committee",
+      notes:
+        c.tierApprovals?.district?.comments ||
+        (isProvincialWorshipper
+          ? "Direct Provincial Seat Jurisdiction: District review cleared."
+          : "District Review verification cleared."),
+      timestamp: c.tierApprovals?.district?.date || c.submissionDate || new Date().toISOString(),
     });
   }
   if (c.tierApprovals?.province?.approved || c.tierApprovals?.cmc?.approved) {
     vettingHistory.push({
-      stage: "STAGE_3_ZONAL",
+      stage: "STAGE_3_PROVINCIAL",
       action: "APPROVED",
-      handlerId: c.tierApprovals.cmc?.approverName || "Zonal Directorate",
-      notes: c.tierApprovals.cmc?.comments || "Passed doctrinal screening and examination.",
-      timestamp: c.tierApprovals.cmc?.date || c.submissionDate || new Date().toISOString(),
+      handlerId: c.tierApprovals?.province?.approverName || "Provincial Advisory Council",
+      notes: c.tierApprovals?.province?.comments || "Provincial Review clearance ratified.",
+      timestamp: c.tierApprovals?.province?.date || c.submissionDate || new Date().toISOString(),
     });
   }
   if (c.tierApprovals?.national?.approved) {
     vettingHistory.push({
-      stage: "STAGE_4_SUPREME_APPROVED",
+      stage: "STAGE_4_NATIONAL",
       action: "APPROVED",
-      handlerId: c.tierApprovals.national.approverName || "Supreme Council",
-      notes: c.tierApprovals.national.comments || "Supreme Council final ratification granted.",
+      handlerId: c.tierApprovals.national.approverName || "National Holy Synod",
+      notes: c.tierApprovals.national.comments || "National Level final ratification granted.",
       timestamp: c.tierApprovals.national.date || c.submissionDate || new Date().toISOString(),
     });
   }
@@ -118,9 +142,10 @@ function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
     churchRankCurrent: c.currentRank || "Member",
     rankTarget,
     parishId: `parish-${(c.parish || "general").toLowerCase().replace(/\s+/g, "-")}`,
-    parishName: c.parish || "Parish",
+    parishName: c.parish || "Branch",
     districtName: c.district || "District",
     provinceName: c.province || "Province",
+    isProvincialWorshipper,
     stageCurrent,
     yearsOfService: c.tenureYears || 5,
     duesStatus: c.duesStatus,
@@ -129,7 +154,7 @@ function mapToAdminCandidate(c: RawPortalCandidate): OrdinationCandidate {
     passportPhotoUrl: c.passportPhotoUrl,
     vettingHistory,
     nominatedAt: c.submissionDate || new Date().toISOString(),
-    nominatedByHandlerId: c.branchPriestName || "Branch Rector",
+    nominatedByHandlerId: c.branchPriestName || "Branch Presiding Officer",
   };
 }
 
@@ -160,9 +185,12 @@ const rankHierarchyOrder: Record<string, number> = {
 };
 
 const stageProgressOrder: Record<VettingStage, number> = {
+  STAGE_1_BRANCH: 1,
   STAGE_1_PARISH: 1,
   STAGE_2_DISTRICT: 2,
+  STAGE_3_PROVINCIAL: 3,
   STAGE_3_ZONAL: 3,
+  STAGE_4_NATIONAL: 4,
   STAGE_4_SUPREME_APPROVED: 4,
 };
 
@@ -234,7 +262,8 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
         parishName: "Diobu Central Cathedral (Provincial Seat)",
         districtName: "Diobu District",
         provinceName: "Diobu Province",
-        stageCurrent: "STAGE_2_DISTRICT",
+        isProvincialWorshipper: true,
+        stageCurrent: "STAGE_3_PROVINCIAL",
         yearsOfService: 7,
         duesStatus: "cleared",
         duesAmountPaid: 65000,
@@ -255,14 +284,15 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
         parishName: "Mount Zion Cathedral Branch (National Headquarters)",
         districtName: "Ebute Metta District (Mother District)",
         provinceName: "Lagos Central Province",
-        stageCurrent: "STAGE_1_PARISH",
+        isProvincialWorshipper: true,
+        stageCurrent: "STAGE_1_BRANCH",
         yearsOfService: 4,
         duesStatus: "pending",
         duesAmountPaid: 0,
         conductRating: "exemplary",
         vettingHistory: [],
         nominatedAt: "2026-10-19T14:00:00Z",
-        nominatedByHandlerId: "Parish Presiding Officer",
+        nominatedByHandlerId: "Branch Presiding Officer",
       },
       {
         id: "cand-002",
@@ -276,6 +306,7 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
         parishName: "Mount Zion Cathedral",
         districtName: "Lagos Central District",
         provinceName: "Lagos Province",
+        isProvincialWorshipper: false,
         stageCurrent: "STAGE_2_DISTRICT",
         yearsOfService: 6,
         duesStatus: "cleared",
@@ -322,7 +353,18 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
 
   // B. Vetting Pipeline Stage Filter
   if (options?.stage && options.stage !== "ALL") {
-    filtered = filtered.filter((c) => c.stageCurrent === options.stage);
+    filtered = filtered.filter((c) => {
+      if (options.stage === "STAGE_1_BRANCH" || options.stage === "STAGE_1_PARISH") {
+        return c.stageCurrent === "STAGE_1_BRANCH" || c.stageCurrent === "STAGE_1_PARISH";
+      }
+      if (options.stage === "STAGE_3_PROVINCIAL" || options.stage === "STAGE_3_ZONAL") {
+        return c.stageCurrent === "STAGE_3_PROVINCIAL" || c.stageCurrent === "STAGE_3_ZONAL";
+      }
+      if (options.stage === "STAGE_4_NATIONAL" || options.stage === "STAGE_4_SUPREME_APPROVED") {
+        return c.stageCurrent === "STAGE_4_NATIONAL" || c.stageCurrent === "STAGE_4_SUPREME_APPROVED";
+      }
+      return c.stageCurrent === options.stage;
+    });
   }
 
   // C. Dues Reconciliation Status Filter
@@ -376,14 +418,27 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
     }
   });
 
+  const isStage1 = (c: OrdinationCandidate) =>
+    c.stageCurrent === "STAGE_1_BRANCH" || c.stageCurrent === "STAGE_1_PARISH";
+  const isStage2 = (c: OrdinationCandidate) => c.stageCurrent === "STAGE_2_DISTRICT";
+  const isStage3 = (c: OrdinationCandidate) =>
+    c.stageCurrent === "STAGE_3_PROVINCIAL" || c.stageCurrent === "STAGE_3_ZONAL";
+  const isStage4 = (c: OrdinationCandidate) =>
+    c.stageCurrent === "STAGE_4_NATIONAL" || c.stageCurrent === "STAGE_4_SUPREME_APPROVED";
+
   return {
     candidates: filtered,
     summary: {
       totalCandidates: filtered.length,
-      stage1Count: filtered.filter((c) => c.stageCurrent === "STAGE_1_PARISH").length,
-      stage2Count: filtered.filter((c) => c.stageCurrent === "STAGE_2_DISTRICT").length,
-      stage3Count: filtered.filter((c) => c.stageCurrent === "STAGE_3_ZONAL").length,
-      stage4ApprovedCount: filtered.filter((c) => c.stageCurrent === "STAGE_4_SUPREME_APPROVED").length,
+      stage1BranchCount: filtered.filter(isStage1).length,
+      stage2DistrictCount: filtered.filter(isStage2).length,
+      stage3ProvincialCount: filtered.filter(isStage3).length,
+      stage4NationalCount: filtered.filter(isStage4).length,
+      // Legacy compatibility aliases
+      stage1Count: filtered.filter(isStage1).length,
+      stage2Count: filtered.filter(isStage2).length,
+      stage3Count: filtered.filter(isStage3).length,
+      stage4ApprovedCount: filtered.filter(isStage4).length,
     },
     allProvinces,
   };

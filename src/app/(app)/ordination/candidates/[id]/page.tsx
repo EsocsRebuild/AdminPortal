@@ -75,11 +75,16 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                     Current Rank: <strong className="text-foreground">{candidate.churchRankCurrent}</strong>
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Parish: <strong className="text-foreground">{candidate.parishName}</strong> • District:{" "}
+                    Branch: <strong className="text-foreground">{candidate.parishName}</strong> • District:{" "}
                     <strong className="text-foreground">{candidate.districtName}</strong> • Province:{" "}
                     <strong className="text-foreground">
                       {candidate.provinceName || "Provincial Headquarters"}
                     </strong>
+                    {candidate.isProvincialWorshipper && (
+                      <span className="text-3xs ml-2 inline-block rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 font-bold text-primary">
+                        Provincial Seat Branch
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -137,13 +142,17 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
               <h3 className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Vetting Pipeline Stage
               </h3>
-              <CandidateStageBar currentStage={candidate.stageCurrent} />
+              <CandidateStageBar
+                currentStage={candidate.stageCurrent}
+                isProvincialWorshipper={candidate.isProvincialWorshipper}
+              />
             </div>
           </CardContent>
         </Card>
 
         {/* Stage Advancement Clearance Action */}
-        {candidate.stageCurrent !== "STAGE_4_SUPREME_APPROVED" ? (
+        {candidate.stageCurrent !== "STAGE_4_NATIONAL" &&
+        candidate.stageCurrent !== "STAGE_4_SUPREME_APPROVED" ? (
           <Card className="border-amber-500/20 bg-amber-500/5 shadow-xs">
             <CardHeader
               title={
@@ -204,11 +213,11 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
               <BadgeCheck className="size-7" />
             </div>
             <h3 className="mt-3 text-base font-bold text-foreground">
-              Supreme Council Final Approval Granted
+              National Level Final Ratification Granted
             </h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Candidate has passed all four canonical vetting tiers and is ratified for official ordination
-              and investiture.
+              Candidate has passed all ecclesiastical canonical vetting tiers and is ratified for official
+              ordination and investiture by the Holy Synod.
             </p>
           </Card>
         )}
