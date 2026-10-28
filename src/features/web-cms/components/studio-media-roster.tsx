@@ -6,11 +6,13 @@ import { Image as ImageIcon, Copy, Check, Trash2, ExternalLink } from "lucide-re
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useModals } from "@/components/modals/modal-provider";
 import { deleteMediaAssetAction } from "../actions";
 import type { MediaAsset } from "../types";
 
 export function StudioMediaRoster({ initialMedia }: { initialMedia: MediaAsset[] }) {
   const router = useRouter();
+  const modals = useModals();
   const [media, setMedia] = React.useState<MediaAsset[]>(initialMedia);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
   const [deletingId, setDeletingId] = React.useState<string | null>(null);
@@ -22,7 +24,18 @@ export function StudioMediaRoster({ initialMedia }: { initialMedia: MediaAsset[]
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Remove this asset from media library?")) return;
+    const target = media.find((m) => m.id === id);
+    const confirmed = await modals.confirm({
+      title: "Remove Media Asset?",
+      description: target
+        ? `Are you sure you want to remove "${target.fileName}" from the church media library?`
+        : "Are you sure you want to remove this media asset?",
+      confirmLabel: "Remove Asset",
+      cancelLabel: "Keep Asset",
+      tone: "danger",
+    });
+    if (!confirmed) return;
+
     setDeletingId(id);
     const res = await deleteMediaAssetAction({ id });
     setDeletingId(null);

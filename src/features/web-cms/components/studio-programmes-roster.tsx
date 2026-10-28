@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useModals } from "@/components/modals/modal-provider";
 import { deleteProgrammeAction } from "../actions";
 import type { WebProgramme } from "../types";
 
@@ -26,11 +27,23 @@ export function StudioProgrammesRoster({
   unitName,
 }: StudioProgrammesRosterProps) {
   const router = useRouter();
+  const modals = useModals();
   const [programmes, setProgrammes] = React.useState<WebProgramme[]>(initialProgrammes);
   const [deletingId, setDeletingId] = React.useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to remove this programme schedule?")) return;
+    const target = programmes.find((p) => p.id === id);
+    const confirmed = await modals.confirm({
+      title: "Remove Programme Schedule?",
+      description: target
+        ? `Are you sure you want to remove "${target.title}"? This will unpublish the schedule from the church bulletin.`
+        : "Are you sure you want to remove this programme schedule?",
+      confirmLabel: "Remove Schedule",
+      cancelLabel: "Keep Schedule",
+      tone: "danger",
+    });
+    if (!confirmed) return;
+
     setDeletingId(id);
     const res = await deleteProgrammeAction({ id });
     setDeletingId(null);

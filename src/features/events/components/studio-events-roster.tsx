@@ -29,6 +29,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { vetContentAction, deleteEventAction } from "@/features/web-cms/actions";
+import { useModals } from "@/components/modals/modal-provider";
 import type { WebEvent } from "@/features/web-cms/types";
 
 interface StudioEventsRosterProps {
@@ -38,6 +39,7 @@ interface StudioEventsRosterProps {
 
 export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRosterProps) {
   const router = useRouter();
+  const modals = useModals();
   const [events, setEvents] = React.useState<WebEvent[]>(initialEvents);
   const [filterTab, setFilterTab] = React.useState<"all" | "approved" | "pending">("all");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -82,7 +84,18 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
   };
 
   const handleDelete = async (eventId: string) => {
-    if (!confirm("Are you sure you want to remove this church event?")) return;
+    const target = events.find((e) => e.id === eventId);
+    const confirmed = await modals.confirm({
+      title: "Remove Church Event?",
+      description: target
+        ? `Are you sure you want to remove "${target.title}" from the church calendar? This action cannot be undone.`
+        : "Are you sure you want to remove this church event?",
+      confirmLabel: "Remove Event",
+      cancelLabel: "Keep Event",
+      tone: "danger",
+    });
+    if (!confirmed) return;
+
     setProcessingId(eventId);
     const res = await deleteEventAction({ id: eventId });
     setProcessingId(null);
