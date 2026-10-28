@@ -3,6 +3,8 @@
 import { backend } from "@/server/backend";
 import { resolveUserUnit } from "@/server/units";
 import { getLocalEvents } from "@/features/events/event-store";
+import { getLocalProgrammes } from "./programmes-store";
+import { getLocalMediaAssets } from "./media-store";
 import type { WebEvent, WebProgramme, WebBulletin, MediaAsset, VettingSummary, EventCategory } from "./types";
 
 interface BackendEventResponse {
@@ -38,7 +40,19 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
   const unitInfo = await resolveUserUnit(scopeUnitId);
   const localList = getLocalEvents();
   const filteredLocal = scopeUnitId
-    ? localList.filter((e) => e.unitId === scopeUnitId || !e.unitId)
+    ? localList.filter((e) => {
+        if (!e.unitId) return true;
+        if (e.unitId === scopeUnitId) return true;
+        if (
+          e.unitName &&
+          unitInfo.unitName &&
+          (e.unitName.toLowerCase().includes(unitInfo.unitName.toLowerCase()) ||
+            unitInfo.unitName.toLowerCase().includes(e.unitName.toLowerCase()))
+        ) {
+          return true;
+        }
+        return false;
+      })
     : localList;
 
   try {
@@ -87,17 +101,59 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
   return filteredLocal;
 }
 
+export async function getBranchProgrammes(scopeUnitId?: string | null): Promise<WebProgramme[]> {
+  const unitInfo = await resolveUserUnit(scopeUnitId);
+  const localList = getLocalProgrammes();
+  const filtered = scopeUnitId
+    ? localList.filter((p) => {
+        if (!p.unitId) return true;
+        if (p.unitId === scopeUnitId) return true;
+        if (
+          p.unitName &&
+          unitInfo.unitName &&
+          (p.unitName.toLowerCase().includes(unitInfo.unitName.toLowerCase()) ||
+            unitInfo.unitName.toLowerCase().includes(p.unitName.toLowerCase()))
+        ) {
+          return true;
+        }
+        return false;
+      })
+    : localList;
+  return filtered;
+}
+
 export async function getVettingQueue(): Promise<{
   events: WebEvent[];
   programmes: WebProgramme[];
   summary: VettingSummary;
 }> {
+  const localList = getLocalEvents();
+  const localPending = localList.filter((e) => e.status === "PENDING_REVIEW");
+  const localApproved = localList.filter((e) => e.status === "APPROVED_LIVE");
+  const localRevision = localList.filter((e) => e.status === "NEEDS_REVISION");
+
   try {
     const data = await backend<{ events: WebEvent[]; programmes: WebProgramme[]; summary: VettingSummary }>(
       "/web-cms/vetting",
     );
     if (data && Array.isArray(data.events)) {
-      return data;
+      const seenIds = new Set(data.events.map((e) => e.id));
+      const mergedEvents = [...data.events];
+      for (const lp of localPending) {
+        if (!seenIds.has(lp.id)) {
+          mergedEvents.unshift(lp);
+        }
+      }
+      return {
+        events: mergedEvents,
+        programmes: data.programmes || [],
+        summary: {
+          pendingEventsCount: mergedEvents.length,
+          pendingProgrammesCount: data.summary?.pendingProgrammesCount || 0,
+          approvedCount: (data.summary?.approvedCount || 0) + localApproved.length,
+          revisionRequestedCount: (data.summary?.revisionRequestedCount || 0) + localRevision.length,
+        },
+      };
     }
   } catch {
     // Fall back to querying draft events from backend
@@ -126,25 +182,33 @@ export async function getVettingQueue(): Promise<{
       submittedAt: evt.startsAt,
     }));
 
+    const seenIds = new Set(events.map((e) => e.id));
+    const merged = [...events];
+    for (const lp of localPending) {
+      if (!seenIds.has(lp.id)) {
+        merged.unshift(lp);
+      }
+    }
+
     return {
-      events,
+      events: merged,
       programmes: [],
       summary: {
-        pendingEventsCount: events.length,
+        pendingEventsCount: merged.length,
         pendingProgrammesCount: 0,
-        approvedCount: 0,
-        revisionRequestedCount: 0,
+        approvedCount: localApproved.length,
+        revisionRequestedCount: localRevision.length,
       },
     };
   } catch {
     return {
-      events: [],
+      events: localPending,
       programmes: [],
       summary: {
-        pendingEventsCount: 0,
+        pendingEventsCount: localPending.length,
         pendingProgrammesCount: 0,
-        approvedCount: 0,
-        revisionRequestedCount: 0,
+        approvedCount: localApproved.length,
+        revisionRequestedCount: localRevision.length,
       },
     };
   }
@@ -174,9 +238,9 @@ export async function getMediaAssets(): Promise<MediaAsset[]> {
       }));
     }
   } catch {
-    // Return empty array
+    // Fallback to local store
   }
-  return [];
+  return getLocalMediaAssets();
 }
 
 export async function getPublishedBulletins(): Promise<WebBulletin[]> {
@@ -187,7 +251,7 @@ export async function getPublishedBulletins(): Promise<WebBulletin[]> {
       return items;
     }
   } catch {
-    // Return empty array
+    // Fallback
   }
   return [];
 }

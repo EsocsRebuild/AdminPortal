@@ -4,15 +4,17 @@ export const eventInputSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(150, "Title is too long"),
   description: z
     .string()
-    .min(10, "Description must be at least 10 characters")
-    .max(2000, "Description is too long"),
+    .max(2000, "Description is too long")
+    .optional()
+    .or(z.literal("")),
   category: z.enum(["REVIVAL", "SUNDAY_SERVICE", "FELLOWSHIP_RALLY", "CONFERENCE", "SPECIAL_PROGRAMME"]),
   startDate: z.string().min(1, "Start date & time is required"),
   endDate: z.string().optional(),
-  venue: z.string().min(3, "Venue location is required"),
+  venue: z.string().min(2, "Venue location is required"),
   bannerUrl: z.string().url("Invalid banner image URL").optional().or(z.literal("")),
   registrationOpen: z.boolean().default(false),
   ticketCapacity: z.number().int().positive("Capacity must be positive").optional(),
+  publishDirectly: z.boolean().optional(),
 });
 
 export const programmeInputSchema = z.object({

@@ -2,6 +2,7 @@ import "server-only";
 
 import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
+import { getLocalFunds, getLocalBatches } from "./giving-store";
 
 export interface FundLedger {
   id: string;
@@ -63,9 +64,9 @@ export async function listFunds(): Promise<FundLedger[]> {
       }));
     }
   } catch {
-    // Fallback to empty if offline/unreachable
+    // Fallback to local store
   }
-  return [];
+  return getLocalFunds();
 }
 
 export async function listBatches(): Promise<GivingBatch[]> {
@@ -97,9 +98,9 @@ export async function listBatches(): Promise<GivingBatch[]> {
       }));
     }
   } catch {
-    // Fallback
+    // Fallback to local store
   }
-  return [];
+  return getLocalBatches();
 }
 
 export async function getGivingSummary(): Promise<GivingSummary | null> {

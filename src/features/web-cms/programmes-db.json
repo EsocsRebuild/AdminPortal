@@ -1,0 +1,37 @@
+[
+  {
+    "id": "prog_2026_q4",
+    "unitId": "",
+    "unitName": "The Holy Order (Global Headquarters)",
+    "title": "2026 Centenary Liturgical Jubilee Summit",
+    "theme": "Walking in the Ancient Paths of Holiness (Jeremiah 6:16)",
+    "scheduleDate": "2026-11-20T10:00:00.000Z",
+    "speakers": [
+      "His Most Eminence, Baba Aladura (Supreme Head)",
+      "Elder Apostle S. M. Oladipo",
+      "Special Mother in Israel B. K. George"
+    ],
+    "bulletinPdfUrl": "https://esocs.org/docs/centenary-jubilee-liturgy.pdf",
+    "livestreamUrl": "https://youtube.com/live/esocs-centenary-jubilee",
+    "status": "APPROVED_LIVE",
+    "submittedByHandlerId": "Liturgical Directorate (HQ)",
+    "submittedAt": "2026-10-24T08:00:00.000Z"
+  },
+  {
+    "id": "prog_diobu_q4",
+    "unitId": "unit_diobu_province",
+    "unitName": "Diobu Provincial Headquarters",
+    "title": "Diobu Provincial Annual Revival & Prayer Assembly",
+    "theme": "The Lord of Hosts Hath Commanded Victory",
+    "scheduleDate": "2026-12-05T09:00:00.000Z",
+    "speakers": [
+      "Senior Apostle D. W. Briggs (Provincial Chairman)",
+      "Pastor Apostle C. N. Amadi"
+    ],
+    "bulletinPdfUrl": "https://esocs.org/docs/diobu-revival-docket.pdf",
+    "livestreamUrl": "https://youtube.com/live/diobu-province-live",
+    "status": "APPROVED_LIVE",
+    "submittedByHandlerId": "Diobu Secretariat",
+    "submittedAt": "2026-10-25T11:00:00.000Z"
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "funds": [
+    {
+      "id": "fund_tithes",
+      "name": "General Tithes & Dues Treasury",
+      "code": "TITHE-001",
+      "description": "General statutory tithes, branch remittances, and ordination statutory dues.",
+      "currentBalance": 4850000,
+      "monthToDate": 1250000,
+      "status": "active"
+    },
+    {
+      "id": "fund_building",
+      "name": "Cathedral Sanctuary Expansion Project",
+      "code": "BLD-002",
+      "description": "Dedicated capital project fund for cathedral construction, acoustic roofing, and altar furnishings.",
+      "currentBalance": 8720000,
+      "monthToDate": 2100000,
+      "status": "restricted"
+    },
+    {
+      "id": "fund_welfare",
+      "name": "Widows, Orphans & Clergy Welfare Fund",
+      "code": "WLF-003",
+      "description": "Benevolence and welfare ledger supporting indigent members, widows, and retired clergy.",
+      "currentBalance": 1640000,
+      "monthToDate": 450000,
+      "status": "active"
+    }
+  ],
+  "batches": [
+    {
+      "id": "batch_2026_10_25",
+      "batchNumber": "BAT-2026-W43",
+      "date": "2026-10-25T11:30:00.000Z",
+      "cashTotal": 420000,
+      "posTotal": 280000,
+      "onlineTotal": 350000,
+      "total": 1050000,
+      "status": "verified",
+      "verifiedBy": "Elder S. O. Balogun (Treasurer)"
+    },
+    {
+      "id": "batch_2026_10_18",
+      "batchNumber": "BAT-2026-W42",
+      "date": "2026-10-18T11:30:00.000Z",
+      "cashTotal": 395000,
+      "posTotal": 240000,
+      "onlineTotal": 310000,
+      "total": 945000,
+      "status": "reconciled",
+      "verifiedBy": "Diocesan Audit Committee"
+    }
+  ]
+}

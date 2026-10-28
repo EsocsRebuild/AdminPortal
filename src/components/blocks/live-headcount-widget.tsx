@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRealtimeStream } from "@/hooks/use-realtime-stream";
+import { incrementHeadcountAction } from "@/features/attendance/actions";
 
 interface LiveHeadcountProps {
   parishName?: string;
@@ -20,8 +21,9 @@ export function LiveHeadcountWidget({
   const [count, setCount] = React.useState(initialCount);
   const { connected } = useRealtimeStream("headcount");
 
-  function handleIncrement(amount: number) {
+  async function handleIncrement(amount: number) {
     setCount((prev) => Math.max(0, prev + amount));
+    await incrementHeadcountAction(amount);
   }
 
   return (

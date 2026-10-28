@@ -40,6 +40,14 @@ export async function getEcclesiasticalFeed(provinceFilter?: string): Promise<Fe
   try {
     const events = await listEvents();
     for (const evt of events) {
+      const prov = evt.unitName.includes("Diobu")
+        ? "Diobu Province"
+        : evt.unitName.includes("Lagos Central")
+          ? "Lagos Central Province"
+          : evt.unitName.includes("Lagos")
+            ? "Lagos Province"
+            : "National Headquarters";
+
       feed.push({
         id: `feed-evt-${evt.id}`,
         type: "event",
@@ -48,7 +56,7 @@ export async function getEcclesiasticalFeed(provinceFilter?: string): Promise<Fe
         authorName: "Liturgical Directorate",
         authorRole: "Secretariat Administrator",
         unitName: evt.unitName,
-        provinceName: "National Headquarters",
+        provinceName: prov,
         timestamp: new Date().toISOString(),
         badgeText: `${evt.category.toUpperCase()} • ${evt.status.toUpperCase()}`,
         actionUrl: "/events",

@@ -3,12 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ShieldCheck, CheckCircle2, Clock, User, BadgeCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getCandidateDocket } from "@/features/ordination/queries";
-import { advanceVettingStageAction, updateCandidateDetailsAction } from "@/features/ordination/actions";
 import { CandidateStageBar } from "@/features/ordination/components/candidate-stage-bar";
+import {
+  CandidateClearanceForm,
+  CandidateRecordUpdateForm,
+} from "@/features/ordination/components/docket-action-forms";
 
 export const metadata: Metadata = { title: "Candidate Vetting Docket · ESOCS Ordination" };
 
@@ -164,47 +166,11 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
               description="Authorize advancement to the next screening stage after examining doctrinal fitness, character references, and ministry contributions."
             />
             <CardContent>
-              <form
-                action={async (formData) => {
-                  "use server";
-                  await advanceVettingStageAction({
-                    candidateId: candidate.id,
-                    currentStage: candidate.stageCurrent,
-                    action: "APPROVED",
-                    clearanceNotes:
-                      (formData.get("notes") as string) || "Vetting clearance granted by board.",
-                  });
-                }}
-                className="space-y-4"
-              >
-                <div className="space-y-1.5">
-                  <label htmlFor="clearance-notes" className="text-xs font-medium text-foreground">
-                    Clearance Justification & Audit Notes *
-                  </label>
-                  <textarea
-                    id="clearance-notes"
-                    name="notes"
-                    rows={3}
-                    required
-                    placeholder="Provide theological screening rationale, pastoral council endorsement, or verification details..."
-                    className="w-full rounded-md border border-input bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-primary focus:outline-none"
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-2xs text-muted-foreground">
-                    Action will be permanently recorded in the ordination audit ledger and dispatched to
-                    Mailpit.
-                  </span>
-                  <Button
-                    type="submit"
-                    className="gap-1.5 bg-emerald-600 text-xs font-medium text-white shadow-md hover:bg-emerald-500"
-                  >
-                    <CheckCircle2 className="size-4" />
-                    Grant Clearance & Advance to Next Tier
-                  </Button>
-                </div>
-              </form>
+              <CandidateClearanceForm
+                candidateId={candidate.id}
+                candidateName={candidate.fullName}
+                currentStage={candidate.stageCurrent}
+              />
             </CardContent>
           </Card>
         ) : (
@@ -229,52 +195,11 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
             description="Update financial dues status or conduct assessment directly in the Ordination Portal database."
           />
           <CardContent>
-            <form
-              action={async (formData) => {
-                "use server";
-                await updateCandidateDetailsAction(candidate.id, {
-                  duesStatus: formData.get("duesStatus") as "pending" | "cleared" | "exempt",
-                  conductRating: formData.get("conductRating") as string,
-                });
-              }}
-              className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3 sm:items-end"
-            >
-              <div className="space-y-1.5">
-                <label htmlFor="upd-dues" className="font-medium text-foreground">
-                  Financial Dues Status
-                </label>
-                <select
-                  id="upd-dues"
-                  name="duesStatus"
-                  defaultValue={candidate.duesStatus || "pending"}
-                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-primary focus:outline-none"
-                >
-                  <option value="pending">Pending Payment</option>
-                  <option value="cleared">Cleared (Full Dues Paid)</option>
-                  <option value="exempt">Exempt (Clergy Quota)</option>
-                </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="upd-conduct" className="font-medium text-foreground">
-                  Conduct & Character Rating
-                </label>
-                <select
-                  id="upd-conduct"
-                  name="conductRating"
-                  defaultValue={candidate.conductRating || "exemplary"}
-                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-primary focus:outline-none"
-                >
-                  <option value="exemplary">Exemplary</option>
-                  <option value="commendable">Commendable</option>
-                  <option value="under_review">Under Pastoral Review</option>
-                </select>
-              </div>
-
-              <Button type="submit" variant="outline" className="text-xs">
-                Save Candidate Updates
-              </Button>
-            </form>
+            <CandidateRecordUpdateForm
+              candidateId={candidate.id}
+              initialDuesStatus={candidate.duesStatus}
+              initialConductRating={candidate.conductRating}
+            />
           </CardContent>
         </Card>
 
