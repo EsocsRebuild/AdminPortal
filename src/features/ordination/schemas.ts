@@ -24,7 +24,15 @@ export const candidateNominationSchema = z.object({
 
 export const vettingStageAdvanceSchema = z.object({
   candidateId: z.string().min(1, "Candidate ID is required"),
-  currentStage: z.enum(["STAGE_1_PARISH", "STAGE_2_DISTRICT", "STAGE_3_ZONAL", "STAGE_4_SUPREME_APPROVED"]),
+  currentStage: z.enum([
+    "STAGE_1_BRANCH",
+    "STAGE_2_DISTRICT",
+    "STAGE_3_PROVINCIAL",
+    "STAGE_4_NATIONAL",
+    "STAGE_1_PARISH",
+    "STAGE_3_ZONAL",
+    "STAGE_4_SUPREME_APPROVED",
+  ]),
   action: z.enum(["APPROVED", "REJECTED", "NEEDS_INFO"]),
   clearanceNotes: z.string().min(5, "Vetting clearance notes are required"),
 });

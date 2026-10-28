@@ -81,7 +81,7 @@ export function AuthSplitLayout({
         {/* Background Image from Web Brand */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/brand/hero-mount-zion.webp"
+            src="/brand/splash-bg.webp"
             alt="ESOCS Cathedral"
             fill
             sizes="(max-width: 1024px) 100vw, 55vw"

@@ -56,8 +56,13 @@ export function Tooltip({
   disabled,
   className,
 }: TooltipProps) {
-  if (disabled || !content) {
+  if (disabled) {
     return <>{children}</>;
+  }
+
+  // If no content prop is supplied, act as a TooltipRoot wrapper for compound TooltipTrigger / TooltipContent usage
+  if (!content) {
+    return <TooltipPrimitive.Root delayDuration={120}>{children}</TooltipPrimitive.Root>;
   }
 
   return (

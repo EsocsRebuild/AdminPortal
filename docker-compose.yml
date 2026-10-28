@@ -15,8 +15,8 @@ services:
     ports:
       - "${ADMIN_PORT:-3030}:3001"
     volumes:
-      # Live bind mount for source code
-      - .:/app:delegated
+      # Live bind mount for source code (immediate sync across host boundary)
+      - .:/app
       # Preserve container-built Linux node_modules and .next cache
       - admin_dev_node_modules:/app/node_modules
       - admin_dev_next_cache:/app/.next
@@ -33,7 +33,7 @@ services:
       - BACKEND_API_URL=http://host.docker.internal:5080/api/v1
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    command: npm run dev
+    command: npm run dev:docker
     networks:
       - esocs-network
 

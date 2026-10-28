@@ -12,10 +12,14 @@ import {
 import type { OrdinationCandidate, VettingStage } from "./types";
 
 const stageNextMap: Record<VettingStage, VettingStage> = {
+  STAGE_1_BRANCH: "STAGE_2_DISTRICT",
+  STAGE_2_DISTRICT: "STAGE_3_PROVINCIAL",
+  STAGE_3_PROVINCIAL: "STAGE_4_NATIONAL",
+  STAGE_4_NATIONAL: "STAGE_4_NATIONAL",
+  // Legacy aliases
   STAGE_1_PARISH: "STAGE_2_DISTRICT",
-  STAGE_2_DISTRICT: "STAGE_3_ZONAL",
-  STAGE_3_ZONAL: "STAGE_4_SUPREME_APPROVED",
-  STAGE_4_SUPREME_APPROVED: "STAGE_4_SUPREME_APPROVED",
+  STAGE_3_ZONAL: "STAGE_4_NATIONAL",
+  STAGE_4_SUPREME_APPROVED: "STAGE_4_NATIONAL",
 };
 
 const portalUrls = [
@@ -90,7 +94,7 @@ export async function nominateCandidateAction(
               parishId: `parish-${check.data.parishName.toLowerCase().replace(/\s+/g, "-")}`,
               parishName: check.data.parishName,
               districtName: "Diocesan District",
-              stageCurrent: "STAGE_1_PARISH",
+              stageCurrent: "STAGE_1_BRANCH",
               yearsOfService: check.data.yearsOfService,
               vettingHistory: [],
               nominatedAt: new Date().toISOString(),
@@ -150,49 +154,69 @@ export async function advanceVettingStageAction(
           let currentVettingTier = current.currentVettingTier;
           const now = new Date().toISOString();
           const approverName = "Admin Directorate (HQ)";
+          const isProvincialWorshipper = Boolean(
+            (current.parish || "").toLowerCase().includes("provincial") ||
+            (current.parish || "").toLowerCase().includes("cathedral") ||
+            (current.parish || "").toLowerCase().includes("seat") ||
+            (current.district || "").toLowerCase().includes("provincial"),
+          );
 
-          if (check.data.currentStage === "STAGE_1_PARISH") {
+          if (check.data.currentStage === "STAGE_1_BRANCH" || check.data.currentStage === "STAGE_1_PARISH") {
             tierApprovals.branch = {
               approved: check.data.action === "APPROVED",
               date: now,
               approverName,
-              comments: check.data.clearanceNotes || "Parish Priest endorsement ratified.",
+              comments: check.data.clearanceNotes || "Branch Level Nomination ratified.",
             };
-            currentVettingTier = "district";
-            stage = "district_review";
+
+            if (isProvincialWorshipper) {
+              // Direct Provincial seat: auto-endorse District Review and jump straight to Provincial Review
+              tierApprovals.district = {
+                approved: true,
+                date: now,
+                approverName: "Provincial Seat Direct Administration",
+                comments: "Direct Provincial Cathedral Jurisdiction: District review automatically cleared.",
+              };
+              currentVettingTier = "province";
+              stage = "provincial_review";
+            } else {
+              currentVettingTier = "district";
+              stage = "district_review";
+            }
           } else if (check.data.currentStage === "STAGE_2_DISTRICT") {
             tierApprovals.district = {
               approved: check.data.action === "APPROVED",
               date: now,
               approverName,
-              comments: check.data.clearanceNotes || "District Superintendent Council clearance verified.",
+              comments: check.data.clearanceNotes || "District Review Committee clearance verified.",
             };
             currentVettingTier = "province";
             stage = "provincial_review";
-          } else if (check.data.currentStage === "STAGE_3_ZONAL") {
+          } else if (
+            check.data.currentStage === "STAGE_3_PROVINCIAL" ||
+            check.data.currentStage === "STAGE_3_ZONAL"
+          ) {
             tierApprovals.province = {
               approved: check.data.action === "APPROVED",
               date: now,
               approverName,
-              comments: check.data.clearanceNotes || "Provincial Diocesan quota ratified.",
-            };
-            tierApprovals.cmc = {
-              approved: check.data.action === "APPROVED",
-              date: now,
-              approverName: "Central Ministerial Committee (Admin)",
-              comments: "Theological assessment & Liturgical interview cleared.",
+              comments: check.data.clearanceNotes || "Provincial Review clearance ratified.",
             };
             currentVettingTier = "national";
-            stage = "cmc_review";
-          } else if (check.data.currentStage === "STAGE_4_SUPREME_APPROVED") {
+            stage = "board_approved";
+          } else if (
+            check.data.currentStage === "STAGE_4_NATIONAL" ||
+            check.data.currentStage === "STAGE_4_SUPREME_APPROVED"
+          ) {
             tierApprovals.national = {
               approved: check.data.action === "APPROVED",
               date: now,
-              approverName: "Holy Synod & Supreme Council (Admin)",
-              comments: check.data.clearanceNotes || "Supreme Advisory Council final seal issued.",
+              approverName: "National Holy Synod Directorate",
+              comments:
+                check.data.clearanceNotes || "National Level final ratification and investiture approved.",
             };
             currentVettingTier = "completed";
-            stage = "board_approved";
+            stage = "ordained";
           }
 
           const patchRes = await fetch(`${portalUrl}/api/candidates/${check.data.candidateId}`, {

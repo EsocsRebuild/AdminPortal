@@ -2,6 +2,7 @@ import "server-only";
 
 import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
+import { getLocalEvents } from "./event-store";
 
 export interface ChurchEvent {
   id: string;
@@ -36,8 +37,9 @@ export async function listEvents(): Promise<ChurchEvent[]> {
     }
     const raw = await backend<{ items?: RawEventItem[] } | RawEventItem[]>("/events");
     const items = Array.isArray(raw) ? raw : raw?.items || [];
+    let backendMapped: ChurchEvent[] = [];
     if (Array.isArray(items) && items.length > 0) {
-      return items.map((evt) => {
+      backendMapped = items.map((evt) => {
         const startsAt = new Date(evt.startsAt);
         const dateStr = startsAt.toISOString().split("T")[0];
         const timeStr = startsAt.toLocaleTimeString("en-US", {
@@ -69,8 +71,71 @@ export async function listEvents(): Promise<ChurchEvent[]> {
         };
       });
     }
+
+    const mappedLocal: ChurchEvent[] = getLocalEvents().map((e) => {
+      const startsAt = new Date(e.startDate);
+      const catLower = e.category.toLowerCase();
+      const cat = (
+        catLower === "conference"
+          ? "conference"
+          : catLower === "revival"
+            ? "revival"
+            : catLower === "fellowship_rally"
+              ? "fellowship"
+              : "service"
+      ) as "service" | "conference" | "revival" | "fellowship";
+
+      return {
+        id: e.id,
+        title: e.title,
+        category: cat,
+        date: startsAt.toISOString().split("T")[0],
+        time: startsAt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+        location: e.venue,
+        unitName: e.unitName,
+        capacity: e.ticketCapacity,
+        registeredCount: e.registrationOpen ? 0 : undefined,
+        isRecurring: false,
+        status: "scheduled",
+      };
+    });
+
+    const seenIds = new Set(backendMapped.map((e) => e.id));
+    for (const loc of mappedLocal) {
+      if (!seenIds.has(loc.id)) {
+        backendMapped.unshift(loc);
+      }
+    }
+    return backendMapped;
   } catch {
     // Network fallback
   }
-  return [];
+
+  return getLocalEvents().map((e) => {
+    const startsAt = new Date(e.startDate);
+    const catLower = e.category.toLowerCase();
+    const cat = (
+      catLower === "conference"
+        ? "conference"
+        : catLower === "revival"
+          ? "revival"
+          : catLower === "fellowship_rally"
+            ? "fellowship"
+            : "service"
+    ) as "service" | "conference" | "revival" | "fellowship";
+
+    return {
+      id: e.id,
+      title: e.title,
+      category: cat,
+      date: startsAt.toISOString().split("T")[0],
+      time: startsAt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+      location: e.venue,
+      unitName: e.unitName,
+      capacity: e.ticketCapacity,
+      registeredCount: e.registrationOpen ? 0 : undefined,
+      isRecurring: false,
+      status: "scheduled",
+    };
+  });
 }

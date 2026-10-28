@@ -31,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { UserMenu } from "@/components/layout/user-menu";
 import { siteConfig } from "@/config/site";
 import { useHotkey } from "@/hooks/use-hotkey";
@@ -489,32 +489,26 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
 
             {/* Right Actions */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-500 transition-all hover:bg-amber-500/20 sm:text-xs"
-                  >
-                    <Church className="size-3.5 text-amber-500" />
-                    <span className="hidden sm:inline">Main Church Admin</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>Switch to Ecclesiastical Governance & Admin Portal</TooltipContent>
+              <Tooltip content="Switch to Ecclesiastical Governance & Admin Portal">
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-500 transition-all hover:bg-amber-500/20 sm:text-xs"
+                >
+                  <Church className="size-3.5 text-amber-500" />
+                  <span className="hidden sm:inline">Main Church Admin</span>
+                </Link>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={`/church/${userUnit.unitSlug}`}
-                    target="_blank"
-                    className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 sm:text-xs dark:text-emerald-400"
-                  >
-                    <Globe className="size-3.5" />
-                    <span className="hidden sm:inline">Live Web Preview</span>
-                    <ExternalLink className="size-3 opacity-70" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>View live public site for {userUnit.unitName}</TooltipContent>
+              <Tooltip content={`View live public site for ${userUnit.unitName}`}>
+                <Link
+                  href={`/church/${userUnit.unitSlug}`}
+                  target="_blank"
+                  className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 sm:text-xs dark:text-emerald-400"
+                >
+                  <Globe className="size-3.5" />
+                  <span className="hidden sm:inline">Live Web Preview</span>
+                  <ExternalLink className="size-3 opacity-70" />
+                </Link>
               </Tooltip>
 
               <ThemeToggle />

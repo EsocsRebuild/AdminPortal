@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { SessionProvider } from "@/components/auth/session-provider";
@@ -8,18 +7,10 @@ import { WebStudioShell } from "@/components/layout/web-studio-shell";
 import { getSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 
-export default async function WebAdminLayout({ children }: { children: ReactNode }) {
-  const headerList = await headers();
-  const pathname = headerList.get("x-pathname") ?? "";
-  const isAuthPage = pathname.includes("/admin-web/login") || pathname.includes("/admin-web/signup");
-
-  if (isAuthPage) {
-    return <>{children}</>;
-  }
-
+export default async function WebAdminStudioLayout({ children }: { children: ReactNode }) {
   const sessionUser = await getSession();
   if (!sessionUser) {
-    redirect(`/admin-web/login?next=${encodeURIComponent(pathname || "/admin-web/dashboard")}`);
+    redirect("/admin-web/login?next=/admin-web/dashboard");
   }
 
   const userUnit = await resolveUserUnit(sessionUser.scopeUnitId);

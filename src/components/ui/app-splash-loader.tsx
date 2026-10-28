@@ -1,156 +1,83 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Crest } from "@/components/icons/logo";
-import { ArrowRight, CheckCircle2, Sparkles, Building2, ShieldCheck, UsersRound } from "lucide-react";
 
-const steps = [
-  {
-    at: 0,
-    title: "Holy Order Connection",
-    text: "Connecting to Holy Order Unit & Parish Ledger...",
-    icon: Building2,
-  },
-  {
-    at: 25,
-    title: "Ecclesiastical Security",
-    text: "Verifying Handler Credentials & Audit Traceability...",
-    icon: ShieldCheck,
-  },
-  {
-    at: 55,
-    title: "Registry & Records",
-    text: "Synchronizing Member & Ordination Candidate Records...",
-    icon: UsersRound,
-  },
-  {
-    at: 80,
-    title: "Interface Assembly",
-    text: "Preparing Administration & Content Publishing Core...",
-    icon: Sparkles,
-  },
-  {
-    at: 100,
-    title: "Platform Ready",
-    text: "Welcome to The Eternal Sacred Order of the Cherubim and Seraphim",
-    icon: CheckCircle2,
-  },
-];
+interface AppSplashLoaderProps {
+  message?: string;
+  subMessage?: string;
+  fullScreen?: boolean;
+}
 
-export function AppSplashLoader() {
+export function AppSplashLoader({
+  message = "Loading Central Administration Portal...",
+  subMessage = "The Eternal Sacred Order of the Cherubim and Seraphim • Central Secretariat Worldwide",
+  fullScreen = true,
+}: AppSplashLoaderProps) {
   const [mounted, setMounted] = React.useState(true);
-  const [progress, setProgress] = React.useState(0);
-  const [currentStepText, setCurrentStepText] = React.useState(steps[0].text);
-  const [bgIndex, setBgIndex] = React.useState(0);
   const [fadingOut, setFadingOut] = React.useState(false);
 
-  const images = [
-    "/brand/hero-mount-zion.webp",
-    "/brand/splash-bg.webp",
-    "/brand/hero-youth.webp",
-    "/brand/hero-women.webp",
-    "/brand/hero-fathers.webp",
-  ];
-
   React.useEffect(() => {
-    const startTime = Date.now();
-    const duration = 2800; // Crisp, prompt pace
-
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const rawPct = Math.min(100, Math.floor((elapsed / duration) * 100));
-
-      setProgress(rawPct);
-
-      const activeStep = steps
-        .slice()
-        .reverse()
-        .find((s) => rawPct >= s.at);
-      if (activeStep) {
-        setCurrentStepText(activeStep.text);
-      }
-
-      const nextBg = Math.floor((rawPct / 100) * images.length) % images.length;
-      setBgIndex(nextBg);
-
-      if (rawPct >= 100) {
-        clearInterval(interval);
-        setFadingOut(true);
-        setTimeout(() => {
-          setMounted(false);
-        }, 350);
-      }
-    }, 40);
-
-    return () => clearInterval(interval);
-  }, [images.length]);
+    const timer = setTimeout(() => {
+      setFadingOut(true);
+      setTimeout(() => setMounted(false), 240);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (!mounted) return null;
+
+  const content = (
+    <div className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-6 p-6 text-center sm:p-8">
+      {/* Animated Stately Crest Container */}
+      <div className="relative flex size-28 items-center justify-center">
+        {/* Soft Ambient Pulse Aura */}
+        <div className="absolute inset-0 animate-pulse rounded-full bg-amber-500/20 blur-xl" />
+
+        {/* Outer Counter-Clockwise Thin Dashed Ring */}
+        <div
+          className="absolute inset-0 animate-spin rounded-full border border-dashed border-amber-500/40"
+          style={{ animationDuration: "14s", animationDirection: "reverse" }}
+        />
+
+        {/* Inner Clockwise Golden Orbit Ring */}
+        <div
+          className="absolute inset-2 animate-spin rounded-full border-2 border-slate-800 border-t-amber-500"
+          style={{ animationDuration: "1.8s" }}
+        />
+
+        {/* Core Official Crest Badge */}
+        <div className="relative z-10 flex size-14 items-center justify-center rounded-2xl border border-slate-800 bg-[#0c1222] p-2 shadow-xl transition-transform hover:scale-105">
+          <Crest size={36} className="text-amber-400" />
+        </div>
+      </div>
+
+      {/* Narrative Progress Message */}
+      <div className="space-y-1.5 px-4">
+        <h3 className="font-sans text-sm font-bold tracking-tight text-white sm:text-base">{message}</h3>
+        <p className="font-sans text-xs leading-relaxed text-slate-400">{subMessage}</p>
+      </div>
+
+      {/* High-Precision Continuous Progress Shimmer */}
+      <div className="relative h-1 w-44 overflow-hidden rounded-full bg-slate-800">
+        <div className="absolute inset-0 h-full w-full animate-[shimmer_1.5s_infinite] bg-linear-to-r from-transparent via-amber-500 to-transparent" />
+      </div>
+    </div>
+  );
+
+  if (!fullScreen) {
+    return content;
+  }
 
   return (
     <div
       role="status"
       aria-label="Loading platform"
-      className={`fixed inset-0 z-99999 flex flex-col items-center justify-center overflow-hidden bg-slate-950 transition-opacity duration-300 ${
-        fadingOut ? "opacity-0" : "opacity-100"
+      className={`fixed inset-0 z-99999 flex items-center justify-center bg-[#070b14]/98 transition-opacity duration-200 ${
+        fadingOut ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      {/* Background imagery with solid high-contrast dark overlay - no blur */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={images[bgIndex]}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-20 transition-opacity duration-500"
-        />
-        <div className="absolute inset-0 bg-slate-950/90" />
-      </div>
-
-      {/* Main Solid Architectural Content Card - Sharp 1px Border, No Heavy Box-Shadow */}
-      <div className="relative z-10 mx-4 flex max-w-lg flex-col items-center rounded-xl border border-slate-800 bg-slate-900 p-8 text-center sm:p-10">
-        {/* Sacred Official Crest */}
-        <div className="relative mb-5 flex size-24 items-center justify-center rounded-xl border border-amber-500/30 bg-slate-950 p-3 sm:size-28">
-          <Crest className="size-full text-amber-400" />
-        </div>
-
-        {/* Full Complete Name of the Holy Order */}
-        <h1 className="text-sm font-bold tracking-wider text-amber-400 uppercase sm:text-base">
-          The Eternal Sacred Order of the Cherubim and Seraphim
-        </h1>
-        <p className="mt-1 text-xs font-medium tracking-wide text-slate-400 uppercase">
-          Administration & Governance Portal
-        </p>
-
-        {/* Crisp Progress Bar */}
-        <div className="mt-6 w-full max-w-xs space-y-2">
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
-            <div
-              className="h-full bg-linear-to-r from-amber-500 to-amber-300 transition-all duration-150 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-[0.6875rem] font-semibold tracking-wider text-slate-400 uppercase">
-            <span>Loading</span>
-            <span className="font-mono text-amber-400">{progress}%</span>
-          </div>
-        </div>
-
-        {/* Dynamic status line */}
-        <p className="mt-4 min-h-[1.5rem] text-xs font-medium text-slate-300">{currentStepText}</p>
-
-        {/* Quick Dismiss / Skip Button for Returning Admins */}
-        <button
-          type="button"
-          onClick={() => setMounted(false)}
-          className="hover:bg-slate-750 mt-6 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300 transition-colors hover:border-slate-600 hover:text-white"
-        >
-          <span>Continue</span>
-          <ArrowRight className="size-3" />
-        </button>
-      </div>
+      {content}
     </div>
   );
 }

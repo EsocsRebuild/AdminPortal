@@ -2,7 +2,8 @@
 
 import { backend } from "@/server/backend";
 import { resolveUserUnit } from "@/server/units";
-import type { WebEvent, WebProgramme, MediaAsset, VettingSummary, EventCategory } from "./types";
+import { getLocalEvents } from "@/features/events/event-store";
+import type { WebEvent, WebProgramme, WebBulletin, MediaAsset, VettingSummary, EventCategory } from "./types";
 
 interface BackendEventResponse {
   id: string;
@@ -35,6 +36,10 @@ function mapBackendTypeToCategory(type?: string): EventCategory {
 
 export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebEvent[]> {
   const unitInfo = await resolveUserUnit(scopeUnitId);
+  const localList = getLocalEvents();
+  const filteredLocal = scopeUnitId
+    ? localList.filter((e) => e.unitId === scopeUnitId || !e.unitId)
+    : localList;
 
   try {
     const raw = await backend<{ items?: BackendEventResponse[] } | BackendEventResponse[]>("/events", {
@@ -43,7 +48,7 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
 
     const items = Array.isArray(raw) ? raw : raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
-      return items.map((evt) => ({
+      const backendEvents: WebEvent[] = items.map((evt) => ({
         id: evt.id,
         unitId: evt.unitId ?? scopeUnitId ?? "",
         unitName: unitInfo.unitName,
@@ -65,13 +70,21 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
         submittedByHandlerId: evt.id,
         submittedAt: evt.startsAt,
       }));
+
+      // Combine backend events with any locally submitted events
+      const seenIds = new Set(backendEvents.map((e) => e.id));
+      for (const loc of filteredLocal) {
+        if (!seenIds.has(loc.id)) {
+          backendEvents.unshift(loc);
+        }
+      }
+      return backendEvents;
     }
   } catch {
-    // If backend /events returns empty or is unpopulated for this unit, return empty array.
+    // Backend API unavailable; return live local events
   }
 
-  // Gracefully return empty array so new accounts show their clean empty state rather than mock data from another parish
-  return [];
+  return filteredLocal;
 }
 
 export async function getVettingQueue(): Promise<{
@@ -159,6 +172,19 @@ export async function getMediaAssets(): Promise<MediaAsset[]> {
         uploadedAt: m.createdAt,
         uploadedByHandlerId: "system",
       }));
+    }
+  } catch {
+    // Return empty array
+  }
+  return [];
+}
+
+export async function getPublishedBulletins(): Promise<WebBulletin[]> {
+  try {
+    const data = await backend<{ items?: WebBulletin[] } | WebBulletin[]>("/content/bulletins");
+    const items = Array.isArray(data) ? data : data?.items || [];
+    if (Array.isArray(items) && items.length > 0) {
+      return items;
     }
   } catch {
     // Return empty array

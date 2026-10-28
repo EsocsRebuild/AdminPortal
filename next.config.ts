@@ -18,6 +18,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Empty turbopack config silences the warning when running with webpack config
+  turbopack: {},
   // Minimal self-contained server for the Docker image (see Dockerfile).
   output: "standalone",
   // Version-skew protection across rolling deploys; set by the image build.
@@ -33,6 +35,16 @@ const nextConfig: NextConfig = {
       // Imports (CSV) are the largest payloads; keep the ceiling tight.
       bodySizeLimit: "4mb",
     },
+  },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // Enables hot-reload polling inside Docker across macOS filesystem boundary
+      config.watchOptions = {
+        poll: 800,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
   },
   async headers() {
     return [

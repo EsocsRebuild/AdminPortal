@@ -36,6 +36,7 @@ export const updateForm = secureAction(
   { schema: updateFormInput, permission: "forms:manage" },
   async ({ id, ...patch }) => {
     await backend(`/forms/${id}`, { method: "PATCH", body: patch });
+    paths(id);
     return null;
   },
 );

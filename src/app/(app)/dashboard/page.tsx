@@ -1,4 +1,14 @@
-import { ArrowRight, CheckCircle2, FormInput, Mail, MailOpen, Users, UsersRound } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  FormInput,
+  Mail,
+  MailOpen,
+  Users,
+  UsersRound,
+  Award,
+  ExternalLink,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,6 +25,10 @@ import { recentAuditEvents } from "@/features/audit/queries";
 import { listCampaigns } from "@/features/campaigns/queries";
 import { campaignStatusLabels, openRate } from "@/features/campaigns/types";
 import { getDashboardSummary } from "@/features/dashboard/queries";
+import { getEcclesiasticalFeed } from "@/features/feed/queries";
+import { EcclesiasticalFeed } from "@/features/feed/components/ecclesiastical-feed";
+import { getOrdinationCandidates } from "@/features/ordination/queries";
+import { NominateCandidateModal } from "@/features/ordination/components/nominate-candidate-modal";
 import { formatNumber, formatPercent, formatRelative } from "@/lib/format";
 import { can } from "@/lib/permissions";
 import { requirePermission } from "@/server/session";
@@ -30,13 +44,17 @@ export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
-  const [userUnit, summary, campaigns, activity] = await Promise.all([
+  const isSuperAdmin = Boolean(user.isPlatformAdmin || !user.scopeUnitId);
+
+  const [userUnit, summary, campaigns, activity, feedItems, ordinationData] = await Promise.all([
     resolveUserUnit(user.scopeUnitId),
     getDashboardSummary(),
     can(user, "campaigns:view")
       ? listCampaigns({ page: 1, pageSize: 5, sort: "updatedAt", dir: "desc" }).then((r) => r.data)
       : null,
     can(user, "audit:view") ? recentAuditEvents(6) : null,
+    getEcclesiasticalFeed(),
+    getOrdinationCandidates(),
   ]);
 
   const steps: SetupStep[] = [
@@ -168,8 +186,107 @@ export default async function DashboardPage() {
           <QuickActions user={user} />
         </StaggerItem>
 
+        {/* Super Admin Apex Ordination & Command Center */}
+        {isSuperAdmin ? (
+          <StaggerItem>
+            <Card className="via-card to-card border-amber-500/20 bg-linear-to-br from-amber-500/10 shadow-md">
+              <CardContent className="space-y-4 p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/20 text-amber-500">
+                      <Award className="size-6" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xs font-bold tracking-wider text-amber-500 uppercase">
+                          Apex Ecclesiastical Directorate
+                        </span>
+                        <span className="text-3xs rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-500">
+                          Live Central Docket Active
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-foreground">
+                        Holy Order Ordination Candidate Registration & Vetting Pipeline
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Manage registration dossiers, stage approvals, and fee reconciliation across all 4
+                        ecclesiastical tiers.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <NominateCandidateModal defaultParishName="Central Secretariat (HQ)" />
+                    <Link href="/ordination">
+                      <Button variant="outline" size="sm" className="gap-1 text-xs">
+                        <span>Open Vetting Docket ({ordinationData.candidates.length})</span>
+                        <ArrowRight className="size-3.5" />
+                      </Button>
+                    </Link>
+                    <Button variant="secondary" size="sm" asChild className="gap-1 text-xs">
+                      <a href="http://localhost:3010" target="_blank" rel="noopener noreferrer">
+                        <span>Candidate Registration Portal</span>
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Canonical 4-Tier Pipeline Counters */}
+                <div className="grid grid-cols-2 gap-3 border-t border-border/60 pt-3 sm:grid-cols-4">
+                  <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Stage 1: Branch Level
+                    </span>
+                    <div className="mt-1 text-xl font-bold text-foreground">
+                      {ordinationData.summary.stage1BranchCount ?? ordinationData.summary.stage1Count}
+                    </div>
+                    <span className="text-3xs text-muted-foreground">Branch Nominations</span>
+                  </div>
+
+                  <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Stage 2: District Review
+                    </span>
+                    <div className="mt-1 text-xl font-bold text-amber-500">
+                      {ordinationData.summary.stage2DistrictCount ?? ordinationData.summary.stage2Count}
+                    </div>
+                    <span className="text-3xs text-muted-foreground">District Vetting</span>
+                  </div>
+
+                  <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Stage 3: Provincial Review
+                    </span>
+                    <div className="mt-1 text-xl font-bold text-indigo-500">
+                      {ordinationData.summary.stage3ProvincialCount ?? ordinationData.summary.stage3Count}
+                    </div>
+                    <span className="text-3xs text-muted-foreground">Provincial Conclave</span>
+                  </div>
+
+                  <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
+                      Stage 4: National Level
+                    </span>
+                    <div className="mt-1 text-xl font-bold text-emerald-500">
+                      {ordinationData.summary.stage4NationalCount ??
+                        ordinationData.summary.stage4ApprovedCount}
+                    </div>
+                    <span className="text-3xs text-muted-foreground">Ratified for Ordination</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
+        ) : (
+          <StaggerItem>
+            <GettingStarted steps={steps} />
+          </StaggerItem>
+        )}
+
+        {/* Real-time Ecclesiastical Live Doomscrolling Feed Across All Provinces */}
         <StaggerItem>
-          <GettingStarted steps={steps} />
+          <EcclesiasticalFeed initialItems={feedItems} />
         </StaggerItem>
 
         {stats.length > 0 && (

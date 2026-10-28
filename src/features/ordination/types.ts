@@ -1,5 +1,12 @@
 export type VettingStage =
-  "STAGE_1_PARISH" | "STAGE_2_DISTRICT" | "STAGE_3_ZONAL" | "STAGE_4_SUPREME_APPROVED";
+  | "STAGE_1_BRANCH"
+  | "STAGE_2_DISTRICT"
+  | "STAGE_3_PROVINCIAL"
+  | "STAGE_4_NATIONAL"
+  // Legacy aliases for backward compatibility with database records
+  | "STAGE_1_PARISH"
+  | "STAGE_3_ZONAL"
+  | "STAGE_4_SUPREME_APPROVED";
 
 export type EcclesiasticalRank =
   | "ALADURA"
@@ -35,6 +42,7 @@ export interface OrdinationCandidate {
   parishName: string;
   districtName: string;
   provinceName?: string;
+  isProvincialWorshipper?: boolean;
   stageCurrent: VettingStage;
   baptismDate?: string;
   yearsOfService: number;
@@ -51,8 +59,13 @@ export interface OrdinationCandidate {
 
 export interface OrdinationSummary {
   totalCandidates: number;
-  stage1Count: number;
-  stage2Count: number;
-  stage3Count: number;
-  stage4ApprovedCount: number;
+  stage1BranchCount: number;
+  stage2DistrictCount: number;
+  stage3ProvincialCount: number;
+  stage4NationalCount: number;
+  // Legacy aliases
+  stage1Count?: number;
+  stage2Count?: number;
+  stage3Count?: number;
+  stage4ApprovedCount?: number;
 }
