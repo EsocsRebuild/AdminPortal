@@ -39,7 +39,7 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
       </PageHeader>
 
       {/* Featured Canonical Form: 2026 Holy Order Ordination Candidate Registration */}
-      <Card className="mb-6 border-amber-500/20 bg-linear-to-r from-amber-500/10 via-card to-card shadow-sm">
+      <Card className="via-card to-card mb-6 border-amber-500/20 bg-linear-to-r from-amber-500/10 shadow-sm">
         <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/20 text-amber-500">
@@ -47,10 +47,10 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xs font-bold uppercase tracking-wider text-amber-500">
+                <span className="text-2xs font-bold tracking-wider text-amber-500 uppercase">
                   Apex Statutory Form
                 </span>
-                <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-500">
+                <span className="text-3xs flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-500">
                   <ShieldCheck className="size-3" /> Active Official Registration
                 </span>
               </div>
@@ -58,7 +58,8 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
                 2026 Holy Order Ordination Candidate Registration Form
               </h3>
               <p className="text-xs text-muted-foreground">
-                Official candidate dossier intake, statutory rank levies, and 4-tier vetting protocol (Branch → District → Provincial → National).
+                Official candidate dossier intake, statutory rank levies, and 4-tier vetting protocol (Branch
+                → District → Provincial → National).
               </p>
             </div>
           </div>

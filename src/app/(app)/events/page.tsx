@@ -36,10 +36,7 @@ export default async function EventsPage() {
               title="No Church Events Scheduled"
               description={`There are currently no liturgical services, revival conferences, or fellowship events scheduled for ${userUnit.unitName}.`}
               action={
-                <CreateEventDialog
-                  unitName={userUnit.unitName}
-                  triggerButtonText="Create First Event"
-                />
+                <CreateEventDialog unitName={userUnit.unitName} triggerButtonText="Create First Event" />
               }
             />
           </CardContent>

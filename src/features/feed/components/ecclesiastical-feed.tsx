@@ -61,8 +61,14 @@ export function EcclesiasticalFeed({
 
   const filteredItems = initialItems.filter((item) => {
     if (selectedProvince !== "All Provinces") {
-      const normProv = selectedProvince.toLowerCase().replace(/\bprovince\b/gi, "").trim();
-      const itemProv = item.provinceName.toLowerCase().replace(/\bprovince\b/gi, "").trim();
+      const normProv = selectedProvince
+        .toLowerCase()
+        .replace(/\bprovince\b/gi, "")
+        .trim();
+      const itemProv = item.provinceName
+        .toLowerCase()
+        .replace(/\bprovince\b/gi, "")
+        .trim();
       if (!itemProv.includes(normProv)) return false;
     }
     if (selectedType !== "all" && item.type !== selectedType) {
@@ -74,7 +80,7 @@ export function EcclesiasticalFeed({
   return (
     <div className="space-y-4">
       {/* Live Stream Controller Header */}
-      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="bg-card flex flex-col gap-3 rounded-xl border border-border p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="relative flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Flame className="size-5 text-amber-500" />
@@ -88,12 +94,13 @@ export function EcclesiasticalFeed({
               <h3 className="text-sm font-bold text-foreground">
                 Ecclesiastical Live Stream & Doomscrolling Feed
               </h3>
-              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-500">
+              <span className="text-3xs rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-500">
                 REALTIME ALGORITHM ACTIVE
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Dynamic multi-province timeline aggregating events, holy order elevations, and secretarial bulletins.
+              Dynamic multi-province timeline aggregating events, holy order elevations, and secretarial
+              bulletins.
             </p>
           </div>
         </div>
@@ -124,7 +131,7 @@ export function EcclesiasticalFeed({
               className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                 selectedProvince === prov
                   ? "bg-primary text-primary-foreground shadow-xs"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                  : "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground"
               }`}
             >
               {prov}
@@ -180,7 +187,8 @@ export function EcclesiasticalFeed({
             <Sparkles className="mx-auto size-8 text-muted-foreground/60" />
             <h4 className="mt-3 text-sm font-semibold text-foreground">No Feed Activity in Selected Scope</h4>
             <p className="mt-1 text-xs text-muted-foreground">
-              New happenings and events published across administrative portals will stream here automatically.
+              New happenings and events published across administrative portals will stream here
+              automatically.
             </p>
           </CardContent>
         </Card>
@@ -193,7 +201,7 @@ export function EcclesiasticalFeed({
             return (
               <Card
                 key={item.id}
-                className="overflow-hidden border-border bg-card shadow-xs transition-all hover:border-primary/40"
+                className="bg-card overflow-hidden border-border shadow-xs transition-all hover:border-primary/40"
               >
                 <CardContent className="space-y-3.5 p-5">
                   {/* Post Author / Jurisdiction Header */}
@@ -212,23 +220,26 @@ export function EcclesiasticalFeed({
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-sm font-bold text-foreground">{item.authorName}</span>
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-3xs font-semibold text-muted-foreground">
+                          <span className="bg-muted text-3xs rounded-full px-2 py-0.5 font-semibold text-muted-foreground">
                             {item.authorRole}
                           </span>
-                          <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-3xs font-semibold text-indigo-400">
+                          <span className="text-3xs rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-semibold text-indigo-400">
                             <Building className="mr-0.5 inline-block size-2.5" />
                             {item.provinceName}
                           </span>
                         </div>
                         <p className="text-2xs text-muted-foreground">
                           {item.unitName} • {new Date(item.timestamp).toLocaleDateString()} at{" "}
-                          {new Date(item.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          {new Date(item.timestamp).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </p>
                       </div>
                     </div>
 
                     {item.badgeText && (
-                      <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-3xs font-bold text-primary">
+                      <span className="text-3xs shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 font-bold text-primary">
                         {item.badgeText}
                       </span>
                     )}
@@ -236,19 +247,15 @@ export function EcclesiasticalFeed({
 
                   {/* Post Body Content */}
                   <div className="space-y-1.5">
-                    <h4 className="text-base font-bold text-foreground leading-snug">{item.title}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{item.content}</p>
+                    <h4 className="text-base leading-snug font-bold text-foreground">{item.title}</h4>
+                    <p className="text-xs leading-relaxed text-muted-foreground">{item.content}</p>
                   </div>
 
                   {/* Optional Media Preview */}
                   {item.mediaUrl && (
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-slate-950">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={item.mediaUrl}
-                        alt={item.title}
-                        className="h-full w-full object-cover"
-                      />
+                      <img src={item.mediaUrl} alt={item.title} className="h-full w-full object-cover" />
                     </div>
                   )}
 
@@ -259,7 +266,7 @@ export function EcclesiasticalFeed({
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-7 gap-1 border-border text-2xs hover:bg-muted"
+                          className="hover:bg-muted h-7 gap-1 border-border text-2xs"
                         >
                           <span>{item.actionText || "View Dossier"}</span>
                           <ExternalLink className="size-3" />
@@ -280,7 +287,9 @@ export function EcclesiasticalFeed({
                         }`}
                       >
                         <Heart className={`size-4 ${isAmened ? "fill-rose-500 text-rose-500" : ""}`} />
-                        <span>{currentAmens} Amen{currentAmens === 1 ? "" : "s"}</span>
+                        <span>
+                          {currentAmens} Amen{currentAmens === 1 ? "" : "s"}
+                        </span>
                       </button>
 
                       {/* Comments / Fellowship Discussions */}
@@ -297,7 +306,11 @@ export function EcclesiasticalFeed({
                         type="button"
                         onClick={() => {
                           if (navigator.share) {
-                            navigator.share({ title: item.title, text: item.content, url: window.location.href });
+                            navigator.share({
+                              title: item.title,
+                              text: item.content,
+                              url: window.location.href,
+                            });
                           }
                         }}
                         className="flex items-center gap-1.5 font-medium hover:text-foreground"

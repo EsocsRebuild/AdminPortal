@@ -151,7 +151,7 @@ export function StudioEventForm({ unitName }: { unitName: string }) {
           defaultChecked
           className="size-4 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
         />
-        <label htmlFor="evt-reg" className="text-xs text-slate-300 cursor-pointer">
+        <label htmlFor="evt-reg" className="cursor-pointer text-xs text-slate-300">
           Open Registration for Pilgrims
         </label>
       </div>

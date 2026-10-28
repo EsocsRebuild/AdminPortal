@@ -89,7 +89,9 @@ export function WebAdminLoginForm() {
           name="password"
           type="password"
           value={form.password}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, password: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setForm({ ...form, password: e.target.value })
+          }
           placeholder="••••••••••••"
           required
           className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
@@ -127,4 +129,3 @@ export function WebAdminLoginForm() {
     </form>
   );
 }
-

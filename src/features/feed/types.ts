@@ -20,4 +20,3 @@ export interface FeedItem {
     comments: number;
   };
 }
-

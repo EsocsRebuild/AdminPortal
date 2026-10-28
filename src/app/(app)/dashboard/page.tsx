@@ -189,7 +189,7 @@ export default async function DashboardPage() {
         {/* Super Admin Apex Ordination & Command Center */}
         {isSuperAdmin ? (
           <StaggerItem>
-            <Card className="border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card shadow-md">
+            <Card className="via-card to-card border-amber-500/20 bg-linear-to-br from-amber-500/10 shadow-md">
               <CardContent className="space-y-4 p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
@@ -198,10 +198,10 @@ export default async function DashboardPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xs font-bold uppercase tracking-wider text-amber-500">
+                        <span className="text-2xs font-bold tracking-wider text-amber-500 uppercase">
                           Apex Ecclesiastical Directorate
                         </span>
-                        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-500">
+                        <span className="text-3xs rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-500">
                           Live Central Docket Active
                         </span>
                       </div>
@@ -209,7 +209,8 @@ export default async function DashboardPage() {
                         Holy Order Ordination Candidate Registration & Vetting Pipeline
                       </h3>
                       <p className="text-xs text-muted-foreground">
-                        Manage registration dossiers, stage approvals, and fee reconciliation across all 4 ecclesiastical tiers.
+                        Manage registration dossiers, stage approvals, and fee reconciliation across all 4
+                        ecclesiastical tiers.
                       </p>
                     </div>
                   </div>
@@ -234,7 +235,7 @@ export default async function DashboardPage() {
                 {/* Canonical 4-Tier Pipeline Counters */}
                 <div className="grid grid-cols-2 gap-3 border-t border-border/60 pt-3 sm:grid-cols-4">
                   <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
-                    <span className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
                       Stage 1: Branch Level
                     </span>
                     <div className="mt-1 text-xl font-bold text-foreground">
@@ -244,7 +245,7 @@ export default async function DashboardPage() {
                   </div>
 
                   <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
-                    <span className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
                       Stage 2: District Review
                     </span>
                     <div className="mt-1 text-xl font-bold text-amber-500">
@@ -254,7 +255,7 @@ export default async function DashboardPage() {
                   </div>
 
                   <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
-                    <span className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
                       Stage 3: Provincial Review
                     </span>
                     <div className="mt-1 text-xl font-bold text-indigo-500">
@@ -264,11 +265,12 @@ export default async function DashboardPage() {
                   </div>
 
                   <div className="rounded-lg border border-border/80 bg-surface-muted/40 p-2.5">
-                    <span className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <span className="text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
                       Stage 4: National Level
                     </span>
                     <div className="mt-1 text-xl font-bold text-emerald-500">
-                      {ordinationData.summary.stage4NationalCount ?? ordinationData.summary.stage4ApprovedCount}
+                      {ordinationData.summary.stage4NationalCount ??
+                        ordinationData.summary.stage4ApprovedCount}
                     </div>
                     <span className="text-3xs text-muted-foreground">Ratified for Ordination</span>
                   </div>

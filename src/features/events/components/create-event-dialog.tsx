@@ -91,9 +91,7 @@ export function CreateEventDialog({
         <DialogHeader>
           <div className="flex items-center gap-2 text-primary">
             <Calendar className="size-5" />
-            <DialogTitle className="text-base font-bold text-foreground">
-              Create New Church Event
-            </DialogTitle>
+            <DialogTitle className="text-base font-bold text-foreground">Create New Church Event</DialogTitle>
           </div>
           <p className="text-xs text-muted-foreground">
             Schedule a liturgical service, revival, conference, or fellowship rally for{" "}
@@ -102,8 +100,8 @@ export function CreateEventDialog({
         </DialogHeader>
 
         {success ? (
-          <div className="flex flex-col items-center justify-center p-6 text-center space-y-2">
-            <CheckCircle2 className="size-10 text-emerald-500 animate-bounce" />
+          <div className="flex flex-col items-center justify-center space-y-2 p-6 text-center">
+            <CheckCircle2 className="size-10 animate-bounce text-emerald-500" />
             <h4 className="text-sm font-bold text-foreground">Event Published Successfully!</h4>
             <p className="text-xs text-muted-foreground">
               The event is now live on the calendar and timeline feed.
@@ -215,7 +213,7 @@ export function CreateEventDialog({
                 defaultChecked
                 className="size-4 rounded border-input text-primary focus:ring-primary"
               />
-              <label htmlFor="ev-reg" className="text-xs text-foreground cursor-pointer">
+              <label htmlFor="ev-reg" className="cursor-pointer text-xs text-foreground">
                 Enable Online Pilgrim Registration & Attendance Count
               </label>
             </div>

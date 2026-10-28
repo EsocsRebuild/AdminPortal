@@ -75,13 +75,15 @@ export async function listEvents(): Promise<ChurchEvent[]> {
     const mappedLocal: ChurchEvent[] = getLocalEvents().map((e) => {
       const startsAt = new Date(e.startDate);
       const catLower = e.category.toLowerCase();
-      const cat = (catLower === "conference"
-        ? "conference"
-        : catLower === "revival"
-          ? "revival"
-          : catLower === "fellowship_rally"
-            ? "fellowship"
-            : "service") as "service" | "conference" | "revival" | "fellowship";
+      const cat = (
+        catLower === "conference"
+          ? "conference"
+          : catLower === "revival"
+            ? "revival"
+            : catLower === "fellowship_rally"
+              ? "fellowship"
+              : "service"
+      ) as "service" | "conference" | "revival" | "fellowship";
 
       return {
         id: e.id,
@@ -112,13 +114,15 @@ export async function listEvents(): Promise<ChurchEvent[]> {
   return getLocalEvents().map((e) => {
     const startsAt = new Date(e.startDate);
     const catLower = e.category.toLowerCase();
-    const cat = (catLower === "conference"
-      ? "conference"
-      : catLower === "revival"
-        ? "revival"
-        : catLower === "fellowship_rally"
-          ? "fellowship"
-          : "service") as "service" | "conference" | "revival" | "fellowship";
+    const cat = (
+      catLower === "conference"
+        ? "conference"
+        : catLower === "revival"
+          ? "revival"
+          : catLower === "fellowship_rally"
+            ? "fellowship"
+            : "service"
+    ) as "service" | "conference" | "revival" | "fellowship";
 
     return {
       id: e.id,

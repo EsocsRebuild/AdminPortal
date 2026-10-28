@@ -96,13 +96,19 @@ export async function getEcclesiasticalFeed(provinceFilter?: string): Promise<Fe
   // Filter by province if requested
   let result = feed;
   if (provinceFilter && provinceFilter !== "ALL") {
-    const norm = provinceFilter.toLowerCase().replace(/\bprovince\b/gi, "").trim();
+    const norm = provinceFilter
+      .toLowerCase()
+      .replace(/\bprovince\b/gi, "")
+      .trim();
     result = result.filter((item) =>
-      item.provinceName.toLowerCase().replace(/\bprovince\b/gi, "").trim().includes(norm),
+      item.provinceName
+        .toLowerCase()
+        .replace(/\bprovince\b/gi, "")
+        .trim()
+        .includes(norm),
     );
   }
 
   // Sort newest first
   return result.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 }
-
