@@ -64,3 +64,4 @@ export async function incrementHeadcountAction(
   revalidatePath("/attendance");
   return ok({ newTotal }, "Usher headcount updated");
 }
+

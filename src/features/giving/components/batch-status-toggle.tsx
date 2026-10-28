@@ -58,3 +58,4 @@ export function BatchStatusToggle({ batchId, initialStatus }: BatchStatusToggleP
     </div>
   );
 }
+

@@ -164,3 +164,4 @@ export function NewFundModal() {
     </Dialog>
   );
 }
+
