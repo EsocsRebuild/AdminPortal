@@ -23,7 +23,7 @@ import type { WebEvent, WebProgramme, MediaAsset } from "./types";
 export async function submitEventAction(input: EventInput): Promise<ActionResult<WebEvent>> {
   const check = eventInputSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid event parameters");
+    return fail("VALIDATION", "Please check the event title, category, and date entered");
   }
 
   const user = await requireSession();
@@ -115,7 +115,7 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
 export async function submitProgrammeAction(input: ProgrammeInput): Promise<ActionResult<WebProgramme>> {
   const check = programmeInputSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid programme parameters");
+    return fail("VALIDATION", "Please check the programme title, theme, and date entered");
   }
 
   const user = await requireSession();
@@ -192,7 +192,7 @@ export async function vetContentAction(
 ): Promise<ActionResult<{ success: boolean; newStatus: string }>> {
   const check = vettingDecisionSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid decision payload");
+    return fail("VALIDATION", "Please select an approval or revision decision");
   }
   const newStatus = check.data.action === "APPROVE" ? "APPROVED_LIVE" : "NEEDS_REVISION";
 
@@ -237,7 +237,7 @@ export async function submitBulletinAction(
 ): Promise<ActionResult<{ id: string; title: string; category: string }>> {
   const check = bulletinInputSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid bulletin parameters");
+    return fail("VALIDATION", "Please fill in the bulletin title, category, and message");
   }
 
   const user = await requireSession();

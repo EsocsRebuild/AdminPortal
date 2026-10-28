@@ -28,12 +28,12 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { HelpdeskDrawer } from "@/features/support/components/helpdesk-drawer";
 import { Kbd } from "@/components/ui/kbd";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { UserMenu } from "@/components/layout/user-menu";
-import { siteConfig } from "@/config/site";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { usePreference } from "@/hooks/use-preference";
 import { cn } from "@/lib/utils";
@@ -362,17 +362,23 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
               </div>
             )}
 
-            <Tooltip content="Help & Support" side="right" disabled={!collapsed}>
-              <a
-                href={`mailto:${siteConfig.supportEmail}`}
-                className={cn(
-                  "flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-control px-2.5 text-xs font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover hover:text-sidebar-active-foreground",
-                  collapsed && "justify-center px-0",
-                )}
-              >
-                <LifeBuoy className="size-4 shrink-0 text-sidebar-muted" />
-                {!collapsed && <span className="flex-1 truncate">Help & Support</span>}
-              </a>
+            <Tooltip content="Help & Support Desk" side="right" disabled={!collapsed}>
+              <div>
+                <HelpdeskDrawer
+                  trigger={
+                    <button
+                      type="button"
+                      className={cn(
+                        "flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-control px-2.5 text-xs font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover hover:text-sidebar-active-foreground",
+                        collapsed && "justify-center px-0",
+                      )}
+                    >
+                      <LifeBuoy className="size-4 shrink-0 text-sidebar-muted" />
+                      {!collapsed && <span className="flex-1 truncate text-left">Help & Support</span>}
+                    </button>
+                  }
+                />
+              </div>
             </Tooltip>
 
             <Tooltip

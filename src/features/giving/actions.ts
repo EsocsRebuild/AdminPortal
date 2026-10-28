@@ -18,7 +18,7 @@ import type { FundLedger, GivingBatch } from "./queries";
 export async function createFundAction(input: CreateFundInput): Promise<ActionResult<FundLedger>> {
   const check = createFundSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid fund ledger parameters");
+    return fail("VALIDATION", "Please provide a valid fund code and fund name");
   }
   await requireSession();
 
@@ -56,7 +56,7 @@ export async function createFundAction(input: CreateFundInput): Promise<ActionRe
 export async function recordBatchAction(input: RecordBatchInput): Promise<ActionResult<GivingBatch>> {
   const check = recordBatchSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid batch collection parameters");
+    return fail("VALIDATION", "Please enter valid monetary figures for the Sunday collection batch");
   }
   await requireSession();
 
@@ -101,7 +101,7 @@ export async function reconcileBatchAction(
 ): Promise<ActionResult<{ success: boolean; status: string }>> {
   const check = reconcileBatchSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid reconciliation parameters");
+    return fail("VALIDATION", "Please specify the batch ID and reconciliation status");
   }
   await requireSession();
 

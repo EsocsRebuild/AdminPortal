@@ -37,7 +37,7 @@ export async function nominateCandidateAction(
 ): Promise<ActionResult<OrdinationCandidate>> {
   const check = candidateNominationSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid candidate parameters");
+    return fail("VALIDATION", "Please enter the candidate's full name, member number, target rank, and active years of service");
   }
 
   // 1. Attempt .NET Platform.Api
@@ -111,7 +111,7 @@ export async function nominateCandidateAction(
 
   return fail(
     "UNAVAILABLE",
-    "Failed to communicate with the live Ordination Portal. Please verify network connectivity.",
+    "Unable to connect to the National Ordination Registry at this moment. Please try again shortly or contact the Secretariat Helpdesk.",
   );
 }
 
@@ -120,7 +120,7 @@ export async function advanceVettingStageAction(
 ): Promise<ActionResult<{ success: boolean; nextStage: VettingStage }>> {
   const check = vettingStageAdvanceSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid vetting stage input");
+    return fail("VALIDATION", "Please provide clearance justification notes to proceed with vetting approval");
   }
   const nextStage =
     check.data.action === "APPROVED" ? stageNextMap[check.data.currentStage] : check.data.currentStage;

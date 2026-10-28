@@ -32,7 +32,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
             <ArrowLeft className="size-4" />
             Back to Ordination Candidate Roster
           </Link>
-          <span className="font-mono text-2xs text-muted-foreground">Docket ID: {candidate.id}</span>
+          <span className="font-mono text-2xs text-muted-foreground">Candidate Reference: {candidate.memberId || candidate.id}</span>
         </div>
 
         {/* Candidate Header Dossier Card */}
@@ -212,7 +212,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                 Signed Clearance Log & Vetting History ({candidate.vettingHistory.length})
               </div>
             }
-            description="Every stage approval is permanently recorded with Handler ID and approver timestamp."
+            description="Every stage approval is formally recorded with the Officer in-charge and approval date."
           />
           <CardContent className="space-y-3">
             {candidate.vettingHistory.length === 0 ? (
@@ -232,7 +232,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                     </span>
                   </div>
                   <p className="text-muted-foreground">{log.notes}</p>
-                  <div className="pt-1 font-mono text-2xs text-primary">Signed by: {log.handlerId}</div>
+                  <div className="pt-1 font-medium text-2xs text-primary">Verified by: {log.handlerId || "Secretariat Directorate"}</div>
                 </div>
               ))
             )}

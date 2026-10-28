@@ -99,7 +99,7 @@ export function UploadMediaModal() {
 
           <div className="space-y-1.5">
             <label htmlFor="m-url" className="font-semibold text-slate-200">
-              Image CDN URL *
+              Image Web Address (URL) *
             </label>
             <Input
               id="m-url"

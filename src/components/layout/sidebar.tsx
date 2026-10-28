@@ -5,10 +5,10 @@ import { LifeBuoy, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Logo } from "@/components/icons/logo";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip } from "@/components/ui/tooltip";
-import { siteConfig } from "@/config/site";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { usePreference } from "@/hooks/use-preference";
 import { cn } from "@/lib/utils";
+import { HelpdeskDrawer } from "@/features/support/components/helpdesk-drawer";
 
 import { SidebarNav } from "./sidebar-nav";
 
@@ -41,11 +41,17 @@ export function Sidebar({ className }: { className?: string }) {
       </div>
 
       <div className="grid shrink-0 gap-0.5 border-t border-sidebar-border p-3">
-        <Tooltip content="Help & support" side="right" disabled={!collapsed}>
-          <a href={`mailto:${siteConfig.supportEmail}`} className={footerButton}>
-            <LifeBuoy />
-            <span className="flex-1 truncate lg:rail:sr-only">Help & support</span>
-          </a>
+        <Tooltip content="Help & Support Desk" side="right" disabled={!collapsed}>
+          <div>
+            <HelpdeskDrawer
+              trigger={
+                <button type="button" className={footerButton}>
+                  <LifeBuoy />
+                  <span className="flex-1 truncate text-left lg:rail:sr-only">Help & Support Desk</span>
+                </button>
+              }
+            />
+          </div>
         </Tooltip>
         <Tooltip content="Expand sidebar" shortcut="⌘B" side="right" disabled={!collapsed}>
           <button

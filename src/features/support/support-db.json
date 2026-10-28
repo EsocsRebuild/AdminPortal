@@ -1,0 +1,111 @@
+[
+  {
+    "id": "tkt_1042",
+    "ticketNumber": "ESOCS-CARE-2026-1042",
+    "title": "Ordination Docket Rank Correction Request",
+    "category": "ORDINATION_VETTING",
+    "priority": "HIGH",
+    "status": "IN_REVIEW",
+    "complainantName": "Special Senior Apostle Gabriel Benson",
+    "complainantEmail": "gabriel.benson@esocs.org",
+    "complainantPhone": "+234 803 456 7890",
+    "parishName": "Mount Zion Cathedral (Mother Parish)",
+    "districtName": "Ebute Metta District",
+    "provinceName": "Lagos Central Province",
+    "candidateReferenceId": "ESOCS/ORD/2026/6416",
+    "createdAt": "2026-10-26T08:30:00.000Z",
+    "updatedAt": "2026-10-28T04:04:44.673Z",
+    "assignedOfficerName": "Elder Emmanuel Adeyemi (General Secretariat)",
+    "resolutionSummary": "Under active examination by Secretary General",
+    "messages": [
+      {
+        "id": "msg_1",
+        "senderName": "Special Senior Apostle Gabriel Benson",
+        "senderRole": "District Secretary",
+        "isStaff": false,
+        "message": "Greetings in the Holy Order. We noticed candidate Peter Chima Tester's docket indicates Target Rank as 'Aladura' instead of 'Senior Apostle' in line with his 14 years of active pastoral service at the Cathedral. Kindly update the vetting docket before Synod council clears the list.",
+        "sentAt": "2026-10-26T08:30:00.000Z"
+      },
+      {
+        "id": "msg_2",
+        "senderName": "Elder Emmanuel Adeyemi",
+        "senderRole": "Central Secretariat Care Officer",
+        "isStaff": true,
+        "message": "Peace be unto you Elder. We have retrieved the physical recommendation letter from Ebute Metta District and forwarded it to the Ecclesiastical Vetting Board for docket alignment. We will update the status once ratified.",
+        "sentAt": "2026-10-27T11:15:00.000Z"
+      },
+      {
+        "id": "test_msg_1793160284671",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-10-28T04:04:44.671Z"
+      }
+    ]
+  },
+  {
+    "id": "tkt_1038",
+    "ticketNumber": "ESOCS-CARE-2026-1038",
+    "title": "Parish Directory Certificate Number Update",
+    "category": "PARISH_MEMBERSHIP",
+    "priority": "STANDARD",
+    "status": "OPEN",
+    "complainantName": "Senior Mother in Israel Deborah Nwachukwu",
+    "complainantEmail": "deborah.n@esocs-diobu.org",
+    "complainantPhone": "+234 809 112 3344",
+    "parishName": "Diobu Provincial Headquarters",
+    "districtName": "Diobu District",
+    "provinceName": "Diobu Province",
+    "candidateReferenceId": "PAR-DIOBU-001",
+    "createdAt": "2026-10-27T14:20:00.000Z",
+    "updatedAt": "2026-10-27T14:20:00.000Z",
+    "assignedOfficerName": "Secretariat Member Care Desk",
+    "messages": [
+      {
+        "id": "msg_3",
+        "senderName": "Senior Mother in Israel Deborah Nwachukwu",
+        "senderRole": "Parish Registrar",
+        "isStaff": false,
+        "message": "Good day Secretariat. We need assistance updating the registered founding charter year for Diobu Cathedral branch on the central web portal from 1952 to 1948 in time for the Centenary anniversary celebrations.",
+        "sentAt": "2026-10-27T14:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "tkt_1025",
+    "ticketNumber": "ESOCS-CARE-2026-1025",
+    "title": "Remittance Reconciliation for Friday Vigil Collections",
+    "category": "FINANCIAL_STEWARDSHIP",
+    "priority": "STANDARD",
+    "status": "RESOLVED",
+    "complainantName": "Apostle Michael Okon",
+    "complainantEmail": "michael.okon@esocs.org",
+    "complainantPhone": "+234 802 889 0011",
+    "parishName": "St. Gabriel Sanctuary",
+    "districtName": "Surulere District",
+    "provinceName": "Lagos Central Province",
+    "createdAt": "2026-10-24T16:00:00.000Z",
+    "updatedAt": "2026-10-25T12:00:00.000Z",
+    "assignedOfficerName": "Sister Funke Balogun (Finance Directorate)",
+    "resolutionSummary": "Bank POS settlement slip verified and matched against Batch REC-2026-10-41. Ledger marked Reconciled.",
+    "messages": [
+      {
+        "id": "msg_4",
+        "senderName": "Apostle Michael Okon",
+        "senderRole": "Branch Treasurer",
+        "isStaff": false,
+        "message": "Enquiry regarding POS batch payment of ₦245,000 made on Friday 24th October. The online remittance portal showed pending reconciliation.",
+        "sentAt": "2026-10-24T16:00:00.000Z"
+      },
+      {
+        "id": "msg_5",
+        "senderName": "Sister Funke Balogun",
+        "senderRole": "Central Audit & Finance Officer",
+        "isStaff": true,
+        "message": "Bank confirmation received from Zenith Bank NIBSS switch. The transaction has been matched to fund ledger FL-CONF-2026 and reconciled successfully. Receipt dispatched.",
+        "sentAt": "2026-10-25T12:00:00.000Z"
+      }
+    ]
+  }
+]

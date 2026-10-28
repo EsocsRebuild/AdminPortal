@@ -23,7 +23,7 @@ export async function recordHeadcountAction(
 ): Promise<ActionResult<HeadcountRecord>> {
   const check = headcountInputSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid headcount entry parameters");
+    return fail("VALIDATION", "Please enter valid attendance figures for men, women, or children");
   }
   await requireSession();
 
