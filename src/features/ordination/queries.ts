@@ -321,10 +321,10 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
       provinceSet.add(p);
     }
   }
-  // Ensure major ecclesiastical jurisdictions are represented
-  provinceSet.add("Diobu Province");
-  provinceSet.add("Lagos Central Province");
-  provinceSet.add("Lagos Province");
+  // If no candidates present yet, default to active unit
+  if (provinceSet.size === 0) {
+    provinceSet.add("Diobu Province");
+  }
   const allProvinces = Array.from(provinceSet).sort();
 
   // ─── Professional Data Filtering ───
