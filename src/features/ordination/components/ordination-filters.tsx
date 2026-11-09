@@ -4,6 +4,7 @@ import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, Filter, RotateCcw, Lock, Building, CheckCircle2, Clock, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { CandidateSortOption } from "../queries";
 
@@ -84,7 +85,7 @@ export function OrdinationFilters({
   );
 
   return (
-    <div className="space-y-4 rounded-2xl border border-border/80 bg-card p-5 shadow-xs sm:p-6">
+    <Card className="gap-4 border-border bg-card p-card shadow-xs">
       {/* Search Input Row */}
       <form onSubmit={handleSearchSubmit} className="relative">
         <Input
@@ -106,12 +107,39 @@ export function OrdinationFilters({
               </button>
             ) : undefined
           }
-          className="h-11 w-full rounded-xl border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+          className="h-10 w-full rounded-xl border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
         />
       </form>
 
-      {/* Filter Dropdowns Grid - Generous, perfectly responsive 4-column layout */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Quick 1-Click Vetting Stage Switcher Tabs */}
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-border/70 pb-3 text-xs">
+        {[
+          { id: "ALL", label: "All Candidates" },
+          { id: "STAGE_1_BRANCH", label: "Stage 1: Branch" },
+          { id: "STAGE_2_DISTRICT", label: "Stage 2: District" },
+          { id: "STAGE_3_PROVINCIAL", label: "Stage 3: Provincial" },
+          { id: "STAGE_4_NATIONAL", label: "Stage 4: National Synod" },
+        ].map((tab) => {
+          const active = (currentStage || "ALL") === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => updateFilters({ stage: tab.id === "ALL" ? null : tab.id })}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                active
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "bg-surface-muted/60 text-muted-foreground hover:bg-surface-muted hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Secondary Controls: Jurisdiction, Dues, Sort */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {/* Province / Jurisdiction Filter */}
         <div className="relative">
           <select
@@ -143,21 +171,6 @@ export function OrdinationFilters({
           )}
         </div>
 
-        {/* Vetting Pipeline Stage Filter */}
-        <div>
-          <select
-            value={currentStage}
-            onChange={(e) => updateFilters({ stage: e.target.value })}
-            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-          >
-            <option value="ALL">All Vetting Stages</option>
-            <option value="STAGE_1_BRANCH">Stage 1: Branch Level</option>
-            <option value="STAGE_2_DISTRICT">Stage 2: District Review</option>
-            <option value="STAGE_3_PROVINCIAL">Stage 3: Provincial Review</option>
-            <option value="STAGE_4_NATIONAL">Stage 4: National Level</option>
-          </select>
-        </div>
-
         {/* Dues Status Filter */}
         <div>
           <select
@@ -165,7 +178,7 @@ export function OrdinationFilters({
             onChange={(e) => updateFilters({ dues: e.target.value })}
             className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
-            <option value="ALL">All Dues Status</option>
+            <option value="ALL">All Financial Dues</option>
             <option value="cleared">Dues Cleared</option>
             <option value="pending">Dues Pending</option>
             <option value="exempt">Dues Exempt</option>
@@ -275,6 +288,6 @@ export function OrdinationFilters({
           </Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

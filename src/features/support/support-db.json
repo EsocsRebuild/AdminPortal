@@ -14,7 +14,7 @@
     "provinceName": "Lagos Central Province",
     "candidateReferenceId": "ESOCS/ORD/2026/6416",
     "createdAt": "2026-10-26T08:30:00.000Z",
-    "updatedAt": "2026-11-09T03:32:27.049Z",
+    "updatedAt": "2026-11-09T03:49:55.352Z",
     "assignedOfficerName": "Elder Emmanuel Adeyemi (General Secretariat)",
     "resolutionSummary": "Under active examination by Secretary General",
     "messages": [
@@ -121,6 +121,30 @@
         "isStaff": true,
         "message": "Your inquiry is being evaluated by the Synod Council.",
         "sentAt": "2026-11-09T03:32:27.048Z"
+      },
+      {
+        "id": "test_msg_1794195657814",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-09T03:40:57.814Z"
+      },
+      {
+        "id": "test_msg_1794196129133",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-09T03:48:49.133Z"
+      },
+      {
+        "id": "test_msg_1794196195350",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-09T03:49:55.350Z"
       }
     ]
   },

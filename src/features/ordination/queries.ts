@@ -1,6 +1,7 @@
 "server-only";
 
 import { backend } from "@/server/backend";
+import { getLocalCandidates, getLocalCandidateById } from "./ordination-store";
 import type {
   OrdinationCandidate,
   OrdinationSummary,
@@ -247,23 +248,7 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
     }
   }
 
-  // 3. Local filesystem read of live ordination portal database if direct API bridge is offline
-  if (allRawCandidates.length === 0) {
-    try {
-      const fs = await import("fs/promises");
-      const dbPath = "/Users/testapp/Documents/TechDev/EsocsRebuild/ordinationPortal/data/db.json";
-      const fileContent = await fs.readFile(dbPath, "utf-8");
-      const parsed = JSON.parse(fileContent);
-      const rawList = parsed.candidates || [];
-      if (Array.isArray(rawList) && rawList.length > 0) {
-        allRawCandidates = rawList.map(mapToAdminCandidate);
-      }
-    } catch {
-      // No live candidates available; fallback to empty set
-    }
-  }
-
-  // Unit testing dataset strictly isolated to test environment
+  // 3. Unit testing dataset strictly isolated to test environment
   if (allRawCandidates.length === 0 && process.env.NODE_ENV === "test") {
     allRawCandidates = [
       {
@@ -311,6 +296,15 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
         nominatedByHandlerId: "Parish Nomination Officer",
       },
     ];
+  }
+
+  // 4. Fallback to local canonical ordination store if direct API bridge is offline
+  if (allRawCandidates.length === 0) {
+    try {
+      allRawCandidates = getLocalCandidates();
+    } catch {
+      // Fallback if local store fails
+    }
   }
 
   // Extract all distinct provinces present across the full candidate population
@@ -440,5 +434,7 @@ export async function getOrdinationCandidates(options?: CandidateFilterOptions):
 
 export async function getCandidateDocket(id: string): Promise<OrdinationCandidate | null> {
   const { candidates } = await getOrdinationCandidates();
-  return candidates.find((c) => c.id === id) ?? null;
+  const found = candidates.find((c) => c.id === id);
+  if (found) return found;
+  return getLocalCandidateById(id);
 }
