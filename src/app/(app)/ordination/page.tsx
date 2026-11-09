@@ -87,7 +87,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
         <Stagger className="grid grid-cols-[minmax(0,1fr)] gap-page" gap={0.07}>
           {/* Executive Header — Visual twin of DashboardHeader */}
           <StaggerItem>
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-amber-500/10 via-card to-card p-5 shadow-xs sm:p-6">
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-linear-to-r from-amber-500/10 via-card to-card p-5 shadow-xs sm:p-6">
               <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 {/* Profile Info & Ecclesiastical Scope */}
                 <div className="flex items-start gap-4">

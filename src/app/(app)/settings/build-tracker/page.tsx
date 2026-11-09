@@ -200,7 +200,7 @@ export default function BuildTrackerPage() {
         </StaggerItem>
 
         <StaggerItem>
-          <Card className="bg-gradient-to-r from-surface via-surface to-surface-muted/60 p-6">
+          <Card className="bg-linear-to-r from-surface via-surface to-surface-muted/60 p-6">
             <div className="flex items-center justify-between text-sm font-semibold">
               <span className="flex items-center gap-2">
                 <Activity className="size-4 animate-pulse text-primary" />
