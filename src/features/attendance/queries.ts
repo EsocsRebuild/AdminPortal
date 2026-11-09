@@ -2,6 +2,7 @@ import "server-only";
 
 import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
+import { getLocalHeadcounts } from "./attendance-store";
 
 export interface HeadcountRecord {
   id: string;
@@ -39,20 +40,23 @@ export async function listHeadcounts(): Promise<HeadcountRecord[]> {
     });
 
     if (Array.isArray(raw) && raw.length > 0) {
-      return raw.map((row) => ({
-        id: row.occurrenceId,
-        date: new Date(row.startsAt).toISOString().split("T")[0],
-        serviceType: row.eventTitle || "Sunday Worship",
-        men: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.35),
-        women: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.45),
-        children: Math.round((row.headCountTotal || row.recordedCount || 100) * 0.2),
-        total: row.headCountTotal || row.recordedCount || 0,
-        notes: row.eventType,
-        recorder: "Parish Ushering Desk",
-      }));
+      return raw.map((row) => {
+        const total = row.headCountTotal || row.recordedCount || 0;
+        return {
+          id: row.occurrenceId,
+          date: new Date(row.startsAt).toISOString().split("T")[0],
+          serviceType: row.eventTitle || "Sunday Worship",
+          men: Math.floor(total / 3),
+          women: Math.floor(total / 3),
+          children: total - 2 * Math.floor(total / 3),
+          total,
+          notes: row.eventType || "Service record",
+          recorder: row.createdByName || "Parish Ushering Desk",
+        };
+      });
     }
   } catch {
-    // Network fallback
+    // Fallback to local store
   }
-  return [];
+  return getLocalHeadcounts();
 }

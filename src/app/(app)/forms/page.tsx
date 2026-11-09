@@ -39,7 +39,7 @@ export default async function FormsPage({ searchParams }: PageProps<"/forms">) {
       </PageHeader>
 
       {/* Featured Canonical Form: 2026 Holy Order Ordination Candidate Registration */}
-      <Card className="via-card to-card mb-6 border-amber-500/20 bg-linear-to-r from-amber-500/10 shadow-sm">
+      <Card className="mb-6 border-amber-500/20 bg-linear-to-r from-amber-500/10 via-card to-card shadow-sm">
         <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/20 text-amber-500">

@@ -556,6 +556,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-muted: var(--surface-muted);

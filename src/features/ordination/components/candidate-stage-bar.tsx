@@ -67,10 +67,10 @@ export function CandidateStageBar({ currentStage, isProvincialWorshipper = false
               <div
                 className={`flex size-9 items-center justify-center rounded-full border transition-all duration-300 ${
                   isDone
-                    ? "border-emerald-400 bg-emerald-500 font-bold text-slate-950 shadow-md shadow-emerald-950/40"
+                    ? "border-emerald-500 bg-emerald-600 font-bold text-white shadow-sm"
                     : isCurrent
-                      ? "animate-pulse border-amber-400 bg-amber-500/20 font-bold text-amber-400 ring-4 ring-amber-500/10"
-                      : "border-slate-800 bg-slate-900 text-slate-500"
+                      ? "animate-pulse border-amber-500 bg-amber-500/20 font-bold text-amber-800 ring-4 ring-amber-500/10 dark:text-amber-300"
+                      : "border-border bg-surface-muted text-muted-foreground"
                 }`}
               >
                 {isDone ? <Check className="size-4" /> : <Icon className="size-4" />}
@@ -78,13 +78,13 @@ export function CandidateStageBar({ currentStage, isProvincialWorshipper = false
               <div className="flex flex-col">
                 <span
                   className={`max-w-32 text-2xs leading-tight font-semibold ${
-                    isDone || isCurrent ? "text-slate-200" : "text-slate-500"
+                    isDone || isCurrent ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
                   {s.label}
                 </span>
                 {s.subtext && (
-                  <span className="text-3xs mt-0.5 truncate text-muted-foreground/75">{s.subtext}</span>
+                  <span className="text-3xs mt-0.5 truncate text-muted-foreground">{s.subtext}</span>
                 )}
               </div>
             </div>
@@ -93,9 +93,9 @@ export function CandidateStageBar({ currentStage, isProvincialWorshipper = false
       </div>
 
       {/* Progress Line */}
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
         <div
-          className="h-full bg-linear-to-r from-emerald-500 to-amber-400 transition-all duration-500"
+          className="h-full bg-linear-to-r from-emerald-500 to-amber-500 transition-all duration-500"
           style={{ width: `${(currentIdx / 4) * 100}%` }}
         />
       </div>

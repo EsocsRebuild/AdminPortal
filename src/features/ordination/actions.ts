@@ -10,6 +10,11 @@ import {
   type VettingStageAdvanceInput,
 } from "./schemas";
 import type { OrdinationCandidate, VettingStage } from "./types";
+import {
+  addLocalCandidate,
+  updateLocalCandidateStage,
+  updateLocalCandidateDetails,
+} from "@/features/ordination/ordination-store";
 
 const stageNextMap: Record<VettingStage, VettingStage> = {
   STAGE_1_BRANCH: "STAGE_2_DISTRICT",
@@ -37,7 +42,10 @@ export async function nominateCandidateAction(
 ): Promise<ActionResult<OrdinationCandidate>> {
   const check = candidateNominationSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid candidate parameters");
+    return fail(
+      "VALIDATION",
+      "Please enter the candidate's full name, member number, target rank, and active years of service",
+    );
   }
 
   // 1. Attempt .NET Platform.Api
@@ -109,10 +117,27 @@ export async function nominateCandidateAction(
     }
   }
 
-  return fail(
-    "UNAVAILABLE",
-    "Failed to communicate with the live Ordination Portal. Please verify network connectivity.",
-  );
+  // 3. Fallback: Save candidate in local canonical ordination store
+  const newLocalCand: OrdinationCandidate = {
+    id: `cand-${Date.now()}`,
+    memberId: check.data.memberId,
+    fullName: check.data.fullName,
+    churchRankCurrent: "Worker",
+    rankTarget: check.data.rankTarget,
+    parishId: `parish-${check.data.parishName.toLowerCase().replace(/\s+/g, "-")}`,
+    parishName: check.data.parishName,
+    districtName: "Diobu Central District",
+    provinceName: "Diobu Province",
+    stageCurrent: "STAGE_1_BRANCH",
+    yearsOfService: check.data.yearsOfService,
+    vettingHistory: [],
+    nominatedAt: new Date().toISOString(),
+    nominatedByHandlerId: "Secretariat Administration",
+  };
+  addLocalCandidate(newLocalCand);
+  revalidatePath("/ordination");
+  revalidatePath("/dashboard");
+  return ok(newLocalCand, "Candidate registered successfully in ecclesiastical ordination docket");
 }
 
 export async function advanceVettingStageAction(
@@ -120,7 +145,10 @@ export async function advanceVettingStageAction(
 ): Promise<ActionResult<{ success: boolean; nextStage: VettingStage }>> {
   const check = vettingStageAdvanceSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Invalid vetting stage input");
+    return fail(
+      "VALIDATION",
+      "Please provide clearance justification notes to proceed with vetting approval",
+    );
   }
   const nextStage =
     check.data.action === "APPROVED" ? stageNextMap[check.data.currentStage] : check.data.currentStage;
@@ -241,6 +269,13 @@ export async function advanceVettingStageAction(
     }
   }
 
+  updateLocalCandidateStage(
+    check.data.candidateId,
+    nextStage,
+    "Secretariat Administration",
+    check.data.clearanceNotes || "Vetting stage clearance ratified.",
+  );
+
   revalidatePath("/ordination");
   revalidatePath(`/ordination/candidates/${check.data.candidateId}`);
   if (updated) {
@@ -284,6 +319,7 @@ export async function updateCandidateDetailsAction(
     }
   }
 
+  updateLocalCandidateDetails(candidateId, updates);
   revalidatePath("/ordination");
   revalidatePath(`/ordination/candidates/${candidateId}`);
   return ok({ success: true }, "Candidate record updated");

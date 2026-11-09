@@ -28,15 +28,16 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { HelpdeskDrawer } from "@/features/support/components/helpdesk-drawer";
 import { Kbd } from "@/components/ui/kbd";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { UserMenu } from "@/components/layout/user-menu";
-import { siteConfig } from "@/config/site";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { usePreference } from "@/hooks/use-preference";
 import { cn } from "@/lib/utils";
+import { getWebFrontendUrl } from "@/lib/web-url";
 
 interface WebStudioShellProps {
   userUnit: { unitName: string; unitSlug: string };
@@ -204,9 +205,10 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
           <nav className="space-y-1">
             {(() => {
               const liveNode = (
-                <Link
-                  href={`/church/${userUnit.unitSlug}`}
+                <a
+                  href={getWebFrontendUrl(`/church/${userUnit.unitSlug}`)}
                   target="_blank"
+                  rel="noopener noreferrer"
                   onClick={onSelect}
                   className={cn(
                     "group flex h-10 items-center gap-3 rounded-control px-3 text-xs font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/10 dark:text-emerald-400",
@@ -220,7 +222,7 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                       <ExternalLink className="size-3 text-emerald-500/70" />
                     </>
                   )}
-                </Link>
+                </a>
               );
 
               return isCompact ? (
@@ -362,17 +364,23 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
               </div>
             )}
 
-            <Tooltip content="Help & Support" side="right" disabled={!collapsed}>
-              <a
-                href={`mailto:${siteConfig.supportEmail}`}
-                className={cn(
-                  "flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-control px-2.5 text-xs font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover hover:text-sidebar-active-foreground",
-                  collapsed && "justify-center px-0",
-                )}
-              >
-                <LifeBuoy className="size-4 shrink-0 text-sidebar-muted" />
-                {!collapsed && <span className="flex-1 truncate">Help & Support</span>}
-              </a>
+            <Tooltip content="Help & Support Desk" side="right" disabled={!collapsed}>
+              <div>
+                <HelpdeskDrawer
+                  trigger={
+                    <button
+                      type="button"
+                      className={cn(
+                        "flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-control px-2.5 text-xs font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-hover hover:text-sidebar-active-foreground",
+                        collapsed && "justify-center px-0",
+                      )}
+                    >
+                      <LifeBuoy className="size-4 shrink-0 text-sidebar-muted" />
+                      {!collapsed && <span className="flex-1 truncate text-left">Help & Support</span>}
+                    </button>
+                  }
+                />
+              </div>
             </Tooltip>
 
             <Tooltip
@@ -492,23 +500,24 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
               <Tooltip content="Switch to Ecclesiastical Governance & Admin Portal">
                 <Link
                   href="/dashboard"
-                  className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-500 transition-all hover:bg-amber-500/20 sm:text-xs"
+                  className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-700 transition-all hover:bg-amber-500/20 sm:text-xs dark:text-amber-400"
                 >
-                  <Church className="size-3.5 text-amber-500" />
+                  <Church className="size-3.5 text-amber-600 dark:text-amber-400" />
                   <span className="hidden sm:inline">Main Church Admin</span>
                 </Link>
               </Tooltip>
 
-              <Tooltip content={`View live public site for ${userUnit.unitName}`}>
-                <Link
-                  href={`/church/${userUnit.unitSlug}`}
+              <Tooltip content={`View live public site for ${userUnit.unitName} (http://localhost:3020)`}>
+                <a
+                  href={getWebFrontendUrl(`/church/${userUnit.unitSlug}`)}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 sm:text-xs dark:text-emerald-400"
                 >
                   <Globe className="size-3.5" />
                   <span className="hidden sm:inline">Live Web Preview</span>
                   <ExternalLink className="size-3 opacity-70" />
-                </Link>
+                </a>
               </Tooltip>
 
               <ThemeToggle />

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArrowUpRight, CheckCircle2, FileSpreadsheet, Plus, Wallet } from "lucide-react";
+import { ArrowUpRight, FileSpreadsheet, Plus, Wallet } from "lucide-react";
 import type { Metadata } from "next";
 
 import { Page, PageHeader } from "@/components/layout/page";
@@ -11,6 +11,9 @@ import { formatDate } from "@/lib/format";
 import { requirePermission } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 import { getGivingSummary, listBatches, listFunds } from "@/features/giving/queries";
+import { NewFundModal } from "@/features/giving/components/new-fund-modal";
+import { RecordBatchModal } from "@/features/giving/components/record-batch-modal";
+import { BatchStatusToggle } from "@/features/giving/components/batch-status-toggle";
 
 export const metadata: Metadata = { title: "Giving & Stewardship" };
 
@@ -38,12 +41,8 @@ export default async function GivingPage() {
         description={`Parish tithes, Sunday collection batches, and dedicated fund ledgers for ${userUnit.unitName}.`}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="secondary" leftIcon={<FileSpreadsheet className="size-4" />}>
-              Giving Statements
-            </Button>
-            <Button variant="primary" leftIcon={<Plus className="size-4" />}>
-              New Fund Ledger
-            </Button>
+            <RecordBatchModal />
+            <NewFundModal />
           </div>
         }
       />
@@ -187,9 +186,7 @@ export default async function GivingPage() {
                         {formatCurrency(b.total)}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
-                          <CheckCircle2 className="size-3" /> Reconciled
-                        </span>
+                        <BatchStatusToggle batchId={b.id} initialStatus={b.status} />
                       </td>
                       <td className="py-3 pl-4 text-muted-foreground">{b.verifiedBy}</td>
                     </tr>

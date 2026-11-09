@@ -1,10 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Award, Sparkles } from "lucide-react";
+import { Plus, Award, Sparkles, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetBody,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useMediaQuery, breakpoints } from "@/hooks/use-media-query";
 import { nominateCandidateAction } from "@/features/ordination/actions";
 import type { EcclesiasticalRank } from "@/features/ordination/types";
 
@@ -18,6 +27,8 @@ export function NominateCandidateModal({
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  const isDesktop = useMediaQuery(breakpoints.md);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -53,138 +64,156 @@ export function NominateCandidateModal({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button className="gap-1.5 bg-primary text-xs font-medium text-primary-foreground shadow-md hover:bg-primary/90">
+        <Button className="gap-2 bg-primary text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90">
           <Plus className="size-4" />
           Nominate Candidate for Rank Promotion
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
-        <SheetHeader className="border-b border-border pb-4">
-          <div className="flex items-center gap-2 text-amber-500">
+      <SheetContent
+        side={isDesktop ? "right" : "bottom"}
+        size={isDesktop ? "lg" : undefined}
+        className="flex flex-col bg-card text-foreground sm:max-w-xl"
+      >
+        {/* Mobile Pull Handle */}
+        <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-border md:hidden" />
+
+        <SheetHeader className="border-b border-border px-6 py-4">
+          <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400">
             <Award className="size-5" />
             <SheetTitle className="text-base font-bold text-foreground">
               Branch Level Nomination Docket
             </SheetTitle>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Nominate a church worker or clergy member for ecclesiastical rank promotion vetting starting at
-            Branch Level.
-          </p>
+          <SheetDescription className="text-xs text-muted-foreground">
+            Nominate a church worker or clergy member for ecclesiastical rank promotion vetting.
+          </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 pt-4 text-xs">
-          {error && (
-            <div className="rounded-lg border border-rose-500/20 bg-rose-500/10 p-3 text-xs text-rose-500">
-              {error}
+        <SheetBody className="px-6 py-5">
+          <form onSubmit={handleSubmit} className="space-y-4 text-sm">
+            {error && (
+              <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-700 dark:text-rose-400">
+                <AlertCircle className="size-4 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <label htmlFor="nom-name" className="text-xs font-semibold text-foreground">
+                Candidate Full Name <span className="text-rose-500">*</span>
+              </label>
+              <Input
+                id="nom-name"
+                name="fullName"
+                required
+                placeholder="e.g. Brother Samuel Olawale"
+                className="h-10 text-sm"
+              />
             </div>
-          )}
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-name" className="font-medium text-foreground">
-              Candidate Full Name *
-            </label>
-            <Input
-              id="nom-name"
-              name="fullName"
-              required
-              placeholder="e.g. Brother Samuel Olawale"
-              className="text-xs"
-            />
-          </div>
+            <div className="space-y-1.5">
+              <label htmlFor="nom-member-id" className="text-xs font-semibold text-foreground">
+                Member ID / Registration Number <span className="text-rose-500">*</span>
+              </label>
+              <Input
+                id="nom-member-id"
+                name="memberId"
+                required
+                placeholder="e.g. ESOCS/MBR/2026/894"
+                className="h-10 font-mono text-sm"
+              />
+            </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-member-id" className="font-medium text-foreground">
-              Member ID / Reg Number *
-            </label>
-            <Input
-              id="nom-member-id"
-              name="memberId"
-              required
-              placeholder="e.g. ESOCS/MBR/2026/894"
-              className="font-mono text-xs"
-            />
-          </div>
+            <div className="space-y-1.5">
+              <label htmlFor="nom-rank" className="text-xs font-semibold text-foreground">
+                Target Ecclesiastical Rank <span className="text-rose-500">*</span>
+              </label>
+              <select
+                id="nom-rank"
+                name="rankTarget"
+                required
+                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:ring-2 focus:ring-primary focus:outline-none"
+              >
+                <option value="ALADURA">Aladura</option>
+                <option value="RABBI">Rabbi</option>
+                <option value="EVANGELIST">Evangelist</option>
+                <option value="DEACON">Deacon</option>
+                <option value="DEACONESS">Deaconess</option>
+                <option value="SUB_LEADER">Sub-Leader</option>
+                <option value="LEADER">Leader</option>
+                <option value="SENIOR_LEADER">Senior Leader</option>
+                <option value="APOSTLE">Apostle</option>
+                <option value="SENIOR_APOSTLE">Senior Apostle</option>
+                <option value="MOST_SENIOR_APOSTLE">Most Senior Apostle</option>
+                <option value="SPECIAL_APOSTLE">Special Apostle</option>
+              </select>
+            </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-rank" className="font-medium text-foreground">
-              Target Ecclesiastical Rank *
-            </label>
-            <select
-              id="nom-rank"
-              name="rankTarget"
-              required
-              className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-primary focus:outline-none"
-            >
-              <option value="ALADURA">Aladura</option>
-              <option value="RABBI">Rabbi</option>
-              <option value="EVANGELIST">Evangelist</option>
-              <option value="DEACON">Deacon</option>
-              <option value="DEACONESS">Deaconess</option>
-              <option value="SUB_LEADER">Sub-Leader</option>
-              <option value="LEADER">Leader</option>
-              <option value="SENIOR_LEADER">Senior Leader</option>
-              <option value="APOSTLE">Apostle</option>
-              <option value="SENIOR_APOSTLE">Senior Apostle</option>
-              <option value="MOST_SENIOR_APOSTLE">Most Senior Apostle</option>
-              <option value="SPECIAL_APOSTLE">Special Apostle</option>
-            </select>
-          </div>
+            <div className="space-y-1.5">
+              <label htmlFor="nom-parish" className="text-xs font-semibold text-foreground">
+                Branch Jurisdiction / Cathedral Seat <span className="text-rose-500">*</span>
+              </label>
+              <Input
+                id="nom-parish"
+                name="parishName"
+                defaultValue={defaultParishName}
+                required
+                placeholder="e.g. Diobu Central Cathedral or Local Branch"
+                className="h-10 text-sm"
+              />
+            </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-parish" className="font-medium text-foreground">
-              Branch Jurisdiction / Cathedral Seat *
-            </label>
-            <Input
-              id="nom-parish"
-              name="parishName"
-              defaultValue={defaultParishName}
-              required
-              placeholder="e.g. Diobu Central Cathedral or Local Branch"
-              className="text-xs"
-            />
-          </div>
+            <div className="space-y-1.5">
+              <label htmlFor="nom-tenure" className="text-xs font-semibold text-foreground">
+                Tenure / Years in Active Service <span className="text-rose-500">*</span>
+              </label>
+              <Input
+                id="nom-tenure"
+                name="yearsOfService"
+                type="number"
+                min={1}
+                max={60}
+                defaultValue={5}
+                required
+                className="h-10 font-mono text-sm"
+              />
+            </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-tenure" className="font-medium text-foreground">
-              Tenure / Years in Active Service *
-            </label>
-            <Input
-              id="nom-tenure"
-              name="yearsOfService"
-              type="number"
-              min={1}
-              max={60}
-              defaultValue={5}
-              required
-              className="font-mono text-xs"
-            />
-          </div>
+            <div className="space-y-1.5">
+              <label htmlFor="nom-notes" className="text-xs font-semibold text-foreground">
+                Pastoral Council Recommendation Notes <span className="text-rose-500">*</span>
+              </label>
+              <textarea
+                id="nom-notes"
+                name="notes"
+                required
+                rows={3}
+                placeholder="State ministerial dedication, spiritual maturity, and attendance fidelity..."
+                className="w-full rounded-md border border-input bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="nom-notes" className="font-medium text-foreground">
-              Pastoral Council Recommendation Notes *
-            </label>
-            <textarea
-              id="nom-notes"
-              name="notes"
-              required
-              rows={3}
-              placeholder="State ministerial dedication, spiritual maturity, and tithing fidelity..."
-              className="w-full rounded-md border border-input bg-background p-2 text-xs text-foreground focus:ring-1 focus:ring-primary focus:outline-none"
-            />
-          </div>
-
-          <div className="pt-2">
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full gap-1.5 bg-primary text-xs font-semibold text-primary-foreground shadow-md hover:bg-primary/90"
-            >
-              <Sparkles className="size-4" />
-              {loading ? "Registering Candidate..." : "Submit Nomination to Ordination Pipeline"}
-            </Button>
-          </div>
-        </form>
+            <div className="pt-2">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="h-11 w-full gap-2 bg-primary text-sm font-semibold text-primary-foreground shadow-md hover:bg-primary/90"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Registering Candidate...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="size-4" />
+                    Submit Nomination to Ordination Pipeline
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </SheetBody>
       </SheetContent>
     </Sheet>
   );

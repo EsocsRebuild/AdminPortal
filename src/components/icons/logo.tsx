@@ -59,13 +59,13 @@ export function Logo({
       <span className={cn("grid min-w-0 leading-tight", collapsible && "lg:rail:hidden")}>
         <span
           className={cn(
-            "font-brand font-bold tracking-tight text-white dark:text-white",
+            "font-brand font-bold tracking-tight text-foreground",
             size === "lg" ? "text-xl" : size === "sm" ? "text-base" : "text-lg",
           )}
         >
           THE ESOCS
         </span>
-        <span className="text-2xs font-medium tracking-wider text-amber-400 uppercase">
+        <span className="text-2xs font-semibold tracking-wider text-amber-700 uppercase dark:text-amber-400">
           Administration Portal
         </span>
       </span>

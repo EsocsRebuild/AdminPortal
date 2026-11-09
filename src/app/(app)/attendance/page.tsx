@@ -1,12 +1,12 @@
-import { CheckCheck, Download } from "lucide-react";
+import { CheckCheck } from "lucide-react";
 import type { Metadata } from "next";
 
 import { LiveHeadcountWidget } from "@/components/blocks/live-headcount-widget";
 import { Page, PageHeader } from "@/components/layout/page";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { listHeadcounts } from "@/features/attendance/queries";
+import { RecordAttendanceModal } from "@/features/attendance/components/record-attendance-modal";
 import { formatDate, formatNumber } from "@/lib/format";
 import { requirePermission } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
@@ -24,9 +24,7 @@ export default async function AttendancePage() {
         description={`Historical attendance logs, demographic ratios, and Sunday worship headcount records for ${userUnit.unitName}.`}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="secondary" leftIcon={<Download className="size-4" />}>
-              Export Log
-            </Button>
+            <RecordAttendanceModal />
           </div>
         }
       />

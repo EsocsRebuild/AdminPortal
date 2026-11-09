@@ -1,0 +1,35 @@
+[
+  {
+    "id": "att_2026_10_25",
+    "date": "2026-10-25",
+    "serviceType": "Sunday Divine Worship & Thanksgiving",
+    "men": 184,
+    "women": 246,
+    "children": 98,
+    "total": 528,
+    "notes": "Parish annual thanksgiving service with diocesan visitors.",
+    "recorder": "Leader E. K. Alabi (Ushering Board)"
+  },
+  {
+    "id": "att_2026_10_23",
+    "date": "2026-10-23",
+    "serviceType": "Friday Deliverance & Miracle Vigil",
+    "men": 112,
+    "women": 168,
+    "children": 45,
+    "total": 325,
+    "notes": "Night vigil with holy order anointing prayers.",
+    "recorder": "Deaconess B. O. Briggs"
+  },
+  {
+    "id": "att_2026_10_21",
+    "date": "2026-10-21",
+    "serviceType": "Wednesday Intercessory Service",
+    "men": 65,
+    "women": 118,
+    "children": 28,
+    "total": 211,
+    "notes": "Mid-week spiritual strengthening hour.",
+    "recorder": "Sub-Leader T. C. Eze"
+  }
+]

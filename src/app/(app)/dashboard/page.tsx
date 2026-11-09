@@ -34,26 +34,27 @@ import { can } from "@/lib/permissions";
 import { requirePermission } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 
-import { HandlerCard } from "@/components/blocks/handler-card";
-import { JurisdictionScopeBanner } from "./_components/jurisdiction-scope-banner";
+import { DashboardHeader } from "./_components/dashboard-header";
 import { GettingStarted, type SetupStep } from "./_components/getting-started";
-import { Greeting } from "./_components/greeting";
-import { QuickActions } from "./_components/quick-actions";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
   const user = await requirePermission("dashboard:view");
   const isSuperAdmin = Boolean(user.isPlatformAdmin || !user.scopeUnitId);
+  const userUnit = await resolveUserUnit(user.scopeUnitId);
 
-  const [userUnit, summary, campaigns, activity, feedItems, ordinationData] = await Promise.all([
-    resolveUserUnit(user.scopeUnitId),
+  const [summary, campaigns, activity, feedData, ordinationData] = await Promise.all([
     getDashboardSummary(),
     can(user, "campaigns:view")
       ? listCampaigns({ page: 1, pageSize: 5, sort: "updatedAt", dir: "desc" }).then((r) => r.data)
       : null,
     can(user, "audit:view") ? recentAuditEvents(6) : null,
-    getEcclesiasticalFeed(),
+    getEcclesiasticalFeed({
+      scopeUnitId: user.scopeUnitId,
+      unitName: userUnit.unitName,
+      isGlobalAdmin: isSuperAdmin,
+    }),
     getOrdinationCandidates(),
   ]);
 
@@ -162,34 +163,15 @@ export default async function DashboardPage() {
   return (
     <Page>
       <Stagger className="grid grid-cols-[minmax(0,1fr)] gap-page" gap={0.07}>
+        {/* Unified Executive Hub & Scope Header */}
         <StaggerItem>
-          <Greeting name={user.name.split(" ")[0]} />
-        </StaggerItem>
-
-        <StaggerItem>
-          <JurisdictionScopeBanner user={user} unitName={userUnit.unitName} />
-        </StaggerItem>
-
-        <StaggerItem>
-          <HandlerCard
-            handlerId={user.id}
-            name={user.name}
-            roleName={user.role?.name}
-            unitName={userUnit.unitName}
-            unitType={userUnit.isGlobal ? "global" : "parish"}
-            avatarUrl={user.avatarUrl}
-            mfaEnabled={user.mfaEnabled}
-          />
-        </StaggerItem>
-
-        <StaggerItem>
-          <QuickActions user={user} />
+          <DashboardHeader user={user} unitName={userUnit.unitName} isSuperAdmin={isSuperAdmin} />
         </StaggerItem>
 
         {/* Super Admin Apex Ordination & Command Center */}
         {isSuperAdmin ? (
           <StaggerItem>
-            <Card className="via-card to-card border-amber-500/20 bg-linear-to-br from-amber-500/10 shadow-md">
+            <Card className="border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card shadow-md">
               <CardContent className="space-y-4 p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
@@ -284,9 +266,14 @@ export default async function DashboardPage() {
           </StaggerItem>
         )}
 
-        {/* Real-time Ecclesiastical Live Doomscrolling Feed Across All Provinces */}
+        {/* Live Announcements & Activity Feed Scoped Strictly to User Jurisdiction */}
         <StaggerItem>
-          <EcclesiasticalFeed initialItems={feedItems} />
+          <EcclesiasticalFeed
+            initialItems={feedData.items}
+            availableProvinces={feedData.availableProvinces}
+            isGlobalAdmin={isSuperAdmin}
+            userUnitName={userUnit.unitName}
+          />
         </StaggerItem>
 
         {stats.length > 0 && (

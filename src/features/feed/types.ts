@@ -14,9 +14,4 @@ export interface FeedItem {
   badgeText?: string;
   actionUrl?: string;
   actionText?: string;
-  stats: {
-    amens: number;
-    shares: number;
-    comments: number;
-  };
 }

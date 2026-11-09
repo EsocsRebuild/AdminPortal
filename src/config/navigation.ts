@@ -11,6 +11,7 @@ import {
   Layers,
   LayoutDashboard,
   LayoutTemplate,
+  LifeBuoy,
   Mail,
   Megaphone,
   Newspaper,
@@ -222,6 +223,17 @@ export const navigation: NavGroup[] = [
     ],
   },
 
+  {
+    title: "Member Care & Helpdesk",
+    items: [
+      {
+        title: "Secretariat Care & CRM",
+        href: "/crm",
+        icon: LifeBuoy,
+        keywords: ["support", "tickets", "complaints", "enquiries", "crm", "helpdesk", "care"],
+      },
+    ],
+  },
   {
     title: "Administration",
     items: [
