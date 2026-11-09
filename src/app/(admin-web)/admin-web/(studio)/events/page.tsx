@@ -19,26 +19,26 @@ export default async function EventsStudioPage() {
     <TooltipProvider>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col items-start justify-between gap-4 border-b border-slate-800 pb-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-5 sm:flex-row sm:items-center">
           <div>
             <div className="flex items-center gap-2">
-              <Calendar className="size-5 text-emerald-400" />
-              <h1 className="text-2xl font-bold tracking-tight text-white">Events Publishing Studio</h1>
+              <Calendar className="size-5 text-emerald-600 dark:text-emerald-400" />
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Events Publishing Studio</h1>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               Create, manage, and publish church events for{" "}
-              <span className="font-semibold text-amber-300">{unitInfo.unitName}</span>.
+              <span className="font-semibold text-primary">{unitInfo.unitName}</span>.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Left Column: Event Submission Form */}
-          <Card className="border-slate-800 bg-slate-900/80 shadow-xl lg:col-span-1">
+          <Card className="border-border bg-card shadow-xs lg:col-span-1">
             <CardHeader
               title={
-                <div className="flex items-center gap-2 text-base font-semibold text-white">
-                  <Plus className="size-4 text-emerald-400" />
+                <div className="flex items-center gap-2 text-base font-semibold text-foreground">
+                  <Plus className="size-4 text-emerald-600 dark:text-emerald-400" />
                   Submit New Event
                 </div>
               }

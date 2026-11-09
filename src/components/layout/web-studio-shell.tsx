@@ -498,9 +498,9 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
               <Tooltip content="Switch to Ecclesiastical Governance & Admin Portal">
                 <Link
                   href="/dashboard"
-                  className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-500 transition-all hover:bg-amber-500/20 sm:text-xs"
+                  className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-2xs font-bold text-amber-700 transition-all hover:bg-amber-500/20 sm:text-xs dark:text-amber-400"
                 >
-                  <Church className="size-3.5 text-amber-500" />
+                  <Church className="size-3.5 text-amber-600 dark:text-amber-400" />
                   <span className="hidden sm:inline">Main Church Admin</span>
                 </Link>
               </Tooltip>

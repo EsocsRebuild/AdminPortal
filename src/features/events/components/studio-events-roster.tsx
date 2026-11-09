@@ -127,7 +127,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
   return (
     <div className="space-y-4">
       {/* Controls Header */}
-      <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900/70 p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
           <Button
             type="button"
@@ -136,8 +136,8 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             onClick={() => setFilterTab("all")}
             className={`rounded-lg px-3 text-xs font-semibold ${
               filterTab === "all"
-                ? "bg-slate-800 text-white shadow-xs"
-                : "text-slate-400 hover:text-white"
+                ? "bg-surface-muted text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             All Events ({events.length})
@@ -149,8 +149,8 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             onClick={() => setFilterTab("approved")}
             className={`rounded-lg px-3 text-xs font-semibold ${
               filterTab === "approved"
-                ? "bg-emerald-500/20 text-emerald-400 shadow-xs"
-                : "text-slate-400 hover:text-white"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Live Approved ({approvedCount})
@@ -162,8 +162,8 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             onClick={() => setFilterTab("pending")}
             className={`rounded-lg px-3 text-xs font-semibold ${
               filterTab === "pending"
-                ? "bg-amber-500/20 text-amber-400 shadow-xs"
-                : "text-slate-400 hover:text-white"
+                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Pending Clearance ({pendingCount})
@@ -172,16 +172,16 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
 
         <div className="flex items-center gap-2">
           <div className="relative w-full sm:w-48">
-            <Search className="absolute top-2.5 left-2.5 size-3.5 text-slate-500" />
+            <Search className="absolute top-2.5 left-2.5 size-3.5 text-muted-foreground" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search roster..."
-              className="h-8 pl-8 text-xs border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+              className="h-8 border-input bg-background pl-8 text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
             />
           </div>
-          <span className="hidden items-center gap-1 rounded-md border border-slate-800 bg-slate-950/40 px-2 py-1 text-2xs font-medium text-slate-400 sm:flex">
-            <Building2 className="size-3 text-amber-400" />
+          <span className="hidden items-center gap-1 rounded-md border border-border bg-surface-muted/60 px-2 py-1 text-2xs font-medium text-foreground sm:flex">
+            <Building2 className="size-3 text-amber-500" />
             {unitName}
           </span>
         </div>
@@ -189,12 +189,12 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
 
       {/* Events Roster List */}
       {filteredEvents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 p-10 text-center">
-          <div className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+          <div className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <Calendar className="size-6" />
           </div>
-          <h4 className="mt-3 text-sm font-bold text-white">No church events matching your filter</h4>
-          <p className="mt-1 max-w-md text-xs text-slate-400">
+          <h4 className="mt-3 text-sm font-bold text-foreground">No church events matching your filter</h4>
+          <p className="mt-1 max-w-md text-xs text-muted-foreground">
             {events.length === 0
               ? `No active events recorded yet for ${unitName}. Use the form on the left to submit an event.`
               : "Try switching filters or clearing your search term to see other events."}
@@ -219,33 +219,33 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             return (
               <Card
                 key={evt.id}
-                className="overflow-hidden border-slate-800 bg-slate-900/80 shadow-md transition-all hover:border-slate-700"
+                className="overflow-hidden border-border bg-card shadow-xs transition-all hover:border-border/80"
               >
                 <div className="flex flex-col items-start justify-between gap-4 p-4 sm:p-5 md:flex-row">
                   <div className="max-w-xl space-y-2.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-bold text-white">{evt.title}</span>
-                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-2xs font-semibold text-emerald-400">
+                      <span className="text-sm font-bold text-foreground">{evt.title}</span>
+                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
                         {evt.category.replace(/_/g, " ")}
                       </span>
                       {evt.registrationOpen && (
-                        <span className="flex items-center gap-1 rounded-full bg-cyan-500/10 px-2 py-0.5 text-3xs font-medium text-cyan-400">
+                        <span className="flex items-center gap-1 rounded-full bg-cyan-500/10 px-2 py-0.5 text-3xs font-medium text-cyan-600 dark:text-cyan-400">
                           <Users className="size-2.5" />
                           Registration Open
                         </span>
                       )}
                     </div>
 
-                    <p className="text-xs leading-relaxed text-slate-300">{evt.description}</p>
+                    <p className="text-xs leading-relaxed text-muted-foreground">{evt.description}</p>
 
-                    <div className="grid grid-cols-1 gap-2 border-t border-slate-800/60 pt-2 text-2xs text-slate-400 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-2 border-t border-border/60 pt-2 text-2xs text-muted-foreground sm:grid-cols-2">
                       <div className="flex items-center gap-1.5 truncate">
-                        <MapPin className="size-3 text-amber-400 shrink-0" />
-                        <span className="truncate">{evt.venue}</span>
+                        <MapPin className="size-3 text-amber-500 shrink-0" />
+                        <span className="truncate text-foreground">{evt.venue}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Clock className="size-3 text-emerald-400 shrink-0" />
-                        <span>
+                        <Clock className="size-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <span className="text-foreground">
                           {formattedDate} {formattedTime && `• ${formattedTime}`}
                         </span>
                       </div>
@@ -258,23 +258,23 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                         onClick={() => handleAmen(evt.id)}
                         className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-2xs font-semibold transition-all ${
                           amened[evt.id]
-                            ? "border-amber-500/40 bg-amber-500/20 text-amber-300"
-                            : "border-slate-800 bg-slate-950/60 text-slate-400 hover:text-amber-400"
+                            ? "border-amber-500/40 bg-amber-500/20 text-amber-600 dark:text-amber-300"
+                            : "border-border bg-surface-muted/60 text-muted-foreground hover:text-amber-500"
                         }`}
                       >
-                        <Flame className={`size-3 ${amened[evt.id] ? "fill-amber-400 text-amber-400" : ""}`} />
+                        <Flame className={`size-3 ${amened[evt.id] ? "fill-amber-500 text-amber-500" : ""}`} />
                         <span>{amens[evt.id] || 48} Amen / Praises</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleCopyLink(evt)}
-                        className="flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-2xs font-medium text-slate-400 transition-colors hover:text-white"
+                        className="flex items-center gap-1 rounded-full border border-border bg-surface-muted/60 px-2.5 py-1 text-2xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {copiedId === evt.id ? (
                           <>
-                            <Check className="size-3 text-emerald-400" />
-                            <span className="text-emerald-400">Copied Link!</span>
+                            <Check className="size-3 text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-emerald-600 dark:text-emerald-400">Copied Link!</span>
                           </>
                         ) : (
                           <>
@@ -287,7 +287,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                       <button
                         type="button"
                         onClick={() => setSelectedEvent(evt)}
-                        className="flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/60 px-2.5 py-1 text-2xs font-medium text-slate-400 transition-colors hover:text-white"
+                        className="flex items-center gap-1 rounded-full border border-border bg-surface-muted/60 px-2.5 py-1 text-2xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                       >
                         <Eye className="size-3" />
                         <span>Preview Flyer</span>
@@ -298,14 +298,14 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                   {/* Status & Control Actions */}
                   <div className="flex shrink-0 flex-col items-end gap-2.5">
                     {evt.status === "APPROVED_LIVE" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                         <CheckCircle2 className="size-3.5" />
                         Approved Live
                       </span>
                     )}
                     {evt.status === "PENDING_REVIEW" && (
                       <div className="flex flex-col items-end gap-1.5">
-                        <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400">
+                        <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
                           <Clock className="size-3.5" />
                           Pending Clearance
                         </span>
@@ -322,7 +322,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                       </div>
                     )}
                     {evt.status === "NEEDS_REVISION" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400">
                         <AlertCircle className="size-3.5" />
                         Needs Revision
                       </span>
@@ -335,7 +335,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                         size="xs"
                         onClick={() => handleDelete(evt.id)}
                         disabled={processingId === evt.id}
-                        className="h-6 text-slate-500 hover:text-rose-400"
+                        className="h-6 text-muted-foreground hover:text-rose-600"
                         title="Delete Event"
                       >
                         <Trash2 className="size-3" />
@@ -352,22 +352,22 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
       {/* High-End Event Preview Modal */}
       {selectedEvent && (
         <Dialog open={Boolean(selectedEvent)} onOpenChange={() => setSelectedEvent(null)}>
-          <DialogContent className="max-w-lg border-slate-800 bg-slate-950 p-6 text-white shadow-2xl">
+          <DialogContent className="max-w-lg border-border bg-card p-6 text-foreground shadow-2xl">
             <DialogHeader>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-2xs font-semibold text-emerald-400">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
                   {selectedEvent.category.replace(/_/g, " ")}
                 </span>
-                <span className="text-2xs text-slate-400">{selectedEvent.unitName}</span>
+                <span className="text-2xs text-muted-foreground">{selectedEvent.unitName}</span>
               </div>
-              <DialogTitle className="mt-2 text-lg font-bold text-white">
+              <DialogTitle className="mt-2 text-lg font-bold text-foreground">
                 {selectedEvent.title}
               </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4 py-2">
               {selectedEvent.bannerUrl ? (
-                <div className="relative h-48 w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+                <div className="relative h-48 w-full overflow-hidden rounded-xl border border-border bg-surface-muted">
                   <Image
                     src={selectedEvent.bannerUrl}
                     alt={selectedEvent.title}
@@ -377,36 +377,36 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                   />
                 </div>
               ) : (
-                <div className="flex h-36 w-full items-center justify-center rounded-xl border border-dashed border-slate-800 bg-slate-900/50">
-                  <div className="text-center text-xs text-slate-500">
-                    <Calendar className="mx-auto mb-1.5 size-6 text-slate-600" />
+                <div className="flex h-36 w-full items-center justify-center rounded-xl border border-dashed border-border bg-surface-muted/30">
+                  <div className="text-center text-xs text-muted-foreground">
+                    <Calendar className="mx-auto mb-1.5 size-6 text-muted-foreground" />
                     <span>Official Liturgical Programme</span>
                   </div>
                 </div>
               )}
 
-              <p className="text-xs leading-relaxed text-slate-300">{selectedEvent.description}</p>
+              <p className="text-xs leading-relaxed text-muted-foreground">{selectedEvent.description}</p>
 
-              <div className="grid grid-cols-2 gap-3 rounded-lg border border-slate-800/80 bg-slate-900/60 p-3 text-xs">
+              <div className="grid grid-cols-2 gap-3 rounded-lg border border-border bg-surface-muted/40 p-3 text-xs">
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-slate-500">Date & Time</span>
-                  <p className="font-semibold text-white">
+                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Date & Time</span>
+                  <p className="font-semibold text-foreground">
                     {new Date(selectedEvent.startDate).toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-slate-500">Venue</span>
-                  <p className="font-semibold text-white truncate">{selectedEvent.venue}</p>
+                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Venue</span>
+                  <p className="font-semibold text-foreground truncate">{selectedEvent.venue}</p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-slate-500">Registration</span>
-                  <p className="font-semibold text-emerald-400">
+                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Registration</span>
+                  <p className="font-semibold text-emerald-600 dark:text-emerald-400">
                     {selectedEvent.registrationOpen ? "Open to Public" : "Closed / Private"}
                   </p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-slate-500">Capacity</span>
-                  <p className="font-semibold text-white">
+                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Capacity</span>
+                  <p className="font-semibold text-foreground">
                     {selectedEvent.ticketCapacity ? `${selectedEvent.ticketCapacity} Seats` : "Open Sanctuary"}
                   </p>
                 </div>
@@ -419,7 +419,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                 variant="outline"
                 size="sm"
                 onClick={() => handleCopyLink(selectedEvent)}
-                className="border-slate-800 text-xs text-slate-300 hover:text-white"
+                className="text-xs text-foreground"
               >
                 <Share2 className="mr-1.5 size-3.5" />
                 Copy Share Link

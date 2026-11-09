@@ -55,21 +55,21 @@ export function StudioProgrammesRoster({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/70 p-3 px-4">
-        <span className="text-xs font-semibold text-white">
+      <div className="flex items-center justify-between rounded-xl border border-border bg-card p-3 px-4 shadow-xs">
+        <span className="text-xs font-semibold text-foreground">
           Active Programme Schedules ({programmes.length})
         </span>
-        <span className="flex items-center gap-1.5 text-2xs text-slate-400">
-          <Building2 className="size-3 text-teal-400" />
+        <span className="flex items-center gap-1.5 text-2xs text-muted-foreground">
+          <Building2 className="size-3 text-teal-600 dark:text-teal-400" />
           {unitName}
         </span>
       </div>
 
       {programmes.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 p-10 text-center">
-          <Calendar className="size-8 text-teal-400" />
-          <h4 className="mt-3 text-sm font-bold text-white">No active programmes scheduled</h4>
-          <p className="mt-1 max-w-md text-xs text-slate-400">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card p-10 text-center shadow-xs">
+          <Calendar className="size-8 text-teal-600 dark:text-teal-400" />
+          <h4 className="mt-3 text-sm font-bold text-foreground">No active programmes scheduled</h4>
+          <p className="mt-1 max-w-md text-xs text-muted-foreground">
             Submit your quarterly liturgy themes and ministerial speakers using the form.
           </p>
         </div>
@@ -89,21 +89,21 @@ export function StudioProgrammesRoster({
             return (
               <Card
                 key={prog.id}
-                className="overflow-hidden border-slate-800 bg-slate-900/80 p-5 shadow-md transition-all hover:border-slate-700"
+                className="overflow-hidden border-border bg-card p-5 shadow-xs transition-all hover:border-border/80"
               >
                 <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
-                  <div className="space-y-2 max-w-xl">
+                  <div className="max-w-xl space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-bold text-white">{prog.title}</span>
-                      <span className="rounded-full bg-teal-500/10 px-2 py-0.5 text-3xs font-semibold text-teal-400">
+                      <span className="text-sm font-bold text-foreground">{prog.title}</span>
+                      <span className="rounded-full bg-teal-500/10 px-2 py-0.5 text-3xs font-semibold text-teal-600 dark:text-teal-400">
                         {dateStr}
                       </span>
                     </div>
 
-                    <p className="text-xs italic text-teal-300">&ldquo;{prog.theme}&rdquo;</p>
+                    <p className="text-xs italic text-teal-600 dark:text-teal-400">&ldquo;{prog.theme}&rdquo;</p>
 
-                    <div className="flex items-center gap-1.5 text-2xs text-slate-400">
-                      <Mic className="size-3 text-amber-400 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-2xs text-muted-foreground">
+                      <Mic className="size-3 shrink-0 text-amber-500" />
                       <span>Ministers: {prog.speakers.join(", ")}</span>
                     </div>
 
@@ -113,7 +113,7 @@ export function StudioProgrammesRoster({
                           href={prog.livestreamUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-teal-400 hover:underline"
+                          className="flex items-center gap-1 text-teal-600 hover:underline dark:text-teal-400"
                         >
                           <Video className="size-3" />
                           <span>Livestream Link</span>
@@ -126,7 +126,7 @@ export function StudioProgrammesRoster({
                           href={prog.bulletinPdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-amber-400 hover:underline"
+                          className="flex items-center gap-1 text-amber-600 hover:underline dark:text-amber-400"
                         >
                           <FileText className="size-3" />
                           <span>Bulletin PDF</span>
@@ -143,7 +143,7 @@ export function StudioProgrammesRoster({
                       size="xs"
                       onClick={() => handleDelete(prog.id)}
                       disabled={deletingId === prog.id}
-                      className="h-7 text-slate-500 hover:text-rose-400"
+                      className="h-7 text-muted-foreground hover:text-rose-600 dark:hover:text-rose-400"
                       title="Delete Programme"
                     >
                       <Trash2 className="size-3.5" />

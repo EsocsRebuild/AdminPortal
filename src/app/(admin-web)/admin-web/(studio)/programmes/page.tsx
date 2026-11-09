@@ -18,26 +18,26 @@ export default async function ProgrammesSchedulePage() {
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-5">
+        <div className="flex items-center justify-between border-b border-border pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <Megaphone className="size-5 text-teal-400" />
-              <h1 className="text-2xl font-bold tracking-tight text-white">Programmes & Bulletin Schedule</h1>
+              <Megaphone className="size-5 text-teal-600 dark:text-teal-400" />
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Programmes & Bulletin Schedule</h1>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               Manage church annual summits, quarterly theme schedules, and bulletin attachments for{" "}
-              <span className="font-semibold text-amber-300">{unitInfo.unitName}</span>.
+              <span className="font-semibold text-primary">{unitInfo.unitName}</span>.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Left Column: Programme Form */}
-          <Card className="border-slate-800 bg-slate-900/80 shadow-xl lg:col-span-1">
+          <Card className="border-border bg-card shadow-xs lg:col-span-1">
             <CardHeader
               title={
-                <div className="flex items-center gap-2 text-base font-semibold text-white">
-                  <Plus className="size-4 text-teal-400" />
+                <div className="flex items-center gap-2 text-base font-semibold text-foreground">
+                  <Plus className="size-4 text-teal-600 dark:text-teal-400" />
                   Submit Programme Schedule
                 </div>
               }

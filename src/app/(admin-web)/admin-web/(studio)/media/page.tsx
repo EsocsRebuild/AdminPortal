@@ -15,13 +15,13 @@ export default async function MediaGalleryPage() {
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-5">
+        <div className="flex items-center justify-between border-b border-border pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <ImageIcon className="size-5 text-amber-400" />
-              <h1 className="text-2xl font-bold tracking-tight text-white">Media Asset Library</h1>
+              <ImageIcon className="size-5 text-amber-500" />
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">Media Asset Library</h1>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-muted-foreground">
               Upload banners, logos, and public photos for events and web sections.
             </p>
           </div>

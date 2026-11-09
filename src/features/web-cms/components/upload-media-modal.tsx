@@ -59,17 +59,17 @@ export function UploadMediaModal() {
           Upload New Media Asset
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md border-slate-800 bg-slate-950 p-6 text-white shadow-2xl">
+      <DialogContent className="max-w-md border-border bg-card p-6 text-foreground shadow-2xl">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+            <div className="flex size-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <Upload className="size-5" />
             </div>
             <div>
-              <DialogTitle className="text-base font-bold text-white">
+              <DialogTitle className="text-base font-bold text-foreground">
                 Upload Church Media Asset
               </DialogTitle>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 Add banner photos, flyers, or church logos to the central media CDN library.
               </p>
             </div>
@@ -78,13 +78,13 @@ export function UploadMediaModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-2 text-xs">
           {error && (
-            <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-400">
+            <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400">
               {error}
             </div>
           )}
 
           <div className="space-y-1.5">
-            <label htmlFor="m-name" className="font-semibold text-slate-200">
+            <label htmlFor="m-name" className="font-semibold text-foreground">
               Asset Name / Title *
             </label>
             <Input
@@ -93,12 +93,12 @@ export function UploadMediaModal() {
               value={fileName}
               onChange={(e) => setFileName(e.target.value)}
               placeholder="e.g. general_conference_banner_2026.jpg"
-              className="border-slate-800 bg-slate-900 text-white placeholder:text-slate-600 focus-visible:ring-amber-500 text-xs"
+              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500 text-xs"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="m-url" className="font-semibold text-slate-200">
+            <label htmlFor="m-url" className="font-semibold text-foreground">
               Image Web Address (URL) *
             </label>
             <Input
@@ -107,11 +107,11 @@ export function UploadMediaModal() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://..."
-              className="border-slate-800 bg-slate-900 text-white placeholder:text-slate-600 focus-visible:ring-amber-500 text-xs"
+              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500 text-xs"
             />
 
             <div className="flex items-center gap-1.5 pt-1">
-              <span className="text-3xs text-slate-500">Presets:</span>
+              <span className="text-3xs text-muted-foreground">Presets:</span>
               {presets.map((p) => (
                 <button
                   key={p.name}
@@ -120,7 +120,7 @@ export function UploadMediaModal() {
                     setUrl(p.url);
                     if (!fileName) setFileName(`${p.name.toLowerCase().replace(/\s+/g, "_")}.jpg`);
                   }}
-                  className="rounded border border-slate-800 bg-slate-900 px-2 py-0.5 text-3xs font-medium text-slate-400 hover:border-slate-700 hover:text-white"
+                  className="rounded border border-border bg-surface-muted/60 px-2 py-0.5 text-3xs font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
                 >
                   {p.name}
                 </button>
@@ -129,7 +129,7 @@ export function UploadMediaModal() {
           </div>
 
           {url.trim().length > 10 && (
-            <div className="relative h-36 w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+            <div className="relative h-36 w-full overflow-hidden rounded-xl border border-border bg-surface-muted">
               <Image src={url} alt="Preview" fill unoptimized className="object-cover" />
             </div>
           )}
@@ -140,7 +140,7 @@ export function UploadMediaModal() {
               variant="outline"
               size="sm"
               onClick={() => setOpen(false)}
-              className="border-slate-800 text-xs text-slate-300 hover:text-white"
+              className="border-border text-xs text-muted-foreground hover:text-foreground"
             >
               Cancel
             </Button>

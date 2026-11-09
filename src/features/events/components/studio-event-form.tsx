@@ -114,13 +114,13 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
     <>
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
-          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-400">
+          <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400">
             {error}
           </div>
         )}
 
         <div className="space-y-1.5">
-          <label htmlFor="evt-title" className="font-semibold text-slate-200">
+          <label htmlFor="evt-title" className="font-semibold text-foreground">
             Event Title *
           </label>
           <Input
@@ -128,18 +128,18 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             name="title"
             placeholder="e.g. 2026 Anointing Night Revival"
             required
-            className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="evt-category" className="font-semibold text-slate-200">
+          <label htmlFor="evt-category" className="font-semibold text-foreground">
             Category *
           </label>
           <select
             id="evt-category"
             name="category"
-            className="h-9 w-full rounded-md border border-slate-800 bg-slate-950/60 px-3 text-xs text-white focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+            className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
           >
             <option value="REVIVAL">Revival Service</option>
             <option value="SUNDAY_SERVICE">Sunday Service</option>
@@ -150,7 +150,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="evt-date" className="font-semibold text-slate-200">
+          <label htmlFor="evt-date" className="font-semibold text-foreground">
             Start Date & Time *
           </label>
           <Input
@@ -159,12 +159,12 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             type="datetime-local"
             required
             defaultValue={defaultStartDate}
-            className="border-slate-800 bg-slate-950/60 text-white focus-visible:ring-emerald-500"
+            className="border-input bg-background text-foreground focus-visible:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="evt-venue" className="font-semibold text-slate-200">
+          <label htmlFor="evt-venue" className="font-semibold text-foreground">
             Venue / Location *
           </label>
           <Input
@@ -172,28 +172,28 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             name="venue"
             defaultValue={`${unitName} Auditorium`}
             required
-            className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
           />
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label htmlFor="evt-desc" className="font-semibold text-slate-200">
+            <label htmlFor="evt-desc" className="font-semibold text-foreground">
               Event Description
             </label>
-            <span className="text-3xs text-slate-500">Optional (auto-generated if empty)</span>
+            <span className="text-3xs text-muted-foreground">Optional (auto-generated if empty)</span>
           </div>
           <textarea
             id="evt-desc"
             name="description"
             rows={2}
             placeholder="Brief programme details, guest ministers, scripture theme..."
-            className="w-full rounded-md border border-slate-800 bg-slate-950/60 p-2 text-xs text-white placeholder:text-slate-600 focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+            className="w-full rounded-md border border-input bg-background p-2 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
           />
         </div>
 
         <div className="space-y-1.5">
-          <label htmlFor="evt-banner" className="font-semibold text-slate-200">
+          <label htmlFor="evt-banner" className="font-semibold text-foreground">
             Banner / Flyer Image URL (Optional)
           </label>
           <Input
@@ -202,16 +202,16 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             value={bannerUrl}
             onChange={(e) => setBannerUrl(e.target.value)}
             placeholder="https://images.unsplash.com/..."
-            className="border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
           />
           <div className="flex items-center gap-1.5 pt-1">
-            <span className="text-3xs text-slate-500">Presets:</span>
+            <span className="text-3xs text-muted-foreground">Presets:</span>
             {bannerPresets.map((p) => (
               <button
                 key={p.label}
                 type="button"
                 onClick={() => setBannerUrl(p.url)}
-                className="rounded border border-slate-800 bg-slate-900 px-2 py-0.5 text-3xs font-medium text-slate-400 hover:border-slate-700 hover:text-white"
+                className="rounded border border-border bg-surface-muted/60 px-2 py-0.5 text-3xs font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
               >
                 {p.label}
               </button>
@@ -220,8 +220,8 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
         </div>
 
         {/* Publication Protocol */}
-        <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950/50 p-3">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-slate-400">
+        <div className="space-y-2 rounded-xl border border-border bg-surface-muted/30 p-3">
+          <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
             Publication Mode
           </span>
           <div className="grid grid-cols-2 gap-2">
@@ -230,8 +230,8 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
               onClick={() => setPublishDirectly(true)}
               className={`flex items-center justify-center gap-1.5 rounded-lg border p-2 text-2xs font-semibold transition-all ${
                 publishDirectly
-                  ? "border-emerald-500/40 bg-emerald-500/20 text-emerald-400"
-                  : "border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               <CheckCircle2 className="size-3.5" />
@@ -242,8 +242,8 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
               onClick={() => setPublishDirectly(false)}
               className={`flex items-center justify-center gap-1.5 rounded-lg border p-2 text-2xs font-semibold transition-all ${
                 !publishDirectly
-                  ? "border-amber-500/40 bg-amber-500/20 text-amber-400"
-                  : "border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
+                  ? "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground"
               }`}
             >
               <Clock className="size-3.5" />
@@ -258,9 +258,9 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             id="evt-reg"
             name="registrationOpen"
             defaultChecked
-            className="size-4 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
+            className="size-4 rounded border-input bg-background text-emerald-600 focus:ring-emerald-500"
           />
-          <label htmlFor="evt-reg" className="cursor-pointer text-xs text-slate-300">
+          <label htmlFor="evt-reg" className="cursor-pointer text-xs text-foreground">
             Enable Public Pilgrim Registration Form
           </label>
         </div>
@@ -268,7 +268,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
         <Button
           type="submit"
           disabled={loading}
-          className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-emerald-950/50 hover:bg-emerald-500"
+          className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500"
         >
           <Sparkles className="size-4" />
           {loading ? "Publishing to Church Network..." : "Submit & Publish Event"}
@@ -278,43 +278,43 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
       {/* High-End Event Created Confirmation Modal */}
       {createdEvent && (
         <Dialog open={Boolean(createdEvent)} onOpenChange={() => setCreatedEvent(null)}>
-          <DialogContent className="max-w-md border-slate-800 bg-slate-950 p-6 text-white shadow-2xl">
+          <DialogContent className="max-w-md border-border bg-card p-6 text-foreground shadow-2xl">
             <DialogHeader className="text-center">
-              <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-400 shadow-xl shadow-emerald-950/60">
+              <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-600 shadow-md dark:text-emerald-400">
                 <CheckCircle2 className="size-8" />
               </div>
-              <DialogTitle className="text-lg font-bold text-white">
+              <DialogTitle className="text-lg font-bold text-foreground">
                 Church Event Successfully Created!
               </DialogTitle>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Your event has been recorded and synchronized with the ecclesiastical network.
               </p>
             </DialogHeader>
 
-            <div className="my-3 space-y-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <span className="text-xs font-bold text-white">{createdEvent.title}</span>
-                <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-400">
+            <div className="my-3 space-y-3 rounded-xl border border-border bg-surface-muted/40 p-4">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="text-xs font-bold text-foreground">{createdEvent.title}</span>
+                <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-600 dark:text-emerald-400">
                   {createdEvent.category.replace(/_/g, " ")}
                 </span>
               </div>
 
-              <div className="space-y-1 text-2xs text-slate-300">
+              <div className="space-y-1 text-2xs text-muted-foreground">
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="size-3 text-amber-400" />
-                  <span>{createdEvent.venue}</span>
+                  <MapPin className="size-3 text-amber-500" />
+                  <span className="text-foreground">{createdEvent.venue}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="size-3 text-emerald-400" />
-                  <span>{new Date(createdEvent.startDate).toLocaleString()}</span>
+                  <Calendar className="size-3 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-foreground">{new Date(createdEvent.startDate).toLocaleString()}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <ShieldCheck className="size-3 text-cyan-400" />
-                  <span>
+                  <ShieldCheck className="size-3 text-primary" />
+                  <span className="text-foreground">
                     Status:{" "}
                     {createdEvent.status === "APPROVED_LIVE"
                       ? "Live on Church Network"
-                      : "Pending Super Vetting Clearance"}
+                      : "Awaiting Secretariat Review"}
                   </span>
                 </div>
               </div>
@@ -326,7 +326,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
                 variant="outline"
                 size="sm"
                 onClick={handleCopyCreatedLink}
-                className="border-slate-800 text-xs text-slate-300 hover:text-white"
+                className="text-xs text-foreground"
               >
                 <Share2 className="mr-1.5 size-3.5" />
                 {copiedLink ? "Link Copied!" : "Copy Public Link"}

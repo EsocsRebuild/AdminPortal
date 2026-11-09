@@ -154,25 +154,25 @@ export function HelpdeskDrawer({
         )}
       </DialogTrigger>
 
-      <DialogContent className="max-w-2xl border-slate-800 bg-slate-950 p-6 text-white shadow-2xl">
-        <DialogHeader className="border-b border-slate-800 pb-4">
+      <DialogContent className="max-w-2xl border-border bg-card p-6 text-foreground shadow-2xl">
+        <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+              <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <LifeBuoy className="size-5" />
               </div>
               <div>
-                <DialogTitle className="text-base font-bold text-white">
+                <DialogTitle className="text-base font-bold text-foreground">
                   Secretariat Helpdesk & Member Care
                 </DialogTitle>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   Lodge enquiries, report ordination vetting questions, or communicate with the Central Secretariat.
                 </p>
               </div>
             </div>
 
             {/* Quick Switch Tabs */}
-            <div className="flex rounded-lg border border-slate-800 bg-slate-900/80 p-0.5 text-xs">
+            <div className="flex rounded-lg border border-border bg-surface-muted/60 p-0.5 text-xs">
               <button
                 type="button"
                 onClick={() => {
@@ -182,7 +182,7 @@ export function HelpdeskDrawer({
                 className={`rounded-md px-3 py-1 font-semibold transition-all ${
                   activeTab === "lodge" && !selectedTicket
                     ? "bg-emerald-600 text-white shadow-xs"
-                    : "text-slate-400 hover:text-white"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 New Enquiry
@@ -192,13 +192,13 @@ export function HelpdeskDrawer({
                 onClick={() => setActiveTab("tickets")}
                 className={`flex items-center gap-1.5 rounded-md px-3 py-1 font-semibold transition-all ${
                   activeTab === "tickets"
-                    ? "bg-slate-800 text-white shadow-xs"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-background text-foreground shadow-xs"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <span>Track Issues</span>
                 {tickets.length > 0 && (
-                  <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 text-3xs font-bold text-emerald-400">
+                  <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 text-3xs font-bold text-emerald-600 dark:text-emerald-400">
                     {tickets.length}
                   </span>
                 )}
@@ -211,7 +211,7 @@ export function HelpdeskDrawer({
         {activeTab === "lodge" && !submittedTicket && (
           <form onSubmit={handleLodgeTicket} className="space-y-4 pt-3 text-xs">
             {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-400">
+              <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400">
                 <AlertCircle className="size-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -219,13 +219,13 @@ export function HelpdeskDrawer({
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="font-semibold text-slate-300">
+                <label className="font-semibold text-foreground">
                   What is this enquiry regarding? *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value as TicketCategory)}
-                  className="h-9 w-full rounded-md border border-slate-800 bg-slate-900 px-3 text-xs text-white focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
                 >
                   <option value="ORDINATION_VETTING">Ordination & Vetting Clearance</option>
                   <option value="PARISH_MEMBERSHIP">Parish Directory & Records</option>
@@ -237,11 +237,11 @@ export function HelpdeskDrawer({
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-semibold text-slate-300">Urgency Level</label>
+                <label className="font-semibold text-foreground">Urgency Level</label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value as TicketPriority)}
-                  className="h-9 w-full rounded-md border border-slate-800 bg-slate-900 px-3 text-xs text-white focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
                 >
                   <option value="STANDARD">Standard Review (Within 24 Hours)</option>
                   <option value="HIGH">High Priority (Within 6 Hours)</option>
@@ -251,36 +251,36 @@ export function HelpdeskDrawer({
             </div>
 
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-300">Subject / Summary *</label>
+              <label className="font-semibold text-foreground">Subject / Summary *</label>
               <Input
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Briefly state your question or issue..."
                 required
-                className="border-slate-800 bg-slate-900 text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
               />
             </div>
 
             {/* Optional Candidate / Member Reference */}
             {category === "ORDINATION_VETTING" && (
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 space-y-1.5">
-                <label className="font-semibold text-amber-300">
+                <label className="font-semibold text-amber-600 dark:text-amber-400">
                   Candidate Registration Number or Full Name (Optional)
                 </label>
                 <Input
                   value={candidateRef}
                   onChange={(e) => setCandidateRef(e.target.value)}
                   placeholder="e.g. ESOCS/ORD/2026/6416 or Bro. Peter Chima"
-                  className="border-slate-800 bg-slate-900 text-white placeholder:text-slate-600 focus-visible:ring-amber-500"
+                  className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500"
                 />
-                <span className="text-3xs text-slate-400">
+                <span className="text-3xs text-muted-foreground">
                   Helps the vetting committee locate the candidate dossier immediately.
                 </span>
               </div>
             )}
 
             <div className="space-y-1.5">
-              <label className="font-semibold text-slate-300">
+              <label className="font-semibold text-foreground">
                 Detailed Message / What happened? *
               </label>
               <textarea
@@ -289,14 +289,14 @@ export function HelpdeskDrawer({
                 rows={3}
                 required
                 placeholder="Kindly explain what you need assistance with in simple words..."
-                className="w-full rounded-md border border-slate-800 bg-slate-900 p-2.5 text-xs text-white placeholder:text-slate-600 focus:ring-1 focus:ring-emerald-500 focus:outline-none"
+                className="w-full rounded-md border border-input bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
               />
             </div>
 
             {/* Contact Details */}
-            <div className="grid grid-cols-1 gap-3 border-t border-slate-800/80 pt-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 border-t border-border pt-3 sm:grid-cols-3">
               <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Your Full Name *
                 </label>
                 <Input
@@ -304,12 +304,12 @@ export function HelpdeskDrawer({
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Elder David Okoro"
                   required
-                  className="h-8 border-slate-800 bg-slate-900 text-xs text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Email Address *
                 </label>
                 <Input
@@ -318,31 +318,31 @@ export function HelpdeskDrawer({
                   type="email"
                   placeholder="e.g. david@esocs.org"
                   required
-                  className="h-8 border-slate-800 bg-slate-900 text-xs text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Phone Number (Optional)
                 </label>
                 <Input
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="e.g. +234 800 000 0000"
-                  className="h-8 border-slate-800 bg-slate-900 text-xs text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                 />
               </div>
 
               <div className="space-y-1 sm:col-span-3">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Parish / Branch (Optional)
                 </label>
                 <Input
                   value={parish}
                   onChange={(e) => setParish(e.target.value)}
                   placeholder="e.g. Diobu Cathedral Branch, Port Harcourt"
-                  className="h-8 border-slate-800 bg-slate-900 text-xs text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                 />
               </div>
             </div>
@@ -350,7 +350,7 @@ export function HelpdeskDrawer({
             <Button
               type="submit"
               disabled={loading}
-              className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-emerald-950/60 hover:bg-emerald-500"
+              className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500"
             >
               {loading ? (
                 <>
@@ -370,32 +370,32 @@ export function HelpdeskDrawer({
         {/* Success Confirmation Card */}
         {submittedTicket && (
           <div className="space-y-4 py-4 text-center">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-400 shadow-xl shadow-emerald-950/60">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-md">
               <CheckCircle2 className="size-8" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Your Enquiry Has Been Received</h3>
-              <p className="mt-1 text-xs text-slate-400">
+              <h3 className="text-lg font-bold text-foreground">Your Enquiry Has Been Received</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
                 A member care officer at the Secretariat has been assigned to assist you.
               </p>
             </div>
 
-            <div className="mx-auto max-w-md rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-left text-xs">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <span className="text-slate-400">Reference Number:</span>
-                <span className="font-mono font-bold text-emerald-400">
+            <div className="mx-auto max-w-md rounded-xl border border-border bg-surface-muted/50 p-4 text-left text-xs">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="text-muted-foreground">Reference Number:</span>
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
                   {submittedTicket.ticketNumber}
                 </span>
               </div>
-              <div className="mt-2 space-y-1 text-2xs text-slate-300">
+              <div className="mt-2 space-y-1 text-2xs text-muted-foreground">
                 <p>
-                  <strong>Subject:</strong> {submittedTicket.title}
+                  <strong className="text-foreground">Subject:</strong> {submittedTicket.title}
                 </p>
                 <p>
-                  <strong>Category:</strong> {categoryLabels[submittedTicket.category]}
+                  <strong className="text-foreground">Category:</strong> {categoryLabels[submittedTicket.category]}
                 </p>
                 <p>
-                  <strong>Status:</strong> Awaiting Secretariat Response
+                  <strong className="text-foreground">Status:</strong> Awaiting Secretariat Response
                 </p>
               </div>
             </div>
@@ -410,7 +410,7 @@ export function HelpdeskDrawer({
                   setSelectedTicket(submittedTicket);
                   setActiveTab("tickets");
                 }}
-                className="border-slate-800 text-xs text-slate-300 hover:text-white"
+                className="border-border text-xs text-muted-foreground hover:text-foreground"
               >
                 View Ticket Thread
               </Button>
@@ -433,8 +433,8 @@ export function HelpdeskDrawer({
         {activeTab === "tickets" && !selectedTicket && (
           <div className="space-y-3 pt-2">
             {tickets.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-slate-800 p-8 text-center text-xs text-slate-500">
-                <LifeBuoy className="mx-auto mb-2 size-8 text-slate-600" />
+              <div className="rounded-xl border border-dashed border-border p-8 text-center text-xs text-muted-foreground">
+                <LifeBuoy className="mx-auto mb-2 size-8 text-muted-foreground" />
                 <p>You have not logged any complaints or enquiries yet.</p>
               </div>
             ) : (
@@ -442,30 +442,30 @@ export function HelpdeskDrawer({
                 <div
                   key={t.id}
                   onClick={() => setSelectedTicket(t)}
-                  className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 transition-all hover:border-slate-700 hover:bg-slate-900"
+                  className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card p-3.5 transition-all hover:border-border/80 hover:bg-surface-muted/40 shadow-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-3xs font-bold text-slate-400">
+                      <span className="font-mono text-3xs font-bold text-muted-foreground">
                         {t.ticketNumber}
                       </span>
                       <span
                         className={`rounded-full px-2 py-0.5 font-mono text-3xs font-semibold ${
                           t.status === "RESOLVED"
-                            ? "bg-emerald-500/10 text-emerald-400"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                             : t.status === "IN_REVIEW"
-                              ? "bg-amber-500/10 text-amber-400"
-                              : "bg-cyan-500/10 text-cyan-400"
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                              : "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400"
                         }`}
                       >
                         {t.status.replace(/_/g, " ")}
                       </span>
                     </div>
-                    <h4 className="text-xs font-bold text-white">{t.title}</h4>
-                    <p className="text-3xs text-slate-400">{categoryLabels[t.category]}</p>
+                    <h4 className="text-xs font-bold text-foreground">{t.title}</h4>
+                    <p className="text-3xs text-muted-foreground">{categoryLabels[t.category]}</p>
                   </div>
 
-                  <div className="flex items-center gap-2 text-slate-400">
+                  <div className="flex items-center gap-2 text-muted-foreground">
                     <span className="text-3xs">{new Date(t.createdAt).toLocaleDateString()}</span>
                     <ChevronRight className="size-4" />
                   </div>
@@ -478,25 +478,25 @@ export function HelpdeskDrawer({
         {/* Ticket Chat & Details View */}
         {activeTab === "tickets" && selectedTicket && (
           <div className="space-y-3 pt-1">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div className="flex items-center justify-between border-b border-border pb-2">
               <button
                 type="button"
                 onClick={() => setSelectedTicket(null)}
-                className="text-xs text-slate-400 hover:text-white"
+                className="text-xs text-muted-foreground hover:text-foreground"
               >
                 ← Back to Ticket List
               </button>
-              <span className="font-mono text-xs font-bold text-emerald-400">
+              <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
                 {selectedTicket.ticketNumber}
               </span>
             </div>
 
-            <div className="rounded-lg border border-slate-800 bg-slate-900/50 p-2.5 text-xs text-slate-300">
-              <span className="font-bold text-white">{selectedTicket.title}</span>
-              <div className="mt-1 flex flex-wrap gap-3 text-3xs text-slate-400">
+            <div className="rounded-lg border border-border bg-surface-muted/50 p-2.5 text-xs text-foreground">
+              <span className="font-bold text-foreground">{selectedTicket.title}</span>
+              <div className="mt-1 flex flex-wrap gap-3 text-3xs text-muted-foreground">
                 <span>Category: {categoryLabels[selectedTicket.category]}</span>
                 {selectedTicket.candidateReferenceId && (
-                  <span className="text-amber-400">
+                  <span className="text-amber-600 dark:text-amber-400 font-semibold">
                     Candidate Ref: {selectedTicket.candidateReferenceId}
                   </span>
                 )}
@@ -511,15 +511,15 @@ export function HelpdeskDrawer({
                   key={m.id}
                   className={`rounded-xl p-3 text-xs ${
                     m.isStaff
-                      ? "border border-emerald-500/30 bg-emerald-500/10 text-slate-200"
-                      : "border border-slate-800 bg-slate-900 text-slate-300"
+                      ? "border border-emerald-500/30 bg-emerald-500/10 text-foreground"
+                      : "border border-border bg-card text-foreground"
                   }`}
                 >
-                  <div className="flex items-center justify-between border-b border-slate-800/60 pb-1 text-3xs">
-                    <span className="font-semibold text-white">
+                  <div className="flex items-center justify-between border-b border-border/60 pb-1 text-3xs">
+                    <span className="font-semibold text-foreground">
                       {m.senderName} ({m.senderRole})
                     </span>
-                    <span className="text-slate-500">
+                    <span className="text-muted-foreground">
                       {new Date(m.sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
@@ -534,7 +534,7 @@ export function HelpdeskDrawer({
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Type a response or follow-up note..."
-                className="h-9 border-slate-800 bg-slate-900 text-xs text-white placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                className="h-9 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
               />
               <Button
                 type="button"
