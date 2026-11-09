@@ -40,8 +40,17 @@ export function EmptyState({
         </div>
       )}
       <div className="grid max-w-sm gap-1">
-        <p className="text-md font-semibold">{title}</p>
-        {description && <p className="text-base text-muted-foreground">{description}</p>}
+        {typeof title === "string" ? (
+          <p className="text-md font-semibold">{title}</p>
+        ) : (
+          <div className="text-md font-semibold">{title}</div>
+        )}
+        {description &&
+          (typeof description === "string" ? (
+            <p className="text-base text-muted-foreground">{description}</p>
+          ) : (
+            <div className="text-base text-muted-foreground">{description}</div>
+          ))}
       </div>
       {action && <div className="flex flex-wrap justify-center gap-2">{action}</div>}
     </div>
