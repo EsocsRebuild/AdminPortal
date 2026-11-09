@@ -84,7 +84,7 @@ export function OrdinationFilters({
   );
 
   return (
-    <div className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-xs sm:p-5">
+    <div className="space-y-4 rounded-2xl border border-border/80 bg-card p-5 shadow-xs sm:p-6">
       {/* Search Input Row */}
       <form onSubmit={handleSearchSubmit} className="relative">
         <Input
@@ -106,7 +106,7 @@ export function OrdinationFilters({
               </button>
             ) : undefined
           }
-          className="h-10 w-full border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+          className="h-11 w-full rounded-xl border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
         />
       </form>
 
@@ -118,7 +118,7 @@ export function OrdinationFilters({
             value={currentProvince}
             disabled={!isGlobalAdmin}
             onChange={(e) => updateFilters({ province: e.target.value })}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-80"
+            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-85"
           >
             {isGlobalAdmin ? (
               <>
@@ -130,7 +130,7 @@ export function OrdinationFilters({
                 ))}
               </>
             ) : (
-              <option value={currentProvince}>{currentProvince} (Your Jurisdiction)</option>
+              <option value={currentProvince}>{currentProvince} (Assigned Jurisdiction)</option>
             )}
           </select>
           {!isGlobalAdmin && (
@@ -148,7 +148,7 @@ export function OrdinationFilters({
           <select
             value={currentStage}
             onChange={(e) => updateFilters({ stage: e.target.value })}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
             <option value="ALL">All Vetting Stages</option>
             <option value="STAGE_1_BRANCH">Stage 1: Branch Level</option>
@@ -163,7 +163,7 @@ export function OrdinationFilters({
           <select
             value={currentDues}
             onChange={(e) => updateFilters({ dues: e.target.value })}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
             <option value="ALL">All Dues Status</option>
             <option value="cleared">Dues Cleared</option>
@@ -177,7 +177,7 @@ export function OrdinationFilters({
           <select
             value={currentSort}
             onChange={(e) => updateFilters({ sort: e.target.value })}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="h-10 w-full rounded-xl border border-input bg-background px-3 text-xs font-semibold text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
             <option value="date-desc">Sort: Newest First</option>
             <option value="date-asc">Sort: Oldest First</option>
@@ -191,25 +191,24 @@ export function OrdinationFilters({
       </div>
 
       {/* Active Filter Badges and Quick Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/70 pt-3 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/80 pt-3.5 text-xs">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
+          <span className="text-2xs font-bold tracking-wider text-muted-foreground uppercase">
             {isPending ? "Filtering..." : `Showing ${totalResults} candidate${totalResults === 1 ? "" : "s"}`}
           </span>
 
-          {currentProvince && currentProvince !== "ALL" && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-2xs font-semibold text-primary">
+          {/* Only show province badge as active filter if global admin intentionally selected one */}
+          {isGlobalAdmin && currentProvince && currentProvince !== "ALL" && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-2xs font-semibold text-primary">
               <Building className="size-3" />
               {currentProvince}
-              {isGlobalAdmin && (
-                <button
-                  type="button"
-                  onClick={() => updateFilters({ province: null })}
-                  className="hover:opacity-75"
-                >
-                  <X className="size-2.5" />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => updateFilters({ province: null })}
+                className="hover:opacity-75"
+              >
+                <X className="size-2.5" />
+              </button>
             </span>
           )}
 
@@ -269,7 +268,7 @@ export function OrdinationFilters({
             variant="ghost"
             size="sm"
             onClick={handleReset}
-            className="h-7 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-7 gap-1.5 px-2.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
           >
             <RotateCcw className="size-3" />
             Reset Filters

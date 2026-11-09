@@ -5,25 +5,24 @@ import {
   Building2,
   ShieldCheck,
   UserCheck,
-  Filter,
   ChevronRight,
   Mail,
   Phone,
   CheckCircle2,
   Clock,
-  Lock,
   Building,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
-import { EmptyState } from "@/components/ui/empty-state";
 import { getOrdinationCandidates, type CandidateSortOption } from "@/features/ordination/queries";
 import { CandidateStageBar } from "@/features/ordination/components/candidate-stage-bar";
 import { NominateCandidateModal } from "@/features/ordination/components/nominate-candidate-modal";
 import { OrdinationFilters } from "@/features/ordination/components/ordination-filters";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = { title: "Ordination Portal System · ESOCS Admin" };
 
@@ -70,116 +69,118 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
     sort: selectedSort,
   });
 
+  const hasFilterParams = Boolean(
+    searchQuery ||
+    (selectedStage && selectedStage !== "ALL") ||
+    (selectedDues && selectedDues !== "ALL") ||
+    (isGlobalAdmin && selectedProvince && selectedProvince !== "ALL")
+  );
+
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col items-start justify-between gap-4 border-b border-border pb-5 sm:flex-row sm:items-center">
-          <div>
-            <div className="flex items-center gap-2">
-              <Award className="size-6 text-amber-500" />
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">Ordination Portal System</h1>
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:px-8">
+        {/* Executive Header */}
+        <div className="flex flex-col gap-4 border-b border-border/80 pb-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-2xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+              <Award className="size-4" />
+              <span>Ecclesiastical Vetting Docket</span>
+              <span>•</span>
+              <span>{isGlobalAdmin && selectedProvince === "ALL" ? "All Provinces Oversight" : selectedProvince}</span>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              4-Stage Ecclesiastical Rank Promotion Screening Docket & Vetting Register synchronized with live
-              Ordination Portal.
+            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              Ordination & Ministerial Pipeline
+            </h1>
+            <p className="max-w-2xl text-sm text-muted-foreground">
+              4-Tier canonical screening docket and vetting register for clergy and church worker rank elevations.
             </p>
           </div>
 
-          <NominateCandidateModal defaultParishName={userUnit.unitName} />
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Live Church Records Synchronized</span>
+            </span>
+            <NominateCandidateModal defaultParishName={userUnit.unitName} />
+          </div>
         </div>
 
-        {/* Ecclesiastical Jurisdiction Scope Banner */}
-        <div className="bg-card flex flex-col gap-3 rounded-lg border border-border p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-md border border-primary/20 bg-primary/10 text-primary">
-              <ShieldCheck className="size-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Ecclesiastical Jurisdiction
-                </span>
-                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-2xs font-bold text-primary">
-                  {isGlobalAdmin ? "Global Directorate Oversight" : "Provincial Jurisdiction"}
-                </span>
+        {/* 4-Stage Liturgical Stepper Funnel Cards */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Card 1: Total Docket */}
+          <div className="group relative rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-primary/40 hover:shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-3xs font-extrabold uppercase tracking-widest text-muted-foreground">
+                Tier 01 • Total Docket
+              </span>
+              <div className="flex size-9 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+                <Building2 className="size-4" />
               </div>
-              <p className="text-sm font-bold text-foreground">
-                {isGlobalAdmin && selectedProvince === "ALL"
-                  ? "Worldwide Central Administration • All Ecclesiastical Provinces"
-                  : `${selectedProvince} • Exclusive Candidate Screening Docket`}
-              </p>
             </div>
+            <div className="mt-4 text-3xl font-extrabold tracking-tight text-foreground">
+              {summary.totalCandidates}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Active candidates nominated in {selectedProvince}
+            </p>
           </div>
 
-          {!isGlobalAdmin && (
-            <div className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-800 dark:text-amber-300">
-              <Lock className="size-3 text-amber-600 dark:text-amber-400" />
-              <span>Assigned to {userUnit.unitName}</span>
+          {/* Card 2: District Review */}
+          <div className="group relative rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-amber-500/40 hover:shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-3xs font-extrabold uppercase tracking-widest text-amber-700 dark:text-amber-400">
+                Tier 02 • District Review
+              </span>
+              <div className="flex size-9 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400">
+                <ShieldCheck className="size-4" />
+              </div>
             </div>
-          )}
+            <div className="mt-4 text-3xl font-extrabold tracking-tight text-amber-700 dark:text-amber-400">
+              {summary.stage2DistrictCount ?? summary.stage2Count}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Pastoral council & local district screening
+            </p>
+          </div>
+
+          {/* Card 3: Provincial Review */}
+          <div className="group relative rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-indigo-500/40 hover:shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-3xs font-extrabold uppercase tracking-widest text-indigo-700 dark:text-indigo-400">
+                Tier 03 • Provincial Conclave
+              </span>
+              <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">
+                <Award className="size-4" />
+              </div>
+            </div>
+            <div className="mt-4 text-3xl font-extrabold tracking-tight text-indigo-700 dark:text-indigo-400">
+              {summary.stage3ProvincialCount ?? summary.stage3Count}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Provincial advisory council conclave vetting
+            </p>
+          </div>
+
+          {/* Card 4: National Level */}
+          <div className="group relative rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-emerald-500/40 hover:shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-3xs font-extrabold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
+                Tier 04 • Synod Ratified
+              </span>
+              <div className="flex size-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+                <UserCheck className="size-4" />
+              </div>
+            </div>
+            <div className="mt-4 text-3xl font-extrabold tracking-tight text-emerald-700 dark:text-emerald-400">
+              {summary.stage4NationalCount ?? summary.stage4ApprovedCount}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Holy Synod final canonical investiture
+            </p>
+          </div>
         </div>
 
-        {/* Summary Metric Cards */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <Card className="bg-card border-border shadow-xs">
-            <CardContent className="space-y-1 p-4">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">
-                  {selectedProvince === "ALL" ? "Total Candidates" : `${selectedProvince} Docket`}
-                </span>
-                <Building2 className="size-4 text-primary" />
-              </div>
-              <div className="text-2xl font-bold text-foreground">{summary.totalCandidates}</div>
-              <p className="text-2xs text-muted-foreground">
-                {selectedProvince === "ALL"
-                  ? "Active in Vetting Pipeline"
-                  : `Active Candidates in ${selectedProvince}`}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card border-border shadow-xs">
-            <CardContent className="space-y-1 p-4">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">District Review</span>
-                <ShieldCheck className="size-4 text-amber-500" />
-              </div>
-              <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">
-                {summary.stage2DistrictCount ?? summary.stage2Count}
-              </div>
-              <p className="text-2xs text-muted-foreground">Stage 2 District Screening</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card border-border shadow-xs">
-            <CardContent className="space-y-1 p-4">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">Provincial Review</span>
-                <Award className="size-4 text-indigo-500" />
-              </div>
-              <div className="text-2xl font-bold text-indigo-500">
-                {summary.stage3ProvincialCount ?? summary.stage3Count}
-              </div>
-              <p className="text-2xs text-muted-foreground">Stage 3 Provincial Conclave</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card border-border shadow-xs">
-            <CardContent className="space-y-1 p-4">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-2xs font-semibold tracking-wider uppercase">National Level</span>
-                <UserCheck className="size-4 text-emerald-500" />
-              </div>
-              <div className="text-2xl font-bold text-emerald-500">
-                {summary.stage4NationalCount ?? summary.stage4ApprovedCount}
-              </div>
-              <p className="text-2xs text-muted-foreground">Stage 4 Synod Ratified</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Professional Filtering & Sorting Toolbar */}
+        {/* Filtering & Sorting Toolbar */}
         <OrdinationFilters
           allProvinces={allProvinces}
           currentProvince={selectedProvince}
@@ -194,57 +195,53 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
 
         {/* Candidates Roster */}
         <div className="space-y-4">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Filter className="size-4 text-primary" />
-              Candidate Vetting Docket Roster ({candidates.length})
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-base font-bold text-foreground">
+              Candidate Vetting Register ({candidates.length})
             </h2>
-            <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-2xs font-medium text-emerald-800 dark:text-emerald-300">
-              <span className="inline-block size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Live Church Records Synchronized</span>
-            </div>
+            <span className="text-xs text-muted-foreground">
+              All promotions are synchronized with the central ecclesiastical records.
+            </span>
           </div>
 
           {candidates.length === 0 ? (
-            <Card className="border-border">
-              <CardContent className="p-6">
-                <EmptyState
-                  icon={<Award className="size-6 text-amber-500" />}
-                  title="No Candidates Found"
-                  description={
-                    selectedProvince === "ALL"
-                      ? "There are currently no candidates matching the active filter criteria in the vetting pipeline."
-                      : `There are currently no ordination candidates matching your criteria under ${selectedProvince}.`
-                  }
-                  action={
-                    <div className="flex gap-2">
-                      <Link href="/ordination">
-                        <Button variant="outline" size="sm">
-                          Clear Filters
-                        </Button>
-                      </Link>
-                      <NominateCandidateModal defaultParishName={userUnit.unitName} />
-                    </div>
-                  }
-                />
-              </CardContent>
-            </Card>
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-surface-muted/20 px-6 py-16 text-center">
+              <div className="flex size-16 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 text-amber-700 shadow-xs dark:text-amber-400">
+                <Award className="size-8" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold text-foreground">No Candidates in Vetting Docket</h3>
+              <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+                {selectedProvince === "ALL"
+                  ? "There are currently no candidates matching the active filter criteria across the church."
+                  : `There are currently no ordination candidates matching your criteria under ${selectedProvince}. When parishes submit nominations, they will appear here.`}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                {hasFilterParams && (
+                  <Link href="/ordination">
+                    <Button variant="outline" size="sm" className="h-9 text-xs">
+                      Clear Active Filters
+                    </Button>
+                  </Link>
+                )}
+                <NominateCandidateModal defaultParishName={userUnit.unitName} />
+              </div>
+            </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
               {candidates.map((c) => (
-                <Card
+                <div
                   key={c.id}
-                  className="bg-card overflow-hidden border-border shadow-xs transition-all hover:border-primary/40"
+                  className="overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-xs transition-all hover:border-primary/40 hover:shadow-sm"
                 >
-                  <CardContent className="space-y-4 p-5">
+                  <div className="space-y-4">
                     <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                       <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-base font-bold text-foreground">{c.fullName}</span>
-                          <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-500">
+                          <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-800 dark:text-amber-300">
                             TARGET: {c.rankTarget}
                           </span>
-                          <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-2xs font-semibold text-indigo-400">
+                          <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-2xs font-semibold text-indigo-700 dark:text-indigo-300">
                             <Building className="mr-1 inline-block size-3" />
                             {c.provinceName}
                           </span>
@@ -254,11 +251,11 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                             </span>
                           )}
                           {c.duesStatus === "cleared" ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-700 dark:text-emerald-400">
                               <CheckCircle2 className="size-3" /> Dues Cleared
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-500">
+                            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-800 dark:text-amber-300">
                               <Clock className="size-3" /> Dues Pending
                             </span>
                           )}
@@ -322,7 +319,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                           <Link href={`/ordination/candidates/${c.id}`}>
                             <Button
                               variant="outline"
-                              className="hover:bg-muted gap-1.5 border-border text-xs"
+                              className="hover:bg-muted gap-1.5 border-border text-xs font-semibold"
                             >
                               Open Candidate Docket
                               <ChevronRight className="size-3.5" />
@@ -337,8 +334,8 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                       currentStage={c.stageCurrent}
                       isProvincialWorshipper={c.isProvincialWorshipper}
                     />
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           )}

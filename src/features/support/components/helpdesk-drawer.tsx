@@ -10,6 +10,7 @@ import {
   Loader2,
   ArrowLeft,
   Sparkles,
+  X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ import {
   SheetDescription,
   SheetBody,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 import { useMediaQuery, breakpoints } from "@/hooks/use-media-query";
 import { lodgeSupportTicketAction, replySupportTicketAction } from "../actions";
@@ -164,6 +166,7 @@ export function HelpdeskDrawer({
       <SheetContent
         side={isDesktop ? "right" : "bottom"}
         size={isDesktop ? "xl" : undefined}
+        hideClose
         className="flex flex-col bg-card text-foreground sm:max-w-2xl lg:max-w-3xl"
       >
         {/* Mobile Pull Handle */}
@@ -185,38 +188,51 @@ export function HelpdeskDrawer({
               </div>
             </div>
 
-            {/* Quick Switch Tabs */}
-            <div className="flex self-start rounded-lg border border-border bg-surface-muted/60 p-1 text-xs sm:self-center">
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab("lodge");
-                  setSelectedTicket(null);
-                }}
-                className={`rounded-md px-3 py-1.5 font-semibold transition-all ${
-                  activeTab === "lodge" && !selectedTicket
-                    ? "bg-emerald-600 text-white shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                New Enquiry
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("tickets")}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-semibold transition-all ${
-                  activeTab === "tickets"
-                    ? "bg-background text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <span>Track Issues</span>
-                {tickets.length > 0 && (
-                  <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 font-mono text-3xs font-bold text-emerald-700 dark:text-emerald-300">
-                    {tickets.length}
-                  </span>
-                )}
-              </button>
+            {/* Quick Switch Tabs & Close Button */}
+            <div className="flex items-center gap-2 self-end sm:self-center">
+              <div className="flex items-center rounded-lg border border-border bg-surface-muted/60 p-1 text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab("lodge");
+                    setSelectedTicket(null);
+                  }}
+                  className={`rounded-md px-3 py-1.5 font-semibold transition-all ${
+                    activeTab === "lodge" && !selectedTicket
+                      ? "bg-emerald-600 text-white shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  New Enquiry
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("tickets")}
+                  className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-semibold transition-all ${
+                    activeTab === "tickets"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <span>Track Issues</span>
+                  {tickets.length > 0 && (
+                    <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 font-mono text-3xs font-bold text-emerald-700 dark:text-emerald-300">
+                      {tickets.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              <SheetClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 rounded-lg text-muted-foreground transition-colors hover:bg-surface-muted hover:text-foreground"
+                  aria-label="Close Helpdesk"
+                >
+                  <X className="size-4" />
+                </Button>
+              </SheetClose>
             </div>
           </div>
         </SheetHeader>
