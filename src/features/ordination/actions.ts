@@ -14,7 +14,7 @@ import {
   addLocalCandidate,
   updateLocalCandidateStage,
   updateLocalCandidateDetails,
-} from "./ordination-store";
+} from "@/features/ordination/ordination-store";
 
 const stageNextMap: Record<VettingStage, VettingStage> = {
   STAGE_1_BRANCH: "STAGE_2_DISTRICT",

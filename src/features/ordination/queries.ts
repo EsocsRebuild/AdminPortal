@@ -1,7 +1,7 @@
 "server-only";
 
 import { backend } from "@/server/backend";
-import { getLocalCandidates, getLocalCandidateById } from "./ordination-store";
+import { getLocalCandidates, getLocalCandidateById } from "@/features/ordination/ordination-store";
 import type {
   OrdinationCandidate,
   OrdinationSummary,
