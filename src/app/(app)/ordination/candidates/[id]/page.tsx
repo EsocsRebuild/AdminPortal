@@ -59,15 +59,15 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xl font-bold text-foreground">{candidate.fullName}</span>
-                    <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-500 uppercase">
+                    <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-800 dark:text-amber-300 uppercase">
                       TARGET: {candidate.rankTarget}
                     </span>
                     {candidate.duesStatus === "cleared" ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-2xs font-semibold text-emerald-700 dark:text-emerald-400">
                         <CheckCircle2 className="size-3" /> Dues Cleared
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-500">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-800 dark:text-amber-300">
                         <Clock className="size-3" /> Dues Pending
                       </span>
                     )}

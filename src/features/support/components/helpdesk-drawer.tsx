@@ -8,17 +8,22 @@ import {
   AlertCircle,
   ChevronRight,
   Loader2,
+  ArrowLeft,
+  Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetBody,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useMediaQuery, breakpoints } from "@/hooks/use-media-query";
 import { lodgeSupportTicketAction, replySupportTicketAction } from "../actions";
 import type { SupportTicket, TicketCategory, TicketPriority } from "../types";
 
@@ -51,6 +56,8 @@ export function HelpdeskDrawer({
   const [activeTab, setActiveTab] = React.useState<"lodge" | "tickets">("lodge");
   const [selectedTicket, setSelectedTicket] = React.useState<SupportTicket | null>(null);
   const [tickets, setTickets] = React.useState<SupportTicket[]>(initialTickets);
+
+  const isDesktop = useMediaQuery(breakpoints.md);
 
   // Form states
   const [subject, setSubject] = React.useState(defaultSubject);
@@ -140,46 +147,53 @@ export function HelpdeskDrawer({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         {trigger || (
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 border-emerald-500/40 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20"
+            className="gap-2 border-emerald-500/40 bg-emerald-500/10 text-xs font-semibold text-emerald-700 hover:bg-emerald-500/20 dark:text-emerald-300"
           >
-            <LifeBuoy className="size-4" />
+            <LifeBuoy className="size-4 text-emerald-600 dark:text-emerald-400" />
             Secretariat Helpdesk & Enquiries
           </Button>
         )}
-      </DialogTrigger>
+      </SheetTrigger>
 
-      <DialogContent className="max-w-2xl border-border bg-card p-6 text-foreground shadow-2xl">
-        <DialogHeader className="border-b border-border pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+      <SheetContent
+        side={isDesktop ? "right" : "bottom"}
+        size={isDesktop ? "xl" : undefined}
+        className="flex flex-col bg-card text-foreground sm:max-w-2xl lg:max-w-3xl"
+      >
+        {/* Mobile Pull Handle */}
+        <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-border md:hidden" />
+
+        <SheetHeader className="border-b border-border px-6 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <LifeBuoy className="size-5" />
               </div>
               <div>
-                <DialogTitle className="text-base font-bold text-foreground">
+                <SheetTitle className="text-base font-bold text-foreground">
                   Secretariat Helpdesk & Member Care
-                </DialogTitle>
-                <p className="text-xs text-muted-foreground">
-                  Lodge enquiries, report ordination vetting questions, or communicate with the Central Secretariat.
-                </p>
+                </SheetTitle>
+                <SheetDescription className="text-xs text-muted-foreground">
+                  Lodge enquiries, check vetting status, or speak with the Secretariat.
+                </SheetDescription>
               </div>
             </div>
 
             {/* Quick Switch Tabs */}
-            <div className="flex rounded-lg border border-border bg-surface-muted/60 p-0.5 text-xs">
+            <div className="flex self-start rounded-lg border border-border bg-surface-muted/60 p-1 text-xs sm:self-center">
               <button
                 type="button"
                 onClick={() => {
                   setActiveTab("lodge");
                   setSelectedTicket(null);
                 }}
-                className={`rounded-md px-3 py-1 font-semibold transition-all ${
+                className={`rounded-md px-3 py-1.5 font-semibold transition-all ${
                   activeTab === "lodge" && !selectedTicket
                     ? "bg-emerald-600 text-white shadow-xs"
                     : "text-muted-foreground hover:text-foreground"
@@ -190,7 +204,7 @@ export function HelpdeskDrawer({
               <button
                 type="button"
                 onClick={() => setActiveTab("tickets")}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1 font-semibold transition-all ${
+                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-semibold transition-all ${
                   activeTab === "tickets"
                     ? "bg-background text-foreground shadow-xs"
                     : "text-muted-foreground hover:text-foreground"
@@ -198,357 +212,378 @@ export function HelpdeskDrawer({
               >
                 <span>Track Issues</span>
                 {tickets.length > 0 && (
-                  <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 text-3xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 font-mono text-3xs font-bold text-emerald-700 dark:text-emerald-300">
                     {tickets.length}
                   </span>
                 )}
               </button>
             </div>
           </div>
-        </DialogHeader>
+        </SheetHeader>
 
-        {/* Tab 1: Submit New Enquiry / Complaint */}
-        {activeTab === "lodge" && !submittedTicket && (
-          <form onSubmit={handleLodgeTicket} className="space-y-4 pt-3 text-xs">
-            {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400">
-                <AlertCircle className="size-4 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="font-semibold text-foreground">
-                  What is this enquiry regarding? *
-                </label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as TicketCategory)}
-                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-                >
-                  <option value="ORDINATION_VETTING">Ordination & Vetting Clearance</option>
-                  <option value="PARISH_MEMBERSHIP">Parish Directory & Records</option>
-                  <option value="FINANCIAL_STEWARDSHIP">Remittances & Stewardship Dues</option>
-                  <option value="MEDIA_AND_WEB">Church Calendar & Media Studio</option>
-                  <option value="ACCOUNT_ACCESS">Sign-In & Administrative Access</option>
-                  <option value="GENERAL_ENQUIRY">General Secretariat Enquiry</option>
-                </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="font-semibold text-foreground">Urgency Level</label>
-                <select
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value as TicketPriority)}
-                  className="h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-                >
-                  <option value="STANDARD">Standard Review (Within 24 Hours)</option>
-                  <option value="HIGH">High Priority (Within 6 Hours)</option>
-                  <option value="URGENT">Immediate Synod Attention</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-semibold text-foreground">Subject / Summary *</label>
-              <Input
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="Briefly state your question or issue..."
-                required
-                className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-              />
-            </div>
-
-            {/* Optional Candidate / Member Reference */}
-            {category === "ORDINATION_VETTING" && (
-              <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 space-y-1.5">
-                <label className="font-semibold text-amber-600 dark:text-amber-400">
-                  Candidate Registration Number or Full Name (Optional)
-                </label>
-                <Input
-                  value={candidateRef}
-                  onChange={(e) => setCandidateRef(e.target.value)}
-                  placeholder="e.g. ESOCS/ORD/2026/6416 or Bro. Peter Chima"
-                  className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500"
-                />
-                <span className="text-3xs text-muted-foreground">
-                  Helps the vetting committee locate the candidate dossier immediately.
-                </span>
-              </div>
-            )}
-
-            <div className="space-y-1.5">
-              <label className="font-semibold text-foreground">
-                Detailed Message / What happened? *
-              </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={3}
-                required
-                placeholder="Kindly explain what you need assistance with in simple words..."
-                className="w-full rounded-md border border-input bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-              />
-            </div>
-
-            {/* Contact Details */}
-            <div className="grid grid-cols-1 gap-3 border-t border-border pt-3 sm:grid-cols-3">
-              <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Your Full Name *
-                </label>
-                <Input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Elder David Okoro"
-                  required
-                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Email Address *
-                </label>
-                <Input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  placeholder="e.g. david@esocs.org"
-                  required
-                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Phone Number (Optional)
-                </label>
-                <Input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="e.g. +234 800 000 0000"
-                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                />
-              </div>
-
-              <div className="space-y-1 sm:col-span-3">
-                <label className="text-3xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Parish / Branch (Optional)
-                </label>
-                <Input
-                  value={parish}
-                  onChange={(e) => setParish(e.target.value)}
-                  placeholder="e.g. Diobu Cathedral Branch, Port Harcourt"
-                  className="h-8 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                />
-              </div>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Submitting to Secretariat...
-                </>
-              ) : (
-                <>
-                  <Send className="size-4" />
-                  Lodge Enquiry with Secretariat Desk
-                </>
+        <SheetBody className="space-y-5 px-6 py-5">
+          {/* Tab 1: Submit New Enquiry / Complaint */}
+          {activeTab === "lodge" && !submittedTicket && (
+            <form onSubmit={handleLodgeTicket} className="space-y-5 text-sm">
+              {error && (
+                <div className="flex items-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-700 dark:text-rose-400">
+                  <AlertCircle className="size-4 shrink-0" />
+                  <span>{error}</span>
+                </div>
               )}
-            </Button>
-          </form>
-        )}
 
-        {/* Success Confirmation Card */}
-        {submittedTicket && (
-          <div className="space-y-4 py-4 text-center">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-md">
-              <CheckCircle2 className="size-8" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-foreground">Your Enquiry Has Been Received</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
-                A member care officer at the Secretariat has been assigned to assist you.
-              </p>
-            </div>
+              {/* Category & Urgency */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-foreground">
+                    What is this enquiry regarding? <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as TicketCategory)}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  >
+                    <option value="ORDINATION_VETTING">Ordination & Vetting Clearance</option>
+                    <option value="PARISH_MEMBERSHIP">Parish Directory & Records</option>
+                    <option value="FINANCIAL_STEWARDSHIP">Remittances & Stewardship Dues</option>
+                    <option value="MEDIA_AND_WEB">Church Calendar & Media Studio</option>
+                    <option value="ACCOUNT_ACCESS">Sign-In & Administrative Access</option>
+                    <option value="GENERAL_ENQUIRY">General Secretariat Enquiry</option>
+                  </select>
+                </div>
 
-            <div className="mx-auto max-w-md rounded-xl border border-border bg-surface-muted/50 p-4 text-left text-xs">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <span className="text-muted-foreground">Reference Number:</span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                  {submittedTicket.ticketNumber}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-foreground">Urgency Level</label>
+                  <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value as TicketPriority)}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  >
+                    <option value="STANDARD">Standard Review (Within 24 Hours)</option>
+                    <option value="HIGH">High Priority (Within 6 Hours)</option>
+                    <option value="URGENT">Immediate Attention</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Subject */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-foreground">
+                  Subject / Summary <span className="text-rose-500">*</span>
+                </label>
+                <Input
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="e.g. Clearance update for Brother David Okoro"
+                  required
+                  className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                />
+              </div>
+
+              {/* Optional Candidate / Member Reference */}
+              {category === "ORDINATION_VETTING" && (
+                <div className="space-y-2 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-300">
+                    <Sparkles className="size-4 text-amber-600 dark:text-amber-400" />
+                    <span>Candidate Registration Number or Full Name (Optional)</span>
+                  </div>
+                  <Input
+                    value={candidateRef}
+                    onChange={(e) => setCandidateRef(e.target.value)}
+                    placeholder="e.g. ESOCS/ORD/2026/6416 or Bro. Peter Chima"
+                    className="h-10 border-amber-500/30 bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500"
+                  />
+                  <p className="text-2xs text-muted-foreground">
+                    Helps the vetting committee locate the candidate dossier immediately.
+                  </p>
+                </div>
+              )}
+
+              {/* Detailed Message */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-foreground">
+                  Detailed Message / What happened? <span className="text-rose-500">*</span>
+                </label>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={4}
+                  required
+                  placeholder="Kindly explain what you need assistance with in simple words..."
+                  className="w-full rounded-md border border-input bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                />
+              </div>
+
+              {/* Contact Details Section - Spacious 2x2 Grid */}
+              <div className="space-y-3 rounded-xl border border-border bg-surface-muted/30 p-4">
+                <div>
+                  <h4 className="text-xs font-bold tracking-wide uppercase text-foreground">
+                    Your Contact Details
+                  </h4>
+                  <p className="text-2xs text-muted-foreground">
+                    Used by the Secretariat to verify your identity and send direct updates.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-foreground">
+                      Your Full Name <span className="text-rose-500">*</span>
+                    </label>
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g. Elder David Okoro"
+                      required
+                      className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-foreground">
+                      Email Address <span className="text-rose-500">*</span>
+                    </label>
+                    <Input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                      placeholder="e.g. david@esocs.org"
+                      required
+                      className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-foreground">
+                      Phone Number (Optional)
+                    </label>
+                    <Input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="e.g. +234 800 000 0000"
+                      className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-foreground">
+                      Parish / Branch (Optional)
+                    </label>
+                    <Input
+                      value={parish}
+                      onChange={(e) => setParish(e.target.value)}
+                      placeholder="e.g. Diobu Cathedral Branch"
+                      className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="h-11 w-full gap-2 rounded-lg bg-emerald-600 text-sm font-bold text-white shadow-md hover:bg-emerald-500"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Submitting to Secretariat...
+                  </>
+                ) : (
+                  <>
+                    <Send className="size-4" />
+                    Lodge Enquiry with Secretariat Desk
+                  </>
+                )}
+              </Button>
+            </form>
+          )}
+
+          {/* Success Confirmation Card */}
+          {submittedTicket && (
+            <div className="space-y-5 py-6 text-center">
+              <div className="mx-auto flex size-16 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/20 text-emerald-600 shadow-md dark:text-emerald-400">
+                <CheckCircle2 className="size-9" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-foreground">Your Enquiry Has Been Received</h3>
+                <p className="text-xs text-muted-foreground">
+                  A member care officer at the Central Secretariat has been assigned to assist you.
+                </p>
+              </div>
+
+              <div className="mx-auto max-w-lg rounded-xl border border-border bg-surface-muted/50 p-4 text-left text-xs">
+                <div className="flex items-center justify-between border-b border-border pb-2.5">
+                  <span className="font-medium text-muted-foreground">Reference Number:</span>
+                  <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                    {submittedTicket.ticketNumber}
+                  </span>
+                </div>
+                <div className="mt-2.5 space-y-1.5 text-xs text-muted-foreground">
+                  <p>
+                    <strong className="text-foreground">Subject:</strong> {submittedTicket.title}
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Category:</strong>{" "}
+                    {categoryLabels[submittedTicket.category]}
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Status:</strong> Awaiting Secretariat Response
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-3 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSubmittedTicket(null);
+                    setSelectedTicket(submittedTicket);
+                    setActiveTab("tickets");
+                  }}
+                  className="border-border text-xs text-muted-foreground hover:text-foreground"
+                >
+                  View Ticket Thread
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setSubmittedTicket(null);
+                    setOpen(false);
+                  }}
+                  className="bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-500"
+                >
+                  Close & Return
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Tab 2: Track Active Issues & Threaded Conversation */}
+          {activeTab === "tickets" && !selectedTicket && (
+            <div className="space-y-3 pt-1">
+              {tickets.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border p-8 text-center text-xs text-muted-foreground">
+                  <LifeBuoy className="mx-auto mb-2 size-8 text-muted-foreground" />
+                  <p>You have not logged any complaints or enquiries yet.</p>
+                </div>
+              ) : (
+                tickets.map((t) => (
+                  <div
+                    key={t.id}
+                    onClick={() => setSelectedTicket(t)}
+                    className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card p-4 shadow-xs transition-all hover:border-emerald-500/40 hover:bg-surface-muted/50"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-3xs font-bold text-muted-foreground">
+                          {t.ticketNumber}
+                        </span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 font-mono text-3xs font-semibold ${
+                            t.status === "RESOLVED"
+                              ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                              : t.status === "IN_REVIEW"
+                                ? "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                                : "bg-cyan-500/10 text-cyan-700 dark:text-cyan-300"
+                          }`}
+                        >
+                          {t.status.replace(/_/g, " ")}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-foreground">{t.title}</h4>
+                      <p className="text-xs text-muted-foreground">{categoryLabels[t.category]}</p>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <span className="text-xs">{new Date(t.createdAt).toLocaleDateString()}</span>
+                      <ChevronRight className="size-4" />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {/* Ticket Chat & Details View */}
+          {activeTab === "tickets" && selectedTicket && (
+            <div className="space-y-4 pt-1">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedTicket(null)}
+                  className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <ArrowLeft className="size-3.5" />
+                  Back to Ticket List
+                </button>
+                <span className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                  {selectedTicket.ticketNumber}
                 </span>
               </div>
-              <div className="mt-2 space-y-1 text-2xs text-muted-foreground">
-                <p>
-                  <strong className="text-foreground">Subject:</strong> {submittedTicket.title}
-                </p>
-                <p>
-                  <strong className="text-foreground">Category:</strong> {categoryLabels[submittedTicket.category]}
-                </p>
-                <p>
-                  <strong className="text-foreground">Status:</strong> Awaiting Secretariat Response
-                </p>
-              </div>
-            </div>
 
-            <div className="flex justify-center gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setSubmittedTicket(null);
-                  setSelectedTicket(submittedTicket);
-                  setActiveTab("tickets");
-                }}
-                className="border-border text-xs text-muted-foreground hover:text-foreground"
-              >
-                View Ticket Thread
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => {
-                  setSubmittedTicket(null);
-                  setOpen(false);
-                }}
-                className="bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-500"
-              >
-                Close & Return
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 2: Track Active Issues & Threaded Conversation */}
-        {activeTab === "tickets" && !selectedTicket && (
-          <div className="space-y-3 pt-2">
-            {tickets.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-border p-8 text-center text-xs text-muted-foreground">
-                <LifeBuoy className="mx-auto mb-2 size-8 text-muted-foreground" />
-                <p>You have not logged any complaints or enquiries yet.</p>
+              <div className="rounded-xl border border-border bg-surface-muted/50 p-3.5 text-xs text-foreground">
+                <span className="text-sm font-bold text-foreground">{selectedTicket.title}</span>
+                <div className="mt-1.5 flex flex-wrap gap-3 text-2xs text-muted-foreground">
+                  <span>Category: {categoryLabels[selectedTicket.category]}</span>
+                  {selectedTicket.candidateReferenceId && (
+                    <span className="font-semibold text-amber-800 dark:text-amber-300">
+                      Candidate Ref: {selectedTicket.candidateReferenceId}
+                    </span>
+                  )}
+                  <span>Status: {selectedTicket.status}</span>
+                </div>
               </div>
-            ) : (
-              tickets.map((t) => (
-                <div
-                  key={t.id}
-                  onClick={() => setSelectedTicket(t)}
-                  className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card p-3.5 transition-all hover:border-border/80 hover:bg-surface-muted/40 shadow-xs"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-3xs font-bold text-muted-foreground">
-                        {t.ticketNumber}
+
+              {/* Conversation Messages */}
+              <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+                {selectedTicket.messages.map((m) => (
+                  <div
+                    key={m.id}
+                    className={`rounded-xl p-3.5 text-xs shadow-xs ${
+                      m.isStaff
+                        ? "border border-emerald-500/30 bg-emerald-500/10 text-foreground"
+                        : "border border-border bg-card text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between border-b border-border/60 pb-1 text-2xs">
+                      <span className="font-semibold text-foreground">
+                        {m.senderName} ({m.senderRole})
                       </span>
-                      <span
-                        className={`rounded-full px-2 py-0.5 font-mono text-3xs font-semibold ${
-                          t.status === "RESOLVED"
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : t.status === "IN_REVIEW"
-                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                              : "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400"
-                        }`}
-                      >
-                        {t.status.replace(/_/g, " ")}
+                      <span className="text-muted-foreground">
+                        {new Date(m.sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                       </span>
                     </div>
-                    <h4 className="text-xs font-bold text-foreground">{t.title}</h4>
-                    <p className="text-3xs text-muted-foreground">{categoryLabels[t.category]}</p>
+                    <p className="mt-2 text-xs leading-relaxed">{m.message}</p>
                   </div>
+                ))}
+              </div>
 
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <span className="text-3xs">{new Date(t.createdAt).toLocaleDateString()}</span>
-                    <ChevronRight className="size-4" />
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-
-        {/* Ticket Chat & Details View */}
-        {activeTab === "tickets" && selectedTicket && (
-          <div className="space-y-3 pt-1">
-            <div className="flex items-center justify-between border-b border-border pb-2">
-              <button
-                type="button"
-                onClick={() => setSelectedTicket(null)}
-                className="text-xs text-muted-foreground hover:text-foreground"
-              >
-                ← Back to Ticket List
-              </button>
-              <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                {selectedTicket.ticketNumber}
-              </span>
-            </div>
-
-            <div className="rounded-lg border border-border bg-surface-muted/50 p-2.5 text-xs text-foreground">
-              <span className="font-bold text-foreground">{selectedTicket.title}</span>
-              <div className="mt-1 flex flex-wrap gap-3 text-3xs text-muted-foreground">
-                <span>Category: {categoryLabels[selectedTicket.category]}</span>
-                {selectedTicket.candidateReferenceId && (
-                  <span className="text-amber-600 dark:text-amber-400 font-semibold">
-                    Candidate Ref: {selectedTicket.candidateReferenceId}
-                  </span>
-                )}
-                <span>Status: {selectedTicket.status}</span>
+              {/* Reply Box */}
+              <div className="flex gap-2 pt-2">
+                <Input
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Type a response or follow-up note..."
+                  className="h-10 border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={replyLoading || !replyText.trim()}
+                  onClick={handleSendReply}
+                  className="h-10 bg-emerald-600 px-4 text-xs font-semibold text-white hover:bg-emerald-500"
+                >
+                  {replyLoading ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                </Button>
               </div>
             </div>
-
-            {/* Conversation Messages */}
-            <div className="max-h-56 space-y-2.5 overflow-y-auto pr-1">
-              {selectedTicket.messages.map((m) => (
-                <div
-                  key={m.id}
-                  className={`rounded-xl p-3 text-xs ${
-                    m.isStaff
-                      ? "border border-emerald-500/30 bg-emerald-500/10 text-foreground"
-                      : "border border-border bg-card text-foreground"
-                  }`}
-                >
-                  <div className="flex items-center justify-between border-b border-border/60 pb-1 text-3xs">
-                    <span className="font-semibold text-foreground">
-                      {m.senderName} ({m.senderRole})
-                    </span>
-                    <span className="text-muted-foreground">
-                      {new Date(m.sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                  </div>
-                  <p className="mt-1.5 leading-relaxed">{m.message}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Reply Box */}
-            <div className="flex gap-2 pt-2">
-              <Input
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                placeholder="Type a response or follow-up note..."
-                className="h-9 border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-              />
-              <Button
-                type="button"
-                size="sm"
-                disabled={replyLoading || !replyText.trim()}
-                onClick={handleSendReply}
-                className="bg-emerald-600 text-xs font-semibold text-white hover:bg-emerald-500"
-              >
-                {replyLoading ? <Loader2 className="size-3.5 animate-spin" /> : <Send className="size-3.5" />}
-              </Button>
-            </div>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+          )}
+        </SheetBody>
+      </SheetContent>
+    </Sheet>
   );
 }

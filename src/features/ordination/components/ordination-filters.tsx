@@ -84,74 +84,71 @@ export function OrdinationFilters({
   );
 
   return (
-    <div className="bg-card space-y-3 rounded-lg border border-border p-4 shadow-xs">
-      {/* Search and Main Filters Row */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12">
-        {/* Search Input */}
-        <form onSubmit={handleSearchSubmit} className="lg:col-span-4">
-          <Input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Search candidate, rank, parish, district..."
-            prefix={<Search className="size-4 text-muted-foreground" />}
-            suffix={
-              searchValue ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchValue("");
-                    updateFilters({ q: null });
-                  }}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <X className="size-3.5" />
-                </button>
-              ) : undefined
-            }
-            size="sm"
-            className="w-full"
-          />
-        </form>
-
-        {/* Province / Jurisdiction Filter */}
-        <div className="lg:col-span-3">
-          <div className="relative">
-            <select
-              value={currentProvince}
-              disabled={!isGlobalAdmin}
-              onChange={(e) => updateFilters({ province: e.target.value })}
-              className="h-control-sm w-full rounded-control border border-input bg-surface px-3 py-1 text-xs text-foreground shadow-xs transition-colors focus-visible:border-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-75"
-            >
-              {isGlobalAdmin ? (
-                <>
-                  <option value="ALL">All Ecclesiastical Provinces</option>
-                  {allProvinces.map((prov) => (
-                    <option key={prov} value={prov}>
-                      {prov}
-                    </option>
-                  ))}
-                </>
-              ) : (
-                <option value={currentProvince}>{currentProvince} (Your Jurisdiction)</option>
-              )}
-            </select>
-            {!isGlobalAdmin && (
-              <div
-                className="pointer-events-none absolute inset-y-0 right-2 flex items-center gap-1 text-2xs text-muted-foreground"
-                title={`Locked to your assigned jurisdiction: ${userJurisdictionName}`}
+    <div className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-xs sm:p-5">
+      {/* Search Input Row */}
+      <form onSubmit={handleSearchSubmit} className="relative">
+        <Input
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Search candidates by name, target ecclesiastical rank, parish, or district..."
+          prefix={<Search className="size-4 text-muted-foreground" />}
+          suffix={
+            searchValue ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchValue("");
+                  updateFilters({ q: null });
+                }}
+                className="text-muted-foreground hover:text-foreground"
               >
-                <Lock className="size-3 text-amber-500" />
-              </div>
+                <X className="size-3.5" />
+              </button>
+            ) : undefined
+          }
+          className="h-10 w-full border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+        />
+      </form>
+
+      {/* Filter Dropdowns Grid - Generous, perfectly responsive 4-column layout */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Province / Jurisdiction Filter */}
+        <div className="relative">
+          <select
+            value={currentProvince}
+            disabled={!isGlobalAdmin}
+            onChange={(e) => updateFilters({ province: e.target.value })}
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-80"
+          >
+            {isGlobalAdmin ? (
+              <>
+                <option value="ALL">All Ecclesiastical Provinces</option>
+                {allProvinces.map((prov) => (
+                  <option key={prov} value={prov}>
+                    {prov}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <option value={currentProvince}>{currentProvince} (Your Jurisdiction)</option>
             )}
-          </div>
+          </select>
+          {!isGlobalAdmin && (
+            <div
+              className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center gap-1 text-2xs text-amber-700 dark:text-amber-400"
+              title={`Locked to your assigned jurisdiction: ${userJurisdictionName}`}
+            >
+              <Lock className="size-3.5" />
+            </div>
+          )}
         </div>
 
         {/* Vetting Pipeline Stage Filter */}
-        <div className="lg:col-span-2">
+        <div>
           <select
             value={currentStage}
             onChange={(e) => updateFilters({ stage: e.target.value })}
-            className="h-control-sm w-full rounded-control border border-input bg-surface px-3 py-1 text-xs text-foreground shadow-xs transition-colors focus-visible:border-ring focus-visible:outline-none"
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
             <option value="ALL">All Vetting Stages</option>
             <option value="STAGE_1_BRANCH">Stage 1: Branch Level</option>
@@ -162,48 +159,46 @@ export function OrdinationFilters({
         </div>
 
         {/* Dues Status Filter */}
-        <div className="sm:col-span-1 lg:col-span-1">
+        <div>
           <select
             value={currentDues}
             onChange={(e) => updateFilters({ dues: e.target.value })}
-            className="h-control-sm w-full rounded-control border border-input bg-surface px-2.5 py-1 text-xs text-foreground shadow-xs transition-colors focus-visible:border-ring focus-visible:outline-none"
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           >
-            <option value="ALL">All Dues</option>
-            <option value="cleared">Cleared</option>
-            <option value="pending">Pending</option>
-            <option value="exempt">Exempt</option>
+            <option value="ALL">All Dues Status</option>
+            <option value="cleared">Dues Cleared</option>
+            <option value="pending">Dues Pending</option>
+            <option value="exempt">Dues Exempt</option>
           </select>
         </div>
 
         {/* Sort Order Selector */}
-        <div className="sm:col-span-1 lg:col-span-2">
-          <div className="flex items-center gap-1.5">
-            <select
-              value={currentSort}
-              onChange={(e) => updateFilters({ sort: e.target.value })}
-              className="h-control-sm w-full rounded-control border border-input bg-surface px-2.5 py-1 text-xs text-foreground shadow-xs transition-colors focus-visible:border-ring focus-visible:outline-none"
-            >
-              <option value="date-desc">Sort: Newest First</option>
-              <option value="date-asc">Sort: Oldest First</option>
-              <option value="name-asc">Sort: Name (A → Z)</option>
-              <option value="name-desc">Sort: Name (Z → A)</option>
-              <option value="rank">Sort: Target Rank</option>
-              <option value="tenure-desc">Sort: Service Tenure</option>
-              <option value="stage">Sort: Pipeline Stage</option>
-            </select>
-          </div>
+        <div>
+          <select
+            value={currentSort}
+            onChange={(e) => updateFilters({ sort: e.target.value })}
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground shadow-xs transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+          >
+            <option value="date-desc">Sort: Newest First</option>
+            <option value="date-asc">Sort: Oldest First</option>
+            <option value="name-asc">Sort: Name (A → Z)</option>
+            <option value="name-desc">Sort: Name (Z → A)</option>
+            <option value="rank">Sort: Target Rank</option>
+            <option value="tenure-desc">Sort: Service Tenure</option>
+            <option value="stage">Sort: Pipeline Stage</option>
+          </select>
         </div>
       </div>
 
       {/* Active Filter Badges and Quick Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-2.5 text-xs">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-2xs font-medium tracking-wider text-muted-foreground uppercase">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/70 pt-3 text-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
             {isPending ? "Filtering..." : `Showing ${totalResults} candidate${totalResults === 1 ? "" : "s"}`}
           </span>
 
           {currentProvince && currentProvince !== "ALL" && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-2xs font-semibold text-primary">
+            <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-2xs font-semibold text-primary">
               <Building className="size-3" />
               {currentProvince}
               {isGlobalAdmin && (
@@ -219,7 +214,7 @@ export function OrdinationFilters({
           )}
 
           {currentStage && currentStage !== "ALL" && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-2xs font-semibold text-indigo-400">
+            <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-2xs font-semibold text-indigo-700 dark:text-indigo-300">
               <Filter className="size-3" />
               {currentStage === "STAGE_1_BRANCH" || currentStage === "STAGE_1_PARISH"
                 ? "Stage 1: Branch"
@@ -239,7 +234,7 @@ export function OrdinationFilters({
           )}
 
           {currentDues && currentDues !== "ALL" && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-2xs font-semibold text-amber-400">
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-semibold text-amber-800 dark:text-amber-300">
               {currentDues === "cleared" ? <CheckCircle2 className="size-3" /> : <Clock className="size-3" />}
               Dues: {currentDues}
               <button
@@ -253,7 +248,7 @@ export function OrdinationFilters({
           )}
 
           {currentSearch && (
-            <span className="bg-muted inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-2xs font-semibold text-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface-muted px-2.5 py-0.5 text-2xs font-semibold text-foreground">
               Search: &quot;{currentSearch}&quot;
               <button
                 type="button"
@@ -274,7 +269,7 @@ export function OrdinationFilters({
             variant="ghost"
             size="sm"
             onClick={handleReset}
-            className="h-6 gap-1 px-2 text-2xs text-muted-foreground hover:text-foreground"
+            className="h-7 gap-1.5 px-2.5 text-xs text-muted-foreground hover:text-foreground"
           >
             <RotateCcw className="size-3" />
             Reset Filters

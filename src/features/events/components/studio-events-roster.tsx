@@ -10,7 +10,6 @@ import {
   Eye,
   Trash2,
   Share2,
-  Flame,
   Check,
   Search,
   Users,
@@ -45,20 +44,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedEvent, setSelectedEvent] = React.useState<WebEvent | null>(null);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
-  const [amens, setAmens] = React.useState<Record<string, number>>({});
-  const [amened, setAmened] = React.useState<Record<string, boolean>>({});
   const [processingId, setProcessingId] = React.useState<string | null>(null);
-
-  const handleAmen = (id: string) => {
-    setAmened((prev) => {
-      const next = !prev[id];
-      setAmens((counts) => ({
-        ...counts,
-        [id]: (counts[id] || 48) + (next ? 1 : -1),
-      }));
-      return { ...prev, [id]: next };
-    });
-  };
 
   const handleCopyLink = (event: WebEvent) => {
     const url = `${window.location.origin}/events?highlight=${event.id}`;
@@ -251,21 +237,8 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                       </div>
                     </div>
 
-                    {/* Social Engagement Actions */}
+                    {/* Administrative Engagement & Share Actions */}
                     <div className="flex flex-wrap items-center gap-3 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => handleAmen(evt.id)}
-                        className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-2xs font-semibold transition-all ${
-                          amened[evt.id]
-                            ? "border-amber-500/40 bg-amber-500/20 text-amber-600 dark:text-amber-300"
-                            : "border-border bg-surface-muted/60 text-muted-foreground hover:text-amber-500"
-                        }`}
-                      >
-                        <Flame className={`size-3 ${amened[evt.id] ? "fill-amber-500 text-amber-500" : ""}`} />
-                        <span>{amens[evt.id] || 48} Amen / Praises</span>
-                      </button>
-
                       <button
                         type="button"
                         onClick={() => handleCopyLink(evt)}
@@ -274,12 +247,12 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                         {copiedId === evt.id ? (
                           <>
                             <Check className="size-3 text-emerald-600 dark:text-emerald-400" />
-                            <span className="text-emerald-600 dark:text-emerald-400">Copied Link!</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Copied Link!</span>
                           </>
                         ) : (
                           <>
                             <Share2 className="size-3" />
-                            <span>Share</span>
+                            <span>Share Link</span>
                           </>
                         )}
                       </button>

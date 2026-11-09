@@ -55,11 +55,6 @@ export async function getEcclesiasticalFeed(options?: FeedScopeOptions): Promise
         badgeText: `Target Rank: ${c.rankTarget}`,
         actionUrl: `/ordination/candidates/${c.id}`,
         actionText: "View Candidate",
-        stats: {
-          amens: 42 + Math.floor((c.yearsOfService || 5) * 3),
-          shares: 12,
-          comments: 6,
-        },
       });
     }
   } catch {
@@ -96,11 +91,6 @@ export async function getEcclesiasticalFeed(options?: FeedScopeOptions): Promise
         badgeText: `${evt.category.toUpperCase()} • ${evt.status.toUpperCase()}`,
         actionUrl: "/admin-web/events",
         actionText: "View Event",
-        stats: {
-          amens: 88,
-          shares: 24,
-          comments: 15,
-        },
       });
     }
   } catch {
@@ -125,11 +115,6 @@ export async function getEcclesiasticalFeed(options?: FeedScopeOptions): Promise
         badgeText: b.category,
         actionUrl: b.ctaLink || "/admin-web/dashboard",
         actionText: b.ctaText || "Read Bulletin",
-        stats: {
-          amens: 135,
-          shares: 41,
-          comments: 29,
-        },
       });
     }
   } catch {

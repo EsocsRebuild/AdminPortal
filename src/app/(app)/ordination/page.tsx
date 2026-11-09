@@ -113,9 +113,9 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
           </div>
 
           {!isGlobalAdmin && (
-            <div className="flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-2xs font-medium text-amber-500">
-              <Lock className="size-3" />
-              <span>Strictly Scoped to {userUnit.unitName}</span>
+            <div className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-800 dark:text-amber-300">
+              <Lock className="size-3 text-amber-600 dark:text-amber-400" />
+              <span>Assigned to {userUnit.unitName}</span>
             </div>
           )}
         </div>
@@ -145,7 +145,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                 <span className="text-2xs font-semibold tracking-wider uppercase">District Review</span>
                 <ShieldCheck className="size-4 text-amber-500" />
               </div>
-              <div className="text-2xl font-bold text-amber-500">
+              <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">
                 {summary.stage2DistrictCount ?? summary.stage2Count}
               </div>
               <p className="text-2xs text-muted-foreground">Stage 2 District Screening</p>
@@ -194,14 +194,15 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
 
         {/* Candidates Roster */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
               <Filter className="size-4 text-primary" />
               Candidate Vetting Docket Roster ({candidates.length})
             </h2>
-            <span className="font-mono text-2xs text-muted-foreground">
-              Sync Mode: Two-Way Realtime Ordination API
-            </span>
+            <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-2xs font-medium text-emerald-800 dark:text-emerald-300">
+              <span className="inline-block size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Live Church Records Synchronized</span>
+            </div>
           </div>
 
           {candidates.length === 0 ? (
