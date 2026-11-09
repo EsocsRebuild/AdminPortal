@@ -86,7 +86,7 @@ export function RecordAttendanceModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-2 text-xs">
           {error && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="border-destructive/20 bg-destructive/10 text-destructive rounded-lg border p-3 text-xs">
               {error}
             </div>
           )}
@@ -119,7 +119,7 @@ export function RecordAttendanceModal() {
           </div>
 
           <div className="space-y-2 rounded-lg border border-border bg-surface-muted/30 p-3">
-            <span className="text-2xs font-bold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-bold tracking-wider text-muted-foreground uppercase">
               Demographic Breakdown
             </span>
 
@@ -174,7 +174,7 @@ export function RecordAttendanceModal() {
               <span className="flex items-center gap-1 font-semibold text-foreground">
                 <Calculator className="size-3.5 text-primary" /> Total Headcount:
               </span>
-              <span className="text-sm font-bold text-primary font-mono">{total} Worshippers</span>
+              <span className="font-mono text-sm font-bold text-primary">{total} Worshippers</span>
             </div>
           </div>
 
@@ -217,4 +217,3 @@ export function RecordAttendanceModal() {
     </Dialog>
   );
 }
-

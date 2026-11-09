@@ -1,10 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { lodgeTicketSchema } from "./schemas";
-import {
-  getLocalTickets,
-  addTicketMessage,
-  updateLocalTicketStatus,
-} from "./support-store";
+import { getLocalTickets, addTicketMessage, updateLocalTicketStatus } from "./support-store";
 import type { TicketCategory, TicketMessage } from "./types";
 
 describe("Support & Member Care CRM", () => {

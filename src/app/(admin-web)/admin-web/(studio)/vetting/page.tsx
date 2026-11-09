@@ -153,8 +153,12 @@ export default async function SuperVettingQueuePage() {
                       </div>
 
                       <h3 className="text-base font-bold text-foreground">{prog.title}</h3>
-                      <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Theme: &quot;{prog.theme}&quot;</p>
-                      <p className="text-xs text-muted-foreground">Keynote Speakers: {prog.speakers.join(", ")}</p>
+                      <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                        Theme: &quot;{prog.theme}&quot;
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Keynote Speakers: {prog.speakers.join(", ")}
+                      </p>
                     </div>
 
                     <div className="flex shrink-0 items-center gap-2 self-end lg:self-center">

@@ -80,7 +80,7 @@ export function StudioMediaRoster({ initialMedia }: { initialMedia: MediaAsset[]
               <h4 className="truncate font-mono text-xs font-semibold text-foreground" title={item.fileName}>
                 {item.fileName}
               </h4>
-              <div className="mt-0.5 flex items-center justify-between text-3xs text-muted-foreground">
+              <div className="text-3xs mt-0.5 flex items-center justify-between text-muted-foreground">
                 <span>{(item.fileSize / 1024).toFixed(1)} KB</span>
                 <span>{item.mimeType}</span>
               </div>
@@ -92,7 +92,7 @@ export function StudioMediaRoster({ initialMedia }: { initialMedia: MediaAsset[]
                 variant="outline"
                 size="xs"
                 onClick={() => handleCopy(item)}
-                className="gap-1 border-border text-3xs text-muted-foreground hover:text-foreground"
+                className="text-3xs gap-1 border-border text-muted-foreground hover:text-foreground"
               >
                 {copiedId === item.id ? (
                   <>
@@ -134,4 +134,3 @@ export function StudioMediaRoster({ initialMedia }: { initialMedia: MediaAsset[]
     </div>
   );
 }
-

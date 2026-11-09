@@ -46,4 +46,3 @@ export function deleteLocalProgramme(id: string): boolean {
   }
   return false;
 }
-

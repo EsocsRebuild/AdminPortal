@@ -33,10 +33,10 @@ export function BatchStatusToggle({ batchId, initialStatus }: BatchStatusToggleP
   };
 
   return (
-    <div className="flex items-center gap-1.5 justify-center">
+    <div className="flex items-center justify-center gap-1.5">
       <Badge
         tone={status === "reconciled" ? "success" : status === "verified" ? "info" : "warning"}
-        className="capitalize cursor-pointer"
+        className="cursor-pointer capitalize"
         onClick={handleReconcile}
         title="Click to toggle audit reconciliation status"
       >
@@ -47,7 +47,7 @@ export function BatchStatusToggle({ batchId, initialStatus }: BatchStatusToggleP
         size="xs"
         disabled={loading}
         onClick={handleReconcile}
-        className="h-6 px-1 text-3xs text-muted-foreground hover:text-foreground"
+        className="text-3xs h-6 px-1 text-muted-foreground hover:text-foreground"
       >
         {status === "reconciled" ? (
           <CheckCircle2 className="size-3 text-success" />
@@ -58,4 +58,3 @@ export function BatchStatusToggle({ batchId, initialStatus }: BatchStatusToggleP
     </div>
   );
 }
-

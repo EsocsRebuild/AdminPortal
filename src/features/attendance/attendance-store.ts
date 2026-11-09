@@ -46,4 +46,3 @@ export function updateLatestLiveCount(delta: number): number {
   }
   return 0;
 }
-

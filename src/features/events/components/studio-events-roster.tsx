@@ -20,13 +20,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { vetContentAction, deleteEventAction } from "@/features/web-cms/actions";
 import { useModals } from "@/components/modals/modal-provider";
 import type { WebEvent } from "@/features/web-cms/types";
@@ -135,7 +129,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             onClick={() => setFilterTab("approved")}
             className={`rounded-lg px-3 text-xs font-semibold ${
               filterTab === "approved"
-                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-xs"
+                ? "bg-emerald-500/10 text-emerald-600 shadow-xs dark:text-emerald-400"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -148,7 +142,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
             onClick={() => setFilterTab("pending")}
             className={`rounded-lg px-3 text-xs font-semibold ${
               filterTab === "pending"
-                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 shadow-xs"
+                ? "bg-amber-500/10 text-amber-600 shadow-xs dark:text-amber-400"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -215,7 +209,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                         {evt.category.replace(/_/g, " ")}
                       </span>
                       {evt.registrationOpen && (
-                        <span className="flex items-center gap-1 rounded-full bg-cyan-500/10 px-2 py-0.5 text-3xs font-medium text-cyan-600 dark:text-cyan-400">
+                        <span className="text-3xs flex items-center gap-1 rounded-full bg-cyan-500/10 px-2 py-0.5 font-medium text-cyan-600 dark:text-cyan-400">
                           <Users className="size-2.5" />
                           Registration Open
                         </span>
@@ -226,11 +220,11 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
 
                     <div className="grid grid-cols-1 gap-2 border-t border-border/60 pt-2 text-2xs text-muted-foreground sm:grid-cols-2">
                       <div className="flex items-center gap-1.5 truncate">
-                        <MapPin className="size-3 text-amber-500 shrink-0" />
+                        <MapPin className="size-3 shrink-0 text-amber-500" />
                         <span className="truncate text-foreground">{evt.venue}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Clock className="size-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <Clock className="size-3 shrink-0 text-emerald-600 dark:text-emerald-400" />
                         <span className="text-foreground">
                           {formattedDate} {formattedTime && `• ${formattedTime}`}
                         </span>
@@ -247,7 +241,9 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                         {copiedId === evt.id ? (
                           <>
                             <Check className="size-3 text-emerald-600 dark:text-emerald-400" />
-                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Copied Link!</span>
+                            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                              Copied Link!
+                            </span>
                           </>
                         ) : (
                           <>
@@ -287,7 +283,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                           size="xs"
                           disabled={processingId === evt.id}
                           onClick={() => handleApprove(evt.id)}
-                          className="h-6 gap-1 bg-emerald-600 px-2.5 text-3xs font-semibold text-white hover:bg-emerald-500"
+                          className="text-3xs h-6 gap-1 bg-emerald-600 px-2.5 font-semibold text-white hover:bg-emerald-500"
                         >
                           <Check className="size-3" />
                           <span>Approve Live</span>
@@ -362,25 +358,29 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
 
               <div className="grid grid-cols-2 gap-3 rounded-lg border border-border bg-surface-muted/40 p-3 text-xs">
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Date & Time</span>
+                  <span className="text-3xs tracking-wider text-muted-foreground uppercase">Date & Time</span>
                   <p className="font-semibold text-foreground">
                     {new Date(selectedEvent.startDate).toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Venue</span>
-                  <p className="font-semibold text-foreground truncate">{selectedEvent.venue}</p>
+                  <span className="text-3xs tracking-wider text-muted-foreground uppercase">Venue</span>
+                  <p className="truncate font-semibold text-foreground">{selectedEvent.venue}</p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Registration</span>
+                  <span className="text-3xs tracking-wider text-muted-foreground uppercase">
+                    Registration
+                  </span>
                   <p className="font-semibold text-emerald-600 dark:text-emerald-400">
                     {selectedEvent.registrationOpen ? "Open to Public" : "Closed / Private"}
                   </p>
                 </div>
                 <div>
-                  <span className="text-3xs uppercase tracking-wider text-muted-foreground">Capacity</span>
+                  <span className="text-3xs tracking-wider text-muted-foreground uppercase">Capacity</span>
                   <p className="font-semibold text-foreground">
-                    {selectedEvent.ticketCapacity ? `${selectedEvent.ticketCapacity} Seats` : "Open Sanctuary"}
+                    {selectedEvent.ticketCapacity
+                      ? `${selectedEvent.ticketCapacity} Seats`
+                      : "Open Sanctuary"}
                   </p>
                 </div>
               </div>

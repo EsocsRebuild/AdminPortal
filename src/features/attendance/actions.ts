@@ -56,12 +56,9 @@ export async function recordHeadcountAction(
   return ok(newRecord, "Service attendance headcount recorded successfully");
 }
 
-export async function incrementHeadcountAction(
-  delta: number,
-): Promise<ActionResult<{ newTotal: number }>> {
+export async function incrementHeadcountAction(delta: number): Promise<ActionResult<{ newTotal: number }>> {
   await requireSession();
   const newTotal = updateLatestLiveCount(delta);
   revalidatePath("/attendance");
   return ok({ newTotal }, "Usher headcount updated");
 }
-

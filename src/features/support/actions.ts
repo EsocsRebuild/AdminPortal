@@ -12,11 +12,7 @@ import {
   type ReplyTicketInput,
   type UpdateTicketStatusInput,
 } from "./schemas";
-import {
-  addLocalTicket,
-  addTicketMessage,
-  updateLocalTicketStatus,
-} from "./support-store";
+import { addLocalTicket, addTicketMessage, updateLocalTicketStatus } from "./support-store";
 import type { SupportTicket, TicketMessage } from "./types";
 
 export async function lodgeSupportTicketAction(
@@ -68,7 +64,10 @@ export async function lodgeSupportTicketAction(
   revalidatePath("/dashboard");
   revalidatePath("/ordination");
 
-  return ok(newTicket, `Support ticket ${ticketNumber} opened successfully. Our Secretariat Care Desk is attending to your request.`);
+  return ok(
+    newTicket,
+    `Support ticket ${ticketNumber} opened successfully. Our Secretariat Care Desk is attending to your request.`,
+  );
 }
 
 export async function replySupportTicketAction(

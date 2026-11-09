@@ -2,17 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import {
-  Globe,
-  ImageIcon,
-  Users,
-  Award,
-  Church,
-  ShieldCheck,
-  Plus,
-  UserCheck,
-  Wallet,
-} from "lucide-react";
+import { Globe, ImageIcon, Users, Award, Church, ShieldCheck, Plus, UserCheck, Wallet } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -85,7 +75,7 @@ export function DashboardHeader({ user, unitName, isSuperAdmin }: DashboardHeade
         </div>
 
         {/* Primary Clear Action Shortcuts */}
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0 pt-2 lg:pt-0">
+        <div className="flex shrink-0 flex-wrap items-center gap-2.5 pt-2 lg:pt-0">
           {isContentEditor ? (
             <>
               <Link href="/admin-web/events">

@@ -26,4 +26,3 @@ export const reconcileBatchSchema = z.object({
 export type CreateFundInput = z.infer<typeof createFundSchema>;
 export type RecordBatchInput = z.infer<typeof recordBatchSchema>;
 export type ReconcileBatchInput = z.infer<typeof reconcileBatchSchema>;
-

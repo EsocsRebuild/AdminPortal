@@ -25,9 +25,18 @@ export function UploadMediaModal() {
   const [fileName, setFileName] = React.useState("");
 
   const presets = [
-    { name: "Altar & Sanctuary", url: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80" },
-    { name: "Chorister Assembly", url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80" },
-    { name: "Holy Order Prayer", url: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1200&q=80" },
+    {
+      name: "Altar & Sanctuary",
+      url: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      name: "Chorister Assembly",
+      url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      name: "Holy Order Prayer",
+      url: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1200&q=80",
+    },
   ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -93,7 +102,7 @@ export function UploadMediaModal() {
               value={fileName}
               onChange={(e) => setFileName(e.target.value)}
               placeholder="e.g. general_conference_banner_2026.jpg"
-              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500 text-xs"
+              className="border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500"
             />
           </div>
 
@@ -107,7 +116,7 @@ export function UploadMediaModal() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://..."
-              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500 text-xs"
+              className="border-input bg-background text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-amber-500"
             />
 
             <div className="flex items-center gap-1.5 pt-1">
@@ -120,7 +129,7 @@ export function UploadMediaModal() {
                     setUrl(p.url);
                     if (!fileName) setFileName(`${p.name.toLowerCase().replace(/\s+/g, "_")}.jpg`);
                   }}
-                  className="rounded border border-border bg-surface-muted/60 px-2 py-0.5 text-3xs font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
+                  className="text-3xs rounded border border-border bg-surface-muted/60 px-2 py-0.5 font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
                 >
                   {p.name}
                 </button>

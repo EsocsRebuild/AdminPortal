@@ -29,10 +29,7 @@ export default async function MediaGalleryPage() {
           <UploadMediaModal />
         </div>
 
-        <StudioMediaRoster
-          key={media.map((m) => m.id).join(":")}
-          initialMedia={media}
-        />
+        <StudioMediaRoster key={media.map((m) => m.id).join(":")} initialMedia={media} />
       </div>
     </TooltipProvider>
   );

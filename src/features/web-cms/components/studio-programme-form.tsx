@@ -5,13 +5,7 @@ import { Sparkles, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { submitProgrammeAction } from "../actions";
 import type { WebProgramme } from "../types";
 
@@ -36,7 +30,10 @@ export function StudioProgrammeForm({ unitName }: { unitName: string }) {
     const scheduleDate = (formData.get("scheduleDate") as string)?.trim();
     const speakersRaw = (formData.get("speakers") as string)?.trim();
     const speakers = speakersRaw
-      ? speakersRaw.split(",").map((s) => s.trim()).filter(Boolean)
+      ? speakersRaw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
       : ["Presiding Clergy"];
     const bulletinPdfUrl = (formData.get("bulletinPdfUrl") as string)?.trim() || undefined;
     const livestreamUrl = (formData.get("livestreamUrl") as string)?.trim() || undefined;
@@ -174,10 +171,8 @@ export function StudioProgrammeForm({ unitName }: { unitName: string }) {
 
             <div className="my-3 space-y-2 rounded-xl border border-border bg-surface-muted/50 p-4 text-xs">
               <h4 className="font-bold text-foreground">{createdProg.title}</h4>
-              <p className="italic text-teal-600 dark:text-teal-400">&ldquo;{createdProg.theme}&rdquo;</p>
-              <p className="text-2xs text-muted-foreground">
-                Ministers: {createdProg.speakers.join(", ")}
-              </p>
+              <p className="text-teal-600 italic dark:text-teal-400">&ldquo;{createdProg.theme}&rdquo;</p>
+              <p className="text-2xs text-muted-foreground">Ministers: {createdProg.speakers.join(", ")}</p>
               <p className="text-2xs text-muted-foreground">
                 Date: {new Date(createdProg.scheduleDate).toLocaleString()}
               </p>

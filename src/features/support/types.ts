@@ -48,4 +48,3 @@ export interface SupportKpis {
   ordinationIssues: number;
   avgResolutionHours: number;
 }
-

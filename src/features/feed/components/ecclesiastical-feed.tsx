@@ -36,9 +36,7 @@ export function EcclesiasticalFeed({
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   const handleShare = (item: FeedItem) => {
-    const shareUrl = item.actionUrl
-      ? `${window.location.origin}${item.actionUrl}`
-      : window.location.href;
+    const shareUrl = item.actionUrl ? `${window.location.origin}${item.actionUrl}` : window.location.href;
 
     if (navigator.share) {
       navigator
@@ -95,10 +93,12 @@ export function EcclesiasticalFeed({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-base font-bold text-foreground">
-                {isGlobalAdmin ? "Church Announcements & Live Activity" : `${userUnitName} Announcements & Activity`}
+                {isGlobalAdmin
+                  ? "Church Announcements & Live Activity"
+                  : `${userUnitName} Announcements & Activity`}
               </h3>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-2xs font-semibold text-emerald-600 dark:text-emerald-400">
-                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="size-1.5 animate-pulse rounded-full bg-emerald-500" />
                 Live Updates
               </span>
             </div>
@@ -147,7 +147,9 @@ export function EcclesiasticalFeed({
         ) : (
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Building className="size-3.5 text-amber-600 dark:text-amber-400" />
-            <span>Jurisdiction Scope: <strong className="font-semibold text-foreground">{userUnitName}</strong></span>
+            <span>
+              Jurisdiction Scope: <strong className="font-semibold text-foreground">{userUnitName}</strong>
+            </span>
           </div>
         )}
 
@@ -157,7 +159,9 @@ export function EcclesiasticalFeed({
             type="button"
             onClick={() => setSelectedType("all")}
             className={`rounded-md px-2.5 py-1 font-semibold transition-colors ${
-              selectedType === "all" ? "bg-card text-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
+              selectedType === "all"
+                ? "bg-card text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             All Updates
@@ -166,7 +170,9 @@ export function EcclesiasticalFeed({
             type="button"
             onClick={() => setSelectedType("event")}
             className={`rounded-md px-2.5 py-1 font-semibold transition-colors ${
-              selectedType === "event" ? "bg-card text-emerald-600 dark:text-emerald-400 shadow-xs" : "text-muted-foreground hover:text-foreground"
+              selectedType === "event"
+                ? "bg-card text-emerald-600 shadow-xs dark:text-emerald-400"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Events
@@ -175,7 +181,9 @@ export function EcclesiasticalFeed({
             type="button"
             onClick={() => setSelectedType("ordination")}
             className={`rounded-md px-2.5 py-1 font-semibold transition-colors ${
-              selectedType === "ordination" ? "bg-card text-amber-600 dark:text-amber-400 shadow-xs" : "text-muted-foreground hover:text-foreground"
+              selectedType === "ordination"
+                ? "bg-card text-amber-600 shadow-xs dark:text-amber-400"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Ordinations
@@ -184,7 +192,9 @@ export function EcclesiasticalFeed({
             type="button"
             onClick={() => setSelectedType("bulletin")}
             className={`rounded-md px-2.5 py-1 font-semibold transition-colors ${
-              selectedType === "bulletin" ? "bg-card text-indigo-600 dark:text-indigo-400 shadow-xs" : "text-muted-foreground hover:text-foreground"
+              selectedType === "bulletin"
+                ? "bg-card text-indigo-600 shadow-xs dark:text-indigo-400"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Bulletins
@@ -199,7 +209,9 @@ export function EcclesiasticalFeed({
             <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <ShieldCheck className="size-6" />
             </div>
-            <h4 className="mt-3 text-sm font-semibold text-foreground">No Activity in Your Scoped Jurisdiction</h4>
+            <h4 className="mt-3 text-sm font-semibold text-foreground">
+              No Activity in Your Scoped Jurisdiction
+            </h4>
             <p className="mt-1 text-xs text-muted-foreground">
               New happenings, programmes, and bulletins published for {userUnitName} will appear here.
             </p>
@@ -229,10 +241,10 @@ export function EcclesiasticalFeed({
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm font-bold text-foreground">{item.authorName}</span>
-                        <span className="rounded-full bg-surface-muted px-2 py-0.5 text-3xs font-semibold text-muted-foreground">
+                        <span className="text-3xs rounded-full bg-surface-muted px-2 py-0.5 font-semibold text-muted-foreground">
                           {item.authorRole}
                         </span>
-                        <span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-3xs font-semibold text-indigo-600 dark:text-indigo-400">
+                        <span className="text-3xs rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 font-semibold text-indigo-600 dark:text-indigo-400">
                           <Building className="mr-0.5 inline-block size-2.5" />
                           {item.provinceName}
                         </span>
@@ -248,7 +260,7 @@ export function EcclesiasticalFeed({
                   </div>
 
                   {item.badgeText && (
-                    <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-3xs font-bold text-primary">
+                    <span className="text-3xs shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 font-bold text-primary">
                       {item.badgeText}
                     </span>
                   )}
@@ -256,7 +268,7 @@ export function EcclesiasticalFeed({
 
                 {/* Post Body Content */}
                 <div className="space-y-1.5">
-                  <h4 className="text-base font-bold leading-snug text-foreground">{item.title}</h4>
+                  <h4 className="text-base leading-snug font-bold text-foreground">{item.title}</h4>
                   <p className="text-xs leading-relaxed text-muted-foreground">{item.content}</p>
                 </div>
 
@@ -294,7 +306,9 @@ export function EcclesiasticalFeed({
                       {copiedId === item.id ? (
                         <>
                           <Check className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-                          <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Copied Link!</span>
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                            Copied Link!
+                          </span>
                         </>
                       ) : (
                         <>
@@ -305,9 +319,7 @@ export function EcclesiasticalFeed({
                     </Button>
                   </div>
 
-                  <span className="text-3xs text-muted-foreground">
-                    Verified Church Publication
-                  </span>
+                  <span className="text-3xs text-muted-foreground">Verified Church Publication</span>
                 </div>
               </CardContent>
             </Card>

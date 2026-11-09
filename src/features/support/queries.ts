@@ -21,4 +21,3 @@ export async function getSupportKpis(): Promise<SupportKpis> {
     avgResolutionHours: 2.4,
   };
 }
-

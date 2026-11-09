@@ -42,7 +42,10 @@ export async function nominateCandidateAction(
 ): Promise<ActionResult<OrdinationCandidate>> {
   const check = candidateNominationSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Please enter the candidate's full name, member number, target rank, and active years of service");
+    return fail(
+      "VALIDATION",
+      "Please enter the candidate's full name, member number, target rank, and active years of service",
+    );
   }
 
   // 1. Attempt .NET Platform.Api
@@ -142,7 +145,10 @@ export async function advanceVettingStageAction(
 ): Promise<ActionResult<{ success: boolean; nextStage: VettingStage }>> {
   const check = vettingStageAdvanceSchema.safeParse(input);
   if (!check.success) {
-    return fail("VALIDATION", "Please provide clearance justification notes to proceed with vetting approval");
+    return fail(
+      "VALIDATION",
+      "Please provide clearance justification notes to proceed with vetting approval",
+    );
   }
   const nextStage =
     check.data.action === "APPROVED" ? stageNextMap[check.data.currentStage] : check.data.currentStage;

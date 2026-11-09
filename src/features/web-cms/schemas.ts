@@ -2,11 +2,7 @@ import { z } from "zod";
 
 export const eventInputSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(150, "Title is too long"),
-  description: z
-    .string()
-    .max(2000, "Description is too long")
-    .optional()
-    .or(z.literal("")),
+  description: z.string().max(2000, "Description is too long").optional().or(z.literal("")),
   category: z.enum(["REVIVAL", "SUNDAY_SERVICE", "FELLOWSHIP_RALLY", "CONFERENCE", "SPECIAL_PROGRAMME"]),
   startDate: z.string().min(1, "Start date & time is required"),
   endDate: z.string().optional(),

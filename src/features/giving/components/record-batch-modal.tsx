@@ -84,7 +84,7 @@ export function RecordBatchModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-2 text-xs">
           {error && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="border-destructive/20 bg-destructive/10 text-destructive rounded-lg border p-3 text-xs">
               {error}
             </div>
           )}
@@ -99,7 +99,7 @@ export function RecordBatchModal() {
                 name="batchNumber"
                 required
                 defaultValue={`BAT-${new Date().getFullYear()}-W${Math.ceil(new Date().getDate() / 7)}`}
-                className="text-xs font-mono"
+                className="font-mono text-xs"
               />
             </div>
             <div className="space-y-1.5">
@@ -118,7 +118,7 @@ export function RecordBatchModal() {
           </div>
 
           <div className="space-y-2.5 rounded-lg border border-border bg-surface-muted/30 p-3">
-            <span className="text-2xs font-bold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-bold tracking-wider text-muted-foreground uppercase">
               Intake Breakdown (₦)
             </span>
 
@@ -173,7 +173,7 @@ export function RecordBatchModal() {
               <span className="flex items-center gap-1 font-semibold text-foreground">
                 <Calculator className="size-3.5 text-primary" /> Total Verified Collection:
               </span>
-              <span className="text-sm font-bold text-primary font-mono">
+              <span className="font-mono text-sm font-bold text-primary">
                 ₦{grandTotal.toLocaleString("en-NG")}
               </span>
             </div>
@@ -205,4 +205,3 @@ export function RecordBatchModal() {
     </Dialog>
   );
 }
-

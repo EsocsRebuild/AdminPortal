@@ -12,6 +12,7 @@ import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 import { listSections } from "@/features/sections/queries";
+import { getWebFrontendUrl } from "@/lib/web-url";
 
 export const metadata: Metadata = { title: "Autonomous Sections & Fellowships" };
 export const dynamic = "force-dynamic";
@@ -80,7 +81,8 @@ export default async function SectionsPage() {
                       </div>
                       <div className="flex items-center justify-between border-t border-border-subtle pt-1 text-2xs">
                         <span>
-                          Active Roster: <strong className="text-foreground">{sec.memberCount} members</strong>
+                          Active Roster:{" "}
+                          <strong className="text-foreground">{sec.memberCount} members</strong>
                         </span>
                         <span>{sec.activeEventsCount} upcoming events</span>
                       </div>
@@ -98,10 +100,15 @@ export default async function SectionsPage() {
                         <Link href={`/members?fellowship=${sec.slug}`}>View Roster</Link>
                       </Button>
                       <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/sections/${sec.slug}`} className="flex items-center gap-1">
+                        <a
+                          href={getWebFrontendUrl(`/church/${sec.slug}`)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1"
+                        >
                           Portal View
                           <ArrowRight className="size-3.5" />
-                        </Link>
+                        </a>
                       </Button>
                     </div>
                   </CardContent>

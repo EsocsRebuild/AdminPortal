@@ -137,9 +137,7 @@ export function HelpdeskDrawer({
           messages: [...selectedTicket.messages, res.data],
         };
         setSelectedTicket(updatedTicket);
-        setTickets((prev) =>
-          prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)),
-        );
+        setTickets((prev) => prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)));
         setReplyText("");
         router.refresh();
       }
@@ -216,7 +214,7 @@ export function HelpdeskDrawer({
                 >
                   <span>Track Issues</span>
                   {tickets.length > 0 && (
-                    <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 font-mono text-3xs font-bold text-emerald-700 dark:text-emerald-300">
+                    <span className="py-0.2 text-3xs rounded-full bg-emerald-500/20 px-1.5 font-mono font-bold text-emerald-700 dark:text-emerald-300">
                       {tickets.length}
                     </span>
                   )}
@@ -333,7 +331,7 @@ export function HelpdeskDrawer({
               {/* Contact Details Section - Spacious 2x2 Grid */}
               <div className="space-y-3 rounded-xl border border-border bg-surface-muted/30 p-4">
                 <div>
-                  <h4 className="text-xs font-bold tracking-wide uppercase text-foreground">
+                  <h4 className="text-xs font-bold tracking-wide text-foreground uppercase">
                     Your Contact Details
                   </h4>
                   <p className="text-2xs text-muted-foreground">
@@ -370,9 +368,7 @@ export function HelpdeskDrawer({
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-foreground">
-                      Phone Number (Optional)
-                    </label>
+                    <label className="text-xs font-semibold text-foreground">Phone Number (Optional)</label>
                     <Input
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -495,11 +491,11 @@ export function HelpdeskDrawer({
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-3xs font-bold text-muted-foreground">
+                        <span className="text-3xs font-mono font-bold text-muted-foreground">
                           {t.ticketNumber}
                         </span>
                         <span
-                          className={`rounded-full px-2 py-0.5 font-mono text-3xs font-semibold ${
+                          className={`text-3xs rounded-full px-2 py-0.5 font-mono font-semibold ${
                             t.status === "RESOLVED"
                               ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
                               : t.status === "IN_REVIEW"

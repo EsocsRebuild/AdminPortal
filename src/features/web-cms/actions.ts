@@ -175,9 +175,9 @@ export async function submitProgrammeAction(input: ProgrammeInput): Promise<Acti
   return ok(newProg, "Programme schedule registered and live on the church network!");
 }
 
-export async function deleteProgrammeAction(
-  input: { id: string },
-): Promise<ActionResult<{ success: boolean }>> {
+export async function deleteProgrammeAction(input: {
+  id: string;
+}): Promise<ActionResult<{ success: boolean }>> {
   if (!input.id) {
     return fail("VALIDATION", "Programme ID is required");
   }
@@ -314,7 +314,9 @@ export async function uploadMediaAssetAction(input: {
   return ok(newAsset, "Media asset successfully uploaded to gallery");
 }
 
-export async function deleteMediaAssetAction(input: { id: string }): Promise<ActionResult<{ success: boolean }>> {
+export async function deleteMediaAssetAction(input: {
+  id: string;
+}): Promise<ActionResult<{ success: boolean }>> {
   if (!input.id) return fail("VALIDATION", "Asset ID required");
   deleteLocalMediaAsset(input.id);
   revalidatePath("/admin-web/media");

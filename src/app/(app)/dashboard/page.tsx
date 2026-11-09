@@ -171,7 +171,7 @@ export default async function DashboardPage() {
         {/* Super Admin Apex Ordination & Command Center */}
         {isSuperAdmin ? (
           <StaggerItem>
-            <Card className="via-card to-card border-amber-500/20 bg-linear-to-br from-amber-500/10 shadow-md">
+            <Card className="border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card shadow-md">
               <CardContent className="space-y-4 p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">

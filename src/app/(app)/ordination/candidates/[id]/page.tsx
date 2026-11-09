@@ -32,11 +32,13 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
             <ArrowLeft className="size-4" />
             Back to Ordination Candidate Roster
           </Link>
-          <span className="font-mono text-2xs text-muted-foreground">Candidate Reference: {candidate.memberId || candidate.id}</span>
+          <span className="font-mono text-2xs text-muted-foreground">
+            Candidate Reference: {candidate.memberId || candidate.id}
+          </span>
         </div>
 
         {/* Candidate Header Dossier Card */}
-        <Card className="bg-card border-border shadow-xs">
+        <Card className="border-border bg-card shadow-xs">
           <CardContent className="space-y-5 p-6">
             <div className="flex flex-col items-start justify-between gap-5 border-b border-border pb-5 md:flex-row md:items-center">
               <div className="flex items-start gap-4">
@@ -59,7 +61,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xl font-bold text-foreground">{candidate.fullName}</span>
-                    <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-800 dark:text-amber-300 uppercase">
+                    <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-2xs font-bold text-amber-800 uppercase dark:text-amber-300">
                       TARGET: {candidate.rankTarget}
                     </span>
                     {candidate.duesStatus === "cleared" ? (
@@ -189,7 +191,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
         )}
 
         {/* Update Candidate Record Card */}
-        <Card className="bg-card border-border shadow-xs">
+        <Card className="border-border bg-card shadow-xs">
           <CardHeader
             title="Update Candidate Record & Financial Clearance"
             description="Update financial dues status or conduct assessment directly in the Ordination Portal database."
@@ -204,7 +206,7 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
         </Card>
 
         {/* Signed Clearance Log & Audit History */}
-        <Card className="bg-card border-border shadow-xs">
+        <Card className="border-border bg-card shadow-xs">
           <CardHeader
             title={
               <div className="flex items-center gap-2 text-sm font-bold text-foreground">
@@ -232,7 +234,9 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                     </span>
                   </div>
                   <p className="text-muted-foreground">{log.notes}</p>
-                  <div className="pt-1 font-medium text-2xs text-primary">Verified by: {log.handlerId || "Secretariat Directorate"}</div>
+                  <div className="pt-1 text-2xs font-medium text-primary">
+                    Verified by: {log.handlerId || "Secretariat Directorate"}
+                  </div>
                 </div>
               ))
             )}

@@ -84,7 +84,7 @@ export function CandidateStageBar({ currentStage, isProvincialWorshipper = false
                   {s.label}
                 </span>
                 {s.subtext && (
-                  <span className="mt-0.5 truncate text-3xs text-muted-foreground">{s.subtext}</span>
+                  <span className="text-3xs mt-0.5 truncate text-muted-foreground">{s.subtext}</span>
                 )}
               </div>
             </div>

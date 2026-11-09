@@ -65,7 +65,7 @@ export function Logo({
         >
           THE ESOCS
         </span>
-        <span className="text-2xs font-semibold tracking-wider text-amber-700 dark:text-amber-400 uppercase">
+        <span className="text-2xs font-semibold tracking-wider text-amber-700 uppercase dark:text-amber-400">
           Administration Portal
         </span>
       </span>

@@ -40,4 +40,3 @@ export const updateTicketStatusSchema = z.object({
 });
 
 export type UpdateTicketStatusInput = z.infer<typeof updateTicketStatusSchema>;
-

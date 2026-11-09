@@ -77,7 +77,7 @@ export function NewFundModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4 pt-2 text-xs">
           {error && (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="border-destructive/20 bg-destructive/10 text-destructive rounded-lg border p-3 text-xs">
               {error}
             </div>
           )}
@@ -105,7 +105,7 @@ export function NewFundModal() {
                 name="code"
                 required
                 placeholder="e.g. MUS-004"
-                className="text-xs uppercase font-mono"
+                className="font-mono text-xs uppercase"
               />
             </div>
             <div className="space-y-1.5">
@@ -164,4 +164,3 @@ export function NewFundModal() {
     </Dialog>
   );
 }
-

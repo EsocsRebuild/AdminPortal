@@ -36,9 +36,7 @@ export async function getEcclesiasticalFeed(options?: FeedScopeOptions): Promise
       // If not a global admin, candidates from outside the user's jurisdiction are strictly isolated!
       if (!isGlobal && unitKeyword) {
         const matches =
-          candProv.includes(unitKeyword) ||
-          candDist.includes(unitKeyword) ||
-          candPar.includes(unitKeyword);
+          candProv.includes(unitKeyword) || candDist.includes(unitKeyword) || candPar.includes(unitKeyword);
         if (!matches) continue;
       }
 
@@ -129,9 +127,16 @@ export async function getEcclesiasticalFeed(options?: FeedScopeOptions): Promise
     options.provinceFilter !== "All Provinces" &&
     options.provinceFilter !== "ALL"
   ) {
-    const norm = options.provinceFilter.toLowerCase().replace(/\bprovince\b/gi, "").trim();
+    const norm = options.provinceFilter
+      .toLowerCase()
+      .replace(/\bprovince\b/gi, "")
+      .trim();
     result = result.filter((item) =>
-      item.provinceName.toLowerCase().replace(/\bprovince\b/gi, "").trim().includes(norm),
+      item.provinceName
+        .toLowerCase()
+        .replace(/\bprovince\b/gi, "")
+        .trim()
+        .includes(norm),
     );
   }
 

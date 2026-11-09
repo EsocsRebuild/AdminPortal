@@ -17,10 +17,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  replySupportTicketAction,
-  updateTicketStatusAction,
-} from "../actions";
+import { replySupportTicketAction, updateTicketStatusAction } from "../actions";
 import type { SupportTicket, SupportKpis, TicketCategory, TicketStatus } from "../types";
 
 interface SupportCrmDashboardProps {
@@ -40,9 +37,7 @@ const categoryLabels: Record<TicketCategory, string> = {
 export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboardProps) {
   const router = useRouter();
   const [tickets, setTickets] = React.useState<SupportTicket[]>(initialTickets);
-  const [selectedTicketId, setSelectedTicketId] = React.useState<string>(
-    initialTickets[0]?.id || "",
-  );
+  const [selectedTicketId, setSelectedTicketId] = React.useState<string>(initialTickets[0]?.id || "");
   const [statusFilter, setStatusFilter] = React.useState<"ALL" | TicketStatus>("ALL");
   const [categoryFilter, setCategoryFilter] = React.useState<string>("ALL");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -91,9 +86,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
           updatedAt: new Date().toISOString(),
           messages: [...selectedTicket.messages, res.data],
         };
-        setTickets((prev) =>
-          prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)),
-        );
+        setTickets((prev) => prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)));
         setReplyText("");
         setActionSuccess("Official Secretariat response recorded and dispatched.");
         router.refresh();
@@ -124,9 +117,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
           resolutionSummary: resolutionSummary.trim() || selectedTicket.resolutionSummary,
           updatedAt: new Date().toISOString(),
         };
-        setTickets((prev) =>
-          prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)),
-        );
+        setTickets((prev) => prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)));
         setActionSuccess(`Ticket status updated to ${newStatus}`);
         router.refresh();
         setTimeout(() => setActionSuccess(null), 3000);
@@ -142,7 +133,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card className="border-border bg-card p-4 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
               Open Enquiries
             </span>
             <div className="flex size-7 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-500">
@@ -155,7 +146,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
 
         <Card className="border-border bg-card p-4 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
               Under Review
             </span>
             <div className="flex size-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
@@ -168,7 +159,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
 
         <Card className="border-border bg-card p-4 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
               Ordination Matters
             </span>
             <div className="flex size-7 items-center justify-center rounded-lg bg-purple-500/10 text-purple-500">
@@ -181,7 +172,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
 
         <Card className="border-border bg-card p-4 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
               Resolved Cases
             </span>
             <div className="flex size-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
@@ -205,7 +196,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by ticket #, parish, name..."
-                className="h-8 pl-8 text-xs border-input bg-background text-foreground placeholder:text-muted-foreground"
+                className="h-8 border-input bg-background pl-8 text-xs text-foreground placeholder:text-muted-foreground"
               />
             </div>
 
@@ -292,11 +283,11 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-3xs font-bold text-muted-foreground">
+                      <span className="text-3xs font-mono font-bold text-muted-foreground">
                         {t.ticketNumber}
                       </span>
                       <span
-                        className={`rounded-full px-2 py-0.5 font-mono text-3xs font-semibold ${
+                        className={`text-3xs rounded-full px-2 py-0.5 font-mono font-semibold ${
                           t.status === "RESOLVED"
                             ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                             : t.status === "IN_REVIEW"
@@ -308,18 +299,18 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                       </span>
                     </div>
 
-                    <h4 className="mt-1 text-xs font-bold text-foreground line-clamp-1">{t.title}</h4>
+                    <h4 className="mt-1 line-clamp-1 text-xs font-bold text-foreground">{t.title}</h4>
 
                     <div className="mt-2 flex items-center justify-between text-2xs text-muted-foreground">
                       <div className="flex items-center gap-1.5 truncate">
-                        <User className="size-3 text-primary shrink-0" />
+                        <User className="size-3 shrink-0 text-primary" />
                         <span className="truncate">{t.complainantName}</span>
                       </div>
                       <span className="text-3xs">{new Date(t.createdAt).toLocaleDateString()}</span>
                     </div>
 
                     {t.candidateReferenceId && (
-                      <div className="mt-1.5 inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 text-3xs font-semibold text-amber-600 dark:text-amber-400">
+                      <div className="text-3xs mt-1.5 inline-flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 font-semibold text-amber-600 dark:text-amber-400">
                         <Award className="size-2.5" />
                         Candidate: {t.candidateReferenceId}
                       </div>
@@ -343,13 +334,11 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                         <span className="font-mono text-xs font-bold text-primary">
                           {selectedTicket.ticketNumber}
                         </span>
-                        <span className="rounded-full bg-surface-muted px-2 py-0.5 text-3xs font-medium text-foreground">
+                        <span className="text-3xs rounded-full bg-surface-muted px-2 py-0.5 font-medium text-foreground">
                           {categoryLabels[selectedTicket.category]}
                         </span>
                       </div>
-                      <h2 className="mt-1 text-base font-bold text-foreground">
-                        {selectedTicket.title}
-                      </h2>
+                      <h2 className="mt-1 text-base font-bold text-foreground">{selectedTicket.title}</h2>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -382,13 +371,17 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                 description={
                   <div className="mt-1 grid grid-cols-1 gap-2 pt-1 text-2xs text-muted-foreground sm:grid-cols-2">
                     <div className="flex items-center gap-1.5">
-                      <User className="size-3 text-muted-foreground shrink-0" />
-                      <span>{selectedTicket.complainantName} ({selectedTicket.complainantEmail})</span>
+                      <User className="size-3 shrink-0 text-muted-foreground" />
+                      <span>
+                        {selectedTicket.complainantName} ({selectedTicket.complainantEmail})
+                      </span>
                     </div>
                     {selectedTicket.parishName && (
                       <div className="flex items-center gap-1.5">
-                        <Building2 className="size-3 text-muted-foreground shrink-0" />
-                        <span>{selectedTicket.parishName} • {selectedTicket.provinceName || "National"}</span>
+                        <Building2 className="size-3 shrink-0 text-muted-foreground" />
+                        <span>
+                          {selectedTicket.parishName} • {selectedTicket.provinceName || "National"}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -431,7 +424,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
 
                 {/* Conversation Thread */}
                 <div className="space-y-3">
-                  <h3 className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <h3 className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
                     Enquiry & Response History ({selectedTicket.messages.length})
                   </h3>
 
@@ -445,7 +438,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                             : "border border-border bg-surface-muted/40 text-foreground"
                         }`}
                       >
-                        <div className="flex items-center justify-between border-b border-border pb-1.5 text-3xs">
+                        <div className="text-3xs flex items-center justify-between border-b border-border pb-1.5">
                           <span className="font-bold text-foreground">
                             {m.senderName} ({m.senderRole})
                           </span>
@@ -475,7 +468,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                       <select
                         value={targetStatus}
                         onChange={(e) => setTargetStatus(e.target.value as TicketStatus)}
-                        className="h-7 rounded border border-input bg-background px-2 text-3xs font-medium text-foreground focus:outline-none"
+                        className="text-3xs h-7 rounded border border-input bg-background px-2 font-medium text-foreground focus:outline-none"
                       >
                         <option value="IN_REVIEW">Under Review</option>
                         <option value="RESOLVED">Resolved & Closed</option>

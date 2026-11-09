@@ -41,11 +41,12 @@ export function CardHeader({
     <div className={cn("flex flex-wrap items-start gap-x-4 gap-y-2 px-card pt-card", className)} {...props}>
       {(title || description) && (
         <div className="grid min-w-0 flex-1 gap-0.5">
-          {title && (typeof title === "string" ? (
-            <h3 className="text-md font-semibold tracking-tight">{title}</h3>
-          ) : (
-            <div className="text-md font-semibold tracking-tight">{title}</div>
-          ))}
+          {title &&
+            (typeof title === "string" ? (
+              <h3 className="text-md font-semibold tracking-tight">{title}</h3>
+            ) : (
+              <div className="text-md font-semibold tracking-tight">{title}</div>
+            ))}
           {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       )}

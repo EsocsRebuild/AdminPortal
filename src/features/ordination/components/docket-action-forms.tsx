@@ -115,7 +115,8 @@ export function CandidateClearanceForm({
 
         <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-2xs text-muted-foreground">
-            Action will be permanently recorded in the ordination audit ledger and synchronized with central registries.
+            Action will be permanently recorded in the ordination audit ledger and synchronized with central
+            registries.
           </span>
           <Button
             type="submit"
@@ -146,7 +147,9 @@ export function CandidateClearanceForm({
           <div className="my-2 space-y-2 rounded-xl border border-border bg-surface-muted/40 p-3 text-xs">
             <div className="flex justify-between border-b border-border pb-1.5">
               <span className="text-muted-foreground">Current Stage:</span>
-              <span className="font-semibold text-foreground">{stageLabelMap[currentStage] || currentStage}</span>
+              <span className="font-semibold text-foreground">
+                {stageLabelMap[currentStage] || currentStage}
+              </span>
             </div>
             <div className="space-y-1">
               <span className="text-muted-foreground">Audit Notes:</span>
@@ -281,7 +284,7 @@ export function CandidateRecordUpdateForm({
           </Button>
 
           {saved && (
-            <span className="flex items-center gap-1 text-2xs font-semibold text-emerald-500 animate-in fade-in">
+            <span className="animate-in fade-in flex items-center gap-1 text-2xs font-semibold text-emerald-500">
               <CheckCircle2 className="size-3.5" />
               Saved!
             </span>

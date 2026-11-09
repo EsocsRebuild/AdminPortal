@@ -46,4 +46,3 @@ export function deleteLocalMediaAsset(id: string): boolean {
   }
   return false;
 }
-

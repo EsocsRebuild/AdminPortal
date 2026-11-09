@@ -1,25 +1,11 @@
 "use client";
 
 import * as React from "react";
-import {
-  Sparkles,
-  CheckCircle2,
-  Calendar,
-  MapPin,
-  Share2,
-  ShieldCheck,
-  Clock,
-} from "lucide-react";
+import { Sparkles, CheckCircle2, Calendar, MapPin, Share2, ShieldCheck, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { submitEventAction } from "@/features/web-cms/actions";
 import type { EventCategory, WebEvent } from "@/features/web-cms/types";
 
@@ -43,9 +29,18 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
   const [publishDirectly, setPublishDirectly] = React.useState(true);
 
   const bannerPresets = [
-    { label: "Revival", url: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1200&q=80" },
-    { label: "Fellowship", url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80" },
-    { label: "Conference", url: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80" },
+    {
+      label: "Revival",
+      url: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      label: "Fellowship",
+      url: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      label: "Conference",
+      url: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80",
+    },
   ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -211,7 +206,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
                 key={p.label}
                 type="button"
                 onClick={() => setBannerUrl(p.url)}
-                className="rounded border border-border bg-surface-muted/60 px-2 py-0.5 text-3xs font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
+                className="text-3xs rounded border border-border bg-surface-muted/60 px-2 py-0.5 font-medium text-muted-foreground hover:border-border/80 hover:text-foreground"
               >
                 {p.label}
               </button>
@@ -221,7 +216,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
 
         {/* Publication Protocol */}
         <div className="space-y-2 rounded-xl border border-border bg-surface-muted/30 p-3">
-          <span className="text-2xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-2xs font-semibold tracking-wider text-muted-foreground uppercase">
             Publication Mode
           </span>
           <div className="grid grid-cols-2 gap-2">
@@ -294,7 +289,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
             <div className="my-3 space-y-3 rounded-xl border border-border bg-surface-muted/40 p-4">
               <div className="flex items-center justify-between border-b border-border pb-2">
                 <span className="text-xs font-bold text-foreground">{createdEvent.title}</span>
-                <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-3xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="text-3xs rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-600 dark:text-emerald-400">
                   {createdEvent.category.replace(/_/g, " ")}
                 </span>
               </div>

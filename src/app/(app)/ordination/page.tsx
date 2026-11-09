@@ -78,7 +78,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
     searchQuery ||
     (selectedStage && selectedStage !== "ALL") ||
     (selectedDues && selectedDues !== "ALL") ||
-    (isGlobalAdmin && selectedProvince && selectedProvince !== "ALL")
+    (isGlobalAdmin && selectedProvince && selectedProvince !== "ALL"),
   );
 
   return (
@@ -96,13 +96,17 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                   </div>
 
                   <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-2xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                    <div className="flex items-center gap-2 text-2xs font-bold tracking-wider text-amber-700 uppercase dark:text-amber-400">
                       <span>Ecclesiastical Docket</span>
                       <span>•</span>
-                      <span>{isGlobalAdmin && selectedProvince === "ALL" ? "All Provinces Oversight" : selectedProvince}</span>
+                      <span>
+                        {isGlobalAdmin && selectedProvince === "ALL"
+                          ? "All Provinces Oversight"
+                          : selectedProvince}
+                      </span>
                       <span>•</span>
-                      <span className="inline-flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300 font-semibold">
-                        <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-800 dark:text-emerald-300">
+                        <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
                         Live Records Synchronized
                       </span>
                     </div>
@@ -112,7 +116,8 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                     </h1>
 
                     <p className="max-w-2xl text-xs leading-relaxed text-muted-foreground">
-                      4-Tier canonical vetting register for rank elevations across {selectedProvince}. Review candidate dossiers, audit clerical recommendations, and advance vetting stages.
+                      4-Tier canonical vetting register for rank elevations across {selectedProvince}. Review
+                      candidate dossiers, audit clerical recommendations, and advance vetting stages.
                     </p>
                   </div>
                 </div>
@@ -131,7 +136,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
               {/* Card 1: Total Docket */}
               <Card interactive className="p-card shadow-xs transition-all hover:border-primary/40">
                 <div className="flex items-center justify-between">
-                  <span className="text-3xs font-extrabold uppercase tracking-widest text-muted-foreground">
+                  <span className="text-3xs font-extrabold tracking-widest text-muted-foreground uppercase">
                     Tier 01 • Active Docket
                   </span>
                   <span className="grid size-8 place-items-center rounded-control bg-primary-soft text-primary-soft-foreground">
@@ -143,7 +148,9 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                     {summary.totalCandidates}
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {selectedProvince === "ALL" ? "Total Nominated Candidates" : `${selectedProvince} Active Docket`}
+                    {selectedProvince === "ALL"
+                      ? "Total Nominated Candidates"
+                      : `${selectedProvince} Active Docket`}
                   </p>
                 </div>
               </Card>
@@ -151,7 +158,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
               {/* Card 2: District Review */}
               <Card interactive className="p-card shadow-xs transition-all hover:border-amber-500/40">
                 <div className="flex items-center justify-between">
-                  <span className="text-3xs font-extrabold uppercase tracking-widest text-amber-700 dark:text-amber-400">
+                  <span className="text-3xs font-extrabold tracking-widest text-amber-700 uppercase dark:text-amber-400">
                     Tier 02 • District Review
                   </span>
                   <span className="grid size-8 place-items-center rounded-control bg-amber-500/10 text-amber-700 dark:text-amber-400">
@@ -162,16 +169,14 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                   <div className="tabular text-metric font-semibold text-amber-700 dark:text-amber-400">
                     {summary.stage2DistrictCount ?? summary.stage2Count}
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    District council screening
-                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">District council screening</p>
                 </div>
               </Card>
 
               {/* Card 3: Provincial Conclave */}
               <Card interactive className="p-card shadow-xs transition-all hover:border-indigo-500/40">
                 <div className="flex items-center justify-between">
-                  <span className="text-3xs font-extrabold uppercase tracking-widest text-indigo-700 dark:text-indigo-400">
+                  <span className="text-3xs font-extrabold tracking-widest text-indigo-700 uppercase dark:text-indigo-400">
                     Tier 03 • Provincial Conclave
                   </span>
                   <span className="grid size-8 place-items-center rounded-control bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">
@@ -182,16 +187,14 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                   <div className="tabular text-metric font-semibold text-indigo-700 dark:text-indigo-400">
                     {summary.stage3ProvincialCount ?? summary.stage3Count}
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Advisory council conclave vetting
-                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Advisory council conclave vetting</p>
                 </div>
               </Card>
 
               {/* Card 4: Synod Ratified */}
               <Card interactive className="p-card shadow-xs transition-all hover:border-emerald-500/40">
                 <div className="flex items-center justify-between">
-                  <span className="text-3xs font-extrabold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
+                  <span className="text-3xs font-extrabold tracking-widest text-emerald-700 uppercase dark:text-emerald-400">
                     Tier 04 • Synod Ratified
                   </span>
                   <span className="grid size-8 place-items-center rounded-control bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
@@ -202,9 +205,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                   <div className="tabular text-metric font-semibold text-emerald-700 dark:text-emerald-400">
                     {summary.stage4NationalCount ?? summary.stage4ApprovedCount}
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Holy Synod final ratification
-                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Holy Synod final ratification</p>
                 </div>
               </Card>
             </div>
@@ -303,11 +304,13 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
 
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                               <span>
-                                Reg Number: <strong className="font-mono text-foreground">{c.memberId}</strong>
+                                Reg Number:{" "}
+                                <strong className="font-mono text-foreground">{c.memberId}</strong>
                               </span>
                               <span>•</span>
                               <span>
-                                Current Rank: <strong className="text-foreground">{c.churchRankCurrent}</strong>
+                                Current Rank:{" "}
+                                <strong className="text-foreground">{c.churchRankCurrent}</strong>
                               </span>
                               <span>•</span>
                               <span>

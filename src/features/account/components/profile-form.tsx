@@ -26,6 +26,7 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useAction } from "@/hooks/use-action";
 import { resultErrors, validate, type Errors } from "@/lib/validate";
+import { getWebFrontendUrl } from "@/lib/web-url";
 import type { SessionUser } from "@/types/auth";
 
 import { updateProfile } from "../actions";
@@ -129,15 +130,16 @@ export function ProfileForm({
 
           {/* Quick link button to public live site */}
           <div className="flex shrink-0 items-center sm:self-center">
-            <Link
-              href={`/church/${userUnit.unitSlug}`}
+            <a
+              href={getWebFrontendUrl(`/church/${userUnit.unitSlug}`)}
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-raised px-3 py-1.5 text-xs font-semibold text-foreground transition-all hover:border-primary/50 hover:bg-surface-hover"
             >
               <Building2 className="size-3.5 text-primary" />
               <span>View Parish Web</span>
               <ExternalLink className="size-3 text-muted-foreground" />
-            </Link>
+            </a>
           </div>
         </div>
       </div>

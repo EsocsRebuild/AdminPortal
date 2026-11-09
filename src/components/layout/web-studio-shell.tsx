@@ -37,6 +37,7 @@ import { UserMenu } from "@/components/layout/user-menu";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { usePreference } from "@/hooks/use-preference";
 import { cn } from "@/lib/utils";
+import { getWebFrontendUrl } from "@/lib/web-url";
 
 interface WebStudioShellProps {
   userUnit: { unitName: string; unitSlug: string };
@@ -204,9 +205,10 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
           <nav className="space-y-1">
             {(() => {
               const liveNode = (
-                <Link
-                  href={`/church/${userUnit.unitSlug}`}
+                <a
+                  href={getWebFrontendUrl(`/church/${userUnit.unitSlug}`)}
                   target="_blank"
+                  rel="noopener noreferrer"
                   onClick={onSelect}
                   className={cn(
                     "group flex h-10 items-center gap-3 rounded-control px-3 text-xs font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/10 dark:text-emerald-400",
@@ -220,7 +222,7 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                       <ExternalLink className="size-3 text-emerald-500/70" />
                     </>
                   )}
-                </Link>
+                </a>
               );
 
               return isCompact ? (
@@ -505,16 +507,17 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
                 </Link>
               </Tooltip>
 
-              <Tooltip content={`View live public site for ${userUnit.unitName}`}>
-                <Link
-                  href={`/church/${userUnit.unitSlug}`}
+              <Tooltip content={`View live public site for ${userUnit.unitName} (http://localhost:3020)`}>
+                <a
+                  href={getWebFrontendUrl(`/church/${userUnit.unitSlug}`)}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-2xs font-semibold text-emerald-600 transition-all hover:bg-emerald-500/20 sm:text-xs dark:text-emerald-400"
                 >
                   <Globe className="size-3.5" />
                   <span className="hidden sm:inline">Live Web Preview</span>
                   <ExternalLink className="size-3 opacity-70" />
-                </Link>
+                </a>
               </Tooltip>
 
               <ThemeToggle />

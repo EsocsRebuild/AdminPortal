@@ -174,7 +174,10 @@ export default async function WebStudioDashboardPage() {
                 Live submission records and publication states for your unit.
               </p>
             </div>
-            <Link href="/admin-web/events" className="text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400">
+            <Link
+              href="/admin-web/events"
+              className="text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
+            >
               View All Events & Bulletins →
             </Link>
           </div>
@@ -184,7 +187,9 @@ export default async function WebStudioDashboardPage() {
               <div className="flex size-12 items-center justify-center rounded-full bg-amber-500/10 text-amber-500">
                 <Calendar className="size-6" />
               </div>
-              <h4 className="mt-3 text-sm font-bold text-foreground">No events published yet for {unitName}</h4>
+              <h4 className="mt-3 text-sm font-bold text-foreground">
+                No events published yet for {unitName}
+              </h4>
               <p className="mt-1 max-w-md text-xs text-muted-foreground">
                 Your unit has not submitted any public events or service bulletins yet. Get started by
                 publishing your first church programme.

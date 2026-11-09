@@ -1,15 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Calendar,
-  Trash2,
-  ExternalLink,
-  FileText,
-  Video,
-  Mic,
-  Building2,
-} from "lucide-react";
+import { Calendar, Trash2, ExternalLink, FileText, Video, Mic, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,10 +14,7 @@ interface StudioProgrammesRosterProps {
   unitName: string;
 }
 
-export function StudioProgrammesRoster({
-  initialProgrammes,
-  unitName,
-}: StudioProgrammesRosterProps) {
+export function StudioProgrammesRoster({ initialProgrammes, unitName }: StudioProgrammesRosterProps) {
   const router = useRouter();
   const modals = useModals();
   const [programmes, setProgrammes] = React.useState<WebProgramme[]>(initialProgrammes);
@@ -95,12 +84,14 @@ export function StudioProgrammesRoster({
                   <div className="max-w-xl space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-sm font-bold text-foreground">{prog.title}</span>
-                      <span className="rounded-full bg-teal-500/10 px-2 py-0.5 text-3xs font-semibold text-teal-600 dark:text-teal-400">
+                      <span className="text-3xs rounded-full bg-teal-500/10 px-2 py-0.5 font-semibold text-teal-600 dark:text-teal-400">
                         {dateStr}
                       </span>
                     </div>
 
-                    <p className="text-xs italic text-teal-600 dark:text-teal-400">&ldquo;{prog.theme}&rdquo;</p>
+                    <p className="text-xs text-teal-600 italic dark:text-teal-400">
+                      &ldquo;{prog.theme}&rdquo;
+                    </p>
 
                     <div className="flex items-center gap-1.5 text-2xs text-muted-foreground">
                       <Mic className="size-3 shrink-0 text-amber-500" />
@@ -158,4 +149,3 @@ export function StudioProgrammesRoster({
     </div>
   );
 }
-

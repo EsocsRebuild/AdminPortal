@@ -132,18 +132,8 @@ export async function listSections(options?: ListSectionsOptions): Promise<Fello
       return false;
     });
 
-    const tones: ("success" | "warning" | "info" | "primary")[] = [
-      "success",
-      "warning",
-      "info",
-      "primary",
-    ];
-    const colors = [
-      "border-l-emerald-500",
-      "border-l-amber-500",
-      "border-l-purple-500",
-      "border-l-blue-500",
-    ];
+    const tones: ("success" | "warning" | "info" | "primary")[] = ["success", "warning", "info", "primary"];
+    const colors = ["border-l-emerald-500", "border-l-amber-500", "border-l-purple-500", "border-l-blue-500"];
 
     return filteredUnits.map((u, i) => {
       const leader = u.leaders?.[0]?.name ?? "Executive Directorate";
@@ -169,7 +159,9 @@ export async function listSections(options?: ListSectionsOptions): Promise<Fello
         name: u.name,
         motto:
           u.tagline ||
-          (Array.isArray(u.about) && u.about[0] ? u.about[0] : "Autonomous ministerial directorate of the Holy Order."),
+          (Array.isArray(u.about) && u.about[0]
+            ? u.about[0]
+            : "Autonomous ministerial directorate of the Holy Order."),
         headLeader: leader,
         memberCount: typeof u.childCount === "number" ? u.childCount : 0,
         activeEventsCount: sectionEvents.length,

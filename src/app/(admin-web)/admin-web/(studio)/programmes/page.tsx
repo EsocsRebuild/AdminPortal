@@ -22,7 +22,9 @@ export default async function ProgrammesSchedulePage() {
           <div>
             <div className="flex items-center gap-2">
               <Megaphone className="size-5 text-teal-600 dark:text-teal-400" />
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">Programmes & Bulletin Schedule</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                Programmes & Bulletin Schedule
+              </h1>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
               Manage church annual summits, quarterly theme schedules, and bulletin attachments for{" "}
