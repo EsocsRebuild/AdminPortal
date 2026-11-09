@@ -37,6 +37,7 @@ interface SectionData {
 }
 
 import { backend } from "@/server/backend";
+import { listEvents } from "@/features/events/queries";
 
 async function getSectionData(slug: string): Promise<SectionData | null> {
   try {
@@ -49,6 +50,33 @@ async function getSectionData(slug: string): Promise<SectionData | null> {
       leaders?: { name: string; role: string }[];
     }>(`/public/units/${encodeURIComponent(slug)}`, { auth: false });
     if (u) {
+      let events: Awaited<ReturnType<typeof listEvents>> = [];
+      try {
+        events = await listEvents();
+      } catch {
+        events = [];
+      }
+
+      const matchingEvents = events.filter((e) => {
+        const titleLower = e.title.toLowerCase();
+        const unitLower = e.unitName.toLowerCase();
+        const sectionNameLower = u.name.toLowerCase();
+        const sectionSlug = u.slug.toLowerCase();
+        return (
+          titleLower.includes(sectionNameLower) ||
+          unitLower.includes(sectionNameLower) ||
+          titleLower.includes(sectionSlug)
+        );
+      });
+
+      const programmes = matchingEvents.map((e) => ({
+        title: e.title,
+        date: `${e.date} at ${e.time}`,
+        location: e.location,
+        description: `Official church programme for ${u.name}.`,
+        registrationOpen: e.status === "scheduled",
+      }));
+
       return {
         name: u.name,
         slug: u.slug,
@@ -61,24 +89,8 @@ async function getSectionData(slug: string): Promise<SectionData | null> {
           Array.isArray(u.leaders) && u.leaders.length > 0
             ? u.leaders.map((l: { name: string; role: string }) => ({ name: l.name, role: l.role }))
             : [{ name: "Executive Directorate", role: "Administration" }],
-        programmes: [
-          {
-            title: "Weekly Assembly & Fellowship",
-            date: "Every Sunday, 09:00 AM",
-            location: u.locality || "Cathedral Sanctuary",
-            description: "Fellowship gathering, Bible study, and ministerial coordination.",
-            registrationOpen: false,
-          },
-        ],
-        news: [
-          {
-            id: "news-1",
-            title: `${u.name} Directorate Updates`,
-            date: "Current Season",
-            category: "Announcements",
-            excerpt: "Stay connected with upcoming programs, service rosters, and ministry initiatives.",
-          },
-        ],
+        programmes,
+        news: [],
       };
     }
   } catch {
@@ -168,29 +180,35 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
                 <Calendar className="size-5 text-amber-500" /> Upcoming Programmes & Conferences
               </h2>
               <div className="grid gap-4">
-                {section.programmes.map((prog) => (
-                  <Card key={prog.title} className="space-y-3 p-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold">{prog.title}</h3>
-                      {prog.registrationOpen && <Badge tone="success">Registration Open</Badge>}
-                    </div>
-                    <div className="text-xs font-semibold text-amber-600 dark:text-amber-400">
-                      {prog.date} • {prog.location}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{prog.description}</p>
-
-                    {prog.formSlug && (
-                      <div className="pt-2">
-                        <Button asChild size="sm">
-                          <Link href={`/f/${prog.formSlug}`}>
-                            <FileText className="mr-2 size-4" />
-                            Register Online Now
-                          </Link>
-                        </Button>
+                {section.programmes.length === 0 ? (
+                  <p className="rounded-lg border border-border/80 bg-surface-muted/30 p-4 text-xs text-muted-foreground">
+                    No upcoming programmes scheduled for this fellowship at this time.
+                  </p>
+                ) : (
+                  section.programmes.map((prog) => (
+                    <Card key={prog.title} className="space-y-3 p-6">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold">{prog.title}</h3>
+                        {prog.registrationOpen && <Badge tone="success">Registration Open</Badge>}
                       </div>
-                    )}
-                  </Card>
-                ))}
+                      <div className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                        {prog.date} • {prog.location}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{prog.description}</p>
+
+                      {prog.formSlug && (
+                        <div className="pt-2">
+                          <Button asChild size="sm">
+                            <Link href={`/f/${prog.formSlug}`}>
+                              <FileText className="mr-2 size-4" />
+                              Register Online Now
+                            </Link>
+                          </Button>
+                        </div>
+                      )}
+                    </Card>
+                  ))
+                )}
               </div>
             </section>
 
@@ -200,16 +218,22 @@ export default async function SectionPublicPage({ params }: { params: Promise<{ 
                 <Newspaper className="size-5 text-amber-500" /> Fellowship News & Updates
               </h2>
               <div className="grid gap-4">
-                {section.news.map((item) => (
-                  <Card key={item.id} className="p-5">
-                    <div className="flex items-center gap-2 text-2xs font-semibold text-muted-foreground">
-                      <Badge tone="outline">{item.category}</Badge>
-                      <span>{item.date}</span>
-                    </div>
-                    <h3 className="mt-2 text-base font-semibold">{item.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{item.excerpt}</p>
-                  </Card>
-                ))}
+                {section.news.length === 0 ? (
+                  <p className="rounded-lg border border-border/80 bg-surface-muted/30 p-4 text-xs text-muted-foreground">
+                    No announcements published for this fellowship yet.
+                  </p>
+                ) : (
+                  section.news.map((item) => (
+                    <Card key={item.id} className="p-5">
+                      <div className="flex items-center gap-2 text-2xs font-semibold text-muted-foreground">
+                        <Badge tone="outline">{item.category}</Badge>
+                        <span>{item.date}</span>
+                      </div>
+                      <h3 className="mt-2 text-base font-semibold">{item.title}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{item.excerpt}</p>
+                    </Card>
+                  ))
+                )}
               </div>
             </section>
           </div>

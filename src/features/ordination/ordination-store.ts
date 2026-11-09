@@ -4,159 +4,12 @@ import type { OrdinationCandidate, VettingStage } from "./types";
 
 const DB_PATH = path.join(process.cwd(), "src/features/ordination/ordination-db.json");
 
-const initialCandidates: OrdinationCandidate[] = [
-  {
-    id: "cand-diobu-1",
-    memberId: "ESOCS/ORD/2026/7781",
-    fullName: "Elder Samuel Olawale Briggs",
-    email: "samuel.briggs@esocs.org",
-    phone: "+234 803 111 2233",
-    churchRankCurrent: "Senior Leader",
-    rankTarget: "APOSTLE",
-    parishId: "parish-diobu-cathedral",
-    parishName: "Diobu Central Cathedral",
-    districtName: "Diobu Central District",
-    provinceName: "Diobu Province",
-    isProvincialWorshipper: true,
-    stageCurrent: "STAGE_3_PROVINCIAL",
-    yearsOfService: 14,
-    duesStatus: "cleared",
-    duesAmountPaid: 45000,
-    conductRating: "exemplary",
-    passportPhotoUrl: undefined,
-    vettingHistory: [
-      {
-        stage: "STAGE_1_BRANCH",
-        action: "APPROVED",
-        handlerId: "Diobu Cathedral Pastoral Council",
-        notes: "Devout service in youth fellowship, consistent scriptural leadership and tithing fidelity.",
-        timestamp: "2026-09-14T09:00:00Z",
-      },
-      {
-        stage: "STAGE_2_DISTRICT",
-        action: "APPROVED",
-        handlerId: "Diobu Central District Screening Board",
-        notes: "Doctrinal fitness and evangelical contributions verified. Cleared for Provincial Conclave.",
-        timestamp: "2026-10-02T14:30:00Z",
-      },
-    ],
-    nominatedAt: "2026-09-12T11:00:00Z",
-    nominatedByHandlerId: "Special Apostle D. Okoro",
-  },
-  {
-    id: "cand-diobu-2",
-    memberId: "ESOCS/ORD/2026/8942",
-    fullName: "Brother Emmanuel Chukwu",
-    email: "emmanuel.c@esocs.org",
-    phone: "+234 802 333 4455",
-    churchRankCurrent: "Leader",
-    rankTarget: "SENIOR_LEADER",
-    parishId: "parish-mile-one",
-    parishName: "Mile 1 Diobu Parish",
-    districtName: "Diobu West District",
-    provinceName: "Diobu Province",
-    isProvincialWorshipper: false,
-    stageCurrent: "STAGE_2_DISTRICT",
-    yearsOfService: 8,
-    duesStatus: "cleared",
-    duesAmountPaid: 30000,
-    conductRating: "commendable",
-    passportPhotoUrl: undefined,
-    vettingHistory: [
-      {
-        stage: "STAGE_1_BRANCH",
-        action: "APPROVED",
-        handlerId: "Mile 1 Parish Committee",
-        notes: "Faithful attendance and choir wing directorship for over seven years.",
-        timestamp: "2026-10-15T11:00:00Z",
-      },
-    ],
-    nominatedAt: "2026-10-10T08:30:00Z",
-    nominatedByHandlerId: "Apostle M. George",
-  },
-  {
-    id: "cand-diobu-3",
-    memberId: "ESOCS/ORD/2026/9103",
-    fullName: "Sister Grace Tamuno",
-    email: "grace.tamuno@esocs.org",
-    phone: "+234 809 555 6677",
-    churchRankCurrent: "Worker",
-    rankTarget: "DEACONESS",
-    parishId: "parish-diobu-cathedral",
-    parishName: "Diobu Central Cathedral",
-    districtName: "Diobu Central District",
-    provinceName: "Diobu Province",
-    isProvincialWorshipper: true,
-    stageCurrent: "STAGE_1_BRANCH",
-    yearsOfService: 6,
-    duesStatus: "pending",
-    duesAmountPaid: 0,
-    conductRating: "exemplary",
-    passportPhotoUrl: undefined,
-    vettingHistory: [],
-    nominatedAt: "2026-11-01T10:15:00Z",
-    nominatedByHandlerId: "Cathedral Secretary",
-  },
-  {
-    id: "cand-diobu-4",
-    memberId: "ESOCS/ORD/2026/6211",
-    fullName: "Special Apostle Joseph Nnamdi",
-    email: "joseph.nnamdi@esocs.org",
-    phone: "+234 803 888 9900",
-    churchRankCurrent: "Apostle",
-    rankTarget: "MOST_SENIOR_APOSTLE",
-    parishId: "parish-diobu-cathedral",
-    parishName: "Diobu Central Cathedral",
-    districtName: "Diobu Central District",
-    provinceName: "Diobu Province",
-    isProvincialWorshipper: true,
-    stageCurrent: "STAGE_4_NATIONAL",
-    yearsOfService: 22,
-    duesStatus: "cleared",
-    duesAmountPaid: 60000,
-    conductRating: "exemplary",
-    passportPhotoUrl: undefined,
-    vettingHistory: [
-      {
-        stage: "STAGE_1_BRANCH",
-        action: "APPROVED",
-        handlerId: "Diobu Cathedral Council",
-        notes: "Distinguished apostolic tenure and ministry development.",
-        timestamp: "2026-07-10T10:00:00Z",
-      },
-      {
-        stage: "STAGE_2_DISTRICT",
-        action: "APPROVED",
-        handlerId: "District Advisory Board",
-        notes: "Canonical examination passed with distinction.",
-        timestamp: "2026-08-14T11:00:00Z",
-      },
-      {
-        stage: "STAGE_3_PROVINCIAL",
-        action: "APPROVED",
-        handlerId: "Provincial Advisory Council",
-        notes: "Unanimous ratification by the Provincial Chairman in Council.",
-        timestamp: "2026-09-20T16:00:00Z",
-      },
-      {
-        stage: "STAGE_4_NATIONAL",
-        action: "APPROVED",
-        handlerId: "Holy Synod Apex Vetting Commission",
-        notes: "Supreme investiture ratified for Synod assembly ceremony.",
-        timestamp: "2026-10-25T12:00:00Z",
-      },
-    ],
-    nominatedAt: "2026-07-01T09:00:00Z",
-    nominatedByHandlerId: "Provincial Chairman",
-  },
-];
-
 function loadCandidatesFromDisk(): OrdinationCandidate[] {
   try {
     if (fs.existsSync(DB_PATH)) {
       const data = fs.readFileSync(DB_PATH, "utf-8");
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -164,9 +17,7 @@ function loadCandidatesFromDisk(): OrdinationCandidate[] {
     // fallback if file read fails
   }
 
-  // initialize file with defaults
-  saveCandidatesToDisk(initialCandidates);
-  return initialCandidates;
+  return [];
 }
 
 function saveCandidatesToDisk(candidates: OrdinationCandidate[]): void {
@@ -182,55 +33,121 @@ export function getLocalCandidates(): OrdinationCandidate[] {
 }
 
 export function getLocalCandidateById(id: string): OrdinationCandidate | null {
-  const list = loadCandidatesFromDisk();
-  return list.find((c) => c.id === id || c.memberId === id) ?? null;
-}
-
-export function addLocalCandidate(candidate: OrdinationCandidate): void {
-  const list = loadCandidatesFromDisk();
-  const existingIdx = list.findIndex((c) => c.id === candidate.id || c.memberId === candidate.memberId);
-  if (existingIdx !== -1) {
-    list[existingIdx] = candidate;
-  } else {
-    list.unshift(candidate);
-  }
-  saveCandidatesToDisk(list);
+  const candidates = loadCandidatesFromDisk();
+  return candidates.find((c) => c.id === id || c.memberId === id) ?? null;
 }
 
 export function updateLocalCandidateStage(
-  id: string,
+  candidateId: string,
   newStage: VettingStage,
-  handlerName: string,
+  handlerId: string,
   notes: string,
 ): boolean {
-  const list = loadCandidatesFromDisk();
-  const target = list.find((c) => c.id === id || c.memberId === id);
-  if (target) {
-    target.stageCurrent = newStage;
-    target.vettingHistory.push({
-      stage: newStage,
-      action: "APPROVED",
-      handlerId: handlerName,
-      notes,
-      timestamp: new Date().toISOString(),
-    });
-    saveCandidatesToDisk(list);
-    return true;
-  }
-  return false;
+  const candidates = loadCandidatesFromDisk();
+  const candidate = candidates.find((c) => c.id === candidateId || c.memberId === candidateId);
+  if (!candidate) return false;
+
+  candidate.stageCurrent = newStage;
+  candidate.vettingHistory.push({
+    stage: newStage,
+    action: "APPROVED",
+    handlerId,
+    notes,
+    timestamp: new Date().toISOString(),
+  });
+
+  saveCandidatesToDisk(candidates);
+  return true;
 }
 
 export function updateLocalCandidateDetails(
-  id: string,
-  updates: { duesStatus?: "pending" | "cleared" | "exempt"; conductRating?: string },
+  candidateId: string,
+  updates: {
+    duesStatus?: "pending" | "cleared" | "exempt";
+    conductRating?: string;
+    screeningNote?: string;
+  },
 ): boolean {
-  const list = loadCandidatesFromDisk();
-  const target = list.find((c) => c.id === id || c.memberId === id);
-  if (target) {
-    if (updates.duesStatus) target.duesStatus = updates.duesStatus;
-    if (updates.conductRating) target.conductRating = updates.conductRating;
-    saveCandidatesToDisk(list);
-    return true;
+  const candidates = loadCandidatesFromDisk();
+  const candidate = candidates.find((c) => c.id === candidateId || c.memberId === candidateId);
+  if (!candidate) return false;
+
+  if (updates.duesStatus) candidate.duesStatus = updates.duesStatus;
+  if (updates.conductRating) candidate.conductRating = updates.conductRating;
+  if (updates.screeningNote) {
+    candidate.vettingHistory.push({
+      stage: candidate.stageCurrent,
+      action: "NEEDS_INFO",
+      handlerId: "Secretariat Administration",
+      notes: updates.screeningNote,
+      timestamp: new Date().toISOString(),
+    });
   }
-  return false;
+
+  saveCandidatesToDisk(candidates);
+  return true;
+}
+
+export function advanceLocalCandidateStage(
+  candidateId: string,
+  newStage: VettingStage,
+  handlerId: string,
+  notes: string,
+): boolean {
+  return updateLocalCandidateStage(candidateId, newStage, handlerId, notes);
+}
+
+export function rejectLocalCandidateStage(
+  candidateId: string,
+  stage: VettingStage,
+  handlerId: string,
+  notes: string,
+): boolean {
+  const candidates = loadCandidatesFromDisk();
+  const candidate = candidates.find((c) => c.id === candidateId || c.memberId === candidateId);
+  if (!candidate) return false;
+
+  candidate.vettingHistory.push({
+    stage,
+    action: "REJECTED",
+    handlerId,
+    notes,
+    timestamp: new Date().toISOString(),
+  });
+
+  saveCandidatesToDisk(candidates);
+  return true;
+}
+
+export function flagLocalCandidateStage(
+  candidateId: string,
+  stage: VettingStage,
+  handlerId: string,
+  notes: string,
+): boolean {
+  const candidates = loadCandidatesFromDisk();
+  const candidate = candidates.find((c) => c.id === candidateId || c.memberId === candidateId);
+  if (!candidate) return false;
+
+  candidate.vettingHistory.push({
+    stage,
+    action: "NEEDS_INFO",
+    handlerId,
+    notes,
+    timestamp: new Date().toISOString(),
+  });
+
+  saveCandidatesToDisk(candidates);
+  return true;
+}
+
+export function addLocalCandidate(candidate: OrdinationCandidate): void {
+  const candidates = loadCandidatesFromDisk();
+  const existingIdx = candidates.findIndex((c) => c.id === candidate.id || c.memberId === candidate.memberId);
+  if (existingIdx !== -1) {
+    candidates[existingIdx] = candidate;
+  } else {
+    candidates.unshift(candidate);
+  }
+  saveCandidatesToDisk(candidates);
 }
