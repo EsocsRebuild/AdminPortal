@@ -22,9 +22,18 @@ function loadDb(): WebBulletin[] {
 function saveDb(posts: WebBulletin[]): void {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(posts, null, 2), "utf-8");
-    const syncDir = path.resolve(process.cwd(), "../web/src/data/sync");
-    if (fs.existsSync(syncDir)) {
-      fs.writeFileSync(path.join(syncDir, "posts-db.json"), JSON.stringify(posts, null, 2), "utf-8");
+    const candidateSyncDirs = [
+      "/app/web-sync",
+      path.resolve(process.cwd(), "../web/src/data/sync"),
+      path.resolve(process.cwd(), "web/src/data/sync"),
+      "/Users/testapp/Documents/TechDev/EsocsRebuild/web/src/data/sync",
+    ];
+    for (const dir of candidateSyncDirs) {
+      try {
+        if (fs.existsSync(dir)) {
+          fs.writeFileSync(path.join(dir, "posts-db.json"), JSON.stringify(posts, null, 2), "utf-8");
+        }
+      } catch {}
     }
   } catch {
     // Write fallback
