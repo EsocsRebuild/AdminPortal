@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export function Crest({
   size = 40,
   className,
-  priority = false,
+  priority = true,
 }: {
   size?: number;
   className?: string;
@@ -20,6 +20,7 @@ export function Crest({
       width={size}
       height={size}
       priority={priority}
+      loading="eager"
       className={cn(
         "shrink-0 rounded-full object-contain ring-2 ring-amber-400/70 drop-shadow-md",
         className,
@@ -55,7 +56,7 @@ export function Logo({
         className,
       )}
     >
-      <Crest size={crestSize} className="shadow-md ring-2 shadow-amber-950/30 ring-amber-400/80" />
+      <Crest size={crestSize} priority className="shadow-md ring-2 shadow-amber-950/30 ring-amber-400/80" />
       <span className={cn("grid min-w-0 leading-tight", collapsible && "lg:rail:hidden")}>
         <span
           className={cn(
