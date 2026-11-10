@@ -22,6 +22,10 @@ function loadDb(): MediaAsset[] {
 function saveDb(assets: MediaAsset[]): void {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(assets, null, 2), "utf-8");
+    const syncDir = path.resolve(process.cwd(), "../web/src/data/sync");
+    if (fs.existsSync(syncDir)) {
+      fs.writeFileSync(path.join(syncDir, "media-db.json"), JSON.stringify(assets, null, 2), "utf-8");
+    }
   } catch {
     // Write fallback
   }

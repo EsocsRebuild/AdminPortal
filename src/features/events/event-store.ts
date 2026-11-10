@@ -26,6 +26,10 @@ function loadEventsFromDisk(): WebEvent[] {
 function saveEventsToDisk(events: WebEvent[]): void {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(events, null, 2), "utf-8");
+    const syncDir = path.resolve(process.cwd(), "../web/src/data/sync");
+    if (fs.existsSync(syncDir)) {
+      fs.writeFileSync(path.join(syncDir, "events-db.json"), JSON.stringify(events, null, 2), "utf-8");
+    }
   } catch {
     // Write fallback
   }

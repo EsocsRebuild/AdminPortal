@@ -22,6 +22,10 @@ function loadDb(): WebProgramme[] {
 function saveDb(programmes: WebProgramme[]): void {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(programmes, null, 2), "utf-8");
+    const syncDir = path.resolve(process.cwd(), "../web/src/data/sync");
+    if (fs.existsSync(syncDir)) {
+      fs.writeFileSync(path.join(syncDir, "programmes-db.json"), JSON.stringify(programmes, null, 2), "utf-8");
+    }
   } catch {
     // Write fallback
   }

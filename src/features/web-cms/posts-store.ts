@@ -22,6 +22,10 @@ function loadDb(): WebBulletin[] {
 function saveDb(posts: WebBulletin[]): void {
   try {
     fs.writeFileSync(DB_PATH, JSON.stringify(posts, null, 2), "utf-8");
+    const syncDir = path.resolve(process.cwd(), "../web/src/data/sync");
+    if (fs.existsSync(syncDir)) {
+      fs.writeFileSync(path.join(syncDir, "posts-db.json"), JSON.stringify(posts, null, 2), "utf-8");
+    }
   } catch {
     // Write fallback
   }
