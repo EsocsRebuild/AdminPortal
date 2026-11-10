@@ -9,6 +9,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/auth/password-input";
 import { signIn } from "@/features/auth/actions";
 import { fieldError, type ActionResult } from "@/lib/result";
 
@@ -84,16 +85,16 @@ export function WebAdminLoginForm() {
             Forgot it?
           </Link>
         </div>
-        <Input
+        <PasswordInput
           id="web-pass"
           name="password"
-          type="password"
           value={form.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setForm({ ...form, password: e.target.value })
           }
           placeholder="••••••••••••"
           required
+          autoComplete="current-password"
           className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
         />
         {fieldError(result, "password") && (

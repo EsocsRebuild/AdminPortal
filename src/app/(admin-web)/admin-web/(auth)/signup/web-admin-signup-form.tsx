@@ -7,6 +7,7 @@ import * as React from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/auth/password-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { registerWebAdmin } from "@/features/auth/actions";
 import type { PublicParish, PublicRole } from "@/features/auth/types";
@@ -186,14 +187,14 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
             <Lock className="size-3.5 text-amber-400" />
             Password
           </label>
-          <Input
+          <PasswordInput
             id="admin-pass"
             name="password"
-            type="password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             placeholder="••••••••••••"
             required
+            autoComplete="new-password"
             className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>
@@ -205,14 +206,14 @@ export function WebAdminSignupForm({ parishes, roles }: WebAdminSignupFormProps)
           >
             Confirm Password
           </label>
-          <Input
+          <PasswordInput
             id="admin-confirm-pass"
             name="confirmPassword"
-            type="password"
             value={form.confirmPassword}
             onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
             placeholder="••••••••••••"
             required
+            autoComplete="new-password"
             className="border-slate-700 bg-slate-900 font-medium text-white placeholder:text-slate-400 focus-visible:ring-amber-400"
           />
         </div>

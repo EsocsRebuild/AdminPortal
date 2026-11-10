@@ -27,37 +27,42 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 }
 
 // 16px on phones so iOS Safari does not zoom on focus; 14px from `sm`.
-export function Input({ className, size = "md", prefix, suffix, type = "text", ...props }: InputProps) {
-  const input = (
-    <input
-      type={type}
-      className={cn(
-        fieldBase,
-        sizes[size],
-        "px-3 max-sm:text-[16px]",
-        prefix && "pl-10",
-        suffix && "pr-10",
-        "file:mr-3 file:h-full file:border-0 file:bg-transparent file:text-sm file:font-medium",
-        "[&::-webkit-search-cancel-button]:hidden",
-        className,
-      )}
-      {...props}
-    />
-  );
-  if (!prefix && !suffix) return input;
-  return (
-    <div className="relative w-full">
-      {prefix && (
-        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-amber-500 dark:text-amber-400 [&_svg]:size-4">
-          {prefix}
-        </span>
-      )}
-      {input}
-      {suffix && (
-        <span className="absolute inset-y-0 right-2 flex items-center text-slate-500 dark:text-slate-400 [&_svg]:size-4">
-          {suffix}
-        </span>
-      )}
-    </div>
-  );
-}
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, size = "md", prefix, suffix, type = "text", ...props }, ref) => {
+    const input = (
+      <input
+        ref={ref}
+        type={type}
+        className={cn(
+          fieldBase,
+          sizes[size],
+          "px-3 max-sm:text-[16px]",
+          prefix && "pl-10",
+          suffix && "pr-10",
+          "file:mr-3 file:h-full file:border-0 file:bg-transparent file:text-sm file:font-medium",
+          "[&::-webkit-search-cancel-button]:hidden",
+          className,
+        )}
+        {...props}
+      />
+    );
+    if (!prefix && !suffix) return input;
+    return (
+      <div className="relative w-full">
+        {prefix && (
+          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-amber-500 dark:text-amber-400 [&_svg]:size-4">
+            {prefix}
+          </span>
+        )}
+        {input}
+        {suffix && (
+          <span className="absolute inset-y-0 right-2 flex items-center text-slate-500 dark:text-slate-400 [&_svg]:size-4">
+            {suffix}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
+
+Input.displayName = "Input";
