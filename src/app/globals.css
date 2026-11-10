@@ -636,10 +636,16 @@
   }
 
   html {
-    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     scroll-padding-top: calc(var(--spacing-topbar) + 1rem);
     font-feature-settings: "cv11", "ss01";
+  }
+
+  @supports (-webkit-text-size-adjust: 100%) {
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
   }
 
   body {
@@ -661,8 +667,10 @@
     text-wrap: balance;
   }
 
-  p {
-    text-wrap: pretty;
+  @supports (text-wrap: pretty) {
+    p {
+      text-wrap: pretty;
+    }
   }
 
   ::selection {

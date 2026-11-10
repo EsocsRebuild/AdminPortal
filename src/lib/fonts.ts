@@ -4,12 +4,14 @@ export const fontSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: true,
 });
 
 export const fontDisplay = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap",
+  preload: false,
 });
 
 /** Executive ecclesiastical font matching Ordination Portal (Raleway). */
@@ -17,12 +19,14 @@ export const fontBrand = Raleway({
   subsets: ["latin"],
   variable: "--font-brand",
   display: "swap",
+  preload: false,
 });
 
 export const fontMono = Roboto_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
+  preload: false,
 });
 
 export const fontVariables = `${fontSans.variable} ${fontDisplay.variable} ${fontBrand.variable} ${fontMono.variable}`;
