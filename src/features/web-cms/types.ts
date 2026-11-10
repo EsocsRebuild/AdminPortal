@@ -52,6 +52,8 @@ export interface MediaAsset {
 
 export interface WebBulletin {
   id: string;
+  unitId?: string;
+  unitName?: string;
   title: string;
   summary: string;
   category: string;

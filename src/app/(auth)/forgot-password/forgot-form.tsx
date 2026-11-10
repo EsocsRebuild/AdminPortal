@@ -62,9 +62,8 @@ export function ForgotForm() {
               title="Check your inbox"
               description={
                 <>
-                  If an account exists for{" "}
-                  <span className="font-bold break-all text-amber-300">{email}</span>, you’ll get a link to
-                  choose a new password. It works for 30 minutes.
+                  If an account exists for <span className="font-bold break-all text-amber-300">{email}</span>
+                  , you’ll get a link to choose a new password. It works for 30 minutes.
                 </>
               }
             />
