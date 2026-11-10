@@ -7,28 +7,34 @@ const toDate = (d: DateInput) => (d instanceof Date ? d : new Date(d));
 
 /** e.g. "5 Oct 2026" */
 export function formatDate(date: DateInput, options?: Intl.DateTimeFormatOptions) {
+  const d = toDate(date);
+  if (isNaN(d.getTime())) return typeof date === "string" ? date : "";
   return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
     timeZone,
     ...options,
-  }).format(toDate(date));
+  }).format(d);
 }
 
 /** e.g. "5 Oct 2026, 9:30 am" */
 export function formatDateTime(date: DateInput) {
-  return formatDate(date, { hour: "numeric", minute: "2-digit", hour12: true });
+  const d = toDate(date);
+  if (isNaN(d.getTime())) return typeof date === "string" ? date : "";
+  return formatDate(d, { hour: "numeric", minute: "2-digit", hour12: true });
 }
 
 /** e.g. "9:30 am" */
 export function formatTime(date: DateInput) {
+  const d = toDate(date);
+  if (isNaN(d.getTime())) return "";
   return new Intl.DateTimeFormat(locale, {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
     timeZone,
-  }).format(toDate(date));
+  }).format(d);
 }
 
 /** e.g. "in 3 days", "2 hours ago", "just now" */

@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { formatDate } from "@/lib/format";
 import { getBranchEvents } from "@/features/web-cms/queries";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
@@ -219,7 +220,7 @@ export default async function WebStudioDashboardPage() {
                     <div className="flex items-center gap-3 text-2xs text-muted-foreground">
                       <span>Venue: {evt.venue}</span>
                       <span>•</span>
-                      <span>Submitted: {new Date(evt.submittedAt).toLocaleDateString()}</span>
+                      <span suppressHydrationWarning>Submitted: {formatDate(evt.submittedAt)}</span>
                     </div>
                   </div>
 

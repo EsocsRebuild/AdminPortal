@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { vetContentAction, deleteEventAction } from "@/features/web-cms/actions";
 import { useModals } from "@/components/modals/modal-provider";
+import { formatDate, formatTime } from "@/lib/format";
 import type { WebEvent } from "@/features/web-cms/types";
 
 interface StudioEventsRosterProps {
@@ -184,17 +185,16 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
         <div className="space-y-3">
           {filteredEvents.map((evt) => {
             const dateObj = new Date(evt.startDate);
-            const formattedDate = isNaN(dateObj.getTime())
-              ? evt.startDate
-              : dateObj.toLocaleDateString("en-GB", {
+            const isValid = !isNaN(dateObj.getTime());
+            const formattedDate = isValid
+              ? formatDate(dateObj, {
                   weekday: "short",
                   day: "numeric",
                   month: "short",
                   year: "numeric",
-                });
-            const formattedTime = isNaN(dateObj.getTime())
-              ? ""
-              : dateObj.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+                })
+              : evt.startDate;
+            const formattedTime = isValid ? formatTime(dateObj) : "";
 
             return (
               <Card
@@ -225,7 +225,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Clock className="size-3 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                        <span className="text-foreground">
+                        <span className="text-foreground" suppressHydrationWarning>
                           {formattedDate} {formattedTime && `• ${formattedTime}`}
                         </span>
                       </div>

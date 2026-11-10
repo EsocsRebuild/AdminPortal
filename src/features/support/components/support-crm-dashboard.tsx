@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formatDate } from "@/lib/format";
 import { replySupportTicketAction, updateTicketStatusAction } from "../actions";
 import type { SupportTicket, SupportKpis, TicketCategory, TicketStatus } from "../types";
 
@@ -306,7 +307,9 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
                         <User className="size-3 shrink-0 text-primary" />
                         <span className="truncate">{t.complainantName}</span>
                       </div>
-                      <span className="text-3xs">{new Date(t.createdAt).toLocaleDateString()}</span>
+                      <span className="text-3xs" suppressHydrationWarning>
+                        {formatDate(t.createdAt)}
+                      </span>
                     </div>
 
                     {t.candidateReferenceId && (

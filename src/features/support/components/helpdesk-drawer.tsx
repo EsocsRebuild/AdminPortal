@@ -26,6 +26,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useMediaQuery, breakpoints } from "@/hooks/use-media-query";
+import { formatDate, formatTime } from "@/lib/format";
 import { lodgeSupportTicketAction, replySupportTicketAction } from "../actions";
 import type { SupportTicket, TicketCategory, TicketPriority } from "../types";
 
@@ -511,7 +512,9 @@ export function HelpdeskDrawer({
                     </div>
 
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <span className="text-xs">{new Date(t.createdAt).toLocaleDateString()}</span>
+                      <span className="text-xs" suppressHydrationWarning>
+                        {formatDate(t.createdAt)}
+                      </span>
                       <ChevronRight className="size-4" />
                     </div>
                   </div>
@@ -565,8 +568,8 @@ export function HelpdeskDrawer({
                       <span className="font-semibold text-foreground">
                         {m.senderName} ({m.senderRole})
                       </span>
-                      <span className="text-muted-foreground">
-                        {new Date(m.sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      <span className="text-muted-foreground" suppressHydrationWarning>
+                        {formatTime(m.sentAt)}
                       </span>
                     </div>
                     <p className="mt-2 text-xs leading-relaxed">{m.message}</p>

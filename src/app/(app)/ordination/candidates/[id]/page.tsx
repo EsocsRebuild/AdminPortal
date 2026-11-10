@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ShieldCheck, CheckCircle2, Clock, User, BadgeCheck } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { formatDate } from "@/lib/format";
 import { getCandidateDocket } from "@/features/ordination/queries";
 import { CandidateStageBar } from "@/features/ordination/components/candidate-stage-bar";
 import {
@@ -97,8 +98,8 @@ export default async function CandidateDocketPage({ params }: { params: Promise<
                 <span className="rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary">
                   {candidate.yearsOfService} Years Active Service
                 </span>
-                <span className="text-2xs text-muted-foreground">
-                  Nominated on {new Date(candidate.nominatedAt).toLocaleDateString()}
+                <span className="text-2xs text-muted-foreground" suppressHydrationWarning>
+                  Nominated on {formatDate(candidate.nominatedAt)}
                 </span>
               </div>
             </div>

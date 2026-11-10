@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatDate, formatTime } from "@/lib/format";
 import type { FeedItem } from "../types";
 
 interface EcclesiasticalFeedProps {
@@ -249,12 +250,8 @@ export function EcclesiasticalFeed({
                           {item.provinceName}
                         </span>
                       </div>
-                      <p className="text-2xs text-muted-foreground">
-                        {item.unitName} • {new Date(item.timestamp).toLocaleDateString()} at{" "}
-                        {new Date(item.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                      <p className="text-2xs text-muted-foreground" suppressHydrationWarning>
+                        {item.unitName} • {formatDate(item.timestamp)} at {formatTime(item.timestamp)}
                       </p>
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import "server-only";
 
 import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
+import { formatTime } from "@/lib/format";
 import { getLocalEvents } from "./event-store";
 
 export interface ChurchEvent {
@@ -42,10 +43,7 @@ export async function listEvents(): Promise<ChurchEvent[]> {
       backendMapped = items.map((evt) => {
         const startsAt = new Date(evt.startsAt);
         const dateStr = startsAt.toISOString().split("T")[0];
-        const timeStr = startsAt.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+        const timeStr = formatTime(startsAt);
 
         const typeLower = evt.type ? evt.type.toLowerCase() : "";
         const category = (
@@ -90,7 +88,7 @@ export async function listEvents(): Promise<ChurchEvent[]> {
         title: e.title,
         category: cat,
         date: startsAt.toISOString().split("T")[0],
-        time: startsAt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+        time: formatTime(startsAt),
         location: e.venue,
         unitName: e.unitName,
         capacity: e.ticketCapacity,
@@ -129,7 +127,7 @@ export async function listEvents(): Promise<ChurchEvent[]> {
       title: e.title,
       category: cat,
       date: startsAt.toISOString().split("T")[0],
-      time: startsAt.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+      time: formatTime(startsAt),
       location: e.venue,
       unitName: e.unitName,
       capacity: e.ticketCapacity,

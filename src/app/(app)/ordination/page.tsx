@@ -23,6 +23,7 @@ import { getOrdinationCandidates, type CandidateSortOption } from "@/features/or
 import { CandidateStageBar } from "@/features/ordination/components/candidate-stage-bar";
 import { NominateCandidateModal } from "@/features/ordination/components/nominate-candidate-modal";
 import { OrdinationFilters } from "@/features/ordination/components/ordination-filters";
+import { formatDate } from "@/lib/format";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 
@@ -337,7 +338,7 @@ export default async function OrdinationOverviewPage({ searchParams }: Ordinatio
                                 </>
                               )}
                               <span>•</span>
-                              <span>Nominated on: {new Date(c.nominatedAt).toLocaleDateString()}</span>
+                              <span suppressHydrationWarning>Nominated on: {formatDate(c.nominatedAt)}</span>
                               {c.email && (
                                 <>
                                   <span>•</span>
