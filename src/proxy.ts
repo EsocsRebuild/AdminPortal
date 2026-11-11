@@ -18,7 +18,7 @@ function contentSecurityPolicy(nonce: string, embeddable: boolean, https: boolea
     .filter((o) => /^https:\/\/[a-z0-9.-]+(:\d+)?$/i.test(o));
   return [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}`,
+    `script-src 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ""}`,
     // Radix, Sonner and Motion inject styles at runtime; scripts stay strict.
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: https:`,

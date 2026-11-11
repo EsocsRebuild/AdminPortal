@@ -14,7 +14,7 @@
     "provinceName": "Lagos Central Province",
     "candidateReferenceId": "ESOCS/ORD/2026/6416",
     "createdAt": "2026-10-26T08:30:00.000Z",
-    "updatedAt": "2026-11-09T04:58:06.655Z",
+    "updatedAt": "2026-11-10T19:23:33.090Z",
     "assignedOfficerName": "Elder Emmanuel Adeyemi (General Secretariat)",
     "resolutionSummary": "Under active examination by Secretary General",
     "messages": [
@@ -65,6 +65,110 @@
         "isStaff": true,
         "message": "Your inquiry is being evaluated by the Synod Council.",
         "sentAt": "2026-11-09T04:58:06.651Z"
+      },
+      {
+        "id": "test_msg_1794200436984",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-09T05:00:36.984Z"
+      },
+      {
+        "id": "test_msg_1794273860024",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:24:20.024Z"
+      },
+      {
+        "id": "test_msg_1794274357948",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:32:37.948Z"
+      },
+      {
+        "id": "test_msg_1794274903566",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:41:43.566Z"
+      },
+      {
+        "id": "test_msg_1794274950260",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:42:30.260Z"
+      },
+      {
+        "id": "test_msg_1794275421262",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:50:21.262Z"
+      },
+      {
+        "id": "test_msg_1794275843530",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:57:23.530Z"
+      },
+      {
+        "id": "test_msg_1794275930427",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T01:58:50.427Z"
+      },
+      {
+        "id": "test_msg_1794276280677",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T02:04:40.677Z"
+      },
+      {
+        "id": "test_msg_1794276648261",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T02:10:48.261Z"
+      },
+      {
+        "id": "test_msg_1794284544378",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T04:22:24.378Z"
+      },
+      {
+        "id": "test_msg_1794284756144",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T04:25:56.144Z"
+      },
+      {
+        "id": "test_msg_1794338613089",
+        "senderName": "Pastor Test",
+        "senderRole": "Secretariat Desk",
+        "isStaff": true,
+        "message": "Your inquiry is being evaluated by the Synod Council.",
+        "sentAt": "2026-11-10T19:23:33.089Z"
       }
     ]
   },

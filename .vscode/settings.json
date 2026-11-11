@@ -1,7 +1,10 @@
 {
-  "files.associations": { "*.css": "tailwindcss" },
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
   "css.lint.unknownAtRules": "ignore",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "tailwindCSS.classFunctions": ["cva", "cn"]
+  "tailwindCSS.classFunctions": ["cva", "cn"],
+  "tailwindCSS.experimental.configFile": "src/app/globals.css"
 }

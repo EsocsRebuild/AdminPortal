@@ -17,6 +17,8 @@ services:
     volumes:
       # Live bind mount for source code (immediate sync across host boundary)
       - .:/app
+      # Real-time bridge into public web sync directory
+      - ../web/src/data/sync:/app/web-sync
       # Preserve container-built Linux node_modules and .next cache
       - admin_dev_node_modules:/app/node_modules
       - admin_dev_next_cache:/app/.next

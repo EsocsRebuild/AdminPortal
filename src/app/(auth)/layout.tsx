@@ -29,7 +29,7 @@ const benefits = [
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
-    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+    <div className="dark grid min-h-dvh bg-slate-950 font-sans text-slate-100 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
       <main
         id="main"
         className="relative flex flex-col overflow-hidden bg-slate-950 px-gutter py-6 text-slate-100 sm:py-8"

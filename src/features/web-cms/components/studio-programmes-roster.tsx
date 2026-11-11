@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useModals } from "@/components/modals/modal-provider";
+import { formatDate } from "@/lib/format";
 import { deleteProgrammeAction } from "../actions";
 import type { WebProgramme } from "../types";
 
@@ -66,14 +67,15 @@ export function StudioProgrammesRoster({ initialProgrammes, unitName }: StudioPr
         <div className="space-y-3">
           {programmes.map((prog) => {
             const dateObj = new Date(prog.scheduleDate);
-            const dateStr = isNaN(dateObj.getTime())
-              ? prog.scheduleDate
-              : dateObj.toLocaleDateString("en-GB", {
+            const isValid = !isNaN(dateObj.getTime());
+            const dateStr = isValid
+              ? formatDate(dateObj, {
                   weekday: "short",
                   day: "numeric",
                   month: "short",
                   year: "numeric",
-                });
+                })
+              : prog.scheduleDate;
 
             return (
               <Card
@@ -84,7 +86,10 @@ export function StudioProgrammesRoster({ initialProgrammes, unitName }: StudioPr
                   <div className="max-w-xl space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-sm font-bold text-foreground">{prog.title}</span>
-                      <span className="text-3xs rounded-full bg-teal-500/10 px-2 py-0.5 font-semibold text-teal-600 dark:text-teal-400">
+                      <span
+                        className="text-3xs rounded-full bg-teal-500/10 px-2 py-0.5 font-semibold text-teal-600 dark:text-teal-400"
+                        suppressHydrationWarning
+                      >
                         {dateStr}
                       </span>
                     </div>
