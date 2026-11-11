@@ -5,6 +5,7 @@ import { resolveUserUnit } from "@/server/units";
 import { getLocalEvents } from "@/features/events/event-store";
 import { getLocalProgrammes } from "./programmes-store";
 import { getLocalMediaAssets } from "./media-store";
+import { getLocalPosts } from "./posts-store";
 import type { WebEvent, WebProgramme, WebBulletin, MediaAsset, VettingSummary, EventCategory } from "./types";
 
 interface BackendEventResponse {
@@ -244,14 +245,33 @@ export async function getMediaAssets(): Promise<MediaAsset[]> {
 }
 
 export async function getPublishedBulletins(): Promise<WebBulletin[]> {
+  const localList = getLocalPosts();
   try {
-    const data = await backend<{ items?: WebBulletin[] } | WebBulletin[]>("/content/bulletins");
+    const data = await backend<{ items?: Array<{ id: string; title: string; slug: string; excerpt?: string; coverImageUrl?: string; category?: string; publishedAt?: string; authorName?: string }> } | Array<{ id: string; title: string; slug: string; excerpt?: string; coverImageUrl?: string; category?: string; publishedAt?: string; authorName?: string }>>("/content/posts");
     const items = Array.isArray(data) ? data : data?.items || [];
     if (Array.isArray(items) && items.length > 0) {
-      return items;
+      const backendBulletins: WebBulletin[] = items.map((p) => ({
+        id: p.id,
+        unitId: "esocs",
+        unitName: "General Headquarters",
+        title: p.title,
+        summary: p.excerpt || p.title,
+        category: p.category || "GENERAL",
+        imageUrl: p.coverImageUrl || undefined,
+        publishedAt: p.publishedAt || new Date().toISOString(),
+        submittedAt: p.publishedAt || new Date().toISOString(),
+        submittedByHandlerId: p.authorName || "system",
+      }));
+      const seenIds = new Set(backendBulletins.map((b) => b.id));
+      for (const loc of localList) {
+        if (!seenIds.has(loc.id)) {
+          backendBulletins.unshift(loc);
+        }
+      }
+      return backendBulletins;
     }
   } catch {
     // Fallback
   }
-  return [];
+  return localList;
 }

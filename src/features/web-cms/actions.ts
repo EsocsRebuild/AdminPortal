@@ -8,7 +8,7 @@ import { resolveUserUnit } from "@/server/units";
 import { addLocalEvent, updateLocalEventStatus, deleteLocalEvent } from "@/features/events/event-store";
 import { addLocalProgramme, deleteLocalProgramme } from "./programmes-store";
 import { addLocalMediaAsset, deleteLocalMediaAsset } from "./media-store";
-import { addLocalPost } from "./posts-store";
+import { addLocalPost, deleteLocalPost } from "./posts-store";
 import {
   eventInputSchema,
   programmeInputSchema,
@@ -72,7 +72,14 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
       method: "POST",
       body: payload,
     });
-    if (res?.id) generatedId = res.id;
+    if (res?.id) {
+      generatedId = res.id;
+      if (check.data.publishDirectly !== false) {
+        try {
+          await backend(`/events/${res.id}/publish`, { method: "POST" });
+        } catch {}
+      }
+    }
   } catch {
     // If backend controller is in development, local store guarantees event persistence
   }
@@ -147,7 +154,12 @@ export async function submitProgrammeAction(input: ProgrammeInput): Promise<Acti
       method: "POST",
       body: payload,
     });
-    if (res?.id) generatedId = res.id;
+    if (res?.id) {
+      generatedId = res.id;
+      try {
+        await backend(`/events/${res.id}/publish`, { method: "POST" });
+      } catch {}
+    }
   } catch {
     // Local store guarantees persistence
   }
@@ -183,6 +195,11 @@ export async function deleteProgrammeAction(input: {
     return fail("VALIDATION", "Programme ID is required");
   }
   deleteLocalProgramme(input.id);
+  try {
+    await backend(`/events/${input.id}`, { method: "DELETE" });
+  } catch {
+    // API bridge sync
+  }
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/programmes");
   return ok({ success: true }, "Programme removed successfully");
@@ -200,9 +217,15 @@ export async function vetContentAction(
   updateLocalEventStatus(check.data.contentId, newStatus, check.data.reviewNotes);
 
   try {
-    await backend(`/events/${check.data.contentId}/publish`, {
-      method: "POST",
-    });
+    if (check.data.action === "APPROVE") {
+      await backend(`/events/${check.data.contentId}/publish`, {
+        method: "POST",
+      });
+    } else {
+      await backend(`/events/${check.data.contentId}/cancel`, {
+        method: "POST",
+      });
+    }
   } catch {
     // API bridge sync
   }
@@ -244,35 +267,31 @@ export async function submitBulletinAction(
   const user = await requireSession();
   const unitInfo = await resolveUserUnit(user.scopeUnitId);
 
-  const payload = {
+  const slug = `${check.data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${Date.now().toString(36)}`;
+  const backendPayload = {
     title: check.data.title,
-    kind: check.data.isUrgent ? "message" : "news",
-    unitSlug: unitInfo.unitId || "esocs",
-    tags: [check.data.category.toLowerCase().replace(/\s+/g, "-")],
+    slug,
+    excerpt: check.data.summary,
     body: [check.data.summary],
-    date: new Date().toISOString().slice(0, 10),
-    images: check.data.imageUrl
-      ? [
-          {
-            url: check.data.imageUrl,
-            width: 1200,
-            height: 675,
-            alt: check.data.title,
-          },
-        ]
-      : [],
-    ctaText: check.data.ctaText,
-    ctaLink: check.data.ctaLink,
-    isUrgent: check.data.isUrgent,
+    coverImageUrl: check.data.imageUrl || null,
+    authorName: user.name || "Media Officer",
+    category: check.data.category.toLowerCase().replace(/\s+/g, "-"),
+    tags: [unitInfo.unitId || "esocs", check.data.category.toLowerCase().replace(/\s+/g, "-")],
+    isFeatured: Boolean(check.data.isUrgent),
   };
 
   let generatedId = `bulletin_${Date.now()}`;
   try {
     const res = await backend<{ id: string }>("/content/posts", {
       method: "POST",
-      body: payload,
+      body: backendPayload,
     });
-    if (res?.id) generatedId = res.id;
+    if (res?.id) {
+      generatedId = res.id;
+      try {
+        await backend(`/content/posts/${res.id}/publish`, { method: "POST" });
+      } catch {}
+    }
   } catch {
     // Local persistence guarantees spotlight bulletin broadcast
   }
@@ -307,6 +326,23 @@ export async function submitBulletinAction(
   );
 }
 
+export async function deleteBulletinAction(input: {
+  id: string;
+}): Promise<ActionResult<{ success: boolean }>> {
+  if (!input.id) {
+    return fail("VALIDATION", "Bulletin ID is required");
+  }
+  deleteLocalPost(input.id);
+  try {
+    await backend(`/content/posts/${input.id}`, { method: "DELETE" });
+  } catch {
+    // API bridge sync
+  }
+  revalidatePath("/admin-web/dashboard");
+  revalidatePath("/admin-web/events");
+  return ok({ success: true }, "Bulletin removed successfully");
+}
+
 export async function uploadMediaAssetAction(input: {
   fileName: string;
   cdnUrl: string;
@@ -336,6 +372,11 @@ export async function deleteMediaAssetAction(input: {
 }): Promise<ActionResult<{ success: boolean }>> {
   if (!input.id) return fail("VALIDATION", "Asset ID required");
   deleteLocalMediaAsset(input.id);
+  try {
+    await backend(`/content/media/${input.id}`, { method: "DELETE" });
+  } catch {
+    // API bridge sync
+  }
   revalidatePath("/admin-web/media");
   return ok({ success: true }, "Media asset deleted successfully");
 }
