@@ -32,7 +32,11 @@ function saveDb(programmes: WebProgramme[]): void {
       for (const dir of candidateSyncDirs) {
         try {
           if (fs.existsSync(/*turbopackIgnore: true*/ dir)) {
-            fs.writeFileSync(path.join(dir, "programmes-db.json"), JSON.stringify(programmes, null, 2), "utf-8");
+            fs.writeFileSync(
+              path.join(dir, "programmes-db.json"),
+              JSON.stringify(programmes, null, 2),
+              "utf-8",
+            );
           }
         } catch {}
       }
