@@ -7,8 +7,10 @@ import { Page, PageHeader } from "@/components/layout/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { forbidden } from "next/navigation";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { can } from "@/lib/permissions";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 import { listSections } from "@/features/sections/queries";
@@ -20,6 +22,9 @@ export const revalidate = 0;
 
 export default async function SectionsPage() {
   const session = await requireSession();
+  if (!can(session, "groups:view") && !can(session, "members:view")) {
+    forbidden();
+  }
   const userUnit = await resolveUserUnit(session.scopeUnitId);
   const isSuperAdmin = !session.scopeUnitId || userUnit.isGlobal;
   const sections = await listSections({

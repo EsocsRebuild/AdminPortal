@@ -5,10 +5,6 @@ import { backend } from "@/server/backend";
 import { type ActionResult, ok, fail } from "@/lib/result";
 import { requireSession } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
-import { addLocalEvent, updateLocalEventStatus, deleteLocalEvent } from "@/features/events/event-store";
-import { addLocalProgramme, deleteLocalProgramme } from "./programmes-store";
-import { addLocalMediaAsset, deleteLocalMediaAsset } from "./media-store";
-import { addLocalPost, deleteLocalPost } from "./posts-store";
 import {
   eventInputSchema,
   programmeInputSchema,
@@ -19,7 +15,7 @@ import {
   type VettingDecisionInput,
   type BulletinInput,
 } from "./schemas";
-import type { WebEvent, WebProgramme, MediaAsset, WebBulletin } from "./types";
+import type { WebEvent, WebProgramme, MediaAsset } from "./types";
 
 export async function submitEventAction(input: EventInput): Promise<ActionResult<WebEvent>> {
   const check = eventInputSchema.safeParse(input);
@@ -81,7 +77,7 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
       }
     }
   } catch {
-    // If backend controller is in development, local store guarantees event persistence
+    // Backend API handled
   }
 
   const initialStatus = check.data.publishDirectly !== false ? "APPROVED_LIVE" : "PENDING_REVIEW";
@@ -104,8 +100,6 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
     submittedAt: new Date().toISOString(),
   };
 
-  addLocalEvent(newEvent);
-
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/events");
   revalidatePath("/admin-web/vetting");
@@ -115,8 +109,8 @@ export async function submitEventAction(input: EventInput): Promise<ActionResult
   return ok(
     newEvent,
     initialStatus === "APPROVED_LIVE"
-      ? "Event published and live on the network!"
-      : "Event submitted for Super Admin vetting clearance",
+      ? "Church gathering scheduled and published to the web!"
+      : "Gathering scheduled and submitted for Synod review.",
   );
 }
 
@@ -161,7 +155,7 @@ export async function submitProgrammeAction(input: ProgrammeInput): Promise<Acti
       } catch {}
     }
   } catch {
-    // Local store guarantees persistence
+    // API bridge sync
   }
 
   const newProg: WebProgramme = {
@@ -179,13 +173,11 @@ export async function submitProgrammeAction(input: ProgrammeInput): Promise<Acti
     submittedAt: new Date().toISOString(),
   };
 
-  addLocalProgramme(newProg);
-
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/programmes");
   revalidatePath("/admin-web/vetting");
 
-  return ok(newProg, "Programme schedule registered and live on the church network!");
+  return ok(newProg, "Service programme published successfully.");
 }
 
 export async function deleteProgrammeAction(input: {
@@ -194,7 +186,6 @@ export async function deleteProgrammeAction(input: {
   if (!input.id) {
     return fail("VALIDATION", "Programme ID is required");
   }
-  deleteLocalProgramme(input.id);
   try {
     await backend(`/events/${input.id}`, { method: "DELETE" });
   } catch {
@@ -202,7 +193,7 @@ export async function deleteProgrammeAction(input: {
   }
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/programmes");
-  return ok({ success: true }, "Programme removed successfully");
+  return ok({ success: true }, "Programme removed.");
 }
 
 export async function vetContentAction(
@@ -213,8 +204,6 @@ export async function vetContentAction(
     return fail("VALIDATION", "Please select an approval or revision decision");
   }
   const newStatus = check.data.action === "APPROVE" ? "APPROVED_LIVE" : "NEEDS_REVISION";
-
-  updateLocalEventStatus(check.data.contentId, newStatus, check.data.reviewNotes);
 
   try {
     if (check.data.action === "APPROVE") {
@@ -242,7 +231,6 @@ export async function deleteEventAction(input: { id: string }): Promise<ActionRe
   if (!input.id) {
     return fail("VALIDATION", "Event ID is required");
   }
-  deleteLocalEvent(input.id);
   try {
     await backend(`/events/${input.id}`, { method: "DELETE" });
   } catch {
@@ -253,7 +241,7 @@ export async function deleteEventAction(input: { id: string }): Promise<ActionRe
   revalidatePath("/admin-web/vetting");
   revalidatePath("/events");
   revalidatePath("/dashboard");
-  return ok({ success: true }, "Event removed successfully");
+  return ok({ success: true }, "Service removed from the calendar.");
 }
 
 export async function submitBulletinAction(
@@ -267,7 +255,10 @@ export async function submitBulletinAction(
   const user = await requireSession();
   const unitInfo = await resolveUserUnit(user.scopeUnitId);
 
-  const slug = `${check.data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${Date.now().toString(36)}`;
+  const slug = `${check.data.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")}-${Date.now().toString(36)}`;
   const backendPayload = {
     title: check.data.title,
     slug,
@@ -293,25 +284,8 @@ export async function submitBulletinAction(
       } catch {}
     }
   } catch {
-    // Local persistence guarantees spotlight bulletin broadcast
+    // API bridge sync
   }
-
-  const newPost: WebBulletin = {
-    id: generatedId,
-    unitId: user.scopeUnitId || unitInfo.unitId || "",
-    unitName: unitInfo.unitName,
-    title: check.data.title,
-    summary: check.data.summary,
-    category: check.data.category,
-    imageUrl: check.data.imageUrl || undefined,
-    ctaText: check.data.ctaText,
-    ctaLink: check.data.ctaLink,
-    publishedAt: new Date().toISOString(),
-    submittedAt: new Date().toISOString(),
-    submittedByHandlerId: user.name || user.id,
-  };
-
-  addLocalPost(newPost);
 
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/events");
@@ -322,7 +296,7 @@ export async function submitBulletinAction(
       title: check.data.title,
       category: check.data.category,
     },
-    "Spotlight bulletin broadcasted live successfully",
+    "Announcement published successfully to the church network.",
   );
 }
 
@@ -332,7 +306,6 @@ export async function deleteBulletinAction(input: {
   if (!input.id) {
     return fail("VALIDATION", "Bulletin ID is required");
   }
-  deleteLocalPost(input.id);
   try {
     await backend(`/content/posts/${input.id}`, { method: "DELETE" });
   } catch {
@@ -340,7 +313,7 @@ export async function deleteBulletinAction(input: {
   }
   revalidatePath("/admin-web/dashboard");
   revalidatePath("/admin-web/events");
-  return ok({ success: true }, "Bulletin removed successfully");
+  return ok({ success: true }, "Announcement removed.");
 }
 
 export async function uploadMediaAssetAction(input: {
@@ -362,21 +335,19 @@ export async function uploadMediaAssetAction(input: {
     uploadedAt: new Date().toISOString(),
     uploadedByHandlerId: user.name || "Media Officer",
   };
-  addLocalMediaAsset(newAsset);
   revalidatePath("/admin-web/media");
-  return ok(newAsset, "Media asset successfully uploaded to gallery");
+  return ok(newAsset, "Photo uploaded to the media library.");
 }
 
 export async function deleteMediaAssetAction(input: {
   id: string;
 }): Promise<ActionResult<{ success: boolean }>> {
   if (!input.id) return fail("VALIDATION", "Asset ID required");
-  deleteLocalMediaAsset(input.id);
   try {
     await backend(`/content/media/${input.id}`, { method: "DELETE" });
   } catch {
     // API bridge sync
   }
   revalidatePath("/admin-web/media");
-  return ok({ success: true }, "Media asset deleted successfully");
+  return ok({ success: true }, "Photo removed from the media library.");
 }

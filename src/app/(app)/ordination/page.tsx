@@ -24,7 +24,7 @@ import { CandidateStageBar } from "@/features/ordination/components/candidate-st
 import { NominateCandidateModal } from "@/features/ordination/components/nominate-candidate-modal";
 import { OrdinationFilters } from "@/features/ordination/components/ordination-filters";
 import { formatDate } from "@/lib/format";
-import { requireSession } from "@/server/session";
+import { requirePermission } from "@/server/session";
 import { resolveUserUnit } from "@/server/units";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ interface OrdinationPageProps {
 }
 
 export default async function OrdinationOverviewPage({ searchParams }: OrdinationPageProps) {
-  const session = await requireSession();
+  const session = await requirePermission("pastoral:view");
   const userUnit = await resolveUserUnit(session.scopeUnitId);
   const isGlobalAdmin = Boolean(userUnit.isGlobal || session.isPlatformAdmin);
 

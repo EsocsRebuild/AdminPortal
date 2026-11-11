@@ -29,8 +29,8 @@ const studioBenefits = [
   },
   {
     icon: ShieldCheck,
-    title: "Super Vetting Clearance",
-    text: "Direct routing to the Super Admin clearance queue for 1-click approvals.",
+    title: "Synod Ecclesiastical Review",
+    text: "Seamless review and clearance pipeline across Parishes, Districts, and Provinces.",
   },
 ];
 

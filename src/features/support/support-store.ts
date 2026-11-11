@@ -1,62 +1,54 @@
-import fs from "node:fs";
-import path from "node:path";
 import type { SupportTicket, TicketStatus, TicketMessage } from "./types";
 
-const DB_PATH = path.join(process.cwd(), "src/features/support/support-db.json");
-
-function loadTicketsFromDisk(): SupportTicket[] {
-  try {
-    if (fs.existsSync(DB_PATH)) {
-      const data = fs.readFileSync(DB_PATH, "utf-8");
-      const parsed = JSON.parse(data);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-    }
-  } catch {
-    // Fallback if file read fails
-  }
-  return [];
-}
-
-function saveTicketsToDisk(tickets: SupportTicket[]): void {
-  try {
-    fs.writeFileSync(DB_PATH, JSON.stringify(tickets, null, 2), "utf-8");
-  } catch {
-    // Fallback if disk write fails
-  }
-}
+const inMemoryTickets: SupportTicket[] = [
+  {
+    id: "ticket-seed-1",
+    ticketNumber: "ESOCS-CARE-2026-1001",
+    title: "Member Welfare & Support",
+    category: "GENERAL_ENQUIRY",
+    priority: "STANDARD",
+    status: "OPEN",
+    complainantName: "Church Secretariat Desk",
+    complainantEmail: "support@esocs.org",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    messages: [
+      {
+        id: "msg-seed-1",
+        senderName: "Secretariat Desk",
+        senderRole: "Support Officer",
+        isStaff: true,
+        message: "Support channel opened.",
+        sentAt: new Date().toISOString(),
+      },
+    ],
+  },
+];
 
 export function getLocalTickets(): SupportTicket[] {
-  return loadTicketsFromDisk();
+  return inMemoryTickets;
 }
 
 export function getTicketById(id: string): SupportTicket | null {
-  const tickets = loadTicketsFromDisk();
-  return tickets.find((t) => t.id === id || t.ticketNumber === id) ?? null;
+  return inMemoryTickets.find((t) => t.id === id || t.ticketNumber === id) ?? null;
 }
 
 export function addLocalTicket(ticket: SupportTicket): void {
-  const list = loadTicketsFromDisk();
-  const existingIdx = list.findIndex((t) => t.id === ticket.id);
+  const existingIdx = inMemoryTickets.findIndex((t) => t.id === ticket.id);
   if (existingIdx !== -1) {
-    list[existingIdx] = ticket;
+    inMemoryTickets[existingIdx] = ticket;
   } else {
-    list.unshift(ticket);
+    inMemoryTickets.unshift(ticket);
   }
-  saveTicketsToDisk(list);
 }
 
 export function addTicketMessage(ticketId: string, message: TicketMessage): boolean {
-  const list = loadTicketsFromDisk();
-  const target = list.find((t) => t.id === ticketId || t.ticketNumber === ticketId);
-  if (target) {
-    target.messages.push(message);
-    target.updatedAt = new Date().toISOString();
-    saveTicketsToDisk(list);
-    return true;
-  }
-  return false;
+  const ticket = inMemoryTickets.find((t) => t.id === ticketId || t.ticketNumber === ticketId);
+  if (!ticket) return false;
+  if (!ticket.messages) ticket.messages = [];
+  ticket.messages.push(message);
+  ticket.updatedAt = message.sentAt;
+  return true;
 }
 
 export function updateLocalTicketStatus(
@@ -65,15 +57,11 @@ export function updateLocalTicketStatus(
   resolutionSummary?: string,
   assignedOfficerName?: string,
 ): boolean {
-  const list = loadTicketsFromDisk();
-  const target = list.find((t) => t.id === ticketId || t.ticketNumber === ticketId);
-  if (target) {
-    target.status = status;
-    target.updatedAt = new Date().toISOString();
-    if (resolutionSummary) target.resolutionSummary = resolutionSummary;
-    if (assignedOfficerName) target.assignedOfficerName = assignedOfficerName;
-    saveTicketsToDisk(list);
-    return true;
-  }
-  return false;
+  const ticket = inMemoryTickets.find((t) => t.id === ticketId || t.ticketNumber === ticketId);
+  if (!ticket) return false;
+  ticket.status = status;
+  ticket.updatedAt = new Date().toISOString();
+  if (resolutionSummary) ticket.resolutionSummary = resolutionSummary;
+  if (assignedOfficerName) ticket.assignedOfficerName = assignedOfficerName;
+  return true;
 }

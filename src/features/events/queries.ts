@@ -3,7 +3,6 @@ import "server-only";
 import { backend } from "@/server/backend";
 import { requirePermission } from "@/server/session";
 import { formatTime } from "@/lib/format";
-import { getLocalEvents } from "./event-store";
 
 export interface ChurchEvent {
   id: string;
@@ -70,70 +69,9 @@ export async function listEvents(): Promise<ChurchEvent[]> {
       });
     }
 
-    const mappedLocal: ChurchEvent[] = getLocalEvents().map((e) => {
-      const startsAt = new Date(e.startDate);
-      const catLower = e.category.toLowerCase();
-      const cat = (
-        catLower === "conference"
-          ? "conference"
-          : catLower === "revival"
-            ? "revival"
-            : catLower === "fellowship_rally"
-              ? "fellowship"
-              : "service"
-      ) as "service" | "conference" | "revival" | "fellowship";
-
-      return {
-        id: e.id,
-        title: e.title,
-        category: cat,
-        date: startsAt.toISOString().split("T")[0],
-        time: formatTime(startsAt),
-        location: e.venue,
-        unitName: e.unitName,
-        capacity: e.ticketCapacity,
-        registeredCount: e.registrationOpen ? 0 : undefined,
-        isRecurring: false,
-        status: "scheduled",
-      };
-    });
-
-    const seenIds = new Set(backendMapped.map((e) => e.id));
-    for (const loc of mappedLocal) {
-      if (!seenIds.has(loc.id)) {
-        backendMapped.unshift(loc);
-      }
-    }
     return backendMapped;
   } catch {
-    // Network fallback
+    // Backend API unavailable
   }
-
-  return getLocalEvents().map((e) => {
-    const startsAt = new Date(e.startDate);
-    const catLower = e.category.toLowerCase();
-    const cat = (
-      catLower === "conference"
-        ? "conference"
-        : catLower === "revival"
-          ? "revival"
-          : catLower === "fellowship_rally"
-            ? "fellowship"
-            : "service"
-    ) as "service" | "conference" | "revival" | "fellowship";
-
-    return {
-      id: e.id,
-      title: e.title,
-      category: cat,
-      date: startsAt.toISOString().split("T")[0],
-      time: formatTime(startsAt),
-      location: e.venue,
-      unitName: e.unitName,
-      capacity: e.ticketCapacity,
-      registeredCount: e.registrationOpen ? 0 : undefined,
-      isRecurring: false,
-      status: "scheduled",
-    };
-  });
+  return [];
 }

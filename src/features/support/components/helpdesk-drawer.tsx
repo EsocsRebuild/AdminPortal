@@ -39,7 +39,7 @@ interface HelpdeskDrawerProps {
 }
 
 const categoryLabels: Record<TicketCategory, string> = {
-  ORDINATION_VETTING: "Ordination & Vetting Clearance",
+  ORDINATION_VETTING: "Ordination & Pastoral Review",
   PARISH_MEMBERSHIP: "Parish Directory & Records",
   FINANCIAL_STEWARDSHIP: "Remittances & Stewardship Dues",
   MEDIA_AND_WEB: "Church Calendar & Media Studio",
@@ -258,7 +258,7 @@ export function HelpdeskDrawer({
                     onChange={(e) => setCategory(e.target.value as TicketCategory)}
                     className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                   >
-                    <option value="ORDINATION_VETTING">Ordination & Vetting Clearance</option>
+                    <option value="ORDINATION_VETTING">Ordination & Pastoral Review</option>
                     <option value="PARISH_MEMBERSHIP">Parish Directory & Records</option>
                     <option value="FINANCIAL_STEWARDSHIP">Remittances & Stewardship Dues</option>
                     <option value="MEDIA_AND_WEB">Church Calendar & Media Studio</option>

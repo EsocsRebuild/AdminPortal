@@ -9,6 +9,8 @@ export const permissions = [
   "members:manage",
   "members:export",
   "households:manage",
+  "groups:view",
+  "groups:manage",
   "pastoral:view",
   "pastoral:manage",
   "events:view",

@@ -27,7 +27,7 @@ interface SupportCrmDashboardProps {
 }
 
 const categoryLabels: Record<TicketCategory, string> = {
-  ORDINATION_VETTING: "Ordination & Vetting Clearance",
+  ORDINATION_VETTING: "Ordination & Pastoral Review",
   PARISH_MEMBERSHIP: "Parish Directory & Records",
   FINANCIAL_STEWARDSHIP: "Remittances & Stewardship Dues",
   MEDIA_AND_WEB: "Church Calendar & Media Studio",
@@ -207,7 +207,7 @@ export function SupportCrmDashboard({ initialTickets, kpis }: SupportCrmDashboar
               className="h-7 w-full rounded border border-input bg-background px-2 text-2xs text-foreground focus:outline-none"
             >
               <option value="ALL">All Enquiry Categories</option>
-              <option value="ORDINATION_VETTING">Ordination & Vetting Clearance</option>
+              <option value="ORDINATION_VETTING">Ordination & Pastoral Review</option>
               <option value="PARISH_MEMBERSHIP">Parish Directory & Records</option>
               <option value="FINANCIAL_STEWARDSHIP">Remittances & Dues</option>
               <option value="MEDIA_AND_WEB">Church Calendar & Media</option>

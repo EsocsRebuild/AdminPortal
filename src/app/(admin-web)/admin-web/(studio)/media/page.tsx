@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Image as ImageIcon } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { getMediaAssets } from "@/features/web-cms/queries";
+import { getBranchMedia as getMediaAssets } from "@/features/web-cms/queries";
 import { UploadMediaModal } from "@/features/web-cms/components/upload-media-modal";
 import { StudioMediaRoster } from "@/features/web-cms/components/studio-media-roster";
 import { requireSession } from "@/server/session";

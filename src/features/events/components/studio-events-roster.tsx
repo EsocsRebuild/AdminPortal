@@ -134,7 +134,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Live Approved ({approvedCount})
+            Published Live ({approvedCount})
           </Button>
           <Button
             type="button"
@@ -147,7 +147,7 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Pending Clearance ({pendingCount})
+            Awaiting Review ({pendingCount})
           </Button>
         </div>
 
@@ -269,14 +269,14 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                     {evt.status === "APPROVED_LIVE" && (
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                         <CheckCircle2 className="size-3.5" />
-                        Approved Live
+                        Published Live
                       </span>
                     )}
                     {evt.status === "PENDING_REVIEW" && (
                       <div className="flex flex-col items-end gap-1.5">
                         <span className="inline-flex animate-pulse items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
                           <Clock className="size-3.5" />
-                          Pending Clearance
+                          Awaiting Review
                         </span>
                         <Button
                           type="button"
@@ -286,14 +286,14 @@ export function StudioEventsRoster({ initialEvents, unitName }: StudioEventsRost
                           className="text-3xs h-6 gap-1 bg-emerald-600 px-2.5 font-semibold text-white hover:bg-emerald-500"
                         >
                           <Check className="size-3" />
-                          <span>Approve Live</span>
+                          <span>Publish Live</span>
                         </Button>
                       </div>
                     )}
                     {evt.status === "NEEDS_REVISION" && (
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400">
                         <AlertCircle className="size-3.5" />
-                        Needs Revision
+                        Needs Update
                       </span>
                     )}
 

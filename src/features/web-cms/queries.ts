@@ -2,10 +2,6 @@
 
 import { backend } from "@/server/backend";
 import { resolveUserUnit } from "@/server/units";
-import { getLocalEvents } from "@/features/events/event-store";
-import { getLocalProgrammes } from "./programmes-store";
-import { getLocalMediaAssets } from "./media-store";
-import { getLocalPosts } from "./posts-store";
 import type { WebEvent, WebProgramme, WebBulletin, MediaAsset, VettingSummary, EventCategory } from "./types";
 
 interface BackendEventResponse {
@@ -39,22 +35,6 @@ function mapBackendTypeToCategory(type?: string): EventCategory {
 
 export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebEvent[]> {
   const unitInfo = await resolveUserUnit(scopeUnitId);
-  const localList = getLocalEvents();
-  const filteredLocal = scopeUnitId
-    ? localList.filter((e) => {
-        if (!e.unitId) return true;
-        if (e.unitId === scopeUnitId) return true;
-        if (
-          e.unitName &&
-          unitInfo.unitName &&
-          (e.unitName.toLowerCase().includes(unitInfo.unitName.toLowerCase()) ||
-            unitInfo.unitName.toLowerCase().includes(e.unitName.toLowerCase()))
-        ) {
-          return true;
-        }
-        return false;
-      })
-    : localList;
 
   try {
     const raw = await backend<{ items?: BackendEventResponse[] } | BackendEventResponse[]>("/events", {
@@ -63,7 +43,7 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
 
     const items = Array.isArray(raw) ? raw : raw?.items || [];
     if (Array.isArray(items) && items.length > 0) {
-      const backendEvents: WebEvent[] = items.map((evt) => ({
+      return items.map((evt) => ({
         id: evt.id,
         unitId: evt.unitId ?? scopeUnitId ?? "",
         unitName: unitInfo.unitName,
@@ -85,42 +65,41 @@ export async function getBranchEvents(scopeUnitId?: string | null): Promise<WebE
         submittedByHandlerId: evt.id,
         submittedAt: evt.startsAt,
       }));
-
-      // Combine backend events with any locally submitted events
-      const seenIds = new Set(backendEvents.map((e) => e.id));
-      for (const loc of filteredLocal) {
-        if (!seenIds.has(loc.id)) {
-          backendEvents.unshift(loc);
-        }
-      }
-      return backendEvents;
     }
   } catch {
-    // Backend API unavailable; return live local events
+    // Backend API unavailable
   }
 
-  return filteredLocal;
+  return [];
 }
 
 export async function getBranchProgrammes(scopeUnitId?: string | null): Promise<WebProgramme[]> {
   const unitInfo = await resolveUserUnit(scopeUnitId);
-  const localList = getLocalProgrammes();
-  const filtered = scopeUnitId
-    ? localList.filter((p) => {
-        if (!p.unitId) return true;
-        if (p.unitId === scopeUnitId) return true;
-        if (
-          p.unitName &&
-          unitInfo.unitName &&
-          (p.unitName.toLowerCase().includes(unitInfo.unitName.toLowerCase()) ||
-            unitInfo.unitName.toLowerCase().includes(p.unitName.toLowerCase()))
-        ) {
-          return true;
-        }
-        return false;
-      })
-    : localList;
-  return filtered;
+
+  try {
+    const raw = await backend<{ items?: BackendEventResponse[] } | BackendEventResponse[]>("/events", {
+      query: scopeUnitId ? { unitId: scopeUnitId, type: "Conference" } : { type: "Conference" },
+    });
+    const items = Array.isArray(raw) ? raw : raw?.items || [];
+    if (Array.isArray(items) && items.length > 0) {
+      return items.map((evt) => ({
+        id: evt.id,
+        unitId: evt.unitId ?? scopeUnitId ?? "",
+        unitName: unitInfo.unitName,
+        title: evt.title,
+        theme: evt.summary || "Conference Session",
+        scheduleDate: evt.startsAt,
+        speakers: ["Keynote Ministry"],
+        status: evt.status === "Published" ? "APPROVED_LIVE" : "PENDING_REVIEW",
+        submittedByHandlerId: evt.id,
+        submittedAt: evt.startsAt,
+      }));
+    }
+  } catch {
+    // API bridge
+  }
+
+  return [];
 }
 
 export async function getVettingQueue(): Promise<{
@@ -128,38 +107,6 @@ export async function getVettingQueue(): Promise<{
   programmes: WebProgramme[];
   summary: VettingSummary;
 }> {
-  const localList = getLocalEvents();
-  const localPending = localList.filter((e) => e.status === "PENDING_REVIEW");
-  const localApproved = localList.filter((e) => e.status === "APPROVED_LIVE");
-  const localRevision = localList.filter((e) => e.status === "NEEDS_REVISION");
-
-  try {
-    const data = await backend<{ events: WebEvent[]; programmes: WebProgramme[]; summary: VettingSummary }>(
-      "/web-cms/vetting",
-    );
-    if (data && Array.isArray(data.events)) {
-      const seenIds = new Set(data.events.map((e) => e.id));
-      const mergedEvents = [...data.events];
-      for (const lp of localPending) {
-        if (!seenIds.has(lp.id)) {
-          mergedEvents.unshift(lp);
-        }
-      }
-      return {
-        events: mergedEvents,
-        programmes: data.programmes || [],
-        summary: {
-          pendingEventsCount: mergedEvents.length,
-          pendingProgrammesCount: data.summary?.pendingProgrammesCount || 0,
-          approvedCount: (data.summary?.approvedCount || 0) + localApproved.length,
-          revisionRequestedCount: (data.summary?.revisionRequestedCount || 0) + localRevision.length,
-        },
-      };
-    }
-  } catch {
-    // Fall back to querying draft events from backend
-  }
-
   try {
     const rawEvents = await backend<{ items?: BackendEventResponse[] }>("/events", {
       query: { status: "Draft" },
@@ -183,39 +130,31 @@ export async function getVettingQueue(): Promise<{
       submittedAt: evt.startsAt,
     }));
 
-    const seenIds = new Set(events.map((e) => e.id));
-    const merged = [...events];
-    for (const lp of localPending) {
-      if (!seenIds.has(lp.id)) {
-        merged.unshift(lp);
-      }
-    }
-
     return {
-      events: merged,
+      events,
       programmes: [],
       summary: {
-        pendingEventsCount: merged.length,
+        pendingEventsCount: events.length,
         pendingProgrammesCount: 0,
-        approvedCount: localApproved.length,
-        revisionRequestedCount: localRevision.length,
+        approvedCount: 0,
+        revisionRequestedCount: 0,
       },
     };
   } catch {
     return {
-      events: localPending,
+      events: [],
       programmes: [],
       summary: {
-        pendingEventsCount: localPending.length,
+        pendingEventsCount: 0,
         pendingProgrammesCount: 0,
-        approvedCount: localApproved.length,
-        revisionRequestedCount: localRevision.length,
+        approvedCount: 0,
+        revisionRequestedCount: 0,
       },
     };
   }
 }
 
-export async function getMediaAssets(): Promise<MediaAsset[]> {
+export async function getBranchMedia(scopeUnitId?: string | null): Promise<MediaAsset[]> {
   try {
     interface BackendMediaItem {
       id: string;
@@ -225,7 +164,9 @@ export async function getMediaAssets(): Promise<MediaAsset[]> {
       url: string;
       createdAt: string;
     }
-    const res = await backend<{ items?: BackendMediaItem[] } | BackendMediaItem[]>("/content/media");
+    const res = await backend<{ items?: BackendMediaItem[] } | BackendMediaItem[]>("/content/media", {
+      query: scopeUnitId ? { unitId: scopeUnitId } : undefined,
+    });
     const items = Array.isArray(res) ? res : res?.items || [];
     if (Array.isArray(items) && items.length > 0) {
       return items.map((m) => ({
@@ -239,18 +180,28 @@ export async function getMediaAssets(): Promise<MediaAsset[]> {
       }));
     }
   } catch {
-    // Fallback to local store
+    // API bridge
   }
-  return getLocalMediaAssets();
+  return [];
+}
+
+interface BackendPostItem {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  coverImageUrl?: string;
+  category?: string;
+  publishedAt?: string;
+  authorName?: string;
 }
 
 export async function getPublishedBulletins(): Promise<WebBulletin[]> {
-  const localList = getLocalPosts();
   try {
-    const data = await backend<{ items?: Array<{ id: string; title: string; slug: string; excerpt?: string; coverImageUrl?: string; category?: string; publishedAt?: string; authorName?: string }> } | Array<{ id: string; title: string; slug: string; excerpt?: string; coverImageUrl?: string; category?: string; publishedAt?: string; authorName?: string }>>("/content/posts");
+    const data = await backend<{ items?: BackendPostItem[] } | BackendPostItem[]>("/content/posts");
     const items = Array.isArray(data) ? data : data?.items || [];
     if (Array.isArray(items) && items.length > 0) {
-      const backendBulletins: WebBulletin[] = items.map((p) => ({
+      return items.map((p) => ({
         id: p.id,
         unitId: "esocs",
         unitName: "General Headquarters",
@@ -262,16 +213,9 @@ export async function getPublishedBulletins(): Promise<WebBulletin[]> {
         submittedAt: p.publishedAt || new Date().toISOString(),
         submittedByHandlerId: p.authorName || "system",
       }));
-      const seenIds = new Set(backendBulletins.map((b) => b.id));
-      for (const loc of localList) {
-        if (!seenIds.has(loc.id)) {
-          backendBulletins.unshift(loc);
-        }
-      }
-      return backendBulletins;
     }
   } catch {
-    // Fallback
+    // API bridge
   }
-  return localList;
+  return [];
 }

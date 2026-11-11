@@ -36,6 +36,7 @@ import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { UserMenu } from "@/components/layout/user-menu";
 import { useHotkey } from "@/hooks/use-hotkey";
 import { usePreference } from "@/hooks/use-preference";
+import { can, type Permission } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
 import { getWebFrontendUrl } from "@/lib/web-url";
 
@@ -87,10 +88,10 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
       ? [
           {
             href: "/admin-web/vetting",
-            label: "Super Vetting Queue",
+            label: "Synod Review & Clearance",
             icon: CheckCircle2,
             active: pathname.startsWith("/admin-web/vetting"),
-            badge: "Admin",
+            badge: "Clearance",
           },
         ]
       : []),
@@ -102,32 +103,37 @@ export function WebStudioShell({ userUnit, isPlatformAdmin, children }: WebStudi
       label: "Main Governance Portal",
       icon: Church,
       badge: "Portal",
+      permission: "dashboard:view" as Permission,
     },
     {
       href: "/members",
       label: "Member Directory",
       icon: Users,
       badge: null,
+      permission: "members:view" as Permission,
     },
     {
       href: "/attendance",
       label: "Attendance & Headcount",
       icon: UserCheck,
       badge: null,
+      permission: "attendance:view" as Permission,
     },
     {
       href: "/giving",
       label: "Giving & Stewardship",
       icon: Wallet,
       badge: null,
+      permission: "giving:view" as Permission,
     },
     {
       href: "/ordination",
       label: "Ordination Pipeline",
       icon: Award,
       badge: "Dossier",
+      permission: "pastoral:view" as Permission,
     },
-  ];
+  ].filter((item) => can(sessionUser, item.permission));
 
   const renderNavLinks = (isDrawer = false, onSelect?: () => void) => {
     const isCompact = collapsed && !isDrawer;

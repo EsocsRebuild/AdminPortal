@@ -230,7 +230,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
               }`}
             >
               <CheckCircle2 className="size-3.5" />
-              Direct Live Publish
+              Publish Immediately
             </button>
             <button
               type="button"
@@ -242,7 +242,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
               }`}
             >
               <Clock className="size-3.5" />
-              Vetting Clearance
+              Submit for Synod Review
             </button>
           </div>
         </div>
@@ -266,7 +266,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
           className="w-full gap-2 bg-emerald-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500"
         >
           <Sparkles className="size-4" />
-          {loading ? "Publishing to Church Network..." : "Submit & Publish Event"}
+          {loading ? "Publishing to Church Network..." : "Schedule Church Gathering"}
         </Button>
       </form>
 
@@ -279,10 +279,10 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
                 <CheckCircle2 className="size-8" />
               </div>
               <DialogTitle className="text-lg font-bold text-foreground">
-                Church Event Successfully Created!
+                Church Gathering Scheduled Successfully
               </DialogTitle>
               <p className="mt-1 text-xs text-muted-foreground">
-                Your event has been recorded and synchronized with the ecclesiastical network.
+                Your gathering has been recorded and synchronized with the ecclesiastical network.
               </p>
             </DialogHeader>
 
@@ -309,7 +309,7 @@ export function StudioEventForm({ unitName, onEventCreated }: StudioEventFormPro
                     Status:{" "}
                     {createdEvent.status === "APPROVED_LIVE"
                       ? "Live on Church Network"
-                      : "Awaiting Secretariat Review"}
+                      : "Awaiting Synod Review"}
                   </span>
                 </div>
               </div>

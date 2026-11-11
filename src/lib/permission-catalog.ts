@@ -16,19 +16,118 @@ export const permissionCatalog: {
     ],
   },
   {
-    area: "Members",
+    area: "Members & Households",
     items: [
-      { permission: "members:view", label: "View members", description: "Look up people and their details." },
+      {
+        permission: "members:view",
+        label: "View members",
+        description: "Look up people and their details across your church branch.",
+      },
       {
         permission: "members:manage",
         label: "Add and edit members",
-        description: "Create, update, approve and delete member records.",
+        description: "Register new members, update profiles, and manage status.",
         sensitive: true,
       },
       {
         permission: "members:export",
         label: "Export members",
-        description: "Download the member list as a spreadsheet.",
+        description: "Download the congregation roster safely as a spreadsheet.",
+        sensitive: true,
+      },
+      {
+        permission: "households:manage",
+        label: "Manage family households",
+        description: "Group member records into family and household units.",
+      },
+    ],
+  },
+  {
+    area: "Church Services & Events",
+    items: [
+      {
+        permission: "events:view",
+        label: "View church calendar",
+        description: "Browse upcoming church gatherings, revivals, and scheduled services.",
+      },
+      {
+        permission: "events:manage",
+        label: "Schedule and manage services",
+        description: "Create, schedule, edit, and publish church gatherings to the calendar.",
+        sensitive: true,
+      },
+      {
+        permission: "attendance:view",
+        label: "View attendance records",
+        description: "Inspect congregation headcount and service attendance figures.",
+      },
+      {
+        permission: "attendance:record",
+        label: "Record service attendance",
+        description: "Take headcount, record attendees, and save service attendance reports.",
+      },
+    ],
+  },
+  {
+    area: "Giving & Stewardship",
+    items: [
+      {
+        permission: "giving:view",
+        label: "View stewardship records",
+        description: "Inspect tithes, pledges, and general thanksgiving batches.",
+      },
+      {
+        permission: "giving:manage",
+        label: "Manage giving & batch records",
+        description: "Enter, reconcile, and post church offering batches and tithe envelopes.",
+        sensitive: true,
+      },
+    ],
+  },
+  {
+    area: "Fellowships & Autonomous Wings",
+    items: [
+      {
+        permission: "groups:view",
+        label: "View fellowship wings",
+        description: "Browse women's fellowship, youth societies, and ministerial bands.",
+      },
+      {
+        permission: "groups:manage",
+        label: "Manage fellowship wings",
+        description: "Configure leadership and programmes for fellowship societies.",
+        sensitive: true,
+      },
+    ],
+  },
+  {
+    area: "Ordination & Pastoral Ministry",
+    items: [
+      {
+        permission: "pastoral:view",
+        label: "View ordination pipeline",
+        description: "Review candidates recommended for ordination ranks.",
+      },
+      {
+        permission: "pastoral:manage",
+        label: "Manage candidate dossiers",
+        description: "Update candidate clearance, provincial recommendations, and ordination vetting.",
+        sensitive: true,
+      },
+    ],
+  },
+  {
+    area: "Website & Public Announcements",
+    items: [
+      {
+        permission: "content:view",
+        label: "View public content & studio",
+        description: "Open the Web Studio, browse published bulletins, events, and media.",
+      },
+      {
+        permission: "content:manage",
+        label: "Publish bulletins and programmes",
+        description: "Compose announcements, upload sermons, and manage church publications.",
         sensitive: true,
       },
     ],
